@@ -1,0 +1,5 @@
+suites:
+    main:
+        namespace: FlashSaleApi
+        psr4_prefix: FlashSaleApi
+        src_path: app
