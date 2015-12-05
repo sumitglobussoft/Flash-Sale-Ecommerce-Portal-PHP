@@ -76,9 +76,9 @@ Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), fun
 
 //    Route::group(['middleware' => 'auth'], function () {
 
-        Route::group(['middleware' => 'admin'], function () {
-            Route::resource('admin/dashboard', 'AdminController@dashboard');
-        });
+    Route::group(['middleware' => 'admin'], function () {
+        Route::resource('admin/dashboard', 'AdminController@dashboard');
+    });
 
 //    });
 

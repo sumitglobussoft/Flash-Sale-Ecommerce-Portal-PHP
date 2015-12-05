@@ -61,26 +61,13 @@ Route::group(['middleware' => ['guest']], function () {
 //
 //});
 
-Route::get('admin/login', function () {
-    return view("Admin/Layouts/adminlogin");
-});
 
 
-Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), function () {
 
-    Route::resource('admin/login', 'AdminController@adminlogin');
+Route::group(array('module' => 'Home', 'namespace' => 'Home\Controllers'), function () {
 
-//    Route::get('admin/dashboard', function () {
-//        return view("Admin/Views/dashboard");
-//    });
-
-    Route::group(['middleware' => 'auth'], function () {
-
-        Route::group(['middleware' => 'admin'], function () {
-            Route::resource('admin/dashboard', 'AdminController@dashboard');
-        });
-
-    });
+    Route::resource('/', 'HomeController@home');
+    Route::resource('/home-ajax-handler', 'HomeController@homeAjaxHandler');
 
 });
 
