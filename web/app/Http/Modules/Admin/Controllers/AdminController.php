@@ -12,6 +12,7 @@ use DB;
 
 use FlashSale\Http\Modules\Admin\Models\User;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 
 class AdminController extends Controller
@@ -119,9 +120,11 @@ class AdminController extends Controller
 
     public function adminlogin(Request $data)
     {
-        if ($data->isMethod('post')) {
-            $email = $data->input('email');
-            $password = $data->input('password');
+
+     //   if(Session::put('flashsaleadmin', Auth::user())) {
+            if ($data->isMethod('post')) {
+                $email = $data->input('email');
+                $password = $data->input('password');
 
 //            $objUser = new User();
 //            $data = array(
@@ -137,13 +140,17 @@ class AdminController extends Controller
 ////            $result = $objUser->addNewUser($data);
 //            echo "<pre>"; print_r($result);
 //            die;
+// Akash code start//
+//                       $this->validate($data, [
+//                'email' => 'required|email',
+//                'password' => 'required',
+//            ], ['email.required' => 'Please enter email address or username',
+//                    'password.required' => 'Please enter a password']
+//            );
 
-            $this->validate($data, [
-                'email' => 'required|email',
-                'password' => 'required',
-            ], ['email.required' => 'Please enter email address or username',
-                    'password.required' => 'Please enter a password']
-            );
+
+// End //
+
 
 //            $result['message'] = NULL;
 //            echo $email; echo bcrypt($password); die;
@@ -152,23 +159,23 @@ class AdminController extends Controller
 //            echo "<pre>";
 //            print_r($userDetails);
 //            die;
-            if (Auth::attempt(['email' => $email, 'password' => $password])) {
-                if (Auth::user()->role == 5) {
-                    Session::put('flashsaleadmin', Auth::user());
-//                    echo "<pre>";
-//                    print_r(Session::all()); die;
-                    return redirect()->intended('/admin/dashboard');
+                if (Auth::attempt(['email' => $email, 'password' => $password])) {
+
+                    if (Auth::user()->role == 5) {
+                        Session::put('flashsaleadmin', Auth::user());
+                        return redirect()->intended('/admin/dashboard');
+
+                    } else {
+                        Auth::logout();
+                        return view("Admin/Layouts/adminlogin")->withErrors([
+                            'errMsg' => 'Invalid credentials.',
+                        ]);
+                    }
                 } else {
-                    Auth::logout();
                     return view("Admin/Layouts/adminlogin")->withErrors([
-                        'errMsg' => 'Invalid credentials.',
+                        'email' => 'Invalid credentials.',
                     ]);
                 }
-            } else {
-                return view("Admin/Layouts/adminlogin")->withErrors([
-                    'email' => 'Invalid credentials.',
-                ]);
-            }
 
 //            if ($userDetails['status'] !== 200) {
 //                $result['message'] = $checkIfEmailExists['message'];
@@ -183,7 +190,8 @@ class AdminController extends Controller
 //                }
 //            }
 
-        }
+            }
+ //       }
         return view("Admin/Layouts/adminlogin");
 
 //        die("Modular structure Admin login");
