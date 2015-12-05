@@ -1,6 +1,6 @@
 @extends('Admin/Layouts/adminlayout')
 
-@section('title', 'Dashboard') {{--TITLE GOES HERE--}}
+@section('title', 'Access denied') {{--TITLE GOES HERE--}}
 
 @section('headcontent')
     {{--OPTIONAL--}}
@@ -9,6 +9,8 @@
 
 @section('content')
     {{--PAGE CONTENT GOES HERE--}}
+    <h1>Access denied</h1>
+    <p>Sorry you have no access to view this page.</p>
 @endsection
 
 @section('pagejavascripts')

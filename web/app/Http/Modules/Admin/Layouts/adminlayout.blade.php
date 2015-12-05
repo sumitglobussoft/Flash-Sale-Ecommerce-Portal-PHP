@@ -296,6 +296,6 @@
 @include('Admin/layouts/admincommonfooterscripts')
 
 @yield('pagejavascripts')
-
+<script src="/assets/js/modern.js"></script>
 </body>
 </html>
