@@ -98,6 +98,9 @@ class AdminController extends Controller
 
     public function dashboard()
     {
+//        echo "<pre>";
+//        print_r(Session::all());
+//        die;
 //        $userModel = new User();
 //        $users = User::all();
 //        echo "<pre>";
@@ -108,44 +111,35 @@ class AdminController extends Controller
 //        echo "<pre>";
 //        print_r($users);
 //        die;
-//        $userDetails = $userModel->getUserWhere();
-//        echo "<pre>";
-//        $userDetails;
-//        die("asd");
-//        die("Modular structure Admin dashboard");
-
-        return view("Admin/Views/dashboard");
+        return view("Admin/Views/admin/dashboard");
 
     }
 
     public function adminlogin(Request $data)
     {
-//        echo "<pre>";
-////        Session::put("Asd", "Asda");
-//        print_r(Session::all());
-
-        if (Auth::check()) {
+//        dd($data); die;
+        if (Session::has('fs_admin') || $data->session()->has('fs_admin')) {//|| Session::has('fs_manager')
             return redirect('/admin/dashboard');
         }
         if ($data->isMethod('post')) {
-
             $email = $data->input('email');
             $password = $data->input('password');
 
-//            $objUser = new User();
-//            $data = array(
-//                'name' => 'FlashSale Admin',
-//                'username' => 'admin',
-//                'email' => 'admin@flashsale.com',
-//                'password' => Hash::make('admin'),
-////                'added_date' => time(),
-//                'role' => "5",
-//                'status' => '1'
-//            );
-//            $result = DB::table('users')->insert($data);
-////            $result = $objUser->addNewUser($data);
-//            echo "<pre>"; print_r($result);
-//            die;
+            /* BELOW BLOCK TO INSERT ADMIN USER FIRST TIME
+            $objUser = new User();
+            $data = array(
+                'name' => 'FlashSale Admin',
+                'username' => 'admin',
+                'email' => 'admin@flashsale.com',
+                'password' => Hash::make('admin'),
+//                'added_date' => time(),
+                'role' => "5",
+                'status' => '1'
+            );
+            $result = DB::table('users')->insert($data);
+//            $result = $objUser->addNewUser($data);
+            echo "<pre>"; print_r($result);
+            die; */
 
             $this->validate($data, [
                 'email' => 'required|email',
@@ -154,28 +148,46 @@ class AdminController extends Controller
                     'password.required' => 'Please enter a password']
             );
             if (Auth::attempt(['email' => $email, 'password' => $password])) {
-//                dd(Auth::User()); die;
-                Session::put('flashsaleadmin', Auth::User());
-//                echo "<pre>"; print_r(Session::all()); die;
-                return redirect('/admin/dashboard');
+                $objModelUsers = User::getInstance();
+//                User::getInstance();
+                $userDetails = $objModelUsers->getUserById(Auth::id()); //THIS IS TO GET THE MODEL OBJECT
+//                $userDetails = DB::table('users')->select()->where('id', 1)->first(); //USED TO GET ROW OBJECT
+//                echo "<pre>"; print_r($userDetails); die;
+
+                if ($userDetails->role == 5) {
+                    $sessionName = 'fs_admin';
+                    Session::put($sessionName, $userDetails['original']);
+                    return redirect('/admin/dashboard');
+                } else {
+                    return redirect('/admin/login')->withErrors([
+                        'errMsg' => 'Invalid credentials.'
+                    ]);
+                }
+
+//                if ($userDetails['role'] == 4) {
+//                    $sessionName = 'fs_manager';
+//                }
+
             } else {
-                Auth::logout();
                 return redirect('/admin/login')->withErrors([
                     'errMsg' => 'Invalid credentials.'
                 ]);
             }
-
         }
         return view("Admin/Layouts/adminlogin");
     }
 
 
-    public function logout()
+    public function adminLogout()
     {
-//        print_r(Session::all());
-        Session::flush();
-        Auth::logout();
-        return redirect()->guest('/admin/login');
+        Session::forget('fs_admin');
+        return redirect('/admin/login');
+    }
+
+    public function managerLogout()
+    {
+        Session::forget('fs_manager');
+        return redirect()->guest('/manager/login');
     }
 
 
