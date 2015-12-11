@@ -17,3 +17,7 @@ Route::get('/', function () {
 
 
 Route::resource('/product-details','Campaign\ProductController@productdetails');
+Route::resource('/flashsale-details','Campaign\FlashsaleController@flashsaledetails');
+Route::resource('/dailyspecial-details','Campaign\DailyspecialController@dailyspecialdetails');
+Route::resource('/shop-details','Campaign\ShopController@shopdetails');
+Route::resource('/product-size-details','Campaign\ProductController@productsizedetails');

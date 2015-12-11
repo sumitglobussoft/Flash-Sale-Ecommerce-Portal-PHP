@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use DB;
 use Illuminate\Database\QueryException;
 
-class ProductImages extends Model
+class ProductCategories extends Model
 
 {
 
@@ -15,26 +15,27 @@ class ProductImages extends Model
      *
      * @var string
      */
-    protected $table = 'product_images';
+    protected $table = 'product_categories';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['pi_id', 'for_product_id', 'image_type', 'images_upload_type', 'image_url'];
+    protected $fillable = ['category_id', 'category_name', 'created_by', 'category_status', 'status_set_by', 'parent_category_id','for_shop_id','category_banner_url','page_title','meta_description','meta_keywords'];
 
+    public function getCategoriesWhere(){
 
-    public function getProductimagesWhere() {
         if (func_num_args() > 0) {
-            $productId = func_get_arg(0);
-            //echo"<pre>";print_r($productId);die;
+            $categoryId = func_get_arg(0);
             try {
-                $result = DB::table("product_images")
+                $result = DB::table("product_categories")
                     ->select()
-                    ->where('for_product_id',$productId)
+                    ->whereIn('category_id', $categoryId)
+                    ->where('category_status', 1)
                     ->get();
-            }catch (QueryException $e){
+
+            } catch (QueryException $e) {
                 echo $e;
             }
             if ($result) {
@@ -42,9 +43,8 @@ class ProductImages extends Model
             } else {
                 return 0;
             }
+
         }
     }
 
-
 }
-

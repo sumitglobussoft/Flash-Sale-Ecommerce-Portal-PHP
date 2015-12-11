@@ -12,7 +12,6 @@ use DB;
 
 use FlashSale\Http\Modules\Admin\Models\User;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Validator;
 
 
 class AdminController extends Controller
@@ -114,17 +113,24 @@ class AdminController extends Controller
 //        $userDetails;
 //        die("asd");
 //        die("Modular structure Admin dashboard");
+
         return view("Admin/Views/dashboard");
 
     }
 
     public function adminlogin(Request $data)
     {
+//        echo "<pre>";
+////        Session::put("Asd", "Asda");
+//        print_r(Session::all());
 
-     //   if(Session::put('flashsaleadmin', Auth::user())) {
-            if ($data->isMethod('post')) {
-                $email = $data->input('email');
-                $password = $data->input('password');
+        if (Auth::check()) {
+            return redirect('/admin/dashboard');
+        }
+        if ($data->isMethod('post')) {
+
+            $email = $data->input('email');
+            $password = $data->input('password');
 
 //            $objUser = new User();
 //            $data = array(
@@ -140,60 +146,37 @@ class AdminController extends Controller
 ////            $result = $objUser->addNewUser($data);
 //            echo "<pre>"; print_r($result);
 //            die;
-// Akash code start//
-//                       $this->validate($data, [
-//                'email' => 'required|email',
-//                'password' => 'required',
-//            ], ['email.required' => 'Please enter email address or username',
-//                    'password.required' => 'Please enter a password']
-//            );
 
-
-// End //
-
-
-//            $result['message'] = NULL;
-//            echo $email; echo bcrypt($password); die;
-//            $objModelUser = new User();
-//            $userDetails = $objModelUser->getUserWhere($email, $password);
-//            echo "<pre>";
-//            print_r($userDetails);
-//            die;
-                if (Auth::attempt(['email' => $email, 'password' => $password])) {
-
-                    if (Auth::user()->role == 5) {
-                        Session::put('flashsaleadmin', Auth::user());
-                        return redirect()->intended('/admin/dashboard');
-
-                    } else {
-                        Auth::logout();
-                        return view("Admin/Layouts/adminlogin")->withErrors([
-                            'errMsg' => 'Invalid credentials.',
-                        ]);
-                    }
-                } else {
-                    return view("Admin/Layouts/adminlogin")->withErrors([
-                        'email' => 'Invalid credentials.',
-                    ]);
-                }
-
-//            if ($userDetails['status'] !== 200) {
-//                $result['message'] = $checkIfEmailExists['message'];
-//                return view('Auth.login', ['result' => $result]);
-//            } else {
-//                if (Auth::attempt(['email' => $email, 'password' => $password])) {
-//                    Session::put('email', $email);
-//                    return redirect()->intended('view');
-//                } else {
-//                    $result['message'] = 'Password Incorrect';
-//                    return view('Auth.login', ['result' => $result]);
-//                }
-//            }
-
+            $this->validate($data, [
+                'email' => 'required|email',
+                'password' => 'required',
+            ], ['email.required' => 'Please enter email address or username',
+                    'password.required' => 'Please enter a password']
+            );
+            if (Auth::attempt(['email' => $email, 'password' => $password])) {
+//                dd(Auth::User()); die;
+                Session::put('flashsaleadmin', Auth::User());
+//                echo "<pre>"; print_r(Session::all()); die;
+                return redirect('/admin/dashboard');
+            } else {
+                Auth::logout();
+                return redirect('/admin/login')->withErrors([
+                    'errMsg' => 'Invalid credentials.'
+                ]);
             }
- //       }
-        return view("Admin/Layouts/adminlogin");
 
-//        die("Modular structure Admin login");
+        }
+        return view("Admin/Layouts/adminlogin");
     }
+
+
+    public function logout()
+    {
+//        print_r(Session::all());
+        Session::flush();
+        Auth::logout();
+        return redirect()->guest('/admin/login');
+    }
+
+
 }

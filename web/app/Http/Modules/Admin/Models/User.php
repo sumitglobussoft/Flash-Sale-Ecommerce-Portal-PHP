@@ -20,6 +20,14 @@ class User extends Model implements AuthenticatableContract,
     protected $fillable = ['name', 'email', 'password'];
     protected $hidden = ['password', 'remember_token'];
 
+    /**
+     * @param $email
+     * @param $password
+     * @uses admin::admin::dashboard
+     * @return array of users
+     */
+
+
     public function getUserWhere($email, $password)
     {
         $result = User::where('email', $email)

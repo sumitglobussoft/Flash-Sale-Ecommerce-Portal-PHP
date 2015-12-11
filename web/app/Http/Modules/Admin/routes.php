@@ -61,26 +61,29 @@ Route::group(['middleware' => ['guest']], function () {
 //
 //});
 
-Route::get('admin/login', function () {
-    return view("Admin/Layouts/adminlogin");
-});
+//Route::get('admin/login', function () {
+//    return view("Admin/Layouts/adminlogin");
+//});
 
 
 Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), function () {
 
     Route::resource('admin/login', 'AdminController@adminlogin');
+    Route::resource('/logout', 'AdminController@logout');
+    Route::get('/admin/access-denied', function(){
+        return view("Admin/Views/accessdenied");
+    });
 
-//    Route::get('admin/dashboard', function () {
-//        return view("Admin/Views/dashboard");
-//    });
+//IF  YOU NEED TO USE GET POST, USE THIS FORMAT AS IN BELOW BLOCK COMMENT
+    /*Route::get('admin/dashboard', function () {
+        return view("Admin/Views/dashboard");
+    }); */
 
-//    Route::group(['middleware' => 'auth'], function () {
+    Route::group(['middleware' => 'auth:admin'], function () {
+        Route::resource('admin/dashboard', 'AdminController@dashboard');
 
-        Route::group(['middleware' => 'admin'], function () {
-            Route::resource('admin/dashboard', 'AdminController@dashboard');
-        });
-
-//    });
+//        Route::resource('admin/ads', 'AdminController@dashboard');
+    });
 
 });
 

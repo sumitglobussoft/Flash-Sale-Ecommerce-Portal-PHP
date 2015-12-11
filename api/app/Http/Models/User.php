@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use DB;
 
 class User extends Model implements AuthenticatableContract,
     AuthorizableContract,
@@ -36,4 +37,33 @@ class User extends Model implements AuthenticatableContract,
      * @var array
      */
     protected $hidden = ['password', 'remember_token'];
+
+    /**
+     * @return int
+     */
+
+    public function getUsercredsWhere(){
+
+        if (func_num_args() > 0) {
+            $userId = func_get_arg(0);
+
+            try {
+                $result = DB::table("users")
+                    ->select()
+                    ->where('id', $userId)
+                    ->first();
+
+            } catch (QueryException $e) {
+                echo $e;
+            }
+            if ($result) {
+                return $result;
+            } else {
+                return 0;
+            }
+
+        }
+
+
+    }
 }

@@ -45,7 +45,14 @@ class Admin
 //        var_dump($this->auth->guest());
 //        die;
 
-//        if ($this->auth->guest()) {
+        if ($request->user()->role != 5) {
+//            if ($this->auth->check()) {
+//                return redirect('/admin/dashboard');
+//            }
+//        } else {
+            Auth::logout();
+            return redirect()->guest('/admin/login');
+        }
 //        if ($this->auth->user()) {
 //            if ($request->ajax()) {
 //                return response('Unauthorized.', 401);
@@ -57,15 +64,6 @@ class Admin
 //            return redirect('view');
 //        }
 
-        if ($request->user()->role != 5) {
-            if ($this->auth->check()) {
-                return redirect('/admin/dashboard');
-            }
-            die("Asd 5");
-        } else {
-            return redirect()->guest('/admin/login');
-            die("asd 1");
-        }
         return $next($request);
     }
 
