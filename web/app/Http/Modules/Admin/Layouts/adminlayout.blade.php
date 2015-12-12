@@ -171,12 +171,12 @@
                                 {{--<li role="presentation"><a href="/inbox"><i class="fa fa-envelope"></i>Inbox<span class="badge badge-success pull-right">4</span></a></li>--}}
                                 {{--<li role="presentation" class="divider"></li>--}}
                                 {{--<li role="presentation"><a href="/lock-screen"><i class="fa fa-lock"></i>Lock screen</a></li>--}}
-                                <li role="presentation"><a href="/logout"><i class="fa fa-sign-out m-r-xs"></i>Log
+                                <li role="presentation"><a href="/admin/logout"><i class="fa fa-sign-out m-r-xs"></i>Log
                                         out</a></li>
                             </ul>
                         </li>
                         <li>
-                            <a href="/logout" class="log-out waves-effect waves-button waves-classic">
+                            <a href="/admin/logout" class="log-out waves-effect waves-button waves-classic">
                                 <span><i class="fa fa-sign-out m-r-xs"></i>Log out</span>
                             </a>
                         </li>
@@ -235,14 +235,42 @@
                     <a class="waves-effect waves-button">
                         <span class="menu-icon glyphicon glyphicon-envelope"></span>
 
-                        <p>Users</p> <span class="arrow"></span>
+                        <p>Customers</p> <span class="arrow"></span>
                     </a>
                     <ul class="sub-menu">
-                        <li><a href="/admin/pending-users">Pending Users</a></li>
-                        <li><a href="/admin/available-users">Available Users</a></li>
-                        <li><a href="/admin/deleted-users">Deleted Users</a></li>
+                        <li><a href="/admin/pending-users">Pending Customers</a></li>
+                        <li><a href="/admin/available-users">Available Customers</a></li>
+                        <li><a href="/admin/deleted-users">Deleted Customers</a></li>
                     </ul>
                 </li>
+
+                <li class="droplink">
+                    <a class="waves-effect waves-button">
+                        <span class="menu-icon glyphicon glyphicon-envelope"></span>
+
+                        <p>Buyers</p> <span class="arrow"></span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li><a href="/admin/pending-users">Pending Buyers</a></li>
+                        <li><a href="/admin/available-users">Available Buyers</a></li>
+                        <li><a href="/admin/deleted-users">Deleted Buyers</a></li>
+                    </ul>
+                </li>
+
+                <li class="droplink">
+                    <a class="waves-effect waves-button">
+                        <span class="menu-icon glyphicon glyphicon-envelope"></span>
+
+                        <p>Products</p> <span class="arrow"></span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li><a href="/admin/pending-users">Pending Products</a></li>
+                        <li><a href="/admin/available-users">Available Products</a></li>
+                        <li><a href="/admin/deleted-users">Deleted Products</a></li>
+                    </ul>
+                </li>
+
+
                 <!-- glyphicon-briefcase    glyphicon-th    glyphicon-list  glyphicon-edit  glyphicon-stats
                 glyphicon-log-in    glyphicon-map-marker    glyphicon-gift-->
             </ul>

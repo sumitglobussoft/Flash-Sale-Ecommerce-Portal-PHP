@@ -113,7 +113,7 @@ class ProductController extends Controller
                             $data['productmaterials'] = $productmaterial;
                             $data['productpatterns'] = $productpattern;
                             $data['producttags'] = $producttags;
-
+                            $data['productUrl'] = env('WEB_URL') . "/product-details/" . $productId;
                             $presentTime = time();
                             $productDetails[0]['discountFlag'] = 0;
                             if ($productDetails[0]['discount_value'] > 0) {
@@ -179,103 +179,118 @@ class ProductController extends Controller
 
     }
 
-    public function productSizeDetails(Request $request)
+    public function productAjaxHandler(Request $request)
     {
-
-        $postData = $request->all();
-        $response = new stdClass();
-        if ($postData) {
-            $objProductmetaModel = new Productmeta();
-            $objUserModel = new User();
-            $userId = '';
-            if (isset($postData['id'])) {
-                $userId = $postData['id'];
-            }
-            $whereForloginToken = $userId;
-
-            $productmetaId = '';
-            if (isset($postData['productmeta_id'])) {
-                $productmetaId = $postData['productmeta_id'];
-            }
-
-            $mytoken = 0;
-            $authflag = false;
-            if (isset($postData['mytoken'])) {
-                $mytoken = $postData['mytoken'];
-                if ($mytoken == env("API_TOKEN")) {
-                    $authflag = true;
-                } else {
-                    if ($userId != '') {
-                        DB::setFetchMode(PDO::FETCH_ASSOC);
-                        $Userscredentials = $objUserModel->getUsercredsWhere($whereForloginToken);
-                        if ($mytoken == $Userscredentials['login_token']) {
-                            $authflag = true;
+        $method = $request->input('method');
+        if ($method != "") {
+            switch ($method) {
+                case 'productsizingdetails':
+                    $postData = $request->all();
+                    $response = new stdClass();
+                    if ($postData) {
+                        $objProductmetaModel = new Productmeta();
+                        $objUserModel = new User();
+                        $userId = '';
+                        if (isset($postData['id'])) {
+                            $userId = $postData['id'];
                         }
-                    }
-                }
-            }
-            if ($authflag) {
-                if ($productmetaId != '') {
-                    DB::setFetchMode(PDO::FETCH_ASSOC);
-                    $productsizeDetails = $objProductmetaModel->getProductsizeDetails($productmetaId);
-                    $data = array();
-                    foreach ($productsizeDetails as $sizekey => $sizeval) {
+                        $whereForloginToken = $userId;
 
-                        $presentTime = time();
-                        $sizeval['discountFlag'] = 0;
-                        if ($sizeval['discount_value'] > 0) {
+                        $productmetaId = '';
+                        if (isset($postData['productmeta_id'])) {
+                            $productmetaId = $postData['productmeta_id'];
+                        }
 
-
-                            $disountFlag = TRUE;
-                            if ($sizeval['available_from'] != '' || $sizeval['available_upto'] != '') {
-                                if ($sizeval['available_from'] != '' && $sizeval['available_from'] > $presentTime) {
-
-                                    $disountFlag = FALSE;
-                                }
-                                if ($sizeval['available_upto'] != '' && $sizeval['available_upto'] < $presentTime) {
-
-                                    $disountFlag = FALSE;
+                        $mytoken = 0;
+                        $authflag = false;
+                        if (isset($postData['mytoken'])) {
+                            $mytoken = $postData['mytoken'];
+                            if ($mytoken == env("API_TOKEN")) {
+                                $authflag = true;
+                            } else {
+                                if ($userId != '') {
+                                    DB::setFetchMode(PDO::FETCH_ASSOC);
+                                    $Userscredentials = $objUserModel->getUsercredsWhere($whereForloginToken);
+                                    if ($mytoken == $Userscredentials['login_token']) {
+                                        $authflag = true;
+                                    }
                                 }
                             }
-                            if ($disountFlag) {
-                                $discountedValue = 0;
-                                $productPrice = (int)$sizeval['price'];
-                                if ($sizeval['discount_type'] == 1) {
-                                    $discountedValue = $productPrice - (int)$sizeval['discount_value'];
-                                }
-                                if ($sizeval['discount_type'] == 2) {
-                                    $discountedValue = $productPrice - (int)($productPrice * ((int)$sizeval['discount_value'] / 100));
-                                }
-
-                                $data[$sizekey]['discountedprice'] = $discountedValue;
-                                $data[$sizekey]['discountFlag'] = 1;
-                                $data[$sizekey]['productsizeDetails'] = $sizeval;
-
-                            }
                         }
-                    }
-                    $response->code = 200;
-                    $response->message = "Success";
-                    $response->data = $data;
+                        if ($authflag) {
+                            if ($productmetaId != '') {
+                                DB::setFetchMode(PDO::FETCH_ASSOC);
+                                $productsizeDetails = $objProductmetaModel->getProductsizeDetails($productmetaId);
+                                $data = array();
+                                foreach ($productsizeDetails as $sizekey => $sizeval) {
 
-                } else {
-                    $response->code = 100;
-                    $response->message = "Something went Wrong. No Product Details found.";
-                    $response->data = null;
-                }
-            } else {
-                $response->code = 401;
-                $response->message = "Access Denied";
-                $response->data = null;
+                                    $presentTime = time();
+                                    $sizeval['discountFlag'] = 0;
+                                    if ($sizeval['discount_value'] > 0) {
+
+
+                                        $disountFlag = TRUE;
+                                        if ($sizeval['available_from'] != '' || $sizeval['available_upto'] != '') {
+                                            if ($sizeval['available_from'] != '' && $sizeval['available_from'] > $presentTime) {
+
+                                                $disountFlag = FALSE;
+                                            }
+                                            if ($sizeval['available_upto'] != '' && $sizeval['available_upto'] < $presentTime) {
+
+                                                $disountFlag = FALSE;
+                                            }
+                                        }
+                                        if ($disountFlag) {
+                                            $discountedValue = 0;
+                                            $productPrice = (int)$sizeval['price'];
+                                            if ($sizeval['discount_type'] == 1) {
+                                                $discountedValue = $productPrice - (int)$sizeval['discount_value'];
+                                            }
+                                            if ($sizeval['discount_type'] == 2) {
+                                                $discountedValue = $productPrice - (int)($productPrice * ((int)$sizeval['discount_value'] / 100));
+                                            }
+
+                                            $data[$sizekey] = $sizeval;//['productsizeDetails']
+                                            $data[$sizekey]['discountedprice'] = $discountedValue;
+                                            $data[$sizekey]['discountFlag'] = 1;
+
+                                        }
+                                    }
+                                }
+                                $response->code = 200;
+                                $response->message = "Success";
+                                $response->data = $data;
+
+                            } else {
+                                $response->code = 100;
+                                $response->message = "Something went Wrong. No Product Details found.";
+                                $response->data = null;
+                            }
+                        } else {
+                            $response->code = 401;
+                            $response->message = "Access Denied";
+                            $response->data = null;
+                        }
+                    } else {
+                        $response->code = 100;
+                        $response->message = "Something went Wrong. No Details for Post.";
+                        $response->data = null;
+                    }
+                    echo json_encode($response, true);
+                    break;
+                default:
+                    break;
             }
-        } else {
-            $response->code = 100;
-            $response->message = "Something went Wrong. No Details for Post.";
-            $response->data = null;
         }
-//        echo "<pre>";print_r($data);
-        echo json_encode($response, true);
     }
+
+    public function productFilter(Request $request){
+
+
+
+    }
+
+
 
 
 }

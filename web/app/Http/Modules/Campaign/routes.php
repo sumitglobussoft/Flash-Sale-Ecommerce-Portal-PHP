@@ -11,4 +11,5 @@ Route::group(array('module' => 'Campaign', 'namespace' => 'Campaign\Controllers'
     Route::resource('/dailyspecial-details','DailyspecialController@dailyspecialdetails');
     Route::resource('/shop-details','ShopController@shopdetails');
     Route::resource('/product-ajax-handler', 'ProductController@productAjaxHandler');
+    Route::resource('/product-filter', 'ProductController@productfilter');
 });
