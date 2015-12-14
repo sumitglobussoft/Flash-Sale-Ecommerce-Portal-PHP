@@ -34,7 +34,8 @@ class HomeController extends Controller
         return view("Home/Views/home");
     }
 
-    public function homeAjaxHandler(Request $request){
+    public function homeAjaxHandler(Request $request)
+    {
         $method = $request->input('method');
         $api_url = env('API_URL');
         $objCurlHandler = CurlRequestHandler::getInstance();
@@ -46,17 +47,19 @@ class HomeController extends Controller
                     $data['lastname'] = trim($request->input('lname'));
                     $data['username'] = trim($request->input('uname'));
                     $data['email'] = trim($request->input('email'));
-                    echo json_encode($data);
-                    die;
-//                    $url = $api_url . "/signup";
-//                    $curlResponse = $objCurlHandler->curlUsingPost($url, $data);
-//                    if ($curlResponse->code == 200) {
-//                        echo 1;
-//                        die();
-//                    } else {
-//                        echo 0;
-//                        die();
-//                    }
+//                    echo json_encode($data);
+
+//                    echo json_encode($str);
+//                    die;
+                    $url = $api_url . "/signup";
+                    $curlResponse = $objCurlHandler->curlUsingPost($url, $data);
+                    if ($curlResponse->code == 200) {
+                        echo json_encode($curlResponse->message);
+                        die();
+                    } else {
+                        echo json_encode($curlResponse->message);
+                        die();
+                    }
                     break;
                 default:
                     break;
@@ -66,8 +69,6 @@ class HomeController extends Controller
             die();
         }
     }
-
-
 
 
 }

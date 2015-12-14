@@ -113,13 +113,22 @@ class AdminController extends Controller
 //        $userDetails;
 //        die("asd");
 //        die("Modular structure Admin dashboard");
+
         return view("Admin/Views/dashboard");
 
     }
 
     public function adminlogin(Request $data)
     {
+//        echo "<pre>";
+////        Session::put("Asd", "Asda");
+//        print_r(Session::all());
+
+        if (Auth::check()) {
+            return redirect('/admin/dashboard');
+        }
         if ($data->isMethod('post')) {
+
             $email = $data->input('email');
             $password = $data->input('password');
 
@@ -144,48 +153,30 @@ class AdminController extends Controller
             ], ['email.required' => 'Please enter email address or username',
                     'password.required' => 'Please enter a password']
             );
-
-//            $result['message'] = NULL;
-//            echo $email; echo bcrypt($password); die;
-//            $objModelUser = new User();
-//            $userDetails = $objModelUser->getUserWhere($email, $password);
-//            echo "<pre>";
-//            print_r($userDetails);
-//            die;
             if (Auth::attempt(['email' => $email, 'password' => $password])) {
-                if (Auth::user()->role == 5) {
-                    Session::put('flashsaleadmin', Auth::user());
-//                    echo "<pre>";
-//                    print_r(Session::all()); die;
-                    return redirect()->intended('/admin/dashboard');
-                } else {
-                    Auth::logout();
-                    return view("Admin/Layouts/adminlogin")->withErrors([
-                        'errMsg' => 'Invalid credentials.',
-                    ]);
-                }
+//                dd(Auth::User()); die;
+                Session::put('flashsaleadmin', Auth::User());
+//                echo "<pre>"; print_r(Session::all()); die;
+                return redirect('/admin/dashboard');
             } else {
-                return view("Admin/Layouts/adminlogin")->withErrors([
-                    'email' => 'Invalid credentials.',
+                Auth::logout();
+                return redirect('/admin/login')->withErrors([
+                    'errMsg' => 'Invalid credentials.'
                 ]);
             }
 
-//            if ($userDetails['status'] !== 200) {
-//                $result['message'] = $checkIfEmailExists['message'];
-//                return view('Auth.login', ['result' => $result]);
-//            } else {
-//                if (Auth::attempt(['email' => $email, 'password' => $password])) {
-//                    Session::put('email', $email);
-//                    return redirect()->intended('view');
-//                } else {
-//                    $result['message'] = 'Password Incorrect';
-//                    return view('Auth.login', ['result' => $result]);
-//                }
-//            }
-
         }
         return view("Admin/Layouts/adminlogin");
-
-//        die("Modular structure Admin login");
     }
+
+
+    public function logout()
+    {
+//        print_r(Session::all());
+        Session::flush();
+        Auth::logout();
+        return redirect()->guest('/admin/login');
+    }
+
+
 }

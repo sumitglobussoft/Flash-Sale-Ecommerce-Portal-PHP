@@ -699,7 +699,7 @@
         {{--return this.optional(element) || /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{7,14}$/.test(value);--}}
         {{--}, "Min 7 and Max 14 characters at least 1 Uppercase Alphabet, 1 Lowercase Alphabet, 1 Number and 1 Special Character (@$!%*?&):");--}}
 
-        $('#usersignupform').validate({
+        $('#usersignupform1').validate({
             rules: {
                 firstname: {
                     required: true,
@@ -773,8 +773,8 @@
             var Lastname = $('#lastname').val();
             var Username = $('#username').val();
             var Email = $('#email').val();
-            if ($("#usersignupform").valid()) {
-                if (Firstname != '' && Lastname != '' && Username != '' && Email != '') {
+//            if ($("#usersignupform").valid()) {
+//                if (Firstname != '' && Lastname != '' && Username != '' && Email != '') {
                     $.ajax({
                         url: '/home-ajax-handler',
                         type: 'POST',
@@ -805,8 +805,8 @@
 //                            }
                         }
                     });
-                }
-            }
+//                }
+//            }
         });
     });
 </script>

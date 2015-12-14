@@ -29,6 +29,6 @@ class Kernel extends HttpKernel
         'auth' => \FlashSale\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \FlashSale\Http\Middleware\RedirectIfAuthenticated::class,
-        'admin'=>\FlashSale\Http\Middleware\Admin::class,
+//        'admin'=>\FlashSale\Http\Middleware\Admin::class,
     ];
 }
