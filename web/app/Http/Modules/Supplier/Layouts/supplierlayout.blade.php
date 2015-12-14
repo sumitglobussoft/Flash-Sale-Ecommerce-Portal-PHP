@@ -2,6 +2,7 @@
 <html>
 <head>
     @include('Supplier/layouts/supplierheadscripts')
+
     @yield('pageheadcontent')
 
 </head>
@@ -160,8 +161,8 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle waves-effect waves-button waves-classic"
                                data-toggle="dropdown">
-                                <span class="user-name">David<i class="fa fa-angle-down"></i></span>
-                                <img class="img-circle avatar" src="/assets/images/avatar1.png" width="40" height="40"
+                                <span class="user-name">{{Session::get('fs_supplier')['name']}}<i class="fa fa-angle-down"></i></span>
+                                <img class="img-circle avatar" src="{{Session::get('fs_supplier')['profilepic']}}" width="40" height="40"
                                      alt="">
                             </a>
                             <ul class="dropdown-menu dropdown-list" role="menu">
@@ -169,24 +170,11 @@
                                 </li>
                                 {{--<li role="presentation"><a href="/calender"><i class="fa fa-calendar"></i>Calendar</a></li>--}}
                                 {{--<li role="presentation"><a href="/inbox"><i class="fa fa-envelope"></i>Inbox<span class="badge badge-success pull-right">4</span></a></li>--}}
-                                {{--<li role="presentation" class="divider"></li>--}}
+                                <li role="presentation" class="divider"></li>
                                 {{--<li role="presentation"><a href="/lock-screen"><i class="fa fa-lock"></i>Lock screen</a></li>--}}
-                                <li role="presentation"><a href="/logout"><i class="fa fa-sign-out m-r-xs"></i>Log
-                                        out</a></li>
+                                <li role="presentation"><a href="/supplier/logout"><i class="fa fa-sign-out m-r-xs"></i>Log out</a></li>
                             </ul>
                         </li>
-                        <li>
-                            <a href="/logout" class="log-out waves-effect waves-button waves-classic">
-                                <span><i class="fa fa-sign-out m-r-xs"></i>Log out</span>
-                            </a>
-                        </li>
-                        <!--UNCOMMENT THIS BLOCK  WITH SCRIPT IN MODERN.JS TO SHOW CHAT BOX ON RIGHT-->
-                        <!--<li>
-                            <a href="javascript:void(0);" class="waves-effect waves-button waves-classic"
-                               id="showRight">
-                                <i class="fa fa-comments"></i>
-                            </a>
-                        </li>-->
                     </ul>
                     <!-- Nav -->
                 </div>
@@ -197,18 +185,6 @@
     <!-- Navbar -->
     <div class="page-sidebar sidebar">
         <div class="page-sidebar-inner slimscroll">
-            <!--<div class="sidebar-header">
-                <div class="sidebar-profile">
-                    <a href="javascript:void(0);" id="profile-menu-link">
-                        <div class="sidebar-profile-image">
-                            <img src="/assets/images/avatar1.png" class="img-circle img-responsive" alt="">
-                        </div>
-                        <div class="sidebar-profile-details">
-                            <span>David Green<br><small>Art Director</small></span>
-                        </div>
-                    </a>
-                </div>
-            </div>-->
             <ul class="menu accordion-menu">
                 <li class="active">
                     <a href="/supplier/dashboard" class="waves-effect waves-button">
@@ -273,24 +249,6 @@
     <!-- Page Inner -->
 
 </main>
-<!-- Page Content -->
-<!--RIGHT SIDE SHORTCUTS MENU-->
-<!--<nav class="cd-nav-container" id="cd-nav">
-    <header>
-        <h3>Navigation</h3>
-        <a href="#0" class="cd-close-nav">Close</a>
-    </header>
-    <ul class="cd-nav list-unstyled">
-        <li class="cd-selected" data-menu="index">
-            <a href="javsacript:void(0);">
-                        <span>
-                            <i class="glyphicon glyphicon-home"></i>
-                        </span>
-                <p>Dashboard</p>
-            </a>
-        </li>
-    </ul>
-</nav>-->
 <div class="cd-overlay"></div>
 
 @include('Supplier/layouts/suppliercommonfooterscripts')

@@ -13,8 +13,9 @@
                         <a href="/" class="logo-name text-lg text-center">Flash Sale</a>
 
                         <p class="text-center m-t-md">Please login into your account.</p>
-
+                        <span class="error">{!! $errors->first('errMsg') !!}</span>
                         <form class="m-t-md" method="post">
+
                             <div class="form-group">
                                 <input class="form-control" placeholder="Email" name="email">
                                 <span class="error">{!! $errors->first('email') !!}</span>

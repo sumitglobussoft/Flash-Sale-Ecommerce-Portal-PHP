@@ -3,39 +3,21 @@
 namespace FlashSale\Http\Modules\Supplier\Models;
 
 use Illuminate\Support\Facades\DB;
-use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Auth\Passwords\CanResetPassword;
-use Illuminate\Foundation\Auth\Access\Authorizable;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
-use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Mockery\CountValidator\Exception;
 
-class User extends Model implements AuthenticatableContract,
-    AuthorizableContract,
-    CanResetPasswordContract
+
+class Usersmeta extends Model
 {
-    use Authenticatable, Authorizable, CanResetPassword;
 
-    protected $table = 'users';
-    protected $fillable = ['name', 'last_name', 'email', 'password', 'role', 'username', 'profilepic'];
-    protected $hidden = ['password', 'remember_token'];
+    protected $table = 'usersmeta';
+    protected $fillable = ['user_id', 'addressline1', 'addressline2', 'city', 'state', 'country', 'zipcode', 'phone'];
 
-    public function getUserWhere($email, $password)
-    {
-        $result = User::where('email', $email)
-            ->where('password', bcrypt($password))
-            ->first();
-//        $result = User::all();
-        return $result;
-    }
-
-    public function getUserDetailsWhere()
+    public function getUsersMetaDetailsWhere()
     {
         if (func_num_args() > 0) {
             $where = func_get_arg(0);
             $result = DB::table($this->table)
-                ->join('usersmeta', 'users.id', '=', 'usersmeta.user_id')
                 ->where($where)
                 ->first();
             return $result;
@@ -53,7 +35,7 @@ class User extends Model implements AuthenticatableContract,
      * @since 09-12-2015
      * @author Dinanath Thakur <dinanaththakur@globussoft.com>
      */
-    public function updateUserWhere()
+    public function updateUsersMetaDetailsWhere()
     {
         if (func_num_args() > 0) {
             $data = func_get_arg(0);

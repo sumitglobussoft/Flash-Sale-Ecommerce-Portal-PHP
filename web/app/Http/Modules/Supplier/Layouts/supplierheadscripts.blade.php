@@ -21,6 +21,9 @@
 <link href="/assets/plugins/slidepushmenus/css/component.css" rel="stylesheet" type="text/css"/>
 <link href="/assets/plugins/bootstrap-datepicker/css/datepicker3.css" rel="stylesheet" type="text/css"/>
 
+
+
+
 <!-- Theme Styles -->
 <link href="/assets/css/modern.min.css" rel="stylesheet" type="text/css"/>
 <link href="/assets/css/themes/white.css" class="theme-color" rel="stylesheet" type="text/css"/>

@@ -16,12 +16,14 @@
 
                         <form class="m-t-md" method="post" action="login">
                             <div class="form-group">
-                                <input class="form-control" placeholder="Email" name="email">
-                                <span class="error">{!! $errors->first('email') !!}</span>
+                                <input class="form-control" placeholder="Email" name="email" required>
                             </div>
                             <div class="form-group">
                                 <input type="password" class="form-control" placeholder="Password" name="password">
-                                <span class="error">{!! $errors->first('password') !!}</span>
+                            </div>
+                            <span class="error">{!! $errors->first('errMsg') !!}</span>
+                            <div class="form-group">
+                            <input type="checkbox" name="remember"> Remember me
                             </div>
                             <button type="submit" class="btn btn-success btn-block">Login</button>
                             {{--<a href="forgot.html" class="display-block text-center m-t-md text-sm">Forgot Password?</a>--}}
