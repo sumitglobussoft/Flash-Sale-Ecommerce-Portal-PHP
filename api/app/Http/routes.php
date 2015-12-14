@@ -14,3 +14,11 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::resource('/product-details','Campaign\ProductController@productdetails');
+Route::resource('/flashsale-details','Campaign\FlashsaleController@flashsaledetails');
+Route::resource('/dailyspecial-details','Campaign\DailyspecialController@dailyspecialdetails');
+Route::resource('/shop-details','Campaign\ShopController@shopdetails');
+Route::resource('/product-ajax-handler','Campaign\ProductController@productAjaxHandler');
+Route::resource('/product-filter','Campaign\ProductController@productfilter');

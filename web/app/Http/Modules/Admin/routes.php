@@ -68,22 +68,38 @@ Route::group(['middleware' => ['guest']], function () {
 
 Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), function () {
 
-    Route::resource('admin/login', 'AdminController@adminlogin');
-    Route::resource('/logout', 'AdminController@logout');
-    Route::get('/admin/access-denied', function(){
-        return view("Admin/Views/accessdenied");
-    });
+        Route::resource('/admin/login', 'AdminController@adminlogin');
+
 
 //IF  YOU NEED TO USE GET POST, USE THIS FORMAT AS IN BELOW BLOCK COMMENT
-    /*Route::get('admin/dashboard', function () {
-        return view("Admin/Views/dashboard");
-    }); */
+        /*Route::get('admin/dashboard', function () {
+            return view("Admin/Views/dashboard");
+        }); */
 
-    Route::group(['middleware' => 'auth:admin'], function () {
-        Route::resource('admin/dashboard', 'AdminController@dashboard');
+        Route::group(['middleware' => 'auth:admin'], function () {
 
-//        Route::resource('admin/ads', 'AdminController@dashboard');
-    });
+            Route::resource('/admin/logout', 'AdminController@adminLogout');
+            Route::resource('/admin/dashboard', 'AdminController@dashboard');
+            Route::get('/admin/access-denied', function () {
+                return view("Admin/Views/accessdenied");
+            });
+
+            Route::resource('/admin/pending-products', 'ProductController@pendingProducts');
+
+
+
+            //-----------------------------ROUTES FOR MANAGER----------------------------------------
+            //DON't DO ANYTHING IN THIS BLOCK YET [TO BE DONE AT THE END OF ADMIN MODULE WORK]
+            // [COPY ALL ROUTES ABOVE AND REPLACE ADMIN IN URL WITH MANAGER]
+            Route::resource('/manager/logout', 'AdminController@managerLogout');
+
+            Route::resource('manager/dashboard', 'AdminController@dashboard');
+            Route::get('/manager/access-denied', function () {
+                return view("Admin/Views/accessdenied");
+            });
+
+        });
+
 
 });
 
