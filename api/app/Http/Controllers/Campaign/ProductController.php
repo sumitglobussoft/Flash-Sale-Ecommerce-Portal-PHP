@@ -286,7 +286,9 @@ class ProductController extends Controller
 
     public function productFilter(Request $request){
 
-
+        $postData = $request->all();
+        $response = new stdClass();
+        echo"<pre>";print_r($postData);die("dsgvmk");
 
     }
 

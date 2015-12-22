@@ -86,6 +86,7 @@ Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), fun
 
             Route::resource('/admin/pending-products', 'ProductController@pendingProducts');
 
+            Route::resource('/admin/add-product', 'ProductController@addProduct');
 
 
             //-----------------------------ROUTES FOR MANAGER----------------------------------------
