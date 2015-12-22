@@ -12,6 +12,14 @@ class Usersmeta extends Model
 
     protected $table = 'usersmeta';
     protected $fillable = ['user_id', 'addressline1', 'addressline2', 'city', 'state', 'country', 'zipcode', 'phone'];
+    private static $_instance = null;
+
+    public static function getInstance()
+    {
+        if (!is_object(self::$_instance))  //or if( is_null(self::$_instance) ) or if( self::$_instance == null )
+            self::$_instance = new Usersmeta();
+        return self::$_instance;
+    }
 
     public function getUsersMetaDetailsWhere()
     {

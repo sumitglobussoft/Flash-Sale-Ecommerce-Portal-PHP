@@ -8,7 +8,7 @@
 <link href="/assets/css/custom/components.css" id="style_components" rel="stylesheet" type="text/css"/>
 
 
-{{--@section('title', 'Profile')--}}
+@section('title', 'Profile')
 
 @section('content')
     <div class="row">
@@ -153,9 +153,7 @@
                                                 <div class="fileinput fileinput-new" data-provides="fileinput">
                                                     <div class="fileinput-new thumbnail"
                                                          style="width: 200px; height: 150px;">
-
-                                                        <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image"
-                                                             alt=""/>
+                                                        <img src="/assets/images/no-image.png" alt=""/>
                                                     </div>
                                                     <div class="fileinput-preview fileinput-exists thumbnail"
                                                          style="max-width: 200px; max-height: 150px;">
@@ -407,7 +405,7 @@
                 var formData = new FormData();
                 formData.append('method', 'updateAvatar');
 
-                formData.append('image', $('input[type=file]')[0].files[0]);
+                formData.append('file', $('input[type=file]')[0].files[0]);
 
                 $.ajax({
                     type: "POST",

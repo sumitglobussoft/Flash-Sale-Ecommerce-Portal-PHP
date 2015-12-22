@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     @include('Supplier/layouts/supplierheadscripts')
+
 </head>
 <body class="page-login">
 <main class="page-content">
@@ -16,14 +20,17 @@
 
                         <form class="m-t-md" method="post" action="login">
                             <div class="form-group">
-                                <input class="form-control" placeholder="Email" name="email" required>
+                                <input class="form-control" placeholder="Email or Username" name="emailOrUsername"
+                                       value="{{old('emailOrUsername')}}" required>
+                                <span class="error">{!! $errors->first('emailOrUsername') !!}</span>
                             </div>
                             <div class="form-group">
-                                <input type="password" class="form-control" placeholder="Password" name="password">
+                                <input type="password" class="form-control" placeholder="Password" name="password" required>
                             </div>
                             <span class="error">{!! $errors->first('errMsg') !!}</span>
+
                             <div class="form-group">
-                            <input type="checkbox" name="remember"> Remember me
+                                <input type="checkbox" name="remember"> Remember me
                             </div>
                             <button type="submit" class="btn btn-success btn-block">Login</button>
                             {{--<a href="forgot.html" class="display-block text-center m-t-md text-sm">Forgot Password?</a>--}}

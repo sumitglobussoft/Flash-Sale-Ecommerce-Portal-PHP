@@ -264,9 +264,10 @@
                         <p>Products</p> <span class="arrow"></span>
                     </a>
                     <ul class="sub-menu">
-                        <li><a href="/admin/pending-users">Pending Products</a></li>
-                        <li><a href="/admin/available-users">Available Products</a></li>
-                        <li><a href="/admin/deleted-users">Deleted Products</a></li>
+                        <li><a href="/admin/manage-categories">Categories</a></li>
+                        <li><a href="/admin/manage-products">Products</a></li>
+                        <li><a href="/admin/manage-features">Features</a></li>
+                        <li><a href="/admin/manage-filters">Filters</a></li>
                     </ul>
                 </li>
 

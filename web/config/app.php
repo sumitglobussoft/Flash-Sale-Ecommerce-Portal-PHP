@@ -200,7 +200,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Html' => Illuminate\Html\HtmlFacade::class,//EXTRA ADDED COMPOSER ELEMENT BY AKASH PAI TO USE HTML FUNCTIONS
-
+        'Form'=>Illuminate\Html\FormFacade::class,//EXTRA ADDED COMPOSER ELEMENT BY DINANATH THAKUR TO USE FORM FUNCTIONS
 		'Image' => Intervention\Image\Facades\Image::class,//EXTRA ADDED COMPOSER ELEMENT BY DINANATH THAKUR TO USE IMAGE INTERVENTION
 
     ],

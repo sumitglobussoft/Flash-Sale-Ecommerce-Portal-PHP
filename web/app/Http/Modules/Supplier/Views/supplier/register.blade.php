@@ -10,35 +10,34 @@
             <div class="row">
                 <div class="col-md-3 center">
                     <div class="login-box">
-                        <a href="/" class="logo-name text-lg text-center">Flash Sale</a>
-
+                        {!! Html::link('/', 'Flash Sale', ['class' => 'logo-name text-lg text-center']) !!}
                         <p class="text-center m-t-md">Create a Supplier account</p>
 
-                        <form class="m-t-md" method="post" action="">
+                        <form class="m-t-md" method="post" action="" id="registerForm">
                             <span class="error">{!! $errors->first('registerErrMsg') !!}</span>
+
                             <div class="form-group">
-                                <input name="first_name" type="text" class="form-control" placeholder="First Name" required
-                                       value="{{ old('first_name') }}">
+                                {!! Form::text('first_name',old('first_name') , ['class' => 'form-control','placeholder'=>'First Name','required'=>'true']) !!}
                                 <span class="error">{!! $errors->first('first_name') !!}</span>
                             </div>
                             <div class="form-group">
-                                <input name="last_name" type="text" class="form-control" placeholder="Last Name" required
-                                       value="{{ old('last_name') }}">
+                                {!! Form::text('last_name',old('last_name') , ['class' => 'form-control','placeholder'=>'Last Name','required'=>'true']) !!}
                                 <span class="error">{!! $errors->first('last_name') !!}</span>
                             </div>
                             <div class="form-group">
-                                <input name="email" type="email" class="form-control" placeholder="Email" required
-                                       value="{{ old('email') }}">
+                                {!! Form::email('email',old('email')  , ['class' => 'form-control','placeholder'=>'Enail','required'=>'true']) !!}
                                 <span class="error">{!! $errors->first('email') !!}</span>
                             </div>
                             <div class="form-group">
-                                <input name="password" type="password" class="form-control" placeholder="Password"
-                                       required>
+                                {!! Form::text('username',old('username')  , ['class' => 'form-control','placeholder'=>'Username','required'=>'true']) !!}
+                                <span class="error">{!! $errors->first('username') !!}</span>
+                            </div>
+                            <div class="form-group">
+                                {!! Form::password('password', ['class' => 'form-control','placeholder'=>'Password','required'=>'true']) !!}
                                 <span class="error">{!! $errors->first('password') !!}</span>
                             </div>
                             <div class="form-group">
-                                <input name="password_confirm" type="password" class="form-control"
-                                       placeholder="Confirm Password" required>
+                                {!! Form::password('password_confirm', ['class' => 'form-control','placeholder'=>'Confirm Password','required'=>'true']) !!}
                                 <span class="error">{!! $errors->first('password_confirm') !!}</span>
                             </div>
                             <label>
@@ -46,9 +45,9 @@
                                 <div class="clearfix"></div>
                                 <span class="error">{!! $errors->first('terms_and_policy') !!}</span>
                             </label>
-                            <button type="submit" class="btn btn-success btn-block m-t-xs">Submit</button>
+                            {!! Form::submit('Submit', ['class' => 'btn btn-success btn-block m-t-xs']) !!}
                             <p class="text-center m-t-xs text-sm">Already have an account?</p>
-                            <a href="login" class="btn btn-default btn-block m-t-xs">Login</a>
+                            {!! Html::link('/supplier/login', 'Login', ['class' => 'btn btn-default btn-block m-t-xs']) !!}
                         </form>
                         <p class="text-center m-t-xs text-sm">2015 &copy; Flash Sale</p>
                     </div>
@@ -64,6 +63,47 @@
 <!-- Page Content -->
 
 @include('Supplier/layouts/suppliercommonfooterscripts')
-
+<script src="/assets/plugins/jquery-validation/jquery.validate.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#registerForm').validate({
+            rules: {
+                username: {
+                    required: true,
+                    remote: {
+                        url: "/userAjaxHandler",
+                        type: 'POST',
+                        datatype: 'json',
+                        data: {
+                            method: 'checkUserName'
+                        }
+                    }
+                },
+                email: {
+                    required: true,
+                    remote: {
+                        url: "/userAjaxHandler",
+                        type: 'POST',
+                        datatype: 'json',
+                        data: {
+                            method: 'checkEmail'
+                        }
+                    }
+                }
+            },
+            messages: {
+                username: {
+                    remote: "The username has already been taken."
+                },
+                email: {
+                    remote: "The email has already been taken."
+                }
+            },
+            submitHandler: function (form) {
+               event.preventDefault()
+            }
+        });
+    });
+</script>
 </body>
 </html>

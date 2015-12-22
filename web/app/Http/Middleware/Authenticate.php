@@ -127,7 +127,7 @@ class Authenticate
                     $userRoleFlag = true;
                 }
                 if (!$userRoleFlag) {
-                    return redirect('/suppliers/login');
+                    return redirect('/supplier/login');
                 }
             } else if ($parentmodule == "user") {
                 if (Session::has('fs_buyer') || Session::has('fs_customer') || Session::has('fs_admin')) { //ALSO USE " || Session::has('fs_supplier')" in if condition if SUPPLIER CAN ACT AS A BUYER/CUSTOMER  //$userRole = 1,2

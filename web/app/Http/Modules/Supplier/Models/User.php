@@ -17,9 +17,18 @@ class User extends Model implements AuthenticatableContract,
 {
     use Authenticatable, Authorizable, CanResetPassword;
 
+    private static $_instance = null;
+
     protected $table = 'users';
     protected $fillable = ['name', 'last_name', 'email', 'password', 'role', 'username', 'profilepic'];
     protected $hidden = ['password', 'remember_token'];
+
+    public static function getInstance()
+    {
+        if (!is_object(self::$_instance))  //or if( is_null(self::$_instance) ) or if( self::$_instance == null )
+            self::$_instance = new User();
+        return self::$_instance;
+    }
 
     public function getUserWhere($email, $password)
     {
@@ -70,6 +79,13 @@ class User extends Model implements AuthenticatableContract,
         } else {
             throw new Exception('Argument Not Passed');
         }
+    }
+
+    public function getUserById($userId)
+    {
+
+        $result = User::whereId($userId)->first();
+        return $result;
     }
 
 

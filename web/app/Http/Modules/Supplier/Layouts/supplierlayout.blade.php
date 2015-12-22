@@ -62,7 +62,8 @@
         <input type="text" name="search" class="form-control search-input" placeholder="Search...">
                 <span class="input-group-btn">
                     <button class="btn btn-default close-search waves-effect waves-button waves-classic" type="button">
-                        <i class="fa fa-times"></i></button>
+                        <i class="fa fa-times"></i>
+                    </button>
                 </span>
     </div>
     <!-- Input Group -->
@@ -161,18 +162,22 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle waves-effect waves-button waves-classic"
                                data-toggle="dropdown">
-                                <span class="user-name">{{Session::get('fs_supplier')['name']}}<i class="fa fa-angle-down"></i></span>
-                                <img class="img-circle avatar" src="{{Session::get('fs_supplier')['profilepic']}}" width="40" height="40"
+                                <span class="user-name">{{Session::get('fs_supplier')['name']}}<i
+                                            class="fa fa-angle-down"></i></span>
+                                <img class="img-circle avatar" src="{{Session::get('fs_supplier')['profilepic']}}"
+                                     width="40" height="40"
                                      alt="">
                             </a>
                             <ul class="dropdown-menu dropdown-list" role="menu">
-                                <li role="presentation"><a href="/supplier/profile"><i class="fa fa-user"></i>Profile</a>
+                                <li role="presentation"><a href="/supplier/profile"><i
+                                                class="fa fa-user"></i>Profile</a>
                                 </li>
                                 {{--<li role="presentation"><a href="/calender"><i class="fa fa-calendar"></i>Calendar</a></li>--}}
                                 {{--<li role="presentation"><a href="/inbox"><i class="fa fa-envelope"></i>Inbox<span class="badge badge-success pull-right">4</span></a></li>--}}
                                 <li role="presentation" class="divider"></li>
                                 {{--<li role="presentation"><a href="/lock-screen"><i class="fa fa-lock"></i>Lock screen</a></li>--}}
-                                <li role="presentation"><a href="/supplier/logout"><i class="fa fa-sign-out m-r-xs"></i>Log out</a></li>
+                                <li role="presentation"><a href="/supplier/logout"><i class="fa fa-sign-out m-r-xs"></i>Log
+                                        out</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -197,30 +202,15 @@
                     <a class="waves-effect waves-button">
                         <span class="menu-icon glyphicon glyphicon-user"></span>
 
-                        <p>Suppliers</p> <span class="arrow"></span>
+                        <p>Products</p> <span class="arrow"></span>
                     </a>
                     <ul class="sub-menu">
-                        <li><a href="/supplier/pending-suppliers">Pending requests</a></li>
-                        <li><a href="/supplier/available-suppliers">Available suppliers</a></li>
-                        <li><a href="/supplier/rejected-suppliers">Rejected suppliers</a></li>
-                        <li><a href="/supplier/deleted-suppliers">Deleted suppliers</a></li>
+                        <li><a href="/supplier/pending-products">Pending Products</a></li>
+                        <li><a href="/supplier/available-products">Available Products</a></li>
+                        <li><a href="/supplier/rejected-products">Rejected Products</a></li>
+                        <li><a href="/supplier/deleted-products">Deleted Products</a></li>
                     </ul>
                 </li>
-
-                <li class="droplink">
-                    <a class="waves-effect waves-button">
-                        <span class="menu-icon glyphicon glyphicon-envelope"></span>
-
-                        <p>Users</p> <span class="arrow"></span>
-                    </a>
-                    <ul class="sub-menu">
-                        <li><a href="/supplier/pending-users">Pending Users</a></li>
-                        <li><a href="/supplier/available-users">Available Users</a></li>
-                        <li><a href="/supplier/deleted-users">Deleted Users</a></li>
-                    </ul>
-                </li>
-                <!-- glyphicon-briefcase    glyphicon-th    glyphicon-list  glyphicon-edit  glyphicon-stats
-                glyphicon-log-in    glyphicon-map-marker    glyphicon-gift-->
             </ul>
         </div>
         <!-- Page Sidebar Inner -->

@@ -22,120 +22,49 @@ use Illuminate\Support\Facades\Session;
 
 class SupplierController extends Controller
 {
-//    public function __call(){
-//
-//    }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
-    private $allowedResolution = '2500x2500';
-
-    public function index()
-    {
-        //
-//        return view("Admin\admin")
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 
     public function dashboard()
     {
-
+//        if (Session::has('fs_supplier')) {
+//            die("test");
+//        }
+//
+//        echo "<pre>";
+//        print_r(Session::get('fs_supplier')['id']);
+//        die;
         return view("Supplier/Views/supplier/dashboard");
 
     }
 
     public function login(Request $request)
     {
-        if (Session::get('fs_supplier')) {
+        if (Session::has('fs_supplier')) {
             return redirect('/supplier/dashboard');
         }
 
         if ($request->isMethod('post')) {
             $remember = $request['remember'] == 'on' ? true : false;
 
-            $email = $request->input('email');
+            $emailOrUsername = $request->input('emailOrUsername');
             $password = $request->input('password');
 
             $this->validate($request, [
-                'email' => 'required|email',
+                'emailOrUsername' => 'required',
                 'password' => 'required',
-            ], ['email.required' => 'Please enter email address or username',
+            ], ['emailOrUsername.required' => 'Please enter email address or username',
                     'password.required' => 'Please enter a password']
             );
-            if (Auth::attempt(['email' => $email, 'password' => $password], $remember)) {
-                if (Auth::user()->role == 3) {
-                    Session::put('fs_supplier', Auth::user());
+            $field = 'username';
+            if (strpos($emailOrUsername, '@')) {
+                $field = 'email';
+            }
+            if (Auth::attempt([$field => $emailOrUsername, 'password' => $password], $remember)) {
+                $objModelUsers = User::getInstance();
+                $userDetails = $objModelUsers->getUserById(Auth::id());
+                if ($userDetails->role == 3) {
+                    Session::put('fs_supplier', $userDetails['original']);
                     return redirect()->intended('supplier/dashboard');
                 } else {
-                    Auth::logout();
                     return view("Supplier/Views/supplier/login")->withErrors([
                         'errMsg' => 'Invalid credentials.',
                     ]);
@@ -152,7 +81,7 @@ class SupplierController extends Controller
 
     public function register(Request $request)
     {
-        if (Session::get('fs_supplier')) {
+        if (Session::has('fs_supplier')) {
             return redirect('/supplier/dashboard');
         }
 
@@ -181,13 +110,15 @@ class SupplierController extends Controller
                         'email' => $request['email'],
                         'password' => bcrypt($request['password']),
                         'role' => '3',
-                        'username' => $request['email'],
+                        'username' => $request['username'],
                         'profilepic' => '/assets/images/avatar-placeholder.jpg'
                     ]);
 
                     if ($supplier) {
                         Auth::login($supplier);
-                        Session::put('fs_supplier', Auth::user());
+                        $objModelUsers = User::getInstance();
+                        $userDetails = $objModelUsers->getUserById(Auth::id());
+                        Session::put('fs_supplier', $userDetails['original']);
                         return redirect()->intended('supplier/supplierDetails');
                     } else {
                         return view("Supplier/Views/supplier/register")->withErrors([
@@ -206,27 +137,38 @@ class SupplierController extends Controller
 
     public function logout()
     {
-        Session::flush();
-        Auth::logout();
+        Session::forget('fs_supplier');
         return redirect('/supplier/login');
     }
 
     public function profile(Request $request)
     {
-        $objModelUser = new User();
-        $uesrId = Auth::id();
+        $objModelUser = User::getInstance();
 
-        $where['users.id'] = $uesrId;
+        $where['users.id'] = Session::get('fs_supplier')['id'];
         $uesrDetails = $objModelUser->getUserDetailsWhere($where);
 
 //        echo '<pre>';
 //        print_r($uesrDetails);
 //        die;
-        return view('Supplier/Views/supplier/profile', ['uesrDetails' => $uesrDetails]);
+
+        if ($uesrDetails) {
+            return view('Supplier/Views/supplier/profile', ['uesrDetails' => $uesrDetails]);
+        } else {
+            return redirect()->intended('supplier/supplierDetails');
+        }
     }
 
     public function supplierDetails(Request $request)
     {
+        $objModelUser = User::getInstance();
+
+        $where['users.id'] = Session::get('fs_supplier')['id'];
+        $uesrDetails = $objModelUser->getUserDetailsWhere($where);
+        if (isset($uesrDetails->user_id)) {
+            return redirect()->intended('supplier/dashboard');
+        }
+
         //NOT YET COMPLETE, NEED COUNTRY DETAILS
         if ($request->isMethod('post')) {
             $rules = array(
@@ -247,7 +189,7 @@ class SupplierController extends Controller
             } else {
                 try {
                     $supplierDetails = Usersmeta::create([
-                            'user_id' => Auth::id(),
+                            'user_id' => Session::get('fs_supplier')['id'],
                             'addressline1' => $request->input('addressline1'),
                             'addressline2' => $request->input('addressline2'),
                             'city' => $request->input('city'),
@@ -277,12 +219,12 @@ class SupplierController extends Controller
 
     public function ajaxHandler(Request $request)
     {
-        $objModelUser = new User();
-        $objModelUsersmeta = new Usersmeta();
+        $objModelUser = User::getInstance();
+        $objModelUsersmeta = Usersmeta::getInstance();
 
-        $uesrId = Auth::id();
+        $userId = Session::get('fs_supplier')['id'];
 
-        $where['user_id'] = $uesrId;
+        $where['user_id'] = $userId;
         $usersMetaDetails = $objModelUsersmeta->getUsersMetaDetailsWhere($where);
 
         $method = $request->input('method');
@@ -314,7 +256,7 @@ class SupplierController extends Controller
                 if ($validator->fails()) {
                     echo json_encode(array('status' => 2, 'message' => $validator->messages()->all()));
                 } else {
-                    $whereForUpdate['id'] = $uesrId;
+                    $whereForUpdate['id'] = $userId;
                     $updateData['name'] = $request->input('first_name');
                     $updateData['last_name'] = $request->input('last_name');
 
@@ -339,33 +281,32 @@ class SupplierController extends Controller
 
                 break;
             case 'updateAvatar':
-                if (Input::hasFile('image')) {
-                    Validator::extend('resolution', function ($attribute, $value, $parameters) {
-                        $resX = explode("x", $parameters[0])[0];
-                        $resY = explode("x", $parameters[0])[1];
-                        $img = Image::make($value);
-                        return $img->height() <= $resY && $img->width() <= $resX;
-                    }, 'File resolution too large. Allowed resolution ' . $this->allowedResolution);
 
-                    $validator = Validator::make($request->all(), ['image' => 'resolution:' . $this->allowedResolution]);
+                if (Input::hasFile('file')) {
+
+                    $validator = Validator::make($request->all(), ['file' => 'image']);
 
                     if ($validator->fails()) {
                         echo json_encode(array('status' => 2, 'message' => $validator->messages()->all()));
                     } else {
                         $destinationPath = 'assets/uploads/useravatar/';
-                        $filename = $uesrId . '_' . time() . ".jpg";
+                        $filename = $userId . '_' . time() . ".jpg";
                         File::makeDirectory($destinationPath, 0777, true, true);
                         $filePath = '/' . $destinationPath . $filename;
+                        $quality = $this->imageQuality(Input::file('file'));
 
-                        $quality = $this->imageQuality(Input::file('image'));
-                        Image::make(Input::file('image'))->save($destinationPath . $filename, $quality);
+                        Image::make(Input::file('file'))->resize(1024, 1024, function ($constraint) {
+                            $constraint->aspectRatio();
+                        })->save($destinationPath . $filename, $quality);
 
-                        $whereForUpdate['id'] = $uesrId;
+                        $whereForUpdate['id'] = $userId;
                         $updateData['profilepic'] = $filePath;
                         $updatedResult = $objModelUser->updateUserWhere($updateData, $whereForUpdate);
                         if ($updatedResult) {
-                            File::delete(public_path() . Session::get('fs_supplier')['profilepic']);
-                            Session::get('fs_supplier')['profilepic'] = $filePath;
+                            if (!strpos(Session::get('fs_supplier')['profilepic'], 'placeholder')) {
+                                File::delete(public_path() . Session::get('fs_supplier')['profilepic']);
+                            }
+                            Session::put('fs_supplier.profilepic', $filePath);
                             echo json_encode(array('status' => 1, 'message' => 'Successfully updated profile image.'));
                         } else {
                             echo json_encode(array('status' => 0, 'message' => 'Something went wrong, please reload the page and try again.'));
@@ -399,6 +340,33 @@ class SupplierController extends Controller
                     echo json_encode(array('status' => 1, 'message' => 'Your password has been successfully updated.'));
                 }
                 break;
+            default:
+                break;
+        }
+    }
+
+    public function userAjaxHandler(Request $request)
+    {
+        $method = $request->input('method');
+        switch ($method) {
+            case 'checkUserName':
+                $validator = Validator::make($request->all(), ['username' => 'required|unique:users,username']);
+                if ($validator->fails()) {
+                    echo json_encode(false);
+                } else {
+                    echo json_encode(true);
+                }
+                break;
+
+            case 'checkEmail':
+                $validator = Validator::make($request->all(), ['email' => 'required|unique:users,email']);
+                if ($validator->fails()) {
+                    echo json_encode(false);
+                } else {
+                    echo json_encode(true);
+                }
+                break;
+
             default:
                 break;
         }
