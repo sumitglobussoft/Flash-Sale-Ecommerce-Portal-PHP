@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    @include('Admin/layouts/adminheadscripts')
+    @include('Supplier/layouts/supplierheadscripts')
+
     @yield('pageheadcontent')
 
 </head>
@@ -61,7 +62,8 @@
         <input type="text" name="search" class="form-control search-input" placeholder="Search...">
                 <span class="input-group-btn">
                     <button class="btn btn-default close-search waves-effect waves-button waves-classic" type="button">
-                        <i class="fa fa-times"></i></button>
+                        <i class="fa fa-times"></i>
+                    </button>
                 </span>
     </div>
     <!-- Input Group -->
@@ -160,33 +162,24 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle waves-effect waves-button waves-classic"
                                data-toggle="dropdown">
-                                <span class="user-name">David<i class="fa fa-angle-down"></i></span>
-                                <img class="img-circle avatar" src="/assets/images/avatar1.png" width="40" height="40"
+                                <span class="user-name">{{Session::get('fs_supplier')['name']}}<i
+                                            class="fa fa-angle-down"></i></span>
+                                <img class="img-circle avatar" src="{{Session::get('fs_supplier')['profilepic']}}"
+                                     width="40" height="40"
                                      alt="">
                             </a>
                             <ul class="dropdown-menu dropdown-list" role="menu">
-                                <li role="presentation"><a href="/admin/profile"><i class="fa fa-user"></i>Profile</a>
+                                <li role="presentation"><a href="/supplier/profile"><i
+                                                class="fa fa-user"></i>Profile</a>
                                 </li>
                                 {{--<li role="presentation"><a href="/calender"><i class="fa fa-calendar"></i>Calendar</a></li>--}}
                                 {{--<li role="presentation"><a href="/inbox"><i class="fa fa-envelope"></i>Inbox<span class="badge badge-success pull-right">4</span></a></li>--}}
-                                {{--<li role="presentation" class="divider"></li>--}}
+                                <li role="presentation" class="divider"></li>
                                 {{--<li role="presentation"><a href="/lock-screen"><i class="fa fa-lock"></i>Lock screen</a></li>--}}
-                                <li role="presentation"><a href="/admin/logout"><i class="fa fa-sign-out m-r-xs"></i>Log
+                                <li role="presentation"><a href="/supplier/logout"><i class="fa fa-sign-out m-r-xs"></i>Log
                                         out</a></li>
                             </ul>
                         </li>
-                        <li>
-                            <a href="/admin/logout" class="log-out waves-effect waves-button waves-classic">
-                                <span><i class="fa fa-sign-out m-r-xs"></i>Log out</span>
-                            </a>
-                        </li>
-                        <!--UNCOMMENT THIS BLOCK  WITH SCRIPT IN MODERN.JS TO SHOW CHAT BOX ON RIGHT-->
-                        <!--<li>
-                            <a href="javascript:void(0);" class="waves-effect waves-button waves-classic"
-                               id="showRight">
-                                <i class="fa fa-comments"></i>
-                            </a>
-                        </li>-->
                     </ul>
                     <!-- Nav -->
                 </div>
@@ -197,21 +190,9 @@
     <!-- Navbar -->
     <div class="page-sidebar sidebar">
         <div class="page-sidebar-inner slimscroll">
-            <!--<div class="sidebar-header">
-                <div class="sidebar-profile">
-                    <a href="javascript:void(0);" id="profile-menu-link">
-                        <div class="sidebar-profile-image">
-                            <img src="/assets/images/avatar1.png" class="img-circle img-responsive" alt="">
-                        </div>
-                        <div class="sidebar-profile-details">
-                            <span>David Green<br><small>Art Director</small></span>
-                        </div>
-                    </a>
-                </div>
-            </div>-->
             <ul class="menu accordion-menu">
                 <li class="active">
-                    <a href="/admin/dashboard" class="waves-effect waves-button">
+                    <a href="/supplier/dashboard" class="waves-effect waves-button">
                         <span class="menu-icon glyphicon glyphicon-home"></span>
 
                         <p>Dashboard</p>
@@ -221,59 +202,15 @@
                     <a class="waves-effect waves-button">
                         <span class="menu-icon glyphicon glyphicon-user"></span>
 
-                        <p>Suppliers</p> <span class="arrow"></span>
-                    </a>
-                    <ul class="sub-menu">
-                        <li><a href="/admin/pending-suppliers">Pending requests</a></li>
-                        <li><a href="/admin/available-suppliers">Available suppliers</a></li>
-                        <li><a href="/admin/rejected-suppliers">Rejected suppliers</a></li>
-                        <li><a href="/admin/deleted-suppliers">Deleted suppliers</a></li>
-                    </ul>
-                </li>
-
-                <li class="droplink">
-                    <a class="waves-effect waves-button">
-                        <span class="menu-icon glyphicon glyphicon-envelope"></span>
-
-                        <p>Customers</p> <span class="arrow"></span>
-                    </a>
-                    <ul class="sub-menu">
-                        <li><a href="/admin/pending-users">Pending Customers</a></li>
-                        <li><a href="/admin/available-users">Available Customers</a></li>
-                        <li><a href="/admin/deleted-users">Deleted Customers</a></li>
-                    </ul>
-                </li>
-
-                <li class="droplink">
-                    <a class="waves-effect waves-button">
-                        <span class="menu-icon glyphicon glyphicon-envelope"></span>
-
-                        <p>Buyers</p> <span class="arrow"></span>
-                    </a>
-                    <ul class="sub-menu">
-                        <li><a href="/admin/pending-users">Pending Buyers</a></li>
-                        <li><a href="/admin/available-users">Available Buyers</a></li>
-                        <li><a href="/admin/deleted-users">Deleted Buyers</a></li>
-                    </ul>
-                </li>
-
-                <li class="droplink">
-                    <a class="waves-effect waves-button">
-                        <span class="menu-icon glyphicon glyphicon-envelope"></span>
-
                         <p>Products</p> <span class="arrow"></span>
                     </a>
                     <ul class="sub-menu">
-                        <li><a href="/admin/manage-categories">Categories</a></li>
-                        <li><a href="/admin/manage-products">Products</a></li>
-                        <li><a href="/admin/manage-features">Features</a></li>
-                        <li><a href="/admin/manage-filters">Filters</a></li>
+                        <li><a href="/supplier/pending-products">Pending Products</a></li>
+                        <li><a href="/supplier/available-products">Available Products</a></li>
+                        <li><a href="/supplier/rejected-products">Rejected Products</a></li>
+                        <li><a href="/supplier/deleted-products">Deleted Products</a></li>
                     </ul>
                 </li>
-
-
-                <!-- glyphicon-briefcase    glyphicon-th    glyphicon-list  glyphicon-edit  glyphicon-stats
-                glyphicon-log-in    glyphicon-map-marker    glyphicon-gift-->
             </ul>
         </div>
         <!-- Page Sidebar Inner -->
@@ -302,29 +239,11 @@
     <!-- Page Inner -->
 
 </main>
-<!-- Page Content -->
-<!--RIGHT SIDE SHORTCUTS MENU-->
-<!--<nav class="cd-nav-container" id="cd-nav">
-    <header>
-        <h3>Navigation</h3>
-        <a href="#0" class="cd-close-nav">Close</a>
-    </header>
-    <ul class="cd-nav list-unstyled">
-        <li class="cd-selected" data-menu="index">
-            <a href="javsacript:void(0);">
-                        <span>
-                            <i class="glyphicon glyphicon-home"></i>
-                        </span>
-                <p>Dashboard</p>
-            </a>
-        </li>
-    </ul>
-</nav>-->
 <div class="cd-overlay"></div>
 
-@include('Admin/layouts/admincommonfooterscripts')
+@include('Supplier/layouts/suppliercommonfooterscripts')
 
 @yield('pagejavascripts')
-<script src="/assets/js/modern.js"></script>
+
 </body>
 </html>
