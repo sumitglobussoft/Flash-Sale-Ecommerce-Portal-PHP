@@ -86,10 +86,45 @@
                     <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
                         <ul class="login list-inline text-uppercase">
                             {{--<li><a href="#">my cart</a></li>--}}
+                            <?php if (Session::has('fs_user')){ ?>
+                            <li><a href="/logout" class="">Logout</a>
+                            </li>
+                            <li>
+                                <a href="#" id="showdetails"><img src="http://semantic-ui.com/images/avatar/small/jenny.jpg" style="height:30px; width:30px;" class="img-circle"/> Username <span id="triangle_down">&#9660;</span>
+                                    <span id="triangle_up" style="display:none;">&#9650;</span></a>
+                                <div id="userpanel" class="left-panel">
+
+
+                                    <!--body panel-->
+                                    <div class="body-user">
+
+                                        <div class="content-body-user text-overflow">
+                                            <ul class="list-unstyled">
+                                                <li><a href="#"><i class="fa fa-user"></i>&nbsp;&nbsp;My Account</a></li>
+                                                <li><a href="#"><i class="fa fa-heart"></i>&nbsp;&nbsp;My Wishlist</a></li>
+                                                <li><a href="#"><i class="fa fa-truck"></i>&nbsp;&nbsp;My Orders</a></li>
+                                                <li><a href="#"><i class="fa fa-outdent"></i>&nbsp;&nbsp;My Tickets</a></li>
+                                                <li><a href="#"><i class="fa fa-bullhorn"></i>&nbsp;&nbsp;Add New Ticket</a></li>
+                                                <li><a href="#"><i class="fa fa-envelope"></i>&nbsp;&nbsp;Subscribe Newsletter</a></li>
+                                                <li><a href="#"><i class="fa fa-key"></i>&nbsp;&nbsp;Log Out</a></li>
+                                            </ul>
+
+                                        </div>
+                                    </div>
+                                    <!--body panel-->
+
+                                </div>
+
+                            </li>
+                            <?php } else { ?>
+
                             <li><a href="#" class="open_login_model" data-toggle="modal" data-target=".modal-login">login</a>
                             </li>
                             <li><a href="#" class="open_signup_model" data-toggle="modal" data-target=".modal-login">Register</a>
                             </li>
+                            <?php } ?>
+
+
                             <li>
                                 <a href="#" id="showbag">bag (1) <span id="triangle_down">&#9660;</span>
                                     <span id="triangle_up" style="display:none;">&#9650;</span> </a>
@@ -450,16 +485,20 @@
                             <form class="signin_form" method="post" id="userloginform">
                                 <div class="form-group">
                                     <label for="login_email">Username or email</label>
-                                    <input type="email" class="form-control" id="login_email" name="login_email"
+                                    <input type="text" class="form-control" id="login_email" name="login_email"
                                            placeholder="Username or email">
+                                    <span id="login_email_err"></span>
                                 </div>
                                 <div class="form-group">
                                     <label for="login_password">Password</label>
                                     <input type="password" class="form-control" id="login_password"
                                            name="login_password" placeholder="Password">
+                                    <span id="login_password_err"></span>
                                 </div>
                                 <input type="submit" value="Login" class="boton-color text-uppercase">
-                                <a href="#" class="pss">Lost password?</a>
+                                <a class="pss" onClick="forgotpd()">Lost password?</a>
+
+                                <div id="login-suc-err"></div>
                             </form>
                         </div>
 
@@ -477,7 +516,7 @@
                         </div>
                     </div>
 
-                    <div class="signupmodel col-lg-12" style="width: 100%">
+                    <div class="signupmodel col-lg-12 hidden" style="width: 100%">
                         <div class="col-lg-12">
                             <h4 class="text-uppercase">Signup</h4>
 
@@ -486,36 +525,33 @@
                                     <label for="firstname">First Name</label>
                                     <input type="text" class="form-control" id="firstname" name="firstname"
                                            placeholder="First Name">
+                                    <span id="first_name_err"></span>
                                 </div>
                                 <div class="form-group">
                                     <label for="lastname">Last Name</label>
                                     <input type="text" class="form-control" id="lastname" name="lastname"
                                            placeholder="Last Name">
+                                    <span id="last_name_err"></span>
                                 </div>
                                 <div class="form-group">
                                     <label for="username">Username</label>
                                     <input type="text" class="form-control" id="username" name="username"
                                            placeholder="Username">
+                                    <span id="username_err"></span>
                                 </div>
                                 <div class="form-group">
                                     <label for="email">email</label>
                                     <input type="text" class="form-control" id="email" name="email" placeholder="email">
+                                    <span id="email_err"></span>
                                 </div>
 
-                                {{--<div class="form-group">--}}
-                                {{--<label for="password">password</label>--}}
-                                {{--<input type="password" class="form-control" id="password" name="password" placeholder="">--}}
-                                {{--</div>--}}
-                                {{--<div class="form-group">--}}
-                                {{--<label for="password2">Re-password</label>--}}
-                                {{--<input type="password" class="form-control" id="password2" name="password2" placeholder="">--}}
-                                {{--</div>--}}
                                 <input type="submit" value="Signup" class="boton-color text-uppercase">
-                                {{--<a href="#" class="pss">Lost password?</a>--}}
                                 <span style="float: right;">Already Registered
 
                                 <a class="boton-color text-uppercase open_login_model"
-                                   style="color: #f0f0f0;cursor: pointer">Login</a></span>
+                                   style="color: #f0f0f0;cursor: pointer">Login</a></span><br>
+
+                                <div id="pw-suc-err"></div>
                             </form>
                             {{--</div>--}}
 
@@ -523,6 +559,68 @@
 
                         </div>
                     </div>
+
+                    <div class="forgotpd col-lg-12 hidden" style="width: 100%">
+                        <div class="col-lg-12">
+                            <h4 class="text-uppercase">Forgot Password</h4>
+
+                            <form class="regsiter_form" method="post" id="forgotpasswordform">
+                                <div class="form-group">
+                                    <label for="fp_email">Email</label>
+                                    <input type="email" class="form-control" id="fp_email" name="fp_email"
+                                           placeholder="Email">
+                                    <span id="fp_email_err"></span>
+                                </div>
+                                <div class="resetcode hidden" id="resetcodediv">
+                                    <p>
+                                        Check Mail and Enter your reset code below to Reset password
+                                    </p>
+                                    <div class="form-group">
+                                        <label for="fp_email">Reset code</label>
+                                        <input type="text" class="form-control" id="resetcode" name="resetcode"
+                                               placeholder="Reset Code">
+                                        <span id="resetcode_err"></span>
+                                    </div>
+
+                                </div>
+                                <input type="button" class="boton-color" onClick="login()" value="Back">
+                                <input type="submit" value="Send" class="boton-color">
+
+                                <div id="fp-suc-err"></div>
+                            </form>
+                            {{--</div>--}}
+
+                            {{--<div class="col-lg-6">--}}
+
+                        </div>
+                    </div>
+
+                    <div class="enternewpw col-lg-12 hidden" style="width: 100%">
+                        <div class="col-lg-12">
+                            <h4>Enter New Password</h4>
+
+                            <form class="regsiter_form" method="post" id="EnterNewPasswordform">
+                                <div class="form-group">
+                                    <label for="password1">New Password</label>
+                                    <input type="password" class="form-control" id="password1" name="password1"
+                                           placeholder="New Password">
+                                    <span id="password1_err"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password2">Re-enter Password</label>
+                                    <input type="password" class="form-control" id="password2" name="password2"
+                                           placeholder="Re-enter Password">
+                                    <span id="password2_err"></span>
+                                </div>
+
+                                <input type="button" class="boton-color" onClick="login()" value="Back">
+                                <input type="submit" value="Send" class="boton-color">
+
+                                <div id="resetpw-suc-err"></div>
+                            </form>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -679,10 +777,47 @@
         $('#username').val('');
         $('#email').val('');
     });
+    function forgotpd() {
+        $("#dialog_modal").removeAttr('style');
+        $('.forgotpd').removeClass('hidden');
+        $('.loginmodel').addClass('hidden');
+        $('.enternewpw').addClass('hidden');//emailID resetcode password1 password2
+        $('#fp_email').prop('disabled', false);
+        $('#resetcodediv').addClass('hidden');
+    }
+    function login() {
+        $("#dialog_modal").css("width", "90rem");
+        $('.loginmodel').removeClass('hidden');
+        $('.forgotpd').addClass('hidden');
+        $('.enternewpw').addClass('hidden');
+        $('#fp_email').val('');
+        $('#resetcode').val('');
+        $('#password1').val('');
+        $('#password2').val('');
+        $('#fp_email').prop('disabled', false);
+    }
+    function enternewpw() {
+        $("#dialog_modal").removeAttr('style');
+        $('.enternewpw').removeClass('hidden');
+        $('.forgotpd').addClass('hidden');
+        $('.loginmodel').addClass('hidden');
+        $('#password1').val('');
+        $('#password2').val('');
+        $('#fp_email').prop('disabled', false);
+    }
 </script>
 <script type="text/javascript">
 
     $(document).ready(function () {
+
+        $('#showdetails').click(function() {
+            $('#userpanel').slideToggle('slow', function() {
+                $("#triangle_down").toggle();
+                $("#triangle_up").toggle();
+            });
+        });
+
+
         $.validator.addMethod("nameregex", function (value, element) {
             return this.optional(element) || /^[A-Za-z\s]+$/.test(value);
         }, "Name cannot contain special characters.");
@@ -695,11 +830,52 @@
             return this.optional(element) || /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/.test(value);
         }, "Invalid email address.");
 
-        {{--$.validator.addMethod("passwordregex", function (value, element) {--}}
-        {{--return this.optional(element) || /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{7,14}$/.test(value);--}}
-        {{--}, "Min 7 and Max 14 characters at least 1 Uppercase Alphabet, 1 Lowercase Alphabet, 1 Number and 1 Special Character (@$!%*?&):");--}}
+        $.validator.addMethod("passwordregex", function (value, element) {
+            return this.optional(element) || /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{7,14}$/.test(value);
+        }, "Min 7 and Max 14 characters at least 1 Uppercase Alphabet, 1 Lowercase Alphabet, 1 Number and 1 Special Character (@$!%*?&):");
 
-        $('#usersignupform1').validate({
+        $('#forgotpasswordform').validate({
+            rules: {
+                fp_email: {
+                    required: true,
+                    emailregex: true
+                },
+                resetcode: {
+                    required: true
+                }
+            },
+            messages: {
+                fp_email: {
+                    required: "Email cannot be empty"
+                },
+                resetcode: {
+                    required: "Reset Code cannot be empty"
+                }
+            }
+        });
+
+        $('#EnterNewPasswordform').validate({
+            rules: {
+                password1: {
+                    required: true,
+                    passwordregex: true
+                },
+                password2: {
+                    required: true,
+                    equalTo: "#password1"
+                }
+            },
+            messages: {
+                password1: {
+                    required: "Please Enter Password"
+                },
+                password2: {
+                    required: "Please Re-enter Password"
+                }
+            }
+        });
+
+        $('#usersignupform').validate({
             rules: {
                 firstname: {
                     required: true,
@@ -717,14 +893,6 @@
                     required: true,
                     emailregex: true
                 }
-//                password: {
-//                    required: true,
-//                    passwordregex: true
-//                },
-//                password2: {
-//                    required: true,
-//                    equalTo: "#password"
-//                }
             },
             messages: {
                 firstname: {
@@ -739,12 +907,6 @@
                 email: {
                     required: "Email id required"
                 }
-//                password: {
-//                    required: "Password cannot be empty"
-//                },
-//                password2: {
-//                    equalTo: "Passwords do not match"
-//                }
             }
         });
 
@@ -759,7 +921,7 @@
             },
             messages: {
                 login_email: {
-                    required: "Username cannot be empty"
+                    required: "Username or Email cannot be empty"
                 },
                 login_password: {
                     required: "Password cannot be empty"
@@ -773,41 +935,226 @@
             var Lastname = $('#lastname').val();
             var Username = $('#username').val();
             var Email = $('#email').val();
-//            if ($("#usersignupform").valid()) {
-//                if (Firstname != '' && Lastname != '' && Username != '' && Email != '') {
+            if ($('#usersignupform').valid()) {
+                $.ajax({
+                    url: '/home-ajax-handler',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        method: 'user_signup',
+                        fname: Firstname,
+                        lname: Lastname,
+                        uname: Username,
+                        email: Email
+                    },
+                    success: function (response) {
+//                    console.log(response);
+                        if (response) {
+                            if (response['code'] == 200) {
+                                $('#pw-suc-err').show();
+                                $('#pw-suc-err').html(response['message']);
+                                $('#pw-suc-err').css('color', 'green');
+                                $('#pw-suc-err').delay(6000).hide('slow');
+                            } else {
+                                if (response['code'] == 100) {
+                                    var message = response['message'];
+                                    $.each(message, function (key, value) {
+//                                    console.log(key);
+                                        if (key == "first_name") {
+                                            $('#first_name_err').show();
+                                            $('#first_name_err').html(message[key]);
+                                            $('#first_name_err').css('color', 'red');
+                                            $('#first_name_err').delay(6000).hide('slow');
+                                        }
+                                        if (key == "last_name") {
+                                            $('#last_name_err').show();
+                                            $('#last_name_err').html(message[key]);
+                                            $('#last_name_err').css('color', 'red');
+                                            $('#last_name_err').delay(6000).hide('slow');
+                                        }
+                                        if (key == "username") {
+                                            $('#username_err').show();
+                                            $('#username_err').html(message[key]);
+                                            $('#username_err').css('color', 'red');
+                                            $('#username_err').delay(6000).hide('slow');
+                                        }
+                                        if (key == "email") {
+                                            $('#email_err').show();
+                                            $('#email_err').html(message[key]);
+                                            $('#email_err').css('color', 'red');
+                                            $('#email_err').delay(6000).hide('slow');
+                                        }
+                                    })
+                                } else {
+                                    $('#pw-suc-err').show();
+                                    $('#pw-suc-err').html(response['message']);
+                                    $('#pw-suc-err').css('color', 'red');
+                                    $('#pw-suc-err').delay(6000).hide('slow');
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+
+        $("#userloginform").submit(function (e) {
+            e.preventDefault();
+            var Username = $('#login_email').val();
+            var Password = $('#login_password').val();
+            if ($('#userloginform').valid()) {
+                $.ajax({
+                    url: '/home-ajax-handler',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        method: 'user_login',
+                        uname: Username,
+                        password: Password
+                    },
+                    success: function (response) {
+//                    console.log(response);
+                        if (response) {
+                            if (response['code'] == 200) {
+                                $('#login-suc-err').show();
+                                $('#login-suc-err').html(response['message']);
+                                $('#login-suc-err').css('color', 'green');
+                                $('#login-suc-err').delay(6000).hide('slow');
+                                window.location = "/";
+                            } else {
+                                if (response['code'] == 100) {
+                                    var message = response['message'];
+                                    $.each(message, function (key, value) {
+//                                    console.log(key);
+                                        if (key == "username") {
+                                            $('#login_email_err').show();
+                                            $('#login_email_err').html(message[key]);
+                                            $('#login_email_err').css('color', 'red');
+                                            $('#login_email_err').delay(6000).hide('slow');
+                                        }
+                                        if (key == "password") {
+                                            $('#login_password_err').show();
+                                            $('#login_password_err').html(message[key]);
+                                            $('#login_password_err').css('color', 'red');
+                                            $('#login_password_err').delay(6000).hide('slow');
+                                        }
+                                    })
+                                } else {
+                                    $('#login-suc-err').show();
+                                    $('#login-suc-err').html(response['message']);
+                                    $('#login-suc-err').css('color', 'red');
+                                    $('#login-suc-err').delay(6000).hide('slow');
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+
+        $("#forgotpasswordform").submit(function (e) {
+            e.preventDefault();
+            var fpdemail = $('#fp_email').val();
+            var resetcode = $('#resetcode').val();
+
+            if ($("#forgotpasswordform").valid()) {
+                if (resetcode == '' && fpdemail != '') {
                     $.ajax({
                         url: '/home-ajax-handler',
                         type: 'POST',
                         dataType: 'json',
                         data: {
-                            method: 'user_signup',
-                            fname: Firstname,
-                            lname: Lastname,
-                            uname: Username,
-                            email: Email
+                            method: 'forgotpw',
+                            fpwemail: fpdemail
                         },
                         success: function (response) {
-                            console.log(response);
-//                            if (response['code'] == 200) {
-//                                $('.pw-suc-err').show();
-//                                $('.pw-suc-err').html(response['message']);
-//                                $('.pw-suc-err').css('color', 'green');
-//                                $('.pw-suc-err').delay(4000).hide('slow');
-//                                $('#password1').val('');
-//                                $('#password2').val('');
-//                            } else {
-//                                $('.pw-suc-err').show();
-//                                $('.pw-suc-err').html(response);
-//                                $('.pw-suc-err').css('color', 'red');
-//                                $('.pw-suc-err').delay(4000).hide('slow');
-//                                $('#password1').val('');
-//                                $('#password2').val('');
-//                            }
+
+                            if (response['code'] == 200) {
+                                $('#fp_email_err').show();
+                                $('#fp_email_err').html(response['message']);
+                                $('#fp_email_err').css('color', 'green');
+                                $('#fp_email_err').delay(4000).hide('slow');
+                                $('#resetcodediv').removeClass('hidden');
+                                $('#fp_email').prop('disabled', true);
+                            } else {
+                                $('#fp_email_err').show();
+                                $('#fp_email_err').html(response['message']);
+                                $('#fp_email_err').css('color', 'red');
+                                $('#fp_email_err').delay(4000).hide('slow');
+                            }
                         }
                     });
-//                }
-//            }
+                } else {
+                    $.ajax({
+                        url: '/home-ajax-handler',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            method: 'verifyResetCode',
+                            fpwemail: fpdemail,
+                            resetcode: resetcode
+                        },
+                        success: function (response) {
+                            if (response['code'] == 200) {
+                                $('#resetcode_err').show();
+                                $('#resetcode_err').html(response['message']);
+                                $('#resetcode_err').css('color', 'green');
+                                $('#resetcode_err').delay(4000).hide('slow');
+                                enternewpw();
+                            } else {
+                                $('#resetcode_err').show();
+                                $('#resetcode_err').html(response['message']);
+                                $('#resetcode_err').css('color', 'red');
+                                $('#resetcode_err').delay(4000).hide('slow');
+                            }
+                        }
+                    });
+
+                }
+            }
         });
+
+        $("#EnterNewPasswordform").submit(function (e) {
+            e.preventDefault();
+            var fpdemail = $('#fp_email').val();
+            var resetcode = $('#resetcode').val();
+            var password1 = $('#password1').val();
+            var password2 = $('#password2').val();
+            if ($("#EnterNewPasswordform").valid()) {
+                if (resetcode != '' && fpdemail != '' && password1 != '' && password2 != '') {
+                    $.ajax({
+                        url: '/home-ajax-handler',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            method: 'resetPassword',
+                            fpwemail: fpdemail,
+                            password: password1,
+                            re_password: password2,
+                            reset_code: resetcode
+                        },
+                        success: function (response) {
+                            if (response['code'] == 200) {
+                                $('#resetpw-suc-err').show();
+                                $('#resetpw-suc-err').html(response['message']);
+                                $('#resetpw-suc-err').css('color', 'green');
+                                $('#resetpw-suc-err').delay(4000).hide('slow');
+                                $('#password1').val('');
+                                $('#password2').val('');
+                            } else {
+                                $('#resetpw-suc-err').show();
+                                $('#resetpw-suc-err').html(response['message']);
+                                $('#resetpw-suc-err').css('color', 'red');
+                                $('#resetpw-suc-err').delay(4000).hide('slow');
+                                $('#password1').val('');
+                                $('#password2').val('');
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
     });
 </script>
 

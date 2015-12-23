@@ -772,6 +772,53 @@ header.header-color .logo{
 	letter-spacing: 0.08rem;
 }
 
+.body-user{
+	padding: 1rem;
+	overflow: hidden;
+}
+
+.content-body-user .product-user{
+	font-size: 1.6rem;
+	color: #747474;
+	text-transform: capitalize;
+}
+.content-body-user p{
+	letter-spacing: 0.08rem;
+	font-size: 1.2rem;
+	color: #414141;
+}
+.content-body-user p span{
+	font-size: 1.6rem;
+}
+.content-body-user .product-color,
+.content-body-user .product-size{
+	letter-spacing: 0;
+	font-size: 1.5rem;
+	color: #747474;
+}
+.content-body-user .product-color span,
+.content-body-user .product-size span{
+	color: #414141;
+	font-size: 1.5rem;
+}
+.content-body-user .close{
+	font-size: 3rem;
+	width: 100%;
+	color: #535353;
+	opacity: 1;
+}
+#userpanel{
+	z-index: 1040;
+	display:none;
+	width: 22rem;
+	position: absolute;
+	border-radius: 0;
+	margin-top: 20px;
+	display: none;
+	left: 9rem !important;
+	text-align: left;
+	background-color: #292929;
+}
 /* Collections--------------------------------------------------------------------------------*/
 .collections,
 .collection-section{

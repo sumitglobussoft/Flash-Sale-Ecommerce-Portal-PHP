@@ -68,6 +68,7 @@ Route::group(array('module' => 'Home', 'namespace' => 'Home\Controllers'), funct
 
     Route::resource('/', 'HomeController@home');
     Route::resource('/home-ajax-handler', 'HomeController@homeAjaxHandler');
+    Route::resource('/logout', 'HomeController@logout');
 
 });
 
