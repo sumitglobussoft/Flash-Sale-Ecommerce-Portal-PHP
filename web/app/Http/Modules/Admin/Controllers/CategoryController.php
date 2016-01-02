@@ -2,7 +2,7 @@
 
 namespace FlashSale\Http\Modules\Admin\Controllers;
 
-use FlashSale\Http\Modules\Admin\Models\ProductCategories;
+use FlashSale\Http\Modules\Admin\Models\ProductCategory;
 use Illuminate\Http\Request;
 
 use FlashSale\Http\Requests;
@@ -24,10 +24,12 @@ use Illuminate\Support\Facades\Session;
 
 class CategoryController extends Controller
 {
+    private $imageWidth = 1024;//TO BE USED FOR IMAGE RESIZING
+    private $imageHeight = 1024;//TO BE USED FOR IMAGE RESIZING
 
     public function manageCategories()
     {
-        $objCategoryModel = ProductCategories::getInstance();
+        $objCategoryModel = ProductCategory::getInstance();
         $where = array('column' => 'category_status', 'condition' => '=', 'value' => '1');
         $allCategories = $objCategoryModel->getAllCategoriesWhere($where);
 
@@ -45,10 +47,9 @@ class CategoryController extends Controller
 
     public function addCategory(Request $request)
     {
-        $objCategoryModel = ProductCategories::getInstance();
+        $objCategoryModel = ProductCategory::getInstance();
         $userId = Session::get('fs_admin')['id'];
         if ($request->isMethod('post')) {
-
 
             Validator::extend('word_count', function ($field, $value, $parameters) {
                 if (count(explode(' ', $value)) > 10)
@@ -74,19 +75,19 @@ class CategoryController extends Controller
             } else {
                 $categoryData = array();
 
-//                if ($request->has('category_image')) {
-//                    $destinationPath = 'assets/uploads/category/';
-//                    $filename = 'category_' . time() . ".jpg";
-//                    File::makeDirectory($destinationPath, 0777, true, true);
-//                    $filePath = '/' . $destinationPath . $filename;
-//
-//                    $imageResult = Image::make(Input::file('category_image'))->resize(1024, 1024, function ($constraint) {
-//                        $constraint->aspectRatio();
-//                    })->save($destinationPath . $filename, 80);
-//                    if ($imageResult) {
-//                        $categoryData['category_banner_url'] = $filePath;
-//                    }
-//                }
+                if (Input::hasFile('category_image')) {
+                    $destinationPath = 'assets/uploads/categories/';
+                    $filename = 'category_' . time() . ".jpg";
+                    File::makeDirectory($destinationPath, 0777, true, true);
+                    $filePath = '/' . $destinationPath . $filename;
+
+                    $imageResult = Image::make(Input::file('category_image'))->resize($this->imageWidth, $this->imageHeight, function ($constraint) {
+                        $constraint->aspectRatio();
+                    })->save($destinationPath . $filename, 80);
+                    if ($imageResult) {
+                        $categoryData['category_banner_url'] = $filePath;
+                    }
+                }
                 $categoryData['category_name'] = $request->input('category_name');
                 $categoryData['category_desc'] = $request->input('category_desc');
                 $categoryData['created_by'] = $userId;
@@ -143,7 +144,7 @@ class CategoryController extends Controller
         if ($id == 0) {
             return $id;
         } else {
-            $objCategoryModel = ProductCategories::getInstance();
+            $objCategoryModel = ProductCategory::getInstance();
             $where['column'] = 'category_id';
             $where['condition'] = '=';
             $where['value'] = $id;
@@ -171,7 +172,7 @@ class CategoryController extends Controller
         if ($id == 0) {
             return '';
         } else {
-            $objCategoryModel = ProductCategories::getInstance();
+            $objCategoryModel = ProductCategory::getInstance();
             $where['column'] = 'category_id';
             $where['condition'] = '=';
             $where['value'] = $id;
@@ -182,6 +183,87 @@ class CategoryController extends Controller
                 return '';
             }
         }
+    }
+
+    public function editCategory(Request $request, $id)
+    {
+
+        $objCategoryModel = ProductCategory::getInstance();
+        if ($request->isMethod('post')) {
+            Validator::extend('word_count', function ($field, $value, $parameters) {
+                if (count(explode(' ', $value)) > 10)
+                    return false;
+                return true;
+            }, 'Meta keywords should not contain more than 10 words.');
+            $rules = array(
+                'category_name' => 'required|max:50|unique:product_categories,category_name,' . $id . ',category_id',
+                'category_desc' => 'max:255',
+                'status' => 'required',
+//                'category_image' => 'array',
+                'seo_name' => 'max:100',
+                'page_title' => 'max:70',
+                'meta_desc' => 'max:160',
+                'meta_keywords' => 'word_count'
+            );
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return Redirect::back()
+                    ->withErrors($validator)
+                    ->withInput();
+            } else {
+
+                if (Input::hasFile('category_image')) {
+                    $destinationPath = 'assets/uploads/categories/';
+                    $filename = 'category_' . time() . ".jpg";
+                    File::makeDirectory($destinationPath, 0777, true, true);
+                    $filePath = '/' . $destinationPath . $filename;
+
+                    $imageResult = Image::make(Input::file('category_image'))->resize($this->imageWidth, $this->imageHeight, function ($constraint) {
+                        $constraint->aspectRatio();
+                    })->save($destinationPath . $filename, 80);
+                    if ($imageResult) {
+                        $dataToUpdate['category_banner_url'] = $filePath;
+                    }
+                }
+                $dataToUpdate['category_name'] = $request->input('category_name');
+                $dataToUpdate['category_desc'] = $request->input('category_desc');
+                $dataToUpdate['category_status'] = $request->input('status');
+                $dataToUpdate['parent_category_id'] = $request->input('parent_category');
+                $dataToUpdate['page_title'] = $request->input('page_title');
+                $dataToUpdate['meta_description'] = $request->input('meta_desc');
+                $dataToUpdate['meta_keywords'] = $request->input('meta_keywords');
+
+
+                $whereForUpdate['column'] = 'category_id';
+                $whereForUpdate['condition'] = '=';
+                $whereForUpdate['value'] = $id;
+                $updateResult = $objCategoryModel->updateCategoryWhere($dataToUpdate, $whereForUpdate);
+
+                if ($updateResult) {
+                    return Redirect::back()->with(['status' => '1', 'msg' => 'Category details has been updated.']);
+                } else {
+                    return Redirect::back()->with(['status' => '0', 'msg' => 'Nothing to update.']);
+                }
+
+            }
+        }
+
+
+        $where = array('column' => 'category_id', 'condition' => '=', 'value' => $id);
+        $categoryDetails = $objCategoryModel->getCategoryDeltailsWhere($where);
+        $allCategories = '';
+        if ($categoryDetails) {
+            $where = array('column' => 'category_status', 'condition' => '=', 'value' => '1');
+            $allCategories = $objCategoryModel->getAllCategoriesWhere($where);
+            foreach ($allCategories as $key => $value) {
+                $allCategories[$key]->display_name = $this->getCategoryDisplayName($value->category_id);
+            }
+        }
+
+//        echo '<pre>';
+//        print_r($categoryDetails);die;
+        return view('Admin/Views/category/editCategory', ['categoryDetails' => $categoryDetails, 'allCategories' => $allCategories]);
+
     }
 
 }

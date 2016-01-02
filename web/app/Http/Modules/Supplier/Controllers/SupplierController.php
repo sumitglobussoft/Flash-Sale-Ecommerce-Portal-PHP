@@ -23,6 +23,11 @@ use Illuminate\Support\Facades\Session;
 class SupplierController extends Controller
 {
 
+
+    private $imageWidth = 1024;//TO BE USED FOR IMAGE RESIZING
+    private $imageHeight = 1024;//TO BE USED FOR IMAGE RESIZING
+
+
     public function dashboard()
     {
 //        if (Session::has('fs_supplier')) {
@@ -295,7 +300,7 @@ class SupplierController extends Controller
                         $filePath = '/' . $destinationPath . $filename;
                         $quality = $this->imageQuality(Input::file('file'));
 
-                        Image::make(Input::file('file'))->resize(1024, 1024, function ($constraint) {
+                        Image::make(Input::file('file'))->resize($this->imageWidth, $this->imageHeight, function ($constraint) {
                             $constraint->aspectRatio();
                         })->save($destinationPath . $filename, $quality);
 

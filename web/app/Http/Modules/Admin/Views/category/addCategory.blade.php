@@ -5,6 +5,7 @@
 @section('headcontent')
     {{--OPTIONAL--}}
     {{--PAGE STYLES OR SCRIPTS LINKS--}}
+    <link href="/assets/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section('content')
@@ -18,7 +19,7 @@
                     <h4 class="panel-title">Category Details</h4>
                 </div>
                 <div class="panel-body">
-                    <form class="form-horizontal" method="post">
+                    <form class="form-horizontal" method="post" enctype="multipart/form-data">
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Name</label>
 
@@ -72,22 +73,42 @@
                             <label class="col-sm-2 control-label">Image</label>
 
                             <div class="col-sm-4">
-                                <input type="file" name="category_image">
-                                <span class="error">{!! $errors->first('category_image') !!}</span>
+                                <div class="fileinput fileinput-new" data-provides="fileinput">
+                                    <div class="fileinput-new thumbnail"
+                                         style="width: 200px; height: 150px;">
+                                        <img src="/assets/images/no-image.png" alt=""/>
+                                    </div>
+                                    <div class="fileinput-preview fileinput-exists thumbnail"
+                                         style="max-width: 200px; max-height: 150px;">
+                                    </div>
+                                    <div>
+                                                            <span class="btn btn-circle default btn-file">
+                                                                <span class="fileinput-new">
+                                                                    Select image </span>
+                                                                <span class="fileinput-exists">
+                                                                    Change </span>
+                                                                <input type="file" name="category_image"
+                                                                       accept="image/*">
+                                                            </span>
+                                        <a href="#" class="btn btn-circle default fileinput-exists"
+                                           data-dismiss="fileinput">
+                                            Remove </a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <hr>
-                        SEO
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">SEO Name</label>
+                        {{--<hr>--}}
+                        {{--SEO--}}
+                        {{--<div class="form-group">--}}
+                        {{--<label class="col-sm-2 control-label">SEO Name</label>--}}
 
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" name="seo_name"
-                                       value="{{old('category_name')}}">
-                                <span class="error">{!! $errors->first('seo_name') !!}</span>
-                            </div>
-                        </div>
-                        <hr>
+                        {{--<div class="col-sm-4">--}}
+                        {{--<input type="text" class="form-control" name="seo_name"--}}
+                        {{--value="{{old('category_name')}}">--}}
+                        {{--<span class="error">{!! $errors->first('seo_name') !!}</span>--}}
+                        {{--</div>--}}
+                        {{--</div>--}}
+                        {{--<hr>--}}
                         Meta Data
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Page title</label>
@@ -114,7 +135,7 @@
                                 <span class="error">{!! $errors->first('meta_keywords') !!}</span>
                             </div>
                         </div>
-                        <div class="form-actions">
+                        <div class="form-actions" align="center">
                             <button type="submit" class="btn btn-primary">Submit</button>
                             <button type="reset" class="btn btn-default">Reset</button>
                         </div>
@@ -131,4 +152,5 @@
     <script>
         {{--PAGE SCRIPTS GO HERE--}}
     </script>
+    <script src="/assets/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
 @endsection

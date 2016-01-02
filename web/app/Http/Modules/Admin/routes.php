@@ -88,7 +88,14 @@ Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), fun
 
         Route::resource('/admin/manage-categories', 'CategoryController@manageCategories');
         Route::resource('/admin/add-category', 'CategoryController@addCategory');
+        Route::get('/admin/edit-category/{id}', 'CategoryController@editCategory');
+        Route::post('/admin/edit-category/{id}', 'CategoryController@editCategory');
 
+        Route::resource('/admin/manage-options', 'OptionController@manageOptions');
+        Route::resource('/admin/add-option', 'OptionController@addOption');
+        Route::get('/admin/edit-option/{id}', 'OptionController@editOption');
+        Route::post('/admin/edit-option/{id}', 'OptionController@editOption');
+        Route::post('/admin/option-ajax-handler', 'OptionController@optionAjaxHandler');
         //-----------------------------ROUTES FOR MANAGER----------------------------------------
         //DON't DO ANYTHING IN THIS BLOCK YET [TO BE DONE AT THE END OF ADMIN MODULE WORK]
         // [COPY ALL ROUTES ABOVE AND REPLACE ADMIN IN URL WITH MANAGER]

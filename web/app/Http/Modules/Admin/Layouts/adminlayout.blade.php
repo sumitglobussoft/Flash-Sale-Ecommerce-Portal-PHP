@@ -2,7 +2,7 @@
 <html>
 <head>
     @include('Admin/layouts/adminheadscripts')
-    @yield('pageheadcontent')
+    @yield('headcontent')
 
 </head>
 <body class="page-header-fixed compact-menu page-sidebar-fixed">
@@ -268,6 +268,7 @@
                         <li><a href="/admin/manage-products">Products</a></li>
                         <li><a href="/admin/manage-features">Features</a></li>
                         <li><a href="/admin/manage-filters">Filters</a></li>
+                        <li><a href="/admin/manage-options">Options</a></li>
                     </ul>
                 </li>
 

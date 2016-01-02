@@ -1,5 +1,11 @@
 @extends('Supplier/layouts/supplierlayout')
 
+@section('title', 'Profile')
+
+@section('pageheadcontent')
+    {{--OPTIONAL--}}
+    {{--PAGE STYLES OR SCRIPTS LINKS--}}
+
         <!-- BEGIN PAGE LEVEL STYLES -->
 <link href="/assets/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
 <link href="/assets/css/custom/profile.css" rel="stylesheet" type="text/css"/>
@@ -8,8 +14,7 @@
 <link href="/assets/css/custom/components.css" id="style_components" rel="stylesheet" type="text/css"/>
 
 
-@section('title', 'Profile')
-
+@endsection
 @section('content')
     <div class="row">
         <div class="col-md-12">
