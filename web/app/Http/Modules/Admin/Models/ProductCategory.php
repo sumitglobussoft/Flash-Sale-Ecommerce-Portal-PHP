@@ -11,7 +11,7 @@ class ProductCategory extends Model
     private static $_instance = null;
 
     protected $table = 'product_categories';
-    protected $fillable = ['id_path','level'];
+    protected $fillable = ['id_path', 'level'];
 
     public static function getInstance()
     {
@@ -20,6 +20,13 @@ class ProductCategory extends Model
         return self::$_instance;
     }
 
+    /**
+     * Add new category
+     * @return string|array
+     * @throws Exception
+     * @since 20-12-2015
+     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     */
     public function addCategory()
     {
         if (func_num_args() > 0) {
@@ -35,32 +42,47 @@ class ProductCategory extends Model
         }
     }
 
-    public function getAllCategoriesWhere()
+    /**
+     * Get all category details
+     * @param $where
+     * @param array $selectedColumns
+     * @return mixed
+     * @since 21-12-2015
+     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     */
+    public function getAllCategoriesWhere($where, $selectedColumns = ['*'])
     {
-        if (func_num_args() > 0) {
-            $where = func_get_arg(0);
-            $result = DB::table($this->table)
-                ->where($where['column'], $where['condition'], $where['value'])
-                ->get();
-            return $result;
-        } else {
-            throw new Exception('Argument Not Passed');
-        }
+        $result = DB::table($this->table)
+            ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+            ->select($selectedColumns)
+            ->get();
+        return $result;
     }
 
-    public function getCategoryDeltailsWhere($where)
+    /**
+     * Get a category details
+     * @param $where
+     * @param array $selectedColumns
+     * @return mixed
+     * @since 21-12-2015
+     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     */
+    public function getCategoryDetailsWhere($where, $selectedColumns = ['*'])
     {
-        if (func_num_args() > 0) {
-            $where = func_get_arg(0);
-            $result = DB::table($this->table)
-                ->where($where['column'], $where['condition'], $where['value'])
-                ->first();
-            return $result;
-        } else {
-            throw new Exception('Argument Not Passed');
-        }
+        $result = DB::table($this->table)
+            ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+            ->select($selectedColumns)
+            ->first();
+        return $result;
     }
 
+    /**
+     * Update category details
+     * @return string
+     * @throws Exception
+     * @since xx-xx-xxxx
+     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     */
     public function updateCategoryWhere()
     {
         if (func_num_args() > 0) {
@@ -68,7 +90,7 @@ class ProductCategory extends Model
             $where = func_get_arg(1);
             try {
                 $updatedResult = DB::table($this->table)
-                    ->where($where['column'], $where['condition'], $where['value'])
+                    ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
                     ->update($data);
                 return $updatedResult;
             } catch (\Exception $e) {

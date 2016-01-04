@@ -124,75 +124,112 @@ class OptionController extends Controller
         $userId = Session::get('fs_admin')['id'];
 
         if ($request->isMethod('post')) {
-            $inputData = $request->input('option_data');
-            $variantInputData = $request->input('option_data')['variants'];
-            $rules = array(
-                'option_name' => 'required|max:50|unique:product_options,option_name,' . $id . ',option_id,shop_id,' . $inputData['shop_id'] . ',added_by,' . $userId,
-                'description' => 'max:255',
-                'comment' => 'max:100'
-            );
-            $filedNames = array_keys($variantInputData[key($variantInputData)]);
-            foreach ($variantInputData as $variantKey => $variantVal) {
-                foreach ($filedNames as $key => $filedName) {
-                    if ($filedName == 'variant_name') {
-                        $rules['variants.' . $variantKey . '.' . $filedName] = 'max:20|required_with:variants.' . $variantKey . '.price_modifier,variants.' . $variantKey . '.weight_modifier';
-                        $messages['variants.' . $variantKey . '.' . $filedName . '.max'] = 'The variant name may not be greater than 20 characters.';
-                        $messages['variants.' . $variantKey . '.' . $filedName . '.required_with'] = 'The variant name field is required.';
-                    }
-                    if ($filedName == 'price_modifier') {
-                        $rules['variants.' . $variantKey . '.' . $filedName] = 'regex:/^\d*(\.\d{1,5})?$/';
-                        $messages['variants.' . $variantKey . '.' . $filedName . '.regex'] = 'The price modifier format is invalid.';
-                    }
-                    if ($filedName == 'weight_modifier') {
-                        $rules['variants.' . $variantKey . '.' . $filedName] = 'regex:/^\d*(\.\d{1,5})?$/';
-                        $messages['variants.' . $variantKey . '.' . $filedName . '.regex'] = 'The weight modifier format is invalid.';
+            $whereForOption = [
+                'rawQuery' => 'option_id =:id and status IN (0,1,2)',
+                'bindParams' => ['id' => $id]
+            ];
+            $optionDetails = $objProductOptionModel->getOptionWhere($whereForOption);
+            if ($optionDetails) {
+                $inputData = $request->input('option_data');
+                $variantInputData = $request->input('option_data')['variants'];
+                $rules = array(
+                    'option_name' => 'required|max:50|unique:product_options,option_name,' . $id . ',option_id,shop_id,' . $inputData['shop_id'] . ',added_by,' . $userId,
+                    'description' => 'max:255',
+                    'comment' => 'max:100'
+                );
+                $filedNames = array_keys($variantInputData[key($variantInputData)]);
+                foreach ($variantInputData as $variantKey => $variantVal) {
+                    foreach ($filedNames as $key => $filedName) {
+                        if ($filedName == 'variant_name') {
+                            $rules['variants.' . $variantKey . '.' . $filedName] = 'max:20|required_with:variants.' . $variantKey . '.price_modifier,variants.' . $variantKey . '.weight_modifier';
+                            $messages['variants.' . $variantKey . '.' . $filedName . '.max'] = 'The variant name may not be greater than 20 characters.';
+                            $messages['variants.' . $variantKey . '.' . $filedName . '.required_with'] = 'The variant name field is required.';
+                        }
+                        if ($filedName == 'price_modifier') {
+                            $rules['variants.' . $variantKey . '.' . $filedName] = 'regex:/^\d*(\.\d{1,5})?$/';
+                            $messages['variants.' . $variantKey . '.' . $filedName . '.regex'] = 'The price modifier format is invalid.';
+                        }
+                        if ($filedName == 'weight_modifier') {
+                            $rules['variants.' . $variantKey . '.' . $filedName] = 'regex:/^\d*(\.\d{1,5})?$/';
+                            $messages['variants.' . $variantKey . '.' . $filedName . '.regex'] = 'The weight modifier format is invalid.';
+                        }
                     }
                 }
-            }
-            $validator = Validator::make($inputData, $rules, $messages);
-            if ($validator->fails()) {
-                return Redirect::back()
-                    ->withErrors($validator)
-                    ->withInput();
-            } else {
-                $optionData = array();
-                $optionData['option_name'] = $inputData['option_name'];
-                $optionData['shop_id'] = $inputData['shop_id'];
-                $optionData['option_type'] = $inputData['option_type'];
-                $optionData['description'] = $inputData['description'];
-                $optionData['comment'] = $inputData['comment'];
-                if (isset($inputData['required']) && $inputData['required'] == 'on') {
-                    $optionData['required'] = '1';
+                $validator = Validator::make($inputData, $rules, $messages);
+                if ($validator->fails()) {
+                    return Redirect::back()
+                        ->withErrors($validator)
+                        ->withInput();
                 } else {
-                    $optionData['required'] = '0';
-                }
-                $whereForUpdate = [
-                    'rawQuery' => 'option_id =:id',
-                    'bindParams' => ['id' => $id]
-                ];
+                    $optionData = array();
+                    $optionData['option_name'] = $inputData['option_name'];
+                    $optionData['shop_id'] = $inputData['shop_id'];
+                    $optionData['option_type'] = $inputData['option_type'];
+                    $optionData['description'] = $inputData['description'];
+                    $optionData['comment'] = $inputData['comment'];
+                    if (isset($inputData['required']) && $inputData['required'] == 'on') {
+                        $optionData['required'] = '1';
+                    } else {
+                        $optionData['required'] = '0';
+                    }
+                    $whereForUpdate = [
+                        'rawQuery' => 'option_id =?',
+                        'bindParams' => [$id]
+                    ];
 
-//                $updateOptionResult = $objProductOptionModel->updateOptionWhere($optionData, $whereForUpdate);
+                    $updateOptionResult = $objProductOptionModel->updateOptionWhere($optionData, $whereForUpdate);
 
-                $whereForVariantId = [
-                    'rawQuery' => 'option_id =:id',
-                    'bindParams' => ['id' => $id]
-                ];
-                $selectedVariantColumn = array(DB::raw('GROUP_CONCAT(variant_id) AS variant_ids'));
-                $allVariantIds = $objProductOptionVariantModel->getVariantWhere($whereForVariantId, $selectedVariantColumn);
-                echo '<pre>';
-                print_r($allVariantIds);
-                die;
-                $variantData = array();
-                foreach ($variantInputData as $variantKey => $variantValues) {
+                    $whereForVariantId = [
+                        'rawQuery' => 'option_id =:id',
+                        'bindParams' => ['id' => $id]
+                    ];
+                    $selectedVariantColumn = array(DB::raw('GROUP_CONCAT(variant_id) AS variant_ids'));
+                    $oldVariantIds = explode(',', $objProductOptionVariantModel->getVariantWhere($whereForVariantId, $selectedVariantColumn)->variant_ids);
 
-                    if (isset($variantValues->variant_id)) {
+//                echo '<pre>';
+//                print_r($variantInputData);
+//                die;
+                    $inputVariantIds = array();
+                    foreach ($variantInputData as $variantKey => $variantValues) {
+                        if ($variantValues['variant_name'] != '') {
+                            if (isset($variantValues['variant_id']) && in_array($variantValues['variant_id'], $oldVariantIds)) {//UPDATE VARIANT DETAILS
+                                $inputVariantIds[] = $variantValues['variant_id'];
+                                $updateVariantData = '';
+
+                                $updateVariantData['variant_name'] = $variantValues['variant_name'];
+                                $updateVariantData['price_modifier'] = $variantValues['price_modifier'];
+                                $updateVariantData['price_modifier_type'] = $variantValues['price_modifier_type'];
+                                $updateVariantData['weight_modifier'] = $variantValues['weight_modifier'];
+                                $updateVariantData['weight_modifier_type'] = $variantValues['weight_modifier_type'];
+                                $updateVariantData['status'] = $variantValues['status'];
+
+                                $whereForUpdateVariant = ['rawQuery' => "option_id =" . $variantValues['variant_id']];
+                                $updateVariantResult = $objProductOptionVariantModel->updateVariantWhere($updateVariantData, $whereForUpdateVariant);
+
+                            } else {//ADD NEW VARIANT DETAILS
+                                $newVariantData['option_id'] = $id;
+                                $newVariantData['variant_name'] = $variantValues['variant_name'];
+                                $newVariantData['price_modifier'] = $variantValues['price_modifier'];
+                                $newVariantData['price_modifier_type'] = $variantValues['price_modifier_type'];
+                                $newVariantData['weight_modifier'] = $variantValues['weight_modifier'];
+                                $newVariantData['weight_modifier_type'] = $variantValues['weight_modifier_type'];
+                                $newVariantData['added_by'] = $userId;
+                            }
+                        }
 
                     }
+                    $variantIdsToDelete = array_diff($oldVariantIds, $inputVariantIds);
+
                 }
-//                if ($updateOptionResult) {
-//
-//                }
+//            echo '<pre>';
+//            print_r($oldVariantIds);
+//            print_r($inputVariantIds);
+//            print_r($variantIdsToDelete);
+//            die;
+            } else {
+
             }
+
 
         }
 
@@ -223,7 +260,10 @@ class OptionController extends Controller
         switch ($method) {
             case 'changeOptionStatus':
                 $optionId = $inputData['optionId'];
-                $whereForUpdate = ['rawQuery' => "option_id =$optionId"];
+                $whereForUpdate = [
+                    'rawQuery' => 'option_id =?',
+                    'bindParams' => [$optionId]
+                ];
                 $dataToUpdate['status'] = $inputData['status'];
                 $updateResult = $objProductOptionModel->updateOptionWhere($dataToUpdate, $whereForUpdate);
                 if ($updateResult) {

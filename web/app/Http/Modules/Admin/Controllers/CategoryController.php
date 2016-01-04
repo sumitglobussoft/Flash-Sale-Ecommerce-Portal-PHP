@@ -30,7 +30,10 @@ class CategoryController extends Controller
     public function manageCategories()
     {
         $objCategoryModel = ProductCategory::getInstance();
-        $where = array('column' => 'category_status', 'condition' => '=', 'value' => '1');
+        $where = [
+            'rawQuery' => 'category_status =?',
+            'bindParams' => [1]
+        ];
         $allCategories = $objCategoryModel->getAllCategoriesWhere($where);
 
         foreach ($allCategories as $key => $value) {
@@ -45,6 +48,14 @@ class CategoryController extends Controller
     }
 
 
+    /**
+     * Add new category action
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \FlashSale\Http\Modules\Admin\Models\Exception
+     * @since 20-12-2015
+     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     */
     public function addCategory(Request $request)
     {
         $objCategoryModel = ProductCategory::getInstance();
@@ -101,9 +112,10 @@ class CategoryController extends Controller
                 $insertedId = $objCategoryModel->addCategory($categoryData);
 
                 if ($insertedId) {
-                    $whereForUpdate['column'] = 'category_id';
-                    $whereForUpdate['condition'] = '=';
-                    $whereForUpdate['value'] = $insertedId;
+                    $whereForUpdate = [
+                        'rawQuery' => 'category_id =?',
+                        'bindParams' => [$insertedId]
+                    ];
                     $dataToUpdate['id_path'] = $this->getParentCategoryIds($insertedId);
                     $dataToUpdate['level'] = count(explode('/', $dataToUpdate['id_path']));
                     $objCategoryModel->updateCategoryWhere($dataToUpdate, $whereForUpdate);
@@ -116,7 +128,10 @@ class CategoryController extends Controller
         }
 
 
-        $where = array('column' => 'category_status', 'condition' => '=', 'value' => '1');
+        $where = [
+            'rawQuery' => 'category_status =?',
+            'bindParams' => [1]
+        ];
         $allCategories = $objCategoryModel->getAllCategoriesWhere($where);
 
         foreach ($allCategories as $key => $value) {
@@ -145,10 +160,12 @@ class CategoryController extends Controller
             return $id;
         } else {
             $objCategoryModel = ProductCategory::getInstance();
-            $where['column'] = 'category_id';
-            $where['condition'] = '=';
-            $where['value'] = $id;
-            $parentCategory = $objCategoryModel->getCategoryDeltailsWhere($where);
+
+            $where = [
+                'rawQuery' => 'category_id =?',
+                'bindParams' => [$id]
+            ];
+            $parentCategory = $objCategoryModel->getCategoryDetailsWhere($where);
             if ($parentCategory->parent_category_id != 0) {
                 return $this->getParentCategoryIds($parentCategory->parent_category_id) . '/' . $id;
             } else {
@@ -173,10 +190,11 @@ class CategoryController extends Controller
             return '';
         } else {
             $objCategoryModel = ProductCategory::getInstance();
-            $where['column'] = 'category_id';
-            $where['condition'] = '=';
-            $where['value'] = $id;
-            $parentCategory = $objCategoryModel->getCategoryDeltailsWhere($where);
+            $where = [
+                'rawQuery' => 'category_id =?',
+                'bindParams' => [$id]
+            ];
+            $parentCategory = $objCategoryModel->getCategoryDetailsWhere($where);
             if ($parentCategory->parent_category_id != 0) {
                 return $this->getCategoryDisplayName($parentCategory->parent_category_id) . '&brvbar;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
             } else {
@@ -185,6 +203,15 @@ class CategoryController extends Controller
         }
     }
 
+    /**
+     * Edit category action
+     * @param Request $request
+     * @param $id Category id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \FlashSale\Http\Modules\Admin\Models\Exception
+     * @since 20-12-2015
+     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     */
     public function editCategory(Request $request, $id)
     {
 
@@ -233,10 +260,10 @@ class CategoryController extends Controller
                 $dataToUpdate['meta_description'] = $request->input('meta_desc');
                 $dataToUpdate['meta_keywords'] = $request->input('meta_keywords');
 
-
-                $whereForUpdate['column'] = 'category_id';
-                $whereForUpdate['condition'] = '=';
-                $whereForUpdate['value'] = $id;
+                $whereForUpdate = [
+                    'rawQuery' => 'category_id =?',
+                    'bindParams' => [$id]
+                ];
                 $updateResult = $objCategoryModel->updateCategoryWhere($dataToUpdate, $whereForUpdate);
 
                 if ($updateResult) {
@@ -248,12 +275,17 @@ class CategoryController extends Controller
             }
         }
 
-
-        $where = array('column' => 'category_id', 'condition' => '=', 'value' => $id);
-        $categoryDetails = $objCategoryModel->getCategoryDeltailsWhere($where);
+        $where = [
+            'rawQuery' => 'category_id =?',
+            'bindParams' => [$id]
+        ];
+        $categoryDetails = $objCategoryModel->getCategoryDetailsWhere($where);
         $allCategories = '';
         if ($categoryDetails) {
-            $where = array('column' => 'category_status', 'condition' => '=', 'value' => '1');
+            $where = [
+                'rawQuery' => 'category_status =?',
+                'bindParams' => [1]
+            ];
             $allCategories = $objCategoryModel->getAllCategoriesWhere($where);
             foreach ($allCategories as $key => $value) {
                 $allCategories[$key]->display_name = $this->getCategoryDisplayName($value->category_id);

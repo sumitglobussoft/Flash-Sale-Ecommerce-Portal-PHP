@@ -76,4 +76,54 @@ class ProductOptionVariant extends Model
 
     }
 
+    /**
+     * Update variant details
+     * @return string
+     * @throws Exception
+     * @since 04-01-2016
+     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     */
+    public function updateVariantWhere()
+    {
+        if (func_num_args() > 0) {
+            $data = func_get_arg(0);
+            $where = func_get_arg(1);
+            try {
+                $updatedResult = DB::table($this->table)
+                    ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                    ->update($data);
+                return $updatedResult;
+            } catch (\Exception $e) {
+                return $e->getMessage();
+            }
+        } else {
+            throw new Exception('Argument Not Passed');
+        }
+    }
+
+    /**
+     * Delete variant details
+     * @return string
+     * @throws Exception
+     * @since 20-12-2015
+     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     */
+    public function deleteVariantWhere()
+    {
+        if (func_num_args() > 0) {
+            $where = func_get_arg(0);
+            try {
+                $updatedResult = DB::table($this->table)
+//                    ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                    ->whereRaw($where['rawQuery'])
+                    ->delete();
+                return $updatedResult;
+            } catch (\Exception $e) {
+                return $e->getMessage();
+            }
+        } else {
+            throw new Exception('Argument Not Passed');
+        }
+    }
+
 }

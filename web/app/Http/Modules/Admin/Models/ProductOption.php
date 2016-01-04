@@ -105,8 +105,7 @@ class ProductOption extends Model
             $where = func_get_arg(1);
             try {
                 $updatedResult = DB::table($this->table)
-//                    ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
-                    ->whereRaw($where['rawQuery'])
+                    ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
                     ->update($data);
                 return $updatedResult;
             } catch (\Exception $e) {
