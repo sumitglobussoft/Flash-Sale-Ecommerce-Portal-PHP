@@ -451,11 +451,11 @@ header{
 	font-size: 1.3rem;
 }
 .login li{
-	margin-left: 3rem;
+	margin-left: 1rem;
 }
-.login li:first-child{
-	margin-left: 0;
-}
+/*.login li:first-child{*/
+	/*margin-left: 0;*/
+/*}*/
 .login li:last-child{
 	padding: 0;
 }
@@ -1820,4 +1820,43 @@ h4.newsletter{
 }
 #toTop:active, #toTop:focus {
 	outline:none;
+}
+/* ------- RAM 5 ------- */
+
+.collection-extra.post-img-content .overlay {
+	color: #fff;
+	left: -56rem;
+	padding-top: 0;
+}
+
+.collection-extra.post-img-content:hover .overlay {
+	left: 0;
+}
+
+.daily-extra {
+	background-color: #555;
+	color: #fff;
+	left: 0;
+	padding: 1rem;
+	width: 20%;
+	text-align: center;
+}
+
+.price-section {
+	font-size: 19px;
+	margin-right: 7%;
+}
+
+.price-strike {
+	font-size: 15px;
+	text-decoration: line-through;
+	color: #CCC;
+}
+
+#daily-sale .post-img-content.collection-extra {
+	height: 167px;
+}
+
+#daily-sale .daily-extra {
+	width: 30%;
 }

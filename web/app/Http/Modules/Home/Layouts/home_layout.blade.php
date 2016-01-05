@@ -85,47 +85,37 @@
                     <!--Login-->
                     <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
                         <ul class="login list-inline text-uppercase">
-                            {{--<li><a href="#">my cart</a></li>--}}
-                            <?php if (Session::has('fs_user')){ ?>
-                            <li><a href="/logout" class="">Logout</a>
-                            </li>
+                            <?php if (Session::has('fs_user')){
+                             $value = Session::get('fs_user')['profilepic'];
+                            ?>
                             <li>
-                                <a href="#" id="showdetails"><img src="http://semantic-ui.com/images/avatar/small/jenny.jpg" style="height:30px; width:30px;" class="img-circle"/> Username <span id="triangle_down">&#9660;</span>
+                                <a href="javascript:void(0)" id="showdetails"><?php if($value != ''){ ?><img src="<?php echo $value; ?>" style="height:30px; width:30px;" class="img-circle" id="user_profile_pic_id"/> <?php } ?> Username <span id="triangle_down">&#9660;</span>
                                     <span id="triangle_up" style="display:none;">&#9650;</span></a>
                                 <div id="userpanel" class="left-panel">
-
-
                                     <!--body panel-->
                                     <div class="body-user">
-
                                         <div class="content-body-user text-overflow">
                                             <ul class="list-unstyled">
-                                                <li><a href="#"><i class="fa fa-user"></i>&nbsp;&nbsp;My Account</a></li>
+                                                <li><a href="/profile-setting"><i class="fa fa-user"></i>&nbsp;&nbsp;My Account</a></li>
                                                 <li><a href="#"><i class="fa fa-heart"></i>&nbsp;&nbsp;My Wishlist</a></li>
                                                 <li><a href="#"><i class="fa fa-truck"></i>&nbsp;&nbsp;My Orders</a></li>
                                                 <li><a href="#"><i class="fa fa-outdent"></i>&nbsp;&nbsp;My Tickets</a></li>
                                                 <li><a href="#"><i class="fa fa-bullhorn"></i>&nbsp;&nbsp;Add New Ticket</a></li>
-                                                <li><a href="#"><i class="fa fa-envelope"></i>&nbsp;&nbsp;Subscribe Newsletter</a></li>
-                                                <li><a href="#"><i class="fa fa-key"></i>&nbsp;&nbsp;Log Out</a></li>
+                                                <li><a href="#"><i class="fa fa-envelope"></i>&nbsp;&nbsp;Newsletter</a></li>
+                                                <li><a href="/logout"><i class="fa fa-key"></i>&nbsp;&nbsp;Log Out</a></li>
                                             </ul>
-
                                         </div>
                                     </div>
                                     <!--body panel-->
-
                                 </div>
-
                             </li>
                             <?php } else { ?>
-
                             <li><a href="#" class="open_login_model" data-toggle="modal" data-target=".modal-login">login</a>
                             </li>
                             <li><a href="#" class="open_signup_model" data-toggle="modal" data-target=".modal-login">Register</a>
                             </li>
                             <?php } ?>
-
-
-                            <li>
+                            <li style="float:left ">
                                 <a href="#" id="showbag">bag (1) <span id="triangle_down">&#9660;</span>
                                     <span id="triangle_up" style="display:none;">&#9650;</span> </a>
 

@@ -183,7 +183,7 @@ class AuthenticationController extends Controller
                                 $token = hash('sha256', $string);
                                 $data['login_token'] = $token;
                                 $id = $userDetails->id;
-                                $objuser->UpdateUserDetailsWhere($id, $data);
+                                $objuser->UpdateUserDetailsbyId($id, $data);
                                 $userDetails->login_token = $token;
                                 $userDetails->device_id = $postData['device_id'];
                             }

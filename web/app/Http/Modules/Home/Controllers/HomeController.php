@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Curl\CurlRequestHandler;
 
 
+
 class HomeController extends Controller
 {
 //    public function __call(){
@@ -30,7 +31,7 @@ class HomeController extends Controller
     public function home()
     {
 //        Session::put('fs_user', "hhfgh");
-//       echo "<pre>"; print_r(Session::get('fs_user'));
+//       echo "<pre>"; print_r(Session::get('fs_user')['profilepic']);
 //        die();
         //
         return view("Home/Views/home");
