@@ -777,7 +777,10 @@
                             if (response) {
                                 if (response['code'] == 200) {
                                     var profile_pic_url = response['data'];
-                                    document.cookie = "profile_pic_url=" + profile_pic_url;
+                                    var d = new Date();
+                                    d.setTime(d.getTime() + (60*1000));
+                                    var expires = "expires="+d.toUTCString();
+                                    document.cookie = "profile_pic_url=" + profile_pic_url+';'+expires;
                                     <?php
                                     if (isset($_COOKIE['profile_pic_url'])) {
                                        Session::put('fs_user.profilepic' , $_COOKIE['profile_pic_url']);
@@ -788,6 +791,7 @@
                                     $('.image-suc-err').css('color', 'green');
                                     $('.image-suc-err').delay(8000).hide('slow');
                                     $('#user_profile_pic_id').attr('src',profile_pic_url);
+                                    window.location.reload();
                                 } else {
                                     $('.image-suc-err').show();
                                     $('.image-suc-err').html(response['message']);

@@ -30,6 +30,7 @@ class HomeController extends Controller
      */
     public function home()
     {
+        //echo "<pre>";print_r(Session::get('fs_user'));die;
 //        Session::put('fs_user', "hhfgh");
 //       echo "<pre>"; print_r(Session::get('fs_user')['profilepic']);
 //        die();
@@ -53,6 +54,7 @@ class HomeController extends Controller
                     $data['api_token'] = $API_TOKEN;
                     $url = $api_url . "/signup";
                     $curlResponse = $objCurlHandler->curlUsingPost($url, $data);
+//                    echo "<pre>";print_r($curlResponse);die;
                     if ($curlResponse) {
                         echo json_encode($curlResponse);
                         die();

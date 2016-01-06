@@ -121,7 +121,11 @@ class AuthenticationController extends Controller
                             echo json_encode($response);
                         } else {
                             $objuser = new User();
-                            $deleteUser = $objuser->deleteUserDetails($supplier->id);//If mail sending fails then delete user details
+                            $whereForUpdate = [
+                                'rawQuery' => 'id =?',
+                                'bindParams' => [$supplier->id]
+                            ];
+                            $deleteUser = $objuser->deleteUserDetails($whereForUpdate);//If mail sending fails then delete user details
                             $response->code = 400;
                             $response->message = "some Error occured try again";
                             echo json_encode($response);
@@ -175,7 +179,11 @@ class AuthenticationController extends Controller
                         $field = 'email';
                     }
                     if (Auth::attempt([$field => $username, 'password' => $password])) {
-                        $userDetails = $objuser->getUsercredsWhere(Auth::id());
+                        $whereForUpdate = [
+                            'rawQuery' => 'id =?',
+                            'bindParams' => [Auth::id()]
+                        ];
+                        $userDetails = $objuser->getUsercredsWhere($whereForUpdate);
                         if ($userDetails->status == 1) { //ROLE IS NOT CHECKED HERE IF NEEDED ROLE CHECK IS NECESSARY
                             if (isset($postData['device_id']) && $postData['device_id'] != "") {
                                 $data['device_id'] = $postData['device_id'];
@@ -183,7 +191,11 @@ class AuthenticationController extends Controller
                                 $token = hash('sha256', $string);
                                 $data['login_token'] = $token;
                                 $id = $userDetails->id;
-                                $objuser->UpdateUserDetailsbyId($id, $data);
+                                $whereForUpdate = [
+                                    'rawQuery' => 'id =?',
+                                    'bindParams' => [$id]
+                                ];
+                                $objuser->UpdateUserDetailsbyId($whereForUpdate, $data);
                                 $userDetails->login_token = $token;
                                 $userDetails->device_id = $postData['device_id'];
                             }
@@ -324,7 +336,11 @@ class AuthenticationController extends Controller
                         }
                         if ($apitoken == $API_TOKEN) {
                             if ($fpwemail != '' && $resetcode != '') {
-                                $exists = $objUsersModel->verifyResetCode($fpwemail, $resetcode);
+                                $whereForUpdate = [
+                                    'rawQuery' => 'email = ? and reset_code = ?',
+                                    'bindParams' => [$fpwemail, $resetcode]
+                                ];
+                                $exists = $objUsersModel->verifyResetCode($whereForUpdate);
                                 if ($exists) {
                                     $response->code = 200;
                                     $response->message = "Reset Code Verified Successfully.";

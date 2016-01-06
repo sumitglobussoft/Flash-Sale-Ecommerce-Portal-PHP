@@ -33,24 +33,19 @@ class Usersmeta extends Model implements AuthenticatableContract,
 
 
     /**
-     * @param int : $userId
+     * @param array : $where
      * @return array
      * @throws "Argument Not Passed"
      * @author Harshal
      * @uses Profile::profileAjaxHandler[2]
      */
-    public function getUsermetaWhere()
+    public function getUsermetaWhere($where, $selectedColumns = ['*'])
     {
-
-        if (func_num_args() > 0) {
-            $where = func_get_arg(0);
-
             try {
                 $result = DB::table("usersmeta")
-                    ->select()
-                    ->where($where)
+                    ->select($selectedColumns)
+                    ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
                     ->first();
-
             } catch (QueryException $e) {
                 echo $e;
             }
@@ -59,11 +54,10 @@ class Usersmeta extends Model implements AuthenticatableContract,
             } else {
                 return 0;
             }
-        }
     }
 
     /**
-     * @param string : $where
+     * @param array : $where, $data
      * @return int
      * @throws "Argument Not Passed"
      * @author Harshal
@@ -74,13 +68,15 @@ class Usersmeta extends Model implements AuthenticatableContract,
         if (func_num_args() > 0) {
             $where = func_get_arg(0);
             $data = func_get_arg(1);
-            $sql = DB::table('usersmeta')->where($where)->update($data);
+            $sql = DB::table('usersmeta')
+                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                ->update($data);
             return 1;
         }
     }
 
     /**
-     * @param string : $where
+     * @param array : $data
      * @return int
      * @throws "Argument Not Passed"
      * @author Harshal

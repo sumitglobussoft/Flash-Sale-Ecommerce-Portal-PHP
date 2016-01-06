@@ -71,8 +71,7 @@
                     <div class="col-lg-5 search col-md-4 col-sm-4 col-xs-6">
                         <form class="search" action="#" method="Post">
                             <div class="input-group">
-                                <input class="form-control" placeholder="" name="email" type="email"
-                                       required="required">
+                                <input class="form-control" placeholder="" name="email" type="email" required="required">
                                         <span class="input-group-btn">
                                             <button class="btn btn-primary" type="submit" name="subscribe"><i
                                                         class="fa fa-search"></i></button>
@@ -89,7 +88,7 @@
                              $value = Session::get('fs_user')['profilepic'];
                             ?>
                             <li>
-                                <a href="javascript:void(0)" id="showdetails"><?php if($value != ''){ ?><img src="<?php echo $value; ?>" style="height:30px; width:30px;" class="img-circle" id="user_profile_pic_id"/> <?php } ?> Username <span id="triangle_down">&#9660;</span>
+                                <a href="javascript:void(0)" id="showdetails"><img src="<?php if($value != ''){  echo $value; } else { echo "http://placehold.it/350x150"; }?>" style="height:30px; width:30px;" class="img-circle" id="user_profile_pic_id"/> Username <span id="triangle_down">&#9660;</span>
                                     <span id="triangle_up" style="display:none;">&#9650;</span></a>
                                 <div id="userpanel" class="left-panel">
                                     <!--body panel-->

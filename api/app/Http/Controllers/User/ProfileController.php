@@ -59,7 +59,11 @@ class ProfileController extends Controller
                     $authFlag = true;
                 } else {
                     if ($userId != '') {
-                        $Userscredentials = $objuser->getUsercredsWhere($userId);
+                        $where = [
+                            'rawQuery' => 'id =?',
+                            'bindParams' => [$userId]
+                        ];
+                        $Userscredentials = $objuser->getUsercredsWhere($where);
                         if ($apitoken == $Userscredentials->login_token) {
                             $authFlag = true;
                         }
@@ -68,7 +72,11 @@ class ProfileController extends Controller
             }
             if ($authFlag) {
                 if ($userId != '') {
-                    $userdetails = $objuser->getUsercreds($userId);
+                    $where = [
+                        'rawQuery' => 'users.id =?',
+                        'bindParams' => [$userId]
+                    ];
+                    $userdetails = $objuser->getUsercreds($where);
                     if ($userdetails) {
                         $response->code = 200;
                         $response->message = "Success";
@@ -155,7 +163,11 @@ class ProfileController extends Controller
                             $authFlag = true;
                         } else {
                             if ($userId != '') {
-                                $Userscredentials = $objuser->getUsercredsWhere($userId);
+                                $whereForUpdate = [
+                                    'rawQuery' => 'id =?',
+                                    'bindParams' => [$userId]
+                                ];
+                                $Userscredentials = $objuser->getUsercredsWhere($whereForUpdate);
                                 if ($apitoken == $Userscredentials->login_token) {
                                     $authFlag = true;
                                 }
@@ -183,7 +195,11 @@ class ProfileController extends Controller
                             $response->data = null;
                             echo json_encode($response, true);
                         } else {
-                            $currentUserDetails = $objuser->getUsercredsWhere($userId);
+                            $whereForUpdate = [
+                                'rawQuery' => 'id =?',
+                                'bindParams' => [$userId]
+                            ];
+                            $currentUserDetails = $objuser->getUsercredsWhere($whereForUpdate);
                             $uniqueflag = false;
                             if ($currentUserDetails->username == $username && $currentUserDetails->username == $email) {
                                 $uniqueflag = true;
@@ -207,12 +223,19 @@ class ProfileController extends Controller
                                 }
                             }
                             if ($uniqueflag) {
+                                $whereForId = [
+                                    'rawQuery' => 'id =?',
+                                    'bindParams' => [$userId]
+                                ];
                                 $data = array('name' => $firstname, 'last_name' => $lastname, 'username' => $username, 'email' => $email);
-                                $updategeneralinfo = $objuser->UpdateUserDetailsbyId($userId, $data);
-                                $whereForUserId['user_id'] = $userId;
+                                $updategeneralinfo = $objuser->UpdateUserDetailsbyId($whereForId, $data);
+                                $whereForUserId = [
+                                    'rawQuery' => 'user_id =?',
+                                    'bindParams' => [$userId]
+                                ];
                                 $Isuseravailable = $objusermetamodel->getUsermetaWhere($whereForUserId);
                                 if ($Isuseravailable) {
-                                    $dataupdate = array('phone' => $contact_no);
+                                    $dataupdate = array('phone' => "$contact_no");
                                     $UpdateUsermeta = $objusermetamodel->UpdateUsermetawhere($whereForUserId, $dataupdate);
                                 } else {
                                     $dataadd = array('user_id' => $userId, 'phone' => $contact_no);
@@ -269,7 +292,6 @@ class ProfileController extends Controller
                     if (isset($postData['address_line_2'])) {
                         $Address2 = $postData['address_line_2'];
                     }
-                    $mytoken = 0;
                     $authFlag = false;
                     if (isset($postData['api_token'])) {
                         $apitoken = $postData['api_token'];
@@ -277,7 +299,11 @@ class ProfileController extends Controller
                             $authFlag = true;
                         } else {
                             if ($userId != '') {
-                                $Userscredentials = $objuser->getUsercredsWhere($userId);
+                                $whereForUpdate = [
+                                    'rawQuery' => 'id =?',
+                                    'bindParams' => [$userId]
+                                ];
+                                $Userscredentials = $objuser->getUsercredsWhere($whereForUpdate);
                                 if ($apitoken == $Userscredentials->login_token) {
                                     $authFlag = true;
                                 }
@@ -299,7 +325,10 @@ class ProfileController extends Controller
                             $response->data = null;
                             echo json_encode($response);
                         } else {
-                            $whereForUserId['user_id'] = $userId;
+                            $whereForUserId = [
+                                'rawQuery' => 'user_id =?',
+                                'bindParams' => [$userId]
+                            ];
                             $Isuseravailable = $objusermetamodel->getUsermetaWhere($whereForUserId);
                             if ($Isuseravailable) {
                                 $data = array('city' => $City, 'state' => $State, 'zipcode' => $Zip_code, 'addressline1' => $Address1, 'addressline2' => $Address2);
@@ -345,7 +374,6 @@ class ProfileController extends Controller
                     if (isset($postData['reNewPassword'])) {
                         $renewpassword = $postData['reNewPassword'];
                     }
-                    $mytoken = 0;
                     $authFlag = false;
                     if (isset($postData['api_token'])) {
                         $apitoken = $postData['api_token'];
@@ -353,7 +381,11 @@ class ProfileController extends Controller
                             $authFlag = true;
                         } else {
                             if ($userId != '') {
-                                $Userscredentials = $objuser->getUsercredsWhere($userId);
+                                $whereForUpdate = [
+                                    'rawQuery' => 'id =?',
+                                    'bindParams' => [$userId]
+                                ];
+                                $Userscredentials = $objuser->getUsercredsWhere($whereForUpdate);
                                 if ($apitoken == $Userscredentials->login_token) {
                                     $authFlag = true;
                                 }
@@ -378,11 +410,15 @@ class ProfileController extends Controller
 
                             if ($newpassword != $oldpassword) {
                                 if ($newpassword == $renewpassword) {
-                                    $currentUserDetails = $objuser->getUsercredsWhere($userId);
+                                    $where = [
+                                        'rawQuery' => 'id =?',
+                                        'bindParams' => [$userId]
+                                    ];
+                                    $currentUserDetails = $objuser->getUsercredsWhere($where);
                                     if (Hash::check($oldpassword, $currentUserDetails->password)) {
                                         $newpassword = Hash::make($newpassword);
                                         $data = array('password' => $newpassword);
-                                        $Updatepassword = $objuser->UpdateUserDetailsbyId($userId, $data);
+                                        $Updatepassword = $objuser->UpdateUserDetailsbyId($where, $data);
                                         $response->code = 200;
                                         $response->message = "Password Changed Successfully";
                                         $response->data = 1;
@@ -427,7 +463,11 @@ class ProfileController extends Controller
                             $authFlag = true;
                         } else {
                             if ($userId != '') {
-                                $Userscredentials = $objuser->getUsercredsWhere($userId);
+                                $whereForUpdate = [
+                                    'rawQuery' => 'id =?',
+                                    'bindParams' => [$userId]
+                                ];
+                                $Userscredentials = $objuser->getUsercredsWhere($whereForUpdate);
                                 if ($apitoken == $Userscredentials->login_token) {
                                     $authFlag = true;
                                 }
@@ -445,7 +485,7 @@ class ProfileController extends Controller
                                     $response->data = null;
                                     echo json_encode($response);
                                 } else {
-                                    $destinationPath =  $_SERVER['DOCUMENT_ROOT']. '/../../web/public/assets/uploads/useravatar/';
+                                    $destinationPath = $_SERVER['DOCUMENT_ROOT'] . '/../../web/public/assets/uploads/useravatar/';
                                     $filename = $userId . '_' . time() . ".jpg";
                                     File::makeDirectory($destinationPath, 0777, true, true);
                                     $filePath = $destinationPath . $filename;
@@ -453,13 +493,17 @@ class ProfileController extends Controller
                                     Image::make(Input::file('file'))->resize(1024, 1024, function ($constraint) {
                                         $constraint->aspectRatio();
                                     })->save($filePath, $quality);
-                                    $filepathupdate = '/assets/uploads/useravatar/'.$filename;
+                                    $filepathupdate = '/assets/uploads/useravatar/' . $filename;
                                     $updateData['profilepic'] = $filepathupdate;
-                                    $UserData = $objuser->getUsercredsWhere($userId);
-                                    $updatedResult = $objuser->UpdateUserDetailsbyId($userId, $updateData);
+                                    $where = [
+                                        'rawQuery' => 'id =?',
+                                        'bindParams' => [$userId]
+                                    ];
+                                    $UserData = $objuser->getUsercredsWhere($where);
+                                    $updatedResult = $objuser->UpdateUserDetailsbyId($where, $updateData);
                                     if ($updatedResult) {
                                         if ($UserData->profilepic != '') {
-                                            File::delete(public_path() .'/../../web/public'.$UserData->profilepic);
+                                            File::delete(public_path() . '/../../web/public' . $UserData->profilepic);
                                         }
                                         $response->code = 200;
                                         $response->message = "Successfully updated profile image.";

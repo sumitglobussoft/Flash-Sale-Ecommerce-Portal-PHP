@@ -39,23 +39,19 @@ class User extends Model implements AuthenticatableContract,
     protected $hidden = ['password', 'remember_token'];
 
     /**
-     * @param int : $userId
+     * @param array : $where
      * @return array
      * @throws "Argument Not Passed"
      * @throws
      * @author Harshal
      * @uses Authentication::login[1]//Used in each service for getting user login token details
      */
-    public function getUsercredsWhere()
+    public function getUsercredsWhere($where, $selectedColumns = ['*'])
     {
-
-        if (func_num_args() > 0) {
-            $userId = func_get_arg(0);
-
             try {
                 $result = DB::table("users")
-                    ->select()
-                    ->where('id', $userId)
+                    ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                    ->select($selectedColumns)
                     ->first();
 
             } catch (QueryException $e) {
@@ -66,28 +62,26 @@ class User extends Model implements AuthenticatableContract,
             } else {
                 return 0;
             }
-        }
     }
 
     /**
-     * @param int : $userId
+     * @param array : $where
      * @return int
      * @throws "Argument Not Passed"
      * @throws
      * @author Harshal
      * @uses Authentication::signup[1]
      */
-    public function deleteUserDetails()
+    public function deleteUserDetails($where)
     {
-        if (func_num_args() > 0) {
-            $userId = func_get_arg(0);
-            $sql = DB::table('users')->where('id', '=', $userId)->delete();
+            $sql = DB::table('users')
+                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                ->delete();
             if ($sql) {
                 return $sql;
             } else {
                 return 0;
             }
-        }
     }
 
     /**
@@ -129,7 +123,7 @@ class User extends Model implements AuthenticatableContract,
     }
 
     /**
-     * @param int : $resetcode ,String: $fpdemail
+     * @param array : $where
      * @return 0,1
      * @throws "Argument Not Passed"
      * @throws
@@ -137,24 +131,17 @@ class User extends Model implements AuthenticatableContract,
      * @author Harshal
      * @uses authentication::forgotPassword[1]
      */
-    public function verifyResetCode()
+    public function verifyResetCode($where)
     {
-        if (func_num_args() > 0) {
-            $fpwemail = func_get_arg(0);
-            $resetcode = func_get_arg(1);
             $row = DB::table("users")
                 ->select()
-                ->where('email', $fpwemail)
-                ->where('reset_code', $resetcode)
+                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
                 ->first();
             if ($row) {
                 return 1;
             } else {
                 return 0;
             }
-        } else {
-            throw new Exception('Argument not passed');
-        }
     }
 
     /**
@@ -201,25 +188,27 @@ class User extends Model implements AuthenticatableContract,
     }
 
     /**
-     * @param int : $id , array : $data
+     * @param array : $where , array : $data
      * @return 0,1
      * @throws "Argument Not Passed"
      * @throws
      * @author Harshal
-     * @uses authentication::login[1]
+     * @uses authentication::login[1], profile::profileAjaxHandler[3]
      */
     public function UpdateUserDetailsbyId()
     {
         if (func_num_args() > 0) {
-            $id = func_get_arg(0);
+            $where = func_get_arg(0);
             $data = func_get_arg(1);
-            $sql = DB::table('users')->where('id', $id)->update($data);
+            $sql = DB::table('users')
+                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                ->update($data);
             return 1;
         }
     }
 
     /**
-     * @param int : $userId
+     * @param array : $where
      * @return array
      * @throws "Argument Not Passed"
      * @throws
@@ -229,9 +218,9 @@ class User extends Model implements AuthenticatableContract,
     function getUsercreds()
     {
         if (func_num_args() > 0) {
-            $userId = func_get_arg(0);
+            $where = func_get_arg(0);
             $result = DB::table('users')
-                ->where('users.id', $userId)
+                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
                 ->leftJoin('usersmeta', 'users.id', '=', 'usersmeta.user_id')
                 ->select('users.id', 'users.name', 'users.last_name', 'users.username', 'users.email', 'users.profilepic', 'usersmeta.addressline1', 'usersmeta.addressline2', 'usersmeta.city', 'usersmeta.state', 'usersmeta.country', 'usersmeta.phone', 'usersmeta.zipcode')
                 ->first();

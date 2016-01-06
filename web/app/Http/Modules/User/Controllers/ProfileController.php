@@ -28,7 +28,7 @@ class ProfileController extends Controller
 
     public function profileSetting(Request $request)
     {
-        //echo "<pre>";print_r(Session::get('fs_user'));die;
+//        echo "<pre>";print_r(Session::get('fs_user'));die;
         $api_url = env('API_URL');
         $API_TOKEN = env('API_TOKEN');
         $objCurlHandler = CurlRequestHandler::getInstance();
