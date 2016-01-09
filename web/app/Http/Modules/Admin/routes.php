@@ -68,6 +68,11 @@ Route::group(['middleware' => ['guest']], function () {
 
 Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), function () {
 
+//  \DB::listen(function($sql, $bindings, $time) {
+//    var_dump($sql);
+//    var_dump($bindings);
+//    var_dump($time);
+//});
     Route::resource('/admin/login', 'AdminController@adminlogin');
 
 
@@ -96,6 +101,16 @@ Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), fun
         Route::get('/admin/edit-option/{id}', 'OptionController@editOption');
         Route::post('/admin/edit-option/{id}', 'OptionController@editOption');
         Route::post('/admin/option-ajax-handler', 'OptionController@optionAjaxHandler');
+
+        Route::resource('/admin/add-product', 'ProductController@addProduct');
+        Route::resource('/admin/manage-products', 'ProductController@manageProducts');
+
+
+        Route::resource('/admin/control-panel', 'SettingController@controlPanel');
+        Route::get('/admin/manage-settings/{section_id}', 'SettingController@manageSettings');
+        Route::post('/admin/manage-settings/{section_id}', 'SettingController@manageSettings');
+
+
         //-----------------------------ROUTES FOR MANAGER----------------------------------------
         //DON't DO ANYTHING IN THIS BLOCK YET [TO BE DONE AT THE END OF ADMIN MODULE WORK]
         // [COPY ALL ROUTES ABOVE AND REPLACE ADMIN IN URL WITH MANAGER]
@@ -105,7 +120,6 @@ Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), fun
         Route::get('/manager/access-denied', function () {
             return view("Admin/Views/accessdenied");
         });
-
 
     });
 

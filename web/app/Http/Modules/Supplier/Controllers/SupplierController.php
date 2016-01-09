@@ -30,10 +30,10 @@ class SupplierController extends Controller
 
     public function dashboard()
     {
-//        if (Session::has('fs_supplier')) {
-//            die("test");
-//        }
-//
+        if (!Session::has('fs_supplier')) {
+            return redirect('/supplier/login');
+        }
+
 //        echo "<pre>";
 //        print_r(Session::get('fs_supplier')['id']);
 //        die;

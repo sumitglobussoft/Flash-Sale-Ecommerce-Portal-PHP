@@ -150,7 +150,11 @@
 
 @section('pagejavascripts')
     <script>
-        {{--PAGE SCRIPTS GO HERE--}}
+        $(document).ready(function () {
+            @if(session('msg')!='')
+                    toastr["{{session('status')}}"]("{{session('msg')}}");
+            @endif
+        });
     </script>
     <script src="/assets/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
 @endsection

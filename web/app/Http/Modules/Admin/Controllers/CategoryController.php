@@ -30,20 +30,12 @@ class CategoryController extends Controller
     public function manageCategories()
     {
         $objCategoryModel = ProductCategory::getInstance();
-        $where = [
-            'rawQuery' => 'category_status =?',
-            'bindParams' => [1]
-        ];
+        $where = ['rawQuery' => 'category_status =?', 'bindParams' => [1]];
         $allCategories = $objCategoryModel->getAllCategoriesWhere($where);
 
         foreach ($allCategories as $key => $value) {
             $allCategories[$key]->display_name = $this->getCategoryDisplayName($value->category_id);
         }
-
-
-//        echo '<pre>';
-//        print_r($allCategories);
-//        die;
         return view('Admin/Views/category/manageCategories', ['allCategories' => $allCategories]);
     }
 
@@ -81,6 +73,7 @@ class CategoryController extends Controller
             $validator = Validator::make($request->all(), $rules);
             if ($validator->fails()) {
                 return Redirect::back()
+                    ->with(["status" => 'error', 'msg' => 'Please correct the following errors.'])
                     ->withErrors($validator)
                     ->withInput();
             } else {
@@ -112,36 +105,25 @@ class CategoryController extends Controller
                 $insertedId = $objCategoryModel->addCategory($categoryData);
 
                 if ($insertedId) {
-                    $whereForUpdate = [
-                        'rawQuery' => 'category_id =?',
-                        'bindParams' => [$insertedId]
-                    ];
+                    $whereForUpdate = ['rawQuery' => 'category_id =?', 'bindParams' => [$insertedId]];
                     $dataToUpdate['id_path'] = $this->getParentCategoryIds($insertedId);
                     $dataToUpdate['level'] = count(explode('/', $dataToUpdate['id_path']));
                     $objCategoryModel->updateCategoryWhere($dataToUpdate, $whereForUpdate);
 
-                    return Redirect::back()->with(['status' => '1', 'msg' => 'New category' . $request->input('category_name') . ' has been added.']);
+                    return Redirect::back()->with(['status' => 'success', 'msg' => 'New category "' . $request->input('category_name') . '" has been added.']);
                 } else {
-                    return Redirect::back()->with(['status' => '0', 'msg' => 'Something went wrong, please reload the page and try again.']);
+                    return Redirect::back()->with(['status' => 'error', 'msg' => 'Something went wrong, please reload the page and try again.']);
                 }
             }
         }
 
 
-        $where = [
-            'rawQuery' => 'category_status =?',
-            'bindParams' => [1]
-        ];
+        $where = ['rawQuery' => 'category_status =?', 'bindParams' => [1]];
         $allCategories = $objCategoryModel->getAllCategoriesWhere($where);
 
         foreach ($allCategories as $key => $value) {
             $allCategories[$key]->display_name = $this->getCategoryDisplayName($value->category_id);
         }
-
-
-//        echo '<pre>';
-//        print_r($allCategories);
-//        die;
         return view('Admin/Views/category/addCategory', ['allCategories' => $allCategories]);
     }
 
@@ -235,10 +217,10 @@ class CategoryController extends Controller
             $validator = Validator::make($request->all(), $rules);
             if ($validator->fails()) {
                 return Redirect::back()
+                    ->with(["status" => 'error', 'msg' => 'Please correct the following errors.'])
                     ->withErrors($validator)
                     ->withInput();
             } else {
-
                 if (Input::hasFile('category_image')) {
                     $destinationPath = 'assets/uploads/categories/';
                     $filename = 'category_' . time() . ".jpg";
@@ -260,40 +242,28 @@ class CategoryController extends Controller
                 $dataToUpdate['meta_description'] = $request->input('meta_desc');
                 $dataToUpdate['meta_keywords'] = $request->input('meta_keywords');
 
-                $whereForUpdate = [
-                    'rawQuery' => 'category_id =?',
-                    'bindParams' => [$id]
-                ];
+                $whereForUpdate = ['rawQuery' => 'category_id =?', 'bindParams' => [$id]];
                 $updateResult = $objCategoryModel->updateCategoryWhere($dataToUpdate, $whereForUpdate);
 
                 if ($updateResult) {
-                    return Redirect::back()->with(['status' => '1', 'msg' => 'Category details has been updated.']);
+                    return Redirect::back()->with(['status' => 'success', 'msg' => 'Category details has been updated.']);
                 } else {
-                    return Redirect::back()->with(['status' => '0', 'msg' => 'Nothing to update.']);
+                    return Redirect::back()->with(['status' => 'info', 'msg' => 'Nothing to update.']);
                 }
 
             }
         }
 
-        $where = [
-            'rawQuery' => 'category_id =?',
-            'bindParams' => [$id]
-        ];
+        $where = ['rawQuery' => 'category_id =?', 'bindParams' => [$id]];
         $categoryDetails = $objCategoryModel->getCategoryDetailsWhere($where);
         $allCategories = '';
         if ($categoryDetails) {
-            $where = [
-                'rawQuery' => 'category_status =?',
-                'bindParams' => [1]
-            ];
+            $where = ['rawQuery' => 'category_status =?', 'bindParams' => [1]];
             $allCategories = $objCategoryModel->getAllCategoriesWhere($where);
             foreach ($allCategories as $key => $value) {
                 $allCategories[$key]->display_name = $this->getCategoryDisplayName($value->category_id);
             }
         }
-
-//        echo '<pre>';
-//        print_r($categoryDetails);die;
         return view('Admin/Views/category/editCategory', ['categoryDetails' => $categoryDetails, 'allCategories' => $allCategories]);
 
     }

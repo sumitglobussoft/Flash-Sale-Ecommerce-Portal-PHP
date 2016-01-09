@@ -170,6 +170,7 @@
                                 {{--<li role="presentation"><a href="/calender"><i class="fa fa-calendar"></i>Calendar</a></li>--}}
                                 {{--<li role="presentation"><a href="/inbox"><i class="fa fa-envelope"></i>Inbox<span class="badge badge-success pull-right">4</span></a></li>--}}
                                 {{--<li role="presentation" class="divider"></li>--}}
+                                <li role="presentation"><a href="/admin/control-panel"><i class="fa fa-cogs"></i>Control Panel</a></li>
                                 {{--<li role="presentation"><a href="/lock-screen"><i class="fa fa-lock"></i>Lock screen</a></li>--}}
                                 <li role="presentation"><a href="/admin/logout"><i class="fa fa-sign-out m-r-xs"></i>Log
                                         out</a></li>
@@ -283,7 +284,7 @@
 
     <div class="page-inner">
         <div class="page-title">
-            <h3>@yield('title')</h3>
+            <h3><b>@yield('title')</b></h3>
             <!--<div class="page-breadcrumb">
                 <ol class="breadcrumb">
                     <li>Admin</li>

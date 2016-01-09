@@ -1,6 +1,6 @@
 @extends('Admin/Layouts/adminlayout')
 
-@section('title', 'New Option') {{--TITLE GOES HERE--}}
+@section('title', 'New Product') {{--TITLE GOES HERE--}}
 
 @section('headcontent')
     {{--OPTIONAL--}}
@@ -29,7 +29,14 @@
                     <div class="portlet-title tabbable-line">
                         <ul class="nav nav-tabs">
                             <li class="active"><a href="#tab_1_1" data-toggle="tab">General</a></li>
-                            <li><a href="#tab_1_2" data-toggle="tab">Variants</a></li>
+                            <li><a href="#tab_1_2" data-toggle="tab">Images</a></li>
+                            <li><a href="#tab_1_3" data-toggle="tab">SEO</a></li>
+                            <li><a href="#tab_1_4" data-toggle="tab">Options</a></li>
+                            <li><a href="#tab_1_5" data-toggle="tab">Shipping properties</a></li>
+                            <li><a href="#tab_1_6" data-toggle="tab">Quantity discounts</a></li>
+                            <li><a href="#tab_1_7" data-toggle="tab">Features</a></li>
+                            <li><a href="#tab_1_8" data-toggle="tab">Product tabs</a></li>
+                            <li><a href="#tab_1_8" data-toggle="tab">Tags</a></li>
                         </ul>
                     </div>
                     <form class="form-horizontal" method="post" enctype="multipart/form-data">

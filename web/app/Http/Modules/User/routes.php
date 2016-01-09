@@ -11,9 +11,10 @@
 //|
 //*/
 //
-////Route::get('/', function () {
-////    return view('welcome');
-////});
+//Route::get('/', function () {
+//   \Illuminate\Support\Facades\Cache::put("test","hello",10);
+//    return Cache::get("test");
+//});
 //
 //Route::group(['middleware' => ['guest']], function () {
 //

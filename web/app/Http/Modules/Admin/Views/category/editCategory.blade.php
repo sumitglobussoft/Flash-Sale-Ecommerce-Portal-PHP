@@ -1,6 +1,6 @@
 @extends('Admin/Layouts/adminlayout')
 
-@section('title', 'Edit Category') {{--TITLE GOES HERE--}}
+@section('title', 'Editing category: '.(isset($categoryDetails->category_name) ? $categoryDetails->category_name : '')) {{--TITLE GOES HERE--}}
 
 @section('headcontent')
     {{--OPTIONAL--}}
@@ -19,14 +19,6 @@
     {{--PAGE CONTENT GOES HERE--}}
 
     <div class="row">
-        @if(session('status')!='')
-            <div role="alert"
-                 class="alert @if(session('status')) alert-success @else alert-danger @endif alert-dismissible" style="float: right;">
-                <button aria-label="Close" data-dismiss="alert" class="close" type="button"><span
-                            aria-hidden="true">×</span></button>
-                {{session('msg')}}
-            </div>
-        @endif
         <div class="col-md-12">
             @if(!isset($categoryDetails))
                 <div style="text-align: center">
@@ -42,7 +34,7 @@
 
                     </div>
                     <div class="panel-body">
-                        <div class="col-md-4">
+                        <div class="col-md-4 well">
                             <div id="tree_1" class="tree-demo">
                                 <?php
                                 function createTree($array, $curParent, $currLevel = 0, $prevLevel = -1)
@@ -120,8 +112,11 @@
                                     <label class="col-sm-3 control-label">Status</label>
 
                                     <div class="col-sm-8">
-                                        <input type="radio" name="status" value="1" checked>Active
-                                        <input type="radio" name="status" value="0">Inactive
+                                        <?php $status = array('1' => 'Active', '2' => 'Inactive');?>
+                                        @foreach($status as $key=>$value)
+                                            <input type="radio" name="status" value="{{$key}}"
+                                                   @if($categoryDetails->category_status==$key) checked @endif>{{$value}}
+                                        @endforeach
                                     </div>
                                 </div>
 
@@ -199,8 +194,8 @@
                                     </div>
                                 </div>
                                 <div class="form-actions" align="center">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                    <button type="reset" class="btn btn-default">Reset</button>
+                                    <button type="submit" class="btn btn-primary">Save</button>
+                                    <a href="/admin/manage-categories" class="btn btn-default">Cancel</a>
                                 </div>
                             </form>
                         </div>
@@ -219,8 +214,15 @@
     <!-- END PAGE LEVEL SCRIPTS -->
     <script src="/assets/js/pages/ui-tree.js"></script>
     <script>
-        jQuery(document).ready(function () {
+        $(document).ready(function () {
             UITree.init();
+//            FOR UI-NOTIFICATIONS
+            @if(session('msg')!='')
+                toastr["{{session('status')}}"]("{{session('msg')}}");
+            @endif
+
+
+
         });
     </script>
 @endsection

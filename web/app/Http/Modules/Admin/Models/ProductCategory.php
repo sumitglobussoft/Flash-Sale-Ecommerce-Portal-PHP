@@ -24,7 +24,7 @@ class ProductCategory extends Model
      * Add new category
      * @return string|array
      * @throws Exception
-     * @since 20-12-2015
+     * @since 19-12-2015
      * @author Dinanath Thakur <dinanaththakur@globussoft.com>
      */
     public function addCategory()
@@ -80,7 +80,7 @@ class ProductCategory extends Model
      * Update category details
      * @return string
      * @throws Exception
-     * @since xx-xx-xxxx
+     * @since 24-12-2015
      * @author Dinanath Thakur <dinanaththakur@globussoft.com>
      */
     public function updateCategoryWhere()

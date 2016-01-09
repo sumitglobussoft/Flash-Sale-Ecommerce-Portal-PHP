@@ -3,8 +3,6 @@
 @section('title', 'Manage Categories') {{--TITLE GOES HERE--}}
 
 @section('headcontent')
-    {{--OPTIONAL--}}
-    {{--PAGE STYLES OR SCRIPTS LINKS--}}
     <link rel="stylesheet" type="text/css" href="/assets/plugins/jstree/dist/themes/default/style.min.css"/>
 
     <style>
@@ -15,8 +13,6 @@
 @endsection
 
 @section('content')
-    {{--PAGE CONTENT GOES HERE--}}
-    {{--DISPLAY ALL CATEGORIES, USING SERVER SIDE DATATABLES--}}
     <div class="row">
         <div class="col-md-12">
             @if(empty($allCategories))

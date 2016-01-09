@@ -31,7 +31,7 @@ class ProductOptionVariant extends Model
         if (func_num_args() > 0) {
             $data = func_get_arg(0);
             try {
-                $result = DB::table($this->table)->insertGetId($data);
+                $result = DB::table($this->table)->insert($data);
                 return $result;
             } catch (\Exception $e) {
                 return $e->getMessage();
@@ -89,10 +89,10 @@ class ProductOptionVariant extends Model
             $data = func_get_arg(0);
             $where = func_get_arg(1);
             try {
-                $updatedResult = DB::table($this->table)
+                $result = DB::table($this->table)
                     ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
                     ->update($data);
-                return $updatedResult;
+                return $result;
             } catch (\Exception $e) {
                 return $e->getMessage();
             }
@@ -113,11 +113,10 @@ class ProductOptionVariant extends Model
         if (func_num_args() > 0) {
             $where = func_get_arg(0);
             try {
-                $updatedResult = DB::table($this->table)
-//                    ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
-                    ->whereRaw($where['rawQuery'])
+                $result = DB::table($this->table)
+                    ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
                     ->delete();
-                return $updatedResult;
+                return $result;
             } catch (\Exception $e) {
                 return $e->getMessage();
             }

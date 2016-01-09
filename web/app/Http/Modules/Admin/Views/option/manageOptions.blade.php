@@ -4,12 +4,9 @@
 
 @section('headcontent')
     <link rel="stylesheet" type="text/css" href="/assets/plugins/datatables/css/jquery.datatables.min.css"/>
-
 @endsection
 
 @section('content')
-    {{--PAGE CONTENT GOES HERE--}}
-    {{--DISPLAY ALL CATEGORIES, USING SERVER SIDE DATATABLES--}}
     <div class="row">
         <div class="col-md-12">
             @if(empty($allOptions))
@@ -41,7 +38,7 @@
                             </thead>
                             <tbody>
                             @foreach($allOptions as $optionKey=>$optionValue)
-                                <tr>
+                                <tr id="option-{{$optionValue->option_id}}">
                                     <td>{{$optionValue->option_name}}</td>
                                     <td style="text-align: center">
                                         <div role="group" class="btn-group ">
@@ -51,12 +48,12 @@
                                                 <span class="caret"></span>
                                             </button>
                                             <ul role="menu" class="dropdown-menu">
-                                                <li><a href="/admin/edit-option/{{$optionValue->option_id}}"><i class="fa fa-pencil"
-                                                                  data-id="{{$optionValue->option_id}}"></i>&nbsp;Edit</a>
+                                                <li><a href="/admin/edit-option/{{$optionValue->option_id}}"><i
+                                                                class="fa fa-pencil"
+                                                                data-id="{{$optionValue->option_id}}"></i>&nbsp;Edit</a>
                                                 </li>
-                                                <li><a href="javascript:void(0);" class="delete-option"><i
-                                                                class="fa fa-trash"
-                                                                data-id="{{$optionValue->option_id}}"></i>&nbsp;Delete</a>
+                                                <li><a href="javascript:void(0);" class="delete-option"
+                                                       data-id="{{$optionValue->option_id}}"><i class="fa fa-trash"></i>&nbsp;Delete</a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -125,7 +122,8 @@
                         },
                         success: function (response) {
                             response = $.parseJSON(response);
-                            if (response == "1") {
+                            toastr[response['status']](response['msg']);
+                            if (response['status'] == "success") {
                                 if (obj.hasClass('btn-success')) {
                                     obj.removeClass('btn-success');
                                     obj.addClass('btn-danger');
@@ -139,11 +137,33 @@
                         }
                     });
                 }
-            })
-            ;
+            });
 
-        })
-        ;
+            $(document.body).on("click", ".delete-option", function () {
+                var obj = $(this);
+                var optionId = $(this).attr('data-id');
+                var x = confirm("Are you sure, you want to delete this option?");
+                if (x) {
+                    $.ajax({
+                        url: '/admin/option-ajax-handler',
+                        type: 'POST',
+                        datatype: 'json',
+                        data: {
+                            method: 'deleteOption',
+                            optionId: optionId
+                        },
+                        success: function (response) {
+                            response = $.parseJSON(response);
+                            toastr[response['status']](response['msg']);
+                            if (response['status'] == 'success') {
+                                var oTable = $('#optionTable').dataTable();
+                                oTable.fnDeleteRow(document.getElementById('option-' + optionId));
+                            }
+                        }
+                    });
+                }
+            });
+        });
 
     </script>
     <script src="/assets/plugins/datatables/js/jquery.datatables.min.js"></script>

@@ -1,8 +1,18 @@
 @extends('Admin/Layouts/adminlayout')
 
-@section('title', 'Edit Option') {{--TITLE GOES HERE--}}
+@section('title', 'Editing option: '.(isset($optionDetails->option_name) ? $optionDetails->option_name : '')) {{--TITLE GOES HERE--}}
 
 @section('headcontent')
+
+    <style>
+        table tr th {
+            text-align: center;
+        }
+
+        .separator {
+            font-size: 25px;
+        }
+    </style>
 
 @endsection
 
@@ -10,15 +20,6 @@
     {{--PAGE CONTENT GOES HERE--}}
 
     <div class="row">
-        @if(session('status')!='')
-            <div role="alert"
-                 class="alert @if(session('status')) alert-success @else alert-danger @endif alert-dismissible"
-                 style="float: right;">
-                <button aria-label="Close" data-dismiss="alert" class="close" type="button"><span
-                            aria-hidden="true">×</span></button>
-                {{session('msg')}}
-            </div>
-        @endif
         <div class="col-md-12">
             @if(empty($optionDetails)||!isset($optionDetails))
                 <div style="text-align: center">
@@ -76,13 +77,7 @@
                                             <div class="col-sm-4">
                                                 <select name="option_data[option_type]" class="form-control m-b-sm"
                                                         id="option_type">
-                                                    <?php
-                                                    $optionType = array(
-                                                            '1' => 'Select box',
-                                                            '2' => 'Radio group',
-                                                            '3' => 'Check box'
-                                                    );
-                                                    ?>
+                                                    <?php $optionType = array('1' => 'Select box', '2' => 'Radio group', '3' => 'Check box');?>
                                                     <?php $selectedType = isset(old('option_data')['option_type']) ? old('option_data')['option_type'] : $optionDetails->option_type; ?>
                                                     @foreach($optionType as $key=>$value)
                                                         <option value="{{$key}}"
@@ -148,7 +143,9 @@
                                                         @if($variantValue['variant_name']!=''||$variantValue['price_modifier']!=''||$variantValue['weight_modifier']!='')
                                                             <tr>
                                                                 <td>
-                                                                    <input type="hidden" name="option_data[variants][{{$variantKey}}][variant_id]">
+                                                                    <input type="hidden"
+                                                                           name="option_data[variants][{{$variantKey}}][variant_id]"
+                                                                           @if(isset($variantValue['variant_id'])) value="{{$variantValue['variant_id']}}" @endif>
                                                                     <input type="text" class="form-control"
                                                                            name="option_data[variants][{{$variantKey}}][variant_name]"
                                                                            value="{{$variantValue['variant_name']}}">
@@ -167,12 +164,7 @@
                                                                         <div class="col-sm-4">
                                                                             <select name="option_data[variants][{{$variantKey}}][price_modifier_type]"
                                                                                     class="form-control">
-                                                                                <?php
-                                                                                $priceModifierType = array(
-                                                                                        '1' => '$',
-                                                                                        '2' => '%'
-                                                                                );
-                                                                                ?>
+                                                                                <?php $priceModifierType = array('1' => '$', '2' => '%');?>
                                                                                 @foreach($priceModifierType as $key=>$value)
                                                                                     <option value="{{$key}}"
                                                                                             @if(isset(old('option_data')['variants'])&&$key==old('option_data')['variants'][$variantKey]['price_modifier_type']) selected @endif>{{$value}}</option>
@@ -194,12 +186,7 @@
                                                                         <div class="col-sm-4">
                                                                             <select name="option_data[variants][{{$variantKey}}][weight_modifier_type]"
                                                                                     class="form-control">
-                                                                                <?php
-                                                                                $weightModifierType = array(
-                                                                                        '1' => 'lbs',
-                                                                                        '2' => '%'
-                                                                                );
-                                                                                ?>
+                                                                                <?php $weightModifierType = array('1' => 'lbs', '2' => '%');?>
                                                                                 @foreach($priceModifierType as $key=>$value)
                                                                                     <option value="{{$key}}"
                                                                                             @if(isset(old('option_data')['variants'])&&$key==old('option_data')['variants'][$variantKey]['weight_modifier_type']) selected @endif>{{$value}}</option>
@@ -213,12 +200,7 @@
                                                                     <div class="col-sm-12">
                                                                         <select name="option_data[variants][{{$variantKey}}][status]"
                                                                                 class="form-control">
-                                                                            <?php
-                                                                            $status = array(
-                                                                                    '1' => 'Active',
-                                                                                    '2' => 'Inactive'
-                                                                            );
-                                                                            ?>
+                                                                            <?php $status = array('1' => 'Active', '2' => 'Inactive');?>
                                                                             @foreach($status as $key=>$value)
                                                                                 <option value="{{$key}}"
                                                                                         @if(isset(old('option_data')['variants'])&&$key==old('option_data')['variants'][$variantKey]['status']) selected @endif>{{$value}}</option>
@@ -242,7 +224,9 @@
                                                         @foreach($optionDetails->variantDetails as $variantKey=>$variantValue)
                                                             <tr>
                                                                 <td>
-                                                                    <input type="hidden" name="option_data[variants][{{$variantKey}}][variant_id]" value="{{$variantValue->variant_id}}">
+                                                                    <input type="hidden"
+                                                                           name="option_data[variants][{{$variantKey}}][variant_id]"
+                                                                           value="{{$variantValue->variant_id}}">
                                                                     <input type="text" class="form-control"
                                                                            name="option_data[variants][{{$variantKey}}][variant_name]"
                                                                            value="{{$variantValue->variant_name}}">
@@ -259,12 +243,7 @@
                                                                         <div class="col-sm-4">
                                                                             <select name="option_data[variants][{{$variantKey}}][price_modifier_type]"
                                                                                     class="form-control">
-                                                                                <?php
-                                                                                $priceModifierType = array(
-                                                                                        '1' => '$',
-                                                                                        '2' => '%'
-                                                                                );
-                                                                                ?>
+                                                                                <?php $priceModifierType = array('1' => '$', '2' => '%'); ?>
                                                                                 @foreach($priceModifierType as $key=>$value)
                                                                                     <option value="{{$key}}"
                                                                                             @if($key==$variantValue->price_modifier_type) selected @endif>{{$value}}</option>
@@ -285,12 +264,7 @@
                                                                         <div class="col-sm-4">
                                                                             <select name="option_data[variants][{{$variantKey}}][weight_modifier_type]"
                                                                                     class="form-control">
-                                                                                <?php
-                                                                                $weightModifierType = array(
-                                                                                        '1' => 'lbs',
-                                                                                        '2' => '%'
-                                                                                );
-                                                                                ?>
+                                                                                <?php $weightModifierType = array('1' => 'lbs', '2' => '%'); ?>
                                                                                 @foreach($weightModifierType as $key=>$value)
                                                                                     <option value="{{$key}}"
                                                                                             @if($key==$variantValue->weight_modifier_type) selected @endif>{{$value}}</option>
@@ -304,12 +278,7 @@
                                                                     <div class="col-sm-12">
                                                                         <select name="option_data[variants][{{$variantKey}}][status]"
                                                                                 class="form-control">
-                                                                            <?php
-                                                                            $status = array(
-                                                                                    '1' => 'Active',
-                                                                                    '2' => 'Inactive'
-                                                                            );
-                                                                            ?>
+                                                                            <?php $status = array('1' => 'Active', '2' => 'Inactive'); ?>
                                                                             @foreach($status as $key=>$value)
                                                                                 <option value="{{$key}}"
                                                                                         @if($key==$variantValue->status) selected @endif>{{$value}}</option>
@@ -396,7 +365,7 @@
                                 </div>
                                 <div class="form-actions" align="center">
                                     <button type="submit" class="btn btn-primary">Save</button>
-                                    <button type="reset" class="btn btn-default">Reset</button>
+                                    <a href="/admin/manage-options" class="btn btn-default">Cancel</a>
                                 </div>
                             </form>
                         </div>
@@ -493,7 +462,12 @@
                     }
                 });
             }
-        })
-    </script>
 
+            @if(session('msg')!='')
+                     toastr["{{session('status')}}"]("{{session('msg')}}");
+            @endif
+
+
+        });
+    </script>
 @endsection

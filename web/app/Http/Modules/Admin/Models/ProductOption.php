@@ -49,7 +49,7 @@ class ProductOption extends Model
      * @since 28-12-2015
      * @author Dinanath Thakur <dinanaththakur@globussoft.com>
      */
-    public function getAllOptionsWhere($where, $selectedColumns =  ['*'])
+    public function getAllOptionsWhere($where, $selectedColumns = ['*'])
     {
         if (func_num_args() > 0) {
             $where = func_get_arg(0);
@@ -94,9 +94,6 @@ class ProductOption extends Model
      * @throws Exception
      * @since 31-12-2015
      * @author Dinanath Thakur <dinanaththakur@globussoft.com>
-     * NOTE: WHILE UPDATING, JUST PASS THE "rawQuery" INCLUDING VALUE. (FOR UPDATE ONLY)
-     * We can't use binding of parameters and assignation of value in the rawQuery together
-     * IF WE USE BOTH "rawQuery" and "bindParams", IT WILL GIVE AN ERROR.
      */
     public function updateOptionWhere()
     {
@@ -104,10 +101,10 @@ class ProductOption extends Model
             $data = func_get_arg(0);
             $where = func_get_arg(1);
             try {
-                $updatedResult = DB::table($this->table)
+                $result = DB::table($this->table)
                     ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
                     ->update($data);
-                return $updatedResult;
+                return $result;
             } catch (\Exception $e) {
                 return $e->getMessage();
             }
@@ -116,6 +113,29 @@ class ProductOption extends Model
         }
     }
 
+    /**
+     * Delete option details
+     * @return string
+     * @throws Exception
+     * @since 05-01-2016
+     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     */
+    public function deleteOptionWhere()
+    {
+        if (func_num_args() > 0) {
+            $where = func_get_arg(0);
+            try {
+                $result = DB::table($this->table)
+                    ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                    ->delete();
+                return $result;
+            } catch (\Exception $e) {
+                return $e->getMessage();
+            }
+        } else {
+            throw new Exception('Argument Not Passed');
+        }
+    }
 
     private function generateWhere($where, $query)
     {

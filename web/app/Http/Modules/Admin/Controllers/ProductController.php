@@ -6,23 +6,25 @@ use Illuminate\Http\Request;
 
 use FlashSale\Http\Requests;
 use FlashSale\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use DB;
 
-use FlashSale\Http\Modules\Admin\Models\User;
 use Illuminate\Support\Facades\Session;
 
 
 class ProductController extends Controller
 {
 
-    public function pendingProducts()
+    public function addProduct()
     {
-        $objProductModel = Product::getInstance();
-        $pendingProducts = $objProductModel->getAllProductsWhereStatus('0');
-        return view('Admin/Views/product/pending-produtcs', ['pendingProducts' => $pendingProducts]);
+//        return view('Admin/Views/product/addProduct', ['pendingProducts' => $pendingProducts]);
+        return view('Admin/Views/product/addProduct');
 
+    }
+
+    public function manageProducts()
+    {
+//        return view('Admin/Views/product/addProduct', ['pendingProducts' => $pendingProducts]);
+        return view('Admin/Views/product/manageProducts');
 
     }
 
