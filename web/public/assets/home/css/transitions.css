@@ -1,0 +1,22 @@
+a,
+a:hover,
+.collection-extra:hover .text-extra,
+.collection-extra .text-extra
+.social-links li:hover span,
+.social-links li span,
+.social-links li:hover i,
+.social-links li i,
+.newsletterForm .btn:hover i,
+.newsletterForm .btn i,
+.collection-extra:hover .product-hover,
+.product-hover,
+.categories:hover .overlay,
+.categories .overlay,
+.collection-extra:hover .overlay,
+.collection-extra .overlay{	
+	-webkit-transition: 0.3s all ease;
+	-moz-transition: 0.3s all ease;
+	-o-transition: 0.3s all ease;
+	-ms-transition: 0.3s all ease;
+	transition: 0.3s all ease;
+}

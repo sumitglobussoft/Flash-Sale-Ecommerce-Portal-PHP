@@ -60,9 +60,9 @@ class SettingController extends Controller
 
 
         $allObjectsOfSeciton = $objSettingsObject->getAllObjectsAndVariantsOfASectionWhere($whereForSetting);
-        echo '<pre>';
-        print_r($allObjectsOfSeciton);
-        die;
+//        echo '<pre>';
+//        print_r($allObjectsOfSeciton);
+//        die;
 
         return view('Admin/Views/setting/manageSettings', ['allObjectsOfSeciton' => $allObjectsOfSeciton, 'allSection' => $allSection]);
     }

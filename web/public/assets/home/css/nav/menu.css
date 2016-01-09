@@ -1,0 +1,109 @@
+/*!
+ * Yamm!3 - Yet another megamenu for Bootstrap 3
+ * http://geedmo.github.com/yamm3
+ * 
+ * @geedmo - Licensed under the MIT license
+ */
+.yamm .nav,
+.yamm .collapse,
+.yamm .dropup,
+.yamm .dropdown {
+  position: static;
+}
+.yamm .container {
+  position: relative;
+}
+.yamm .dropdown-menu {
+  left: auto;
+}
+.yamm .yamm-content {
+  padding: 2rem 3rem;
+}
+.yamm .dropdown.yamm-fw .dropdown-menu {
+  left: 0;
+/*  right: 0;*/
+  top: 5rem;
+    border-radius: 15px;
+     border: 3px solid #ccc;
+}
+.dropdown-menu{
+/*	background-color: #292929;*/
+	color: #7b7b7b;
+	box-shadow: none;
+	border-radius: 0;
+	border-top: 3px solid #3c3c3c;
+	padding: 0em;
+}
+.m-bottom-sm{margin-bottom: 10px;}
+/*red.css*/
+.bg-color,
+.bg-color-simple,
+header.header-color,
+header.header-color .logo-menu,
+header.header-color .search i,
+.boton-color{
+	background-color: #c94357;
+}
+.nav > li > a:hover, .nav > li > a:focus, .dropdown-menu li ul a:hover, .acc-trigger a:hover,
+.title-banner-dark h4, .acc-trigger.active a:hover, a:hover{
+	color: #c94357;
+}
+header.header-color .bar-extras,
+header.header-color .bar-extras a{
+	background-color: #c33d51;
+}
+
+.post
+{
+    background-color: #FFF;
+    overflow: hidden;
+    box-shadow: 0 0 1px #aaa;
+    border-radius: 5px;
+}
+/*
+.post img
+{
+    filter: blur(2px);
+    -webkit-filter: blur(2px);
+    -moz-filter: blur(2px);
+    -o-filter: blur(2px);
+    -ms-filter: blur(2px);
+}
+*/
+.pad-5{padding: 5px;}
+.post .content
+{
+    padding: 15px;
+}
+.post .author
+{
+    font-size: 11px;
+    color: #737373;
+/*    padding: 25px 30px 20px;*/
+}
+.post .post-img-content
+{
+    height: 250px;
+    position: relative;
+}
+.post .post-img-content img
+{
+    position: absolute;
+     width: 100%;
+}
+.post .post-title
+{
+    display: table-cell;
+    vertical-align: bottom;
+    z-index: 2;
+    position: relative;
+}
+.post .post-title b
+{
+    background-color: rgba(51, 51, 51, 0.58);
+    display: inline-block;
+    margin-bottom: 5px;
+    color: #FFF;
+    padding: 10px 15px;
+    margin-top: 5px;
+}
