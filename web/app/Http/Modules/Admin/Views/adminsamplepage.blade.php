@@ -5,6 +5,7 @@
 @section('headcontent')
     {{--OPTIONAL--}}
     {{--PAGE STYLES OR SCRIPTS LINKS--}}
+
 @endsection
 
 @section('content')
@@ -12,6 +13,7 @@
 @endsection
 
 @section('pagejavascripts')
+
     <script>
         {{--PAGE SCRIPTS GO HERE--}}
     </script>

@@ -11,4 +11,3 @@
 <script src="/assets/plugins/offcanvasmenueffects/js/classie.js"></script>
 {{--<script src="/assets/plugins/offcanvasmenueffects/js/main.js"></script>--}}
 <script src="/assets/plugins/waves/waves.min.js"></script>
-

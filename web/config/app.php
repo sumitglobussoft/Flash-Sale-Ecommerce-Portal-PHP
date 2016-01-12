@@ -144,7 +144,13 @@ return [
         FlashSale\Providers\AppServiceProvider::class,
         FlashSale\Providers\AuthServiceProvider::class,
         FlashSale\Providers\EventServiceProvider::class,
-        FlashSale\Providers\RouteServiceProvider::class
+        FlashSale\Providers\RouteServiceProvider::class,
+		
+		/*
+		 *Added by: Dinanath thakur
+		 *Date: 10-12-2015
+		
+		Intervention\Image\ImageServiceProvider::class */
     ],
 
     /*
@@ -194,6 +200,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Html' => Illuminate\Html\HtmlFacade::class,//EXTRA ADDED COMPOSER ELEMENT BY AKASH PAI TO USE HTML FUNCTIONS
+        'Form'=>Illuminate\Html\FormFacade::class,//EXTRA ADDED COMPOSER ELEMENT BY DINANATH THAKUR TO USE FORM FUNCTIONS
+		//'Image' => Intervention\Image\Facades\Image::class,//EXTRA ADDED COMPOSER ELEMENT BY DINANATH THAKUR TO USE IMAGE INTERVENTION
 
     ],
 

@@ -68,38 +68,48 @@ Route::group(['middleware' => ['guest']], function () {
 
 Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), function () {
 
-        Route::resource('/admin/login', 'AdminController@adminlogin');
+    Route::resource('/admin/login', 'AdminController@adminlogin');
 
 
 //IF  YOU NEED TO USE GET POST, USE THIS FORMAT AS IN BELOW BLOCK COMMENT
-        /*Route::get('admin/dashboard', function () {
-            return view("Admin/Views/dashboard");
-        }); */
+    /*Route::get('admin/dashboard', function () {
+        return view("Admin/Views/dashboard");
+    }); */
 
-        Route::group(['middleware' => 'auth:admin'], function () {
+    Route::group(['middleware' => 'auth:admin'], function () {
 
-            Route::resource('/admin/logout', 'AdminController@adminLogout');
-            Route::resource('/admin/dashboard', 'AdminController@dashboard');
-            Route::get('/admin/access-denied', function () {
-                return view("Admin/Views/accessdenied");
-            });
-
-            Route::resource('/admin/pending-products', 'ProductController@pendingProducts');
-
-            Route::resource('/admin/add-product', 'ProductController@addProduct');
-
-
-            //-----------------------------ROUTES FOR MANAGER----------------------------------------
-            //DON't DO ANYTHING IN THIS BLOCK YET [TO BE DONE AT THE END OF ADMIN MODULE WORK]
-            // [COPY ALL ROUTES ABOVE AND REPLACE ADMIN IN URL WITH MANAGER]
-            Route::resource('/manager/logout', 'AdminController@managerLogout');
-
-            Route::resource('manager/dashboard', 'AdminController@dashboard');
-            Route::get('/manager/access-denied', function () {
-                return view("Admin/Views/accessdenied");
-            });
-
+        Route::resource('/admin/logout', 'AdminController@adminLogout');
+        Route::resource('/admin/dashboard', 'AdminController@dashboard');
+        Route::get('/admin/access-denied', function () {
+            return view("Admin/Views/accessdenied");
         });
+
+        Route::resource('/admin/pending-products', 'ProductController@pendingProducts');
+        Route::resource('/admin/add-product', 'ProductController@addProduct');
+
+        Route::resource('/admin/manage-categories', 'CategoryController@manageCategories');
+        Route::resource('/admin/add-category', 'CategoryController@addCategory');
+
+        Route::resource('/admin/add-new-filtergroup', 'FilterController@addNewFiltergroup');
+        Route::resource('/admin/manage-filtergroup', 'FilterController@manageFilterGroup');
+
+        Route::resource('/admin/filter-ajax-handler', 'FilterController@filterAjaxHandler');
+
+        Route::get('/admin/edit-filtergroup/{id}', 'FilterController@editFilterGroup');
+        Route::post('/admin/edit-filtergroup/{id}', 'FilterController@editFilterGroup');
+
+        //-----------------------------ROUTES FOR MANAGER----------------------------------------
+        //DON't DO ANYTHING IN THIS BLOCK YET [TO BE DONE AT THE END OF ADMIN MODULE WORK]
+        // [COPY ALL ROUTES ABOVE AND REPLACE ADMIN IN URL WITH MANAGER]
+        Route::resource('/manager/logout', 'AdminController@managerLogout');
+
+        Route::resource('manager/dashboard', 'AdminController@dashboard');
+        Route::get('/manager/access-denied', function () {
+            return view("Admin/Views/accessdenied");
+        });
+
+
+    });
 
 
 });
