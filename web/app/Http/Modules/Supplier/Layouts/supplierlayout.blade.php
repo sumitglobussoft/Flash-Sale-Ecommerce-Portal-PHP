@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    @include('Supplier/layouts/supplierheadscripts')
+    @include('Supplier/Layouts/supplierheadscripts')
 
     @yield('pageheadcontent')
 
@@ -241,7 +241,7 @@
 </main>
 <div class="cd-overlay"></div>
 
-@include('Supplier/layouts/suppliercommonfooterscripts')
+@include('Supplier/Layouts/suppliercommonfooterscripts')
 
 @yield('pagejavascripts')
 

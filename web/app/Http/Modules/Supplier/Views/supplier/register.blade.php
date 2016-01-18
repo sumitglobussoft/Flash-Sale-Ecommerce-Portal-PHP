@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    @include('Supplier/layouts/supplierheadscripts')
+    @include('Supplier/Layouts/supplierheadscripts')
 </head>
 <body class="page-login">
 <main class="page-content">
@@ -62,7 +62,7 @@
 </main>
 <!-- Page Content -->
 
-@include('Supplier/layouts/suppliercommonfooterscripts')
+@include('Supplier/Layouts/suppliercommonfooterscripts')
 <script src="/assets/plugins/jquery-validation/jquery.validate.min.js"></script>
 <script>
     $(document).ready(function () {

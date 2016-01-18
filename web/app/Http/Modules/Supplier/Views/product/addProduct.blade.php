@@ -1,4 +1,4 @@
-@extends('Supplier/layouts/supplierlayout')
+@extends('Supplier/Layouts/supplierlayout')
 
 @section('title', 'Add Product')
 

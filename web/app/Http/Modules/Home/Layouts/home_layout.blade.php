@@ -1,6 +1,6 @@
 <html>
 <head>
-    @include('Home/layouts/home_header_scripts')
+    @include('Home/Layouts/home_header_scripts')
     @yield('pageheadcontent')
 </head>
 <body>
@@ -747,7 +747,7 @@
 </div>
 <!--Layout Theme Options-->
 
-@include('Home/layouts/home_footer_scripts')
+@include('Home/Layouts/home_footer_scripts')
 @yield('pagejavascripts')
 <script>
     $(".open_login_model").click(function () {

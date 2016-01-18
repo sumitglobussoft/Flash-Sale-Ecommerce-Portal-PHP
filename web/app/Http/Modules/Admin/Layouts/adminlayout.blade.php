@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    @include('Admin/layouts/adminheadscripts')
+    @include('Admin/Layouts/adminheadscripts')
     @yield('headcontent')
 
 </head>
@@ -324,7 +324,7 @@
 </nav>-->
 <div class="cd-overlay"></div>
 
-@include('Admin/layouts/admincommonfooterscripts')
+@include('Admin/Layouts/admincommonfooterscripts')
 
 @yield('pagejavascripts')
 <script src="/assets/js/modern.js"></script>
