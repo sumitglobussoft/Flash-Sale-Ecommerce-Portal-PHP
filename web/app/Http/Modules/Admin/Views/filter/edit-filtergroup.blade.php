@@ -2,7 +2,7 @@
 
 @section('title', 'Edit Filter Group') {{--TITLE GOES HERE--}}
 
-@section('pageheadcontent')
+@section('headcontent')
     {{--<link href="/assets/plugins/select2/css/select2.css" rel="stylesheet" type="text/css"/>--}}
     {{--<link href="/assets/plugins/summernote-master/summernote.css" rel="stylesheet" type="text/css"/>--}}
     <link href="/assets/plugins/jstree/themes/default/style.min.css" rel="stylesheet" type="text/css"/>
@@ -41,7 +41,7 @@
                             <div class="col-md-4">
                                 <input type="text" class="form-control" id="productfiltergroupname"
                                        placeholder="filter name" name="productfiltergroupname"
-                                       value="<?php echo $editfiltergroup->product_filter_option_name ?>">
+                                       value="{{ $editfiltergroup->product_filter_option_name }}">
                             </div>
                             {!!  $errors->first('productfiltergroupname', '<font color="red">:message</font>') !!}
                         </div>
@@ -131,7 +131,9 @@
                                                 <li class="catli" data-jstree='{"opened":true}'>
                                                     <?php echo $array[$i]->category_name;
                                                     $catId = $array[$i]->category_id; ?>
-                                                    <span class="catinputdivs"  data-id="<?php echo $array[$i]->category_id; ?>" data-checked="{{ (isset(old('productcategories')[$catId]) || in_array($array[$i]->category_id, $selectedcategory)) ? "checked" : ""}}"></span>
+                                                    <span class="catinputdivs"
+                                                          data-id="<?php echo $array[$i]->category_id; ?>"
+                                                          data-checked="{{ (isset(old('productcategories')[$catId]) || in_array($array[$i]->category_id, $selectedcategory)) ? "checked" : ""}}"></span>
 
                                                     <?php // echo $array[$i]->display_name . $array[$i]->category_name ?>
 

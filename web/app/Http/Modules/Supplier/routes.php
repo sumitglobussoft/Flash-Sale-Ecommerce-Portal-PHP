@@ -33,6 +33,18 @@ Route::group(array('module' => 'Supplier', 'namespace' => 'Supplier\Controllers'
         Route::resource('/supplier/supplierDetails', 'SupplierController@supplierDetails');
         Route::post('/supplier/ajaxHandler', 'SupplierController@ajaxHandler');
 
+      Route::get('images/{filename}', function ($filename)
+        {
+            $path = storage_path() . '/' . $filename;
+
+            $file = File::get($path);
+            $type = File::mimeType($path);
+
+            $response = Response::make($file, 200);
+            $response->header("Content-Type", $type);
+
+            return $response;
+        });
 //        Product Controller
         Route::resource('/supplier/add-product', 'ProductController@addProduct');
     });

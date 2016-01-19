@@ -2,7 +2,7 @@
 <html>
 <head>
     @include('Admin/layouts/adminheadscripts')
-    @yield('pageheadcontent')
+    @yield('headcontent')
 
 </head>
 <body class="page-header-fixed compact-menu page-sidebar-fixed">
@@ -170,6 +170,7 @@
                                 {{--<li role="presentation"><a href="/calender"><i class="fa fa-calendar"></i>Calendar</a></li>--}}
                                 {{--<li role="presentation"><a href="/inbox"><i class="fa fa-envelope"></i>Inbox<span class="badge badge-success pull-right">4</span></a></li>--}}
                                 {{--<li role="presentation" class="divider"></li>--}}
+                                <li role="presentation"><a href="/admin/control-panel"><i class="fa fa-cogs"></i>Control Panel</a></li>
                                 {{--<li role="presentation"><a href="/lock-screen"><i class="fa fa-lock"></i>Lock screen</a></li>--}}
                                 <li role="presentation"><a href="/admin/logout"><i class="fa fa-sign-out m-r-xs"></i>Log
                                         out</a></li>
@@ -224,10 +225,11 @@
                         <p>Suppliers</p> <span class="arrow"></span>
                     </a>
                     <ul class="sub-menu">
-                        <li><a href="/admin/pending-suppliers">Pending requests</a></li>
-                        <li><a href="/admin/available-suppliers">Available suppliers</a></li>
-                        <li><a href="/admin/rejected-suppliers">Rejected suppliers</a></li>
-                        <li><a href="/admin/deleted-suppliers">Deleted suppliers</a></li>
+                        <li><a href="/admin/pending-supplier">Pending requests</a></li>
+                        <li><a href="/admin/available-supplier">Available suppliers</a></li>
+                        <li><a href="/admin/add-new-supplier">Add New suppliers</a></li>
+                        {{--<li><a href="/admin/rejected-suppliers">Rejected suppliers</a></li>--}}
+                        <li><a href="/admin/deleted-supplier">Deleted suppliers</a></li>
                     </ul>
                 </li>
 
@@ -238,9 +240,9 @@
                         <p>Customers</p> <span class="arrow"></span>
                     </a>
                     <ul class="sub-menu">
-                        <li><a href="/admin/pending-users">Pending Customers</a></li>
-                        <li><a href="/admin/available-users">Available Customers</a></li>
-                        <li><a href="/admin/deleted-users">Deleted Customers</a></li>
+                        <li><a href="/admin/pending-customer">Pending Customers</a></li>
+                        <li><a href="/admin/available-customer">Available Customers</a></li>
+                        <li><a href="/admin/deleted-customer">Deleted Customers</a></li>
                     </ul>
                 </li>
 
@@ -261,6 +263,20 @@
                     <a class="waves-effect waves-button">
                         <span class="menu-icon glyphicon glyphicon-envelope"></span>
 
+                        <p>Manager</p> <span class="arrow"></span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li><a href="/admin/add-new-manager">Add New Manager</a></li>
+                        <li><a href="/admin/pending-manager">Pending Manager</a></li>
+                        <li><a href="/admin/available-manager">Available Manager</a></li>
+                        <li><a href="/admin/deleted-manager">Deleted Manager</a></li>
+                    </ul>
+                </li>
+
+                <li class="droplink">
+                    <a class="waves-effect waves-button">
+                        <span class="menu-icon glyphicon glyphicon-envelope"></span>
+
                         <p>Products</p> <span class="arrow"></span>
                     </a>
                     <ul class="sub-menu">
@@ -268,6 +284,7 @@
                         <li><a href="/admin/manage-products">Products</a></li>
                         <li><a href="/admin/manage-features">Features</a></li>
                         <li><a href="/admin/manage-filtergroup">Filters</a></li>
+                        <li><a href="/admin/manage-options">Options</a></li>
                     </ul>
                 </li>
 
@@ -282,7 +299,7 @@
 
     <div class="page-inner">
         <div class="page-title">
-            <h3>@yield('title')</h3>
+            <h3><b>@yield('title')</b></h3>
             <!--<div class="page-breadcrumb">
                 <ol class="breadcrumb">
                     <li>Admin</li>

@@ -14,6 +14,7 @@ use Validator;
 use Input;
 use Redirect;
 use File;
+use Illuminate\Support\Facades\Storage;
 
 use FlashSale\Http\Modules\Supplier\Models\User;
 use FlashSale\Http\Modules\Supplier\Models\Usersmeta;
@@ -23,12 +24,17 @@ use Illuminate\Support\Facades\Session;
 class SupplierController extends Controller
 {
 
+
+    private $imageWidth = 1024;//TO BE USED FOR IMAGE RESIZING
+    private $imageHeight = 1024;//TO BE USED FOR IMAGE RESIZING
+
+
     public function dashboard()
     {
-//        if (Session::has('fs_supplier')) {
-//            die("test");
-//        }
-//
+        if (!Session::has('fs_supplier')) {
+            return redirect('/supplier/login');
+        }
+
 //        echo "<pre>";
 //        print_r(Session::get('fs_supplier')['id']);
 //        die;
@@ -147,6 +153,7 @@ class SupplierController extends Controller
 
         $where['users.id'] = Session::get('fs_supplier')['id'];
         $uesrDetails = $objModelUser->getUserDetailsWhere($where);
+
 
 //        echo '<pre>';
 //        print_r($uesrDetails);
@@ -289,23 +296,27 @@ class SupplierController extends Controller
                     if ($validator->fails()) {
                         echo json_encode(array('status' => 2, 'message' => $validator->messages()->all()));
                     } else {
-                        $destinationPath = 'assets/uploads/useravatar/';
+                        $destinationPath = 'uploads/useravatar/';
                         $filename = $userId . '_' . time() . ".jpg";
-                        File::makeDirectory($destinationPath, 0777, true, true);
+                        File::makeDirectory(storage_path($destinationPath), 0777, true, true);
                         $filePath = '/' . $destinationPath . $filename;
+
+
                         $quality = $this->imageQuality(Input::file('file'));
 
-                        Image::make(Input::file('file'))->resize(1024, 1024, function ($constraint) {
+                        Image::make(Input::file('file'))->resize($this->imageWidth, $this->imageHeight, function ($constraint) {
                             $constraint->aspectRatio();
-                        })->save($destinationPath . $filename, $quality);
-
+                        })->save(storage_path($destinationPath . $filename), $quality);
                         $whereForUpdate['id'] = $userId;
                         $updateData['profilepic'] = $filePath;
+
                         $updatedResult = $objModelUser->updateUserWhere($updateData, $whereForUpdate);
                         if ($updatedResult) {
                             if (!strpos(Session::get('fs_supplier')['profilepic'], 'placeholder')) {
-                                File::delete(public_path() . Session::get('fs_supplier')['profilepic']);
+                                File::delete(storage_path() . Session::get('fs_supplier')['profilepic']);
                             }
+//                            $path = storage_path().$filePath ;
+//                            echo"<pre>";print_r($path);die("fch");
                             Session::put('fs_supplier.profilepic', $filePath);
                             echo json_encode(array('status' => 1, 'message' => 'Successfully updated profile image.'));
                         } else {

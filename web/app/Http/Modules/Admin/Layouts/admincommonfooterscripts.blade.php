@@ -12,3 +12,29 @@
 {{--<script src="/assets/plugins/offcanvasmenueffects/js/main.js"></script>--}}
 <script src="/assets/plugins/waves/waves.min.js"></script>
 
+{{--FOR UI-NOTIFICATIONS--}}
+<script src="/assets/plugins/toastr/toastr.min.js"></script>
+<script src="/assets/js/pages/notifications.js"></script>
+
+<script>
+$(document).ready(function(){
+//FOR UI-NOTIFICATIONS
+      toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": true,
+        "positionClass": "toast-top-center",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "3000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "slideDown",
+        "hideMethod": "slideUp"
+    };
+});
+</script>

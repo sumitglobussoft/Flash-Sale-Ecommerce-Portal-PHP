@@ -68,6 +68,11 @@ Route::group(['middleware' => ['guest']], function () {
 
 Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), function () {
 
+//  \DB::listen(function($sql, $bindings, $time) {
+//    var_dump($sql);
+//    var_dump($bindings);
+//    var_dump($time);
+//});
     Route::resource('/admin/login', 'AdminController@adminlogin');
 
 
@@ -89,6 +94,23 @@ Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), fun
 
         Route::resource('/admin/manage-categories', 'CategoryController@manageCategories');
         Route::resource('/admin/add-category', 'CategoryController@addCategory');
+        Route::get('/admin/edit-category/{id}', 'CategoryController@editCategory');
+        Route::post('/admin/edit-category/{id}', 'CategoryController@editCategory');
+
+        Route::resource('/admin/manage-options', 'OptionController@manageOptions');
+        Route::resource('/admin/add-option', 'OptionController@addOption');
+        Route::get('/admin/edit-option/{id}', 'OptionController@editOption');
+        Route::post('/admin/edit-option/{id}', 'OptionController@editOption');
+        Route::post('/admin/option-ajax-handler', 'OptionController@optionAjaxHandler');
+
+        Route::resource('/admin/add-product', 'ProductController@addProduct');
+        Route::resource('/admin/manage-products', 'ProductController@manageProducts');
+
+
+        Route::resource('/admin/control-panel', 'SettingController@controlPanel');
+        Route::get('/admin/manage-settings/{section_id}', 'SettingController@manageSettings');
+        Route::post('/admin/manage-settings/{section_id}', 'SettingController@manageSettings');
+
 
         Route::resource('/admin/add-new-filtergroup', 'FilterController@addNewFiltergroup');
         Route::resource('/admin/manage-filtergroup', 'FilterController@manageFilterGroup');
@@ -97,6 +119,34 @@ Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), fun
 
         Route::get('/admin/edit-filtergroup/{id}', 'FilterController@editFilterGroup');
         Route::post('/admin/edit-filtergroup/{id}', 'FilterController@editFilterGroup');
+
+        Route::resource('/admin/available-customer', 'CustomerController@availableCustomer');
+        Route::resource('/admin/customer-ajax-handler', 'CustomerController@customerAjaxHandler');
+        Route::resource('/admin/add-new-customer', 'CustomerController@addNewCustomer');
+        Route::get('/admin/edit-customer/{uid}', 'CustomerController@editCustomer');
+        Route::post('/admin/edit-customer/{uid}', 'CustomerController@editCustomer');
+        Route::resource('/admin/pending-customer', 'CustomerController@pendingCustomer');
+        Route::resource('/admin/deleted-customer', 'CustomerController@deletedCustomer');
+
+
+        Route::resource('/admin/add-new-supplier', 'SupplierController@addNewSupplier');
+        Route::resource('/admin/available-supplier', 'SupplierController@availableSupplier');
+        Route::resource('/admin/supplier-ajax-handler', 'SupplierController@supplierAjaxHandler');
+        Route::resource('/admin/pending-supplier', 'SupplierController@pendingSupplier');
+        Route::resource('/admin/deleted-supplier', 'SupplierController@deletedSupplier');
+        Route::get('/admin/edit-supplier/{sid}', 'SupplierController@editSupplier');
+        Route::post('/admin/edit-supplier/{sid}', 'SupplierController@editSupplier');
+//        Route::resource('/admin/supplier-detail', 'SupplierController@supplierDetail');
+
+
+        Route::resource('/admin/add-new-manager', 'ManagerController@addNewManager');
+        Route::resource('/admin/available-manager', 'ManagerController@availableManager');
+        Route::get('/admin/edit-manager/{mid}', 'ManagerController@editManager');
+        Route::post('/admin/edit-manager/{mid}', 'ManagerController@editManager');
+        Route::resource('/admin/pending-manager', 'ManagerController@pendingManager');
+     //   Route::resource('/admin/manage-manager-permission', 'ManagerController@pendingManager');
+        Route::resource('/admin/manager-ajax-handler', 'ManagerController@managerAjaxHandler');
+
 
         //-----------------------------ROUTES FOR MANAGER----------------------------------------
         //DON't DO ANYTHING IN THIS BLOCK YET [TO BE DONE AT THE END OF ADMIN MODULE WORK]
@@ -107,7 +157,6 @@ Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), fun
         Route::get('/manager/access-denied', function () {
             return view("Admin/Views/accessdenied");
         });
-
 
     });
 

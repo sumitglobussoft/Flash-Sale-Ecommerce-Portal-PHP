@@ -1,5 +1,11 @@
 @extends('Supplier/layouts/supplierlayout')
 
+@section('title', 'Profile')
+
+@section('pageheadcontent')
+    {{--OPTIONAL--}}
+    {{--PAGE STYLES OR SCRIPTS LINKS--}}
+
         <!-- BEGIN PAGE LEVEL STYLES -->
 <link href="/assets/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
 <link href="/assets/css/custom/profile.css" rel="stylesheet" type="text/css"/>
@@ -8,8 +14,7 @@
 <link href="/assets/css/custom/components.css" id="style_components" rel="stylesheet" type="text/css"/>
 
 
-@section('title', 'Profile')
-
+@endsection
 @section('content')
     <div class="row">
         <div class="col-md-12">
@@ -19,7 +24,9 @@
                 <div class="portlet light profile-sidebar-portlet">
                     <!-- SIDEBAR USERPIC -->
                     <div class="profile-userpic">
-                        <img src="{{Session::get('fs_supplier')['profilepic']}}" class="img-responsive">
+{{--                        <img src="{{Storage::path(Session::get('fs_supplier')['profilepic'])}}" class="img-responsive">--}}
+                        <img src="{{'images/'. Session::get('fs_supplier')['profilepic']}}" class="img-responsive" title="{{Session::get('fs_supplier')['profilepic']}}">
+                        {{--<img src="{{url('images/ '.$uesrDetails['profilepic'].')}}" class="img-responsive">--}}
                     </div>
                     <!-- END SIDEBAR USERPIC -->
                     <!-- SIDEBAR USER TITLE -->

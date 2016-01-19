@@ -23,8 +23,12 @@
     <link href="/assets/plugins/metrojs/MetroJs.min.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/plugins/toastr/toastr.min.css" rel="stylesheet" type="text/css"/>
 
-
+    {{--ADDED BY DINANATH THAKUR, METRONIC COMPONETS CSS --}}
+    <link href="/assets/css/custom/components.css" id="style_components" rel="stylesheet" type="text/css"/>
     {{--{{HTML::style('assets/plugins/pace-master/themes/blue/pace-theme-flash.css')}}--}}
+
+    {{--FOR UI-NOTIFICATIONS--}}
+    <link href="/assets/plugins/toastr/toastr.min.css" rel="stylesheet"/>
 
     <!-- Theme Styles -->
     <link href="/assets/css/modern.css" rel="stylesheet" type="text/css"/>

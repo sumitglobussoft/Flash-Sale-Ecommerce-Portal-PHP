@@ -2,7 +2,7 @@
 
 @section('title', 'New Filter Group') {{--TITLE GOES HERE--}}
 
-@section('pageheadcontent')
+@section('headcontent')
     {{--<link href="/assets/plugins/select2/css/select2.css" rel="stylesheet" type="text/css"/>--}}
     {{--<link href="/assets/plugins/summernote-master/summernote.css" rel="stylesheet" type="text/css"/>--}}
     <link href="/assets/plugins/jstree/themes/default/style.min.css" rel="stylesheet" type="text/css"/>
@@ -271,12 +271,12 @@
 
             $(document.body).on("change", 'input:checkbox[name="filtercheckproduct"]', function () {
                 var checkedflagproduct = $(this).is(':checked');
-                alert(checkedflagproduct);
+//                alert(checkedflagproduct);
             });
 
             $(document.body).on("change", 'input:checkbox[name="filtercheckcatalog"]', function () {
                 var checkedflagcatalog = $(this).is(':checked');
-                alert(checkedflagcatalog);
+//                alert(checkedflagcatalog);
             });
 //            $.validator.addMethod("nameregex", function (value, element) {
 //                return this.optional(element) || /^[A-Za-z\-'\s]+$/.test(value);
@@ -361,7 +361,7 @@
                     if ($(a).attr('data-checked') == "checked") {
                         checkedstring = "checked";
                     }
-                    $(a).html('<input type="checkbox" name="for_categories[' + catid + ']" class="catinput" hidden ' + $(a).attr('data-checked') + '/>');
+                    $(a).html('<input type="checkbox" name="productcategories[' + catid + ']" class="catinput" hidden ' + $(a).attr('data-checked') + '/>');
                 });
                 var catinputs = $('.catinput');
                 $.each(catinputs, function (i, a) {

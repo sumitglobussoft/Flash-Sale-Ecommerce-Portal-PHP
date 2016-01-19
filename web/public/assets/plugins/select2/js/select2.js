@@ -773,7 +773,7 @@ S2.define('select2/results',[
     this.hideLoading();
 
     var $message = $(
-      '<li role="treeitem" class="select2-results__option"></li>'
+      '<li role="treeitem" class="select2-results__option" id="countryInfo"></li>'
     );
 
     var message = this.options.get('translations').get(params.message);

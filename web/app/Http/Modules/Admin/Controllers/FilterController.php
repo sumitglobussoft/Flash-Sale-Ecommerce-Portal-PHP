@@ -10,7 +10,7 @@ use PDO;
 use Input;
 use FlashSale\Http\Modules\Admin\Models\ProductFilterGroup;
 use FlashSale\Http\Modules\Admin\Models\ProductFilterOption;
-use FlashSale\Http\Modules\Admin\Models\ProductCategories;
+use FlashSale\Http\Modules\Admin\Models\ProductCategory;
 use FlashSale\Http\Modules\Admin\Models\ProductFeatures;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
@@ -34,23 +34,24 @@ class FilterController extends Controller
     {
 
         $ObjProductFilterOption = ProductFilterOption::getInstance();
-        $ObjProductCategories = ProductCategories::getInstance();
+        $ObjProductCategories = ProductCategory::getInstance();
         $ObjProjectFilterFeatureGroup = ProductFeatures::getInstance();
         $userId = Session::get('fs_admin')['id'];
         if ($request->isMethod('GET')) {
-            $where = array('column' => 'category_status', 'condition' => '=', 'value' => '1');
+            $where = ['rawQuery' => 'category_status =?', 'bindParams' => [1]];
             $allCategories = $ObjProductCategories->getAllCategoriesWhere($where);
 
             foreach ($allCategories as $key => $value) {
                 $allCategories[$key]->display_name = $this->getCategoryDisplayName($value->category_id);
             }
 
-            $whereFeature = array('column' => 'status', 'condition' => '=', 'value' => '1', 'column' => 'parent_id', 'condition' => '=', 'value' => '0');
+            $whereFeature = ['rawQuery' => 'status=?', 'bindParams' => [1], 'rawQuery' => 'parent_id=?', 'bindParams' => [0]];
             $allFeatures = $ObjProjectFilterFeatureGroup->getAllFeaturesWhere($whereFeature);
 
             return view('Admin/Views/filter/add-new-filtergroup', ['categories' => $allCategories, 'features' => $allFeatures]);
         }
         if ($request->isMethod('post')) {
+
             $validator = Validator::make($request->all(), [
                 'productfiltergroupname' => 'required',
                 'filterdescription' => 'required',
@@ -99,7 +100,8 @@ class FilterController extends Controller
             $categoryIds = implode(',', $category);
             $data['product_filter_category_id'] = $categoryIds;
             $data['added_by'] = $userId;
-            $result = $ObjProductFilterOption->getProductFilterOptionWhere($data['product_filter_option_name']);
+            $wherefiltercategaory = array('rawQuery' => 'product_filter_option_name', 'bindParams' => $data['product_filter_option_name']);
+            $result = $ObjProductFilterOption->getProductFilterOptionWhere($wherefiltercategaory);
 //            echo"<pre>";print_r($result);die("Xf");
 
             if ($result == '') {
@@ -173,7 +175,7 @@ class FilterController extends Controller
     {
 
         $ObjProductFilterOption = ProductFilterOption::getInstance();
-        $ObjProductCategory = ProductCategories::getInstance();
+        $ObjProductCategory = ProductCategory::getInstance();
 
         $getAllFilterGroup = $ObjProductFilterOption->getAllFilterGroup();
         foreach ($getAllFilterGroup as $filtergroupkey => $filtergroupvalue) {
@@ -195,23 +197,24 @@ class FilterController extends Controller
     {
         $postdata = $request->all();
         $ObjProductFeatures = ProductFeatures::getInstance();
-        $ObjProductCategory = ProductCategories::getInstance();
+        $ObjProductCategory = ProductCategory::getInstance();
         $ObjProductFilterOption = ProductFilterOption::getInstance();
         if ($request->isMethod('GET')) {
-            $where = array('column' => 'category_status', 'condition' => '=', 'value' => '1');
+            $where = array('rawQuery' => 'category_status = ?', 'bindParams' => [1]);
             $allCategories = $ObjProductCategory->getAllCategoriesWhere($where);
             foreach ($allCategories as $key => $value) {
                 $allCategories[$key]->display_name = $this->getCategoryDisplayName($value->category_id);
             }
-            $FilterGroup = $ObjProductFilterOption->getFilterDetailsById($id);
-
+            $whereId = array('rawQuery' => 'product_filter_option_id=?', 'bindParams' => [$id]);
+            $FilterGroup = $ObjProductFilterOption->getFilterDetailsById($whereId);
 
             $catfilterName = array_values(array_unique(explode(',', $FilterGroup[0]->product_filter_category_id)));
             $category = $ObjProductCategory->getCategoryById($catfilterName);
+
             foreach ($category as $key => $val) {
                 $filtecat[$key] = $val->category_id;
             }
-            $whereFeature = array('column' => 'status', 'condition' => '=', 'value' => '1', 'column' => 'parent_id', 'condition' => '=', 'value' => '0');
+            $whereFeature = array('rawQuery' => 'status = ?', 'bindParams' => [1], 'rawQuery' => 'parent_id=?', 'bindParams' => [0]);
             $allFeatures = $ObjProductFeatures->getAllFeaturesWhere($whereFeature);
             return view('Admin/Views/filter/edit-filtergroup', ['editfiltergroup' => $FilterGroup[0], 'selectedcategory' => $filtecat, 'categories' => $allCategories, 'features' => $allFeatures]);
         } elseif ($request->isMethod('POST')) {
@@ -245,7 +248,8 @@ class FilterController extends Controller
 
 
 //            $FilterGroup = $ObjProductCategory->getCategoryInfoById($category);
-            $FilterGroup = $ObjProductFilterOption->getFilterDetailsById($id);
+            $where = ['rawQuery' => 'product_filter_option_id = ?', 'bindParams' => [$id]];
+            $FilterGroup = $ObjProductFilterOption->getFilterDetailsById($where);
 
             $catdata = $FilterGroup[0]->product_filter_category_id;
             $cata = explode(",", $catdata);
@@ -255,7 +259,7 @@ class FilterController extends Controller
 
             $data['product_filter_category_id'] = $catmain;
 
-            $result = $ObjProductFilterOption->updateFilterOption($id, $data);
+            $result = $ObjProductFilterOption->updateFilterOption($where, $data);
         }
         if ($result) {
             $success = "Successfully Edited!";
@@ -276,16 +280,18 @@ class FilterController extends Controller
             switch ($method) {
                 case 'changefeatureStatus':
                     $featureId = $request->input('featureId');
+                    $wherefeatureId = ['rawQuery' => 'product_filter_option_id =?', 'bindParams' => [$featureId]];
                     $featuretatus = $request->input('featuretatus');
                     $data['product_filter_option_status'] = $featuretatus;
-                    $featureUpdate = $ObjProductFilterOption->updateFilterOption($featureId, $data);
+                    $featureUpdate = $ObjProductFilterOption->updateFilterOption($wherefeatureId, $data);
                     $featuredata['status'] = $featuretatus;
                     $featuredata['update'] = $featureUpdate;
                     echo json_encode($featuredata);
                     break;
                 case 'deletefilteroption':
                     $filterId = $request->input('filterId');
-                    $deletefilter = $ObjProductFilterOption->deletefilteroption($filterId);
+                    $where = array('rawQuery' => 'product_filter_option_id=?', 'bindParams' => [$filterId]);
+                    $deletefilter = $ObjProductFilterOption->deletefilteroption($where);
                     echo json_encode($deletefilter);
                     break;
                 default:
@@ -309,11 +315,9 @@ class FilterController extends Controller
         if ($id == 0) {
             return '';
         } else {
-            $objCategoryModel = ProductCategories::getInstance();
-            $where['column'] = 'category_id';
-            $where['condition'] = '=';
-            $where['value'] = $id;
-            $parentCategory = $objCategoryModel->getCategoryDeltailsWhere($where);
+            $objCategoryModel = ProductCategory::getInstance();
+            $where = ['rawQuery' => 'category_id = ?', 'bindParams' => [$id]];
+            $parentCategory = $objCategoryModel->getCategoryDetailsWhere($where);
             if ($parentCategory->parent_category_id != 0) {
                 return $this->getCategoryDisplayName($parentCategory->parent_category_id);// . '&brvbar;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
             } else {

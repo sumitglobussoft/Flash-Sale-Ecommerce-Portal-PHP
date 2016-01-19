@@ -35,11 +35,11 @@ class ProductFilterOption extends Model
 
         if (func_num_args() > 0) {
 
-            $filteroptionname = func_get_arg(0);
+            $where = func_get_arg(0);
             try {
                 $result = DB::table("product_filter_option")
 //                ->where('available_from', '<',time()) //Need to modify the available date less than current date//
-                    ->where('product_filter_option_name', $filteroptionname)
+                    ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
                     ->get();
 
             } catch (QueryException $e) {
@@ -93,12 +93,12 @@ class ProductFilterOption extends Model
     {
 
         if (func_num_args() > 0) {
-            $featureId = func_get_arg(0);
+            $where = func_get_arg(0);
             $featureStatus = func_get_arg(1);
 
             try {
                 $result = DB::table("product_filter_option")
-                    ->where('product_filter_option_id', $featureId)
+                    ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
                     ->update($featureStatus);
             } catch (QueryException $e) {
                 echo $e;
@@ -112,13 +112,13 @@ class ProductFilterOption extends Model
     public function getFilterDetailsById()
     {
         if (func_num_args() > 0) {
-            $filterId = func_get_arg(0);
+            $where = func_get_arg(0);
             try {
                 $result = DB::table("product_filter_option")
                     ->leftJoin('product_features', function ($join) {
                         $join->on('product_filter_option.product_filter_feature_id', '=', 'product_features.feature_id');
                     })
-                    ->where('product_filter_option_id', $filterId)
+                    ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
                     ->get();
 
             } catch (QueryException $e) {
@@ -137,9 +137,9 @@ class ProductFilterOption extends Model
     {
 
         if (func_num_args() > 0) {
-            $id = func_get_arg(0);
+            $where = func_get_arg(0);
             $delete = DB::table('product_filter_option')
-                ->where('product_filter_option_id', $id)
+                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
                 ->delete();
 
             return $delete;

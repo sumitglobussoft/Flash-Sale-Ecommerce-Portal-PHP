@@ -1,0 +1,755 @@
+/* ---------------------------------------------------------------------- */
+/*	1024 Version
+/* ---------------------------------------------------------------------- */
+@media handheld, only screen and (max-width: 1024px) {
+	.search,
+	.login{
+		margin-top: 1rem;
+	}
+	.collections h2{
+		font-size: 3rem;
+	}
+	.collection-section > div{
+		float: none;
+		width: 100%;
+	}
+	.bg-collection-simple,
+	.bg-collection-full,
+	.carousel-lookbook{
+		display: none;
+	}
+	.collection-text.collection-01, .collection-text.bg-color-simple{
+		height: auto;
+	}
+	.collection-text{
+		padding: 7rem !important;
+	}
+	.collection-text.collection-01, .collection-text.bg-color-simple{
+		padding-top: 7rem !important;
+	}
+	.modules .box-module:last-child,
+	.banners .item-banner{
+		margin-bottom: 3rem;
+	}
+	.slider-banner .banners > div{
+		width: 50%;
+		float: left;
+	}
+	.slider-banner .banners .banner-overlay-text {
+   		padding: 6rem 2rem 9.5rem 2rem;
+	}
+	.slider-banner .newsletter-box{
+		margin-top: 3rem;
+	}
+	.lookbook > div{
+		width: 100%;
+		float: none;
+	}
+	.steps-list.wishlist li {
+	    padding: 1.5rem 3rem;
+	}
+	.product-bag.top{
+		margin-top: 3rem;
+	}
+	.item-total .boton-dark{
+		font-size: 1rem;
+	}
+	.steps-list li {
+	    padding: 1.5rem 2rem;
+	}
+	.collection-extra img{
+		width: 100%;
+	}
+	.list-selector-clothes li {
+	    margin-right: 3rem;
+	}
+	.reviews h3{
+		margin-top: 3rem;
+	}
+	.quickview-info .gotobag{
+		margin-top: 2rem;
+	}
+	.list-inline{
+		margin-left: 0;
+	}
+	.asidelist.faqs li{
+		display: inline-block;
+		margin-right: 3rem;
+	}
+	.item-total .giftcard{
+		margin-top: 0;
+	}
+	.item-blog,
+	.item-post{
+		margin-bottom: 4rem;
+	}
+	.pagination.blog{
+		width: auto;
+	}
+}
+
+/* ---------------------------------------------------------------------- */
+/*	Mobile Version
+/* ---------------------------------------------------------------------- */
+@media handheld, only screen and (max-width: 980px){
+	html{
+	  font-size: 60%;
+	}
+	.asidelist li {
+	    display: inline;
+	    padding-right: 4rem;
+	}
+	.nav-tabs > li > a{
+		padding-right: 0;
+	}
+}
+
+/* ---------------------------------------------------------------------- */
+/*	768px Version
+/* ---------------------------------------------------------------------- */
+@media handheld, only screen and (max-width: 768px){
+	.collections > div{
+		float: none;
+		width: 100%;
+	}
+	.date{
+		padding: 0.5rem;
+	}
+	.home-02-footer,
+	.home-02-footer .right,
+	.copry{
+		text-align: center;
+	}
+	.home-02-footer .social-links{
+		margin-top: 3rem;
+	}
+	.home-02-footer.paddings{
+		padding: 4rem 0;
+	}
+	.display-responsive{
+		display: none !important;
+	}
+	.categories{
+		max-width: 50rem;
+	    width: 100%;
+	    margin: 0 auto;
+	    text-align: center;
+	    margin-bottom: 3rem;
+	}
+	.text-category{
+		right: 13rem;
+	}
+	.navbar-nav{
+		margin: 20px 0 7.5px 0;
+	}
+	.navbar.menu.top{
+		margin-top: 2rem;
+	}
+	nav.menu a {
+	    line-height: 3rem;
+	}
+	.counter-bag li{
+		padding: 0.7rem 1rem;
+	}
+	.selector,
+	.pagination{
+		width: 70%;
+		margin: 0 auto;
+		margin-bottom: 3rem;
+	}
+	.accordion.aside{
+		margin-bottom: 4rem;
+	}
+	.asidelist.faqs li{
+		margin-right: 1rem;
+		padding-right: 2rem;
+	}
+	.giftcard input{
+		width: 65%;
+		margin-left: 16%;
+	}
+	.giftcard{
+		margin-bottom: 3rem;
+	}
+	.item-post{
+		padding-right: 0;
+	}
+}
+
+/* ---------------------------------------------------------------------- */
+/*	767px Version
+/* ---------------------------------------------------------------------- */
+@media handheld, only screen and (max-width: 767px){
+	.logo-menu,
+	.logo-menu .right{
+		text-align: center;
+	}
+	.logo{
+		margin: 0 auto;
+	}
+	.search, .login,
+	.menu.top {
+	    margin-top: 2.5rem;
+	}
+	.home-02-footer{
+		text-align: left;
+	}
+}
+
+/* ---------------------------------------------------------------------- */
+/*	610px Version
+/* ---------------------------------------------------------------------- */
+
+@media handheld, only screen and (max-width: 640px) {
+	.title-banner h2{
+		line-height: 7rem;
+	}
+	.search,
+	.categories .overlay{
+		display: none;
+	}
+	.bar-extras .right,
+	footer{
+		text-align: center;
+	}
+	.collections > div{
+		padding: 3rem;
+	}
+	.collections .boton-border{
+		margin-top: 3rem;
+	}
+	.title-banner h2{
+		font-size: 4rem;
+		line-height: 5rem;
+	}
+	.col-xs-6{
+		width: 100%;
+	}
+	footer h4{
+		margin-bottom: 1rem;
+		margin-top: 2rem;
+	}
+	.date{
+		float: none;
+    	margin: 0 auto;
+    	margin-top: 3rem;
+	}
+	nav.menu li {
+	    padding-right: 2rem;
+	}
+	aside{
+		width: 35rem;
+	    margin: 0 auto;
+	    text-align: center;
+	}
+	.banners{
+	    width: 50rem;
+	    margin: 0 auto;
+	    text-align: center;
+	    margin-top: 3rem;
+	}
+	.slider-banner .banners{
+		width: auto;
+	}
+	.slider-banner .banners > div{
+		float: none;
+		width: 100%;
+		max-width: 30rem;
+	    margin: 0 auto;
+	}
+	.lookbook .content-text {
+	    padding: 10rem 0;
+	}
+	.lookbook .content-text h2 {
+	    font-size: 5rem;
+	}
+	.lookbook .content-text p {
+    	font-size: 2.5rem;
+	}
+	.left-panel {
+    	left: 20% !important;
+	}
+	.content-body-bag .image-preview-center{
+		margin: 0 auto;
+		text-align: center;
+	}
+	aside .simple-title hr {
+	    margin: 0 auto;
+	}
+	.steps-list.wishlist li{
+		padding: 1.5rem 1rem;
+	}
+	.col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7,
+	.col-xs-8, .col-xs-9, .col-xs-10, .col-xs-11{
+		width: 100%;
+	}
+	.item-total .content-body-bag{
+		text-align: center;
+	}
+	.breadcrumb > li{
+		padding: 8px 0;
+	}
+	.breadcrumb > li + li:before {
+	    padding: 0 0rem;
+	}
+	.collection-extra,
+	.info-collection,
+	.carousel-product-view,
+	.quickview-info,
+	.blog-aside{
+		max-width: 45rem;
+		width: 100%;
+		margin: 0 auto;
+	}
+	.info-collection{
+		margin-top: 2rem;
+		margin-bottom: 3rem;
+	}
+	.counter-bag{
+		margin: 3rem 0;
+	}
+	.asidelist.faqs li{
+		padding-right: 4rem;
+	}
+	.table-compare td{
+		width: auto;
+	}
+	.table-compare tr th{
+		padding: 0 3rem;
+	}
+	.descrip-zone{
+		display: none;
+	}
+	.giftcard input{
+		margin-left: 10%;
+	}
+	.gitfbotton{
+		float: right;
+		margin-bottom: 0;
+		font-size: 14px !important;
+	}
+	.header-shop .logo{
+		margin-top: 3rem;
+	}
+	.pagination-big li a {
+    	padding: 1rem;
+	}
+	.error-page {
+	    padding: 5rem 0 10rem 0;
+	}
+	.error-page h2{
+		font-size: 20rem;
+	}
+}
+
+/* ---------------------------------------------------------------------- */
+/*	480px Version
+/* ---------------------------------------------------------------------- */
+@media handheld, only screen and (max-width: 480px) {
+	.home-02-footer h4.newsletter{
+		float: none;
+	}
+	.home-02-footer .newsletterForm{
+		margin-top: 1rem;
+	}
+	.home-02-footer .navicon{
+		margin-bottom: 2rem;
+	}
+	.left-panel {
+    	left: 10% !important;
+	}
+	.giftcard input{
+		margin-left: 0%;
+		width: 100%;
+	}
+	.pagination-big li a i{
+		display: none;
+	}
+	/* ---------------------------------------------------------------------- */
+/*	1024 Version
+/* ---------------------------------------------------------------------- */
+@media handheld, only screen and (max-width: 1024px) {
+	.search,
+	.login{
+		margin-top: 1rem;
+	}
+	.collections h2{
+		font-size: 3rem;
+	}
+	.collection-section > div{
+		float: none;
+		width: 100%;
+	}
+	.bg-collection-simple,
+	.bg-collection-full,
+	.carousel-lookbook{
+		display: none;
+	}
+	.collection-text.collection-01, .collection-text.bg-color-simple{
+		height: auto;
+	}
+	.collection-text{
+		padding: 7rem !important;
+	}
+	.collection-text.collection-01, .collection-text.bg-color-simple{
+		padding-top: 7rem !important;
+	}
+	.modules .box-module:last-child,
+	.banners .item-banner{
+		margin-bottom: 3rem;
+	}
+	.slider-banner .banners > div{
+		width: 50%;
+		float: left;
+	}
+	.slider-banner .banners .banner-overlay-text {
+   		padding: 6rem 2rem 9.5rem 2rem;
+	}
+	.slider-banner .newsletter-box{
+		margin-top: 3rem;
+	}
+	.lookbook > div{
+		width: 100%;
+		float: none;
+	}
+	.steps-list.wishlist li {
+	    padding: 1.5rem 3rem;
+	}
+	.product-bag.top{
+		margin-top: 3rem;
+	}
+	.item-total .boton-dark{
+		font-size: 1rem;
+	}
+	.steps-list li {
+	    padding: 1.5rem 2rem;
+	}
+	.collection-extra img{
+		width: 100%;
+	}
+	.list-selector-clothes li {
+	    margin-right: 3rem;
+	}
+	.reviews h3{
+		margin-top: 3rem;
+	}
+	.quickview-info .gotobag{
+		margin-top: 2rem;
+	}
+	.list-inline{
+		margin-left: 0;
+	}
+	.asidelist.faqs li{
+		display: inline-block;
+		margin-right: 3rem;
+	}
+	.item-total .giftcard{
+		margin-top: 0;
+	}
+	.item-blog,
+	.item-post{
+		margin-bottom: 4rem;
+	}
+	.pagination.blog{
+		width: auto;
+	}
+}
+
+/* ---------------------------------------------------------------------- */
+/*	Mobile Version
+/* ---------------------------------------------------------------------- */
+@media handheld, only screen and (max-width: 980px){
+	html{
+	  font-size: 60%;
+	}
+	.asidelist li {
+	    display: inline;
+	    padding-right: 4rem;
+	}
+	.nav-tabs > li > a{
+		padding-right: 0;
+	}
+}
+
+/* ---------------------------------------------------------------------- */
+/*	768px Version
+/* ---------------------------------------------------------------------- */
+@media handheld, only screen and (max-width: 768px){
+	.collections > div{
+		float: none;
+		width: 100%;
+	}
+	.date{
+		padding: 0.5rem;
+	}
+	.home-02-footer,
+	.home-02-footer .right,
+	.copry{
+		text-align: center;
+	}
+	.home-02-footer .social-links{
+		margin-top: 3rem;
+	}
+	.home-02-footer.paddings{
+		padding: 4rem 0;
+	}
+	.display-responsive{
+		display: none !important;
+	}
+	.categories{
+		max-width: 50rem;
+	    width: 100%;
+	    margin: 0 auto;
+	    text-align: center;
+	    margin-bottom: 3rem;
+	}
+	.text-category{
+		right: 13rem;
+	}
+	.navbar-nav{
+		margin: 20px 0 7.5px 0;
+	}
+	.navbar.menu.top{
+		margin-top: 2rem;
+	}
+	nav.menu a {
+	    line-height: 3rem;
+	}
+	.counter-bag li{
+		padding: 0.7rem 1rem;
+	}
+	.selector,
+	.pagination{
+		width: 70%;
+		margin: 0 auto;
+		margin-bottom: 3rem;
+	}
+	.accordion.aside{
+		margin-bottom: 4rem;
+	}
+	.asidelist.faqs li{
+		margin-right: 1rem;
+		padding-right: 2rem;
+	}
+	.giftcard input{
+		width: 65%;
+		margin-left: 16%;
+	}
+	.giftcard{
+		margin-bottom: 3rem;
+	}
+	.item-post{
+		padding-right: 0;
+	}
+}
+
+/* ---------------------------------------------------------------------- */
+/*	767px Version
+/* ---------------------------------------------------------------------- */
+@media handheld, only screen and (max-width: 767px){
+	.logo-menu,
+	.logo-menu .right{
+		text-align: center;
+	}
+	.logo{
+		margin: 0 auto;
+	}
+	.search, .login,
+	.menu.top {
+	    margin-top: 2.5rem;
+	}
+	.home-02-footer{
+		text-align: left;
+	}
+ 
+}
+
+/* ---------------------------------------------------------------------- */
+/*	610px Version
+/* ---------------------------------------------------------------------- */
+
+@media handheld, only screen and (max-width: 640px) {
+	.title-banner h2{
+		line-height: 7rem;
+	}
+	.search,
+	.categories .overlay{
+		display: none;
+	}
+	.bar-extras .right,
+	footer{
+		text-align: center;
+	}
+	.collections > div{
+		padding: 3rem;
+	}
+	.collections .boton-border{
+		margin-top: 3rem;
+	}
+	.title-banner h2{
+		font-size: 4rem;
+		line-height: 5rem;
+	}
+	.col-xs-6{
+		width: 100%;
+	}
+	footer h4{
+		margin-bottom: 1rem;
+		margin-top: 2rem;
+	}
+	.date{
+		float: none;
+    	margin: 0 auto;
+    	margin-top: 3rem;
+	}
+	nav.menu li {
+	    padding-right: 2rem;
+	}
+	aside{
+		width: 35rem;
+	    margin: 0 auto;
+	    text-align: center;
+	}
+	.banners{
+	    width: 50rem;
+	    margin: 0 auto;
+	    text-align: center;
+	    margin-top: 3rem;
+	}
+	.slider-banner .banners{
+		width: auto;
+	}
+	.slider-banner .banners > div{
+		float: none;
+		width: 100%;
+		max-width: 30rem;
+	    margin: 0 auto;
+	}
+	.lookbook .content-text {
+	    padding: 10rem 0;
+	}
+	.lookbook .content-text h2 {
+	    font-size: 5rem;
+	}
+	.lookbook .content-text p {
+    	font-size: 2.5rem;
+	}
+	.left-panel {
+    	left: 20% !important;
+	}
+	.content-body-bag .image-preview-center{
+		margin: 0 auto;
+		text-align: center;
+	}
+	aside .simple-title hr {
+	    margin: 0 auto;
+	}
+	.steps-list.wishlist li{
+		padding: 1.5rem 1rem;
+	}
+	.col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7,
+	.col-xs-8, .col-xs-9, .col-xs-10, .col-xs-11{
+		width: 100%;
+	}
+	.item-total .content-body-bag{
+		text-align: center;
+	}
+	.breadcrumb > li{
+		padding: 8px 0;
+	}
+	.breadcrumb > li + li:before {
+	    padding: 0 0rem;
+	}
+	.collection-extra,
+	.info-collection,
+	.carousel-product-view,
+	.quickview-info,
+	.blog-aside{
+		max-width: 45rem;
+		width: 100%;
+		margin: 0 auto;
+	}
+	.info-collection{
+		margin-top: 2rem;
+		margin-bottom: 3rem;
+	}
+	.counter-bag{
+		margin: 3rem 0;
+	}
+	.asidelist.faqs li{
+		padding-right: 4rem;
+	}
+	.table-compare td{
+		width: auto;
+	}
+	.table-compare tr th{
+		padding: 0 3rem;
+	}
+	.descrip-zone{
+		display: none;
+	}
+	.giftcard input{
+		margin-left: 10%;
+	}
+	.gitfbotton{
+		float: right;
+		margin-bottom: 0;
+		font-size: 14px !important;
+	}
+	.header-shop .logo{
+		margin-top: 3rem;
+	}
+	.pagination-big li a {
+    	padding: 1rem;
+	}
+	.error-page {
+	    padding: 5rem 0 10rem 0;
+	}
+	.error-page h2{
+		font-size: 20rem;
+	}
+}
+
+/* ---------------------------------------------------------------------- */
+/*	480px Version
+/* ---------------------------------------------------------------------- */
+@media handheld, only screen and (max-width: 480px) {
+	.home-02-footer h4.newsletter{
+		float: none;
+	}
+	.home-02-footer .newsletterForm{
+		margin-top: 1rem;
+	}
+	.home-02-footer .navicon{
+		margin-bottom: 2rem;
+	}
+	.left-panel {
+    	left: 10% !important;
+	}
+	.giftcard input{
+		margin-left: 0%;
+		width: 100%;
+	}
+	.pagination-big li a i{
+		display: none;
+	}
+       .post .post-img-content {
+    height: 120px;
+    position: relative;
+}
+}
+
+/* ---------------------------------------------------------------------- */
+/*	384px Version
+/* ---------------------------------------------------------------------- */
+@media handheld, only screen and (max-width: 384px) {
+	
+}
+}
+
+/* ---------------------------------------------------------------------- */
+/*	384px Version
+/* ---------------------------------------------------------------------- */
+@media handheld, only screen and (max-width: 384px) {
+	
+}

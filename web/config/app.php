@@ -149,8 +149,9 @@ return [
 		/*
 		 *Added by: Dinanath thakur
 		 *Date: 10-12-2015
-		
-		Intervention\Image\ImageServiceProvider::class */
+ */
+		Intervention\Image\ImageServiceProvider::class,
+        Yajra\Datatables\DatatablesServiceProvider::class,
     ],
 
     /*
@@ -201,8 +202,8 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Html' => Illuminate\Html\HtmlFacade::class,//EXTRA ADDED COMPOSER ELEMENT BY AKASH PAI TO USE HTML FUNCTIONS
         'Form'=>Illuminate\Html\FormFacade::class,//EXTRA ADDED COMPOSER ELEMENT BY DINANATH THAKUR TO USE FORM FUNCTIONS
-		//'Image' => Intervention\Image\Facades\Image::class,//EXTRA ADDED COMPOSER ELEMENT BY DINANATH THAKUR TO USE IMAGE INTERVENTION
-
+		'Image' => Intervention\Image\Facades\Image::class,//EXTRA ADDED COMPOSER ELEMENT BY DINANATH THAKUR TO USE IMAGE INTERVENTION
+        'Datatables' => Yajra\Datatables\Datatables::class,
     ],
 
 ];

@@ -5,6 +5,7 @@ namespace FlashSale\Http\Modules\Admin\Models;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
@@ -18,7 +19,7 @@ class User extends Model implements AuthenticatableContract,
     private static $_instance = null;
 
     protected $table = 'users';
-    protected $fillable = ['name', 'email', 'password'];
+    protected $fillable = ['name', 'email', 'password', 'username', 'last_name', 'role','status'];
     protected $hidden = ['password', 'remember_token'];
 
     public static function getInstance()
@@ -69,5 +70,171 @@ class User extends Model implements AuthenticatableContract,
 
     }
 
+
+    public function getAvailableUserDetails()
+    {
+
+
+        try {
+            $result = User::where('role', 1)
+                ->select(['id', 'username', 'email', 'created_at', 'updated_at', 'status'])
+                ->get();
+
+            return $result;
+
+        } catch (\Exception $e) {
+            return $e->getMessage();
+
+        }
+    }
+
+
+    public function getAvailableSupplierDetails($where)
+    {
+        try {
+            $result = User::whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+//                ->join('usersmeta', 'usersmeta.user_id', '=', 'users.id')
+//                ->join('location','location.location_id', '=', 'usersmeta.country')
+//                ->join('usersmeta', function ($join) {
+//                    $join->on('usersmeta.user_id', '=', 'users.id');
+//                })
+//                ->join('location', function ($join) {
+//                    $join->on('location.location_id', '=', 'usersmeta.country');
+//                })
+//                ->whereRaw($status['rawQuery'], isset($status['bindParams']) ? $status['bindParams'] : array())
+                ->select(['id', 'username', 'email', 'created_at', 'updated_at', 'status'])
+                ->get();
+
+            return $result;
+
+        } catch (\Exception $e) {
+            return $e->getMessage();
+
+        }
+
+    }
+
+    /**
+     * @param array : $where
+     * @return int
+     * @throws "Argument Not Passed"
+     * @throws
+     * @author Vini
+     * @uses Authentication
+     */
+    public function updateUserWhere()
+    {
+
+        if (func_num_args() > 0) {
+            $data = func_get_arg(0);
+            $where = func_get_arg(1);
+            try {
+                $result = User::whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                    ->update($data);
+                return $result;
+            } catch (\Exception $e) {
+                return $e->getMessage();
+            }
+            if ($result) {
+                return $result;
+            } else {
+                return 0;
+            }
+        } else {
+            throw new Exception('Argument Not Passed');
+        }
+    }
+
+
+    /**
+     * @param array : $where
+     * @return int
+     * @throws "Argument Not Passed"
+     * @throws
+     * @author Vini
+     * @uses Authentication::signup[1]
+     */
+    public function deleteUserDetails($where)
+    {
+        $sql = User::whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+            ->delete();
+        if ($sql) {
+            return $sql;
+        } else {
+            return 0;
+        }
+    }
+
+    public function updateUserInfo()
+    {
+
+        if (func_num_args() > 0) {
+            $data = func_get_arg(0);
+            $where = func_get_arg(1);
+            try {
+
+                $result = User::where('id', $where)
+                    ->update($data);
+            } catch (\Exception $e) {
+                return $e->getMessage();
+            }
+            if ($result) {
+                return $result;
+            } else {
+                return 0;
+            }
+        } else {
+            throw new Exception('Argument Not Passed');
+        }
+    }
+
+    public function getPendingUserDetails($where)//, $status)
+    {
+
+        try {
+            $result = User::whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+//                ->whereRaw($status['rawQuery'], isset($status['bindParams']) ? $status['bindParams'] : array())
+                ->select(['id', 'username', 'email', 'created_at', 'updated_at', 'status'])
+                ->get();
+
+            return $result;
+
+        } catch (\Exception $e) {
+            return $e->getMessage();
+
+        }
+
+    }
+
+    public function getDeletedUserDetails($where, $status)
+    {
+
+        try {
+            $result = User::whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                ->whereRaw($status['rawQuery'], isset($status['bindParams']) ? $status['bindParams'] : array())
+                ->select(['id', 'username', 'email', 'created_at', 'updated_at', 'status'])
+                ->get();
+
+            return $result;
+
+        } catch (\Exception $e) {
+            return $e->getMessage();
+
+        }
+
+    }
+
+    public function getUserInfo($where)
+    {
+
+        try {
+            $result = User::whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                ->select()
+                ->get();
+            return $result;
+        } catch (QueryException $e) {
+            echo $e;
+        }
+    }
 
 }

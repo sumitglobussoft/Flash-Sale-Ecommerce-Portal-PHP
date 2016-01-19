@@ -78,7 +78,7 @@ class ProductFeatures extends Model
         if (func_num_args() > 0) {
             $where = func_get_arg(0);
             $result = DB::table($this->table)
-                ->where($where['column'], $where['condition'], $where['value'])
+                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
                 ->get();
             return $result;
         } else {

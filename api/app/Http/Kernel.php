@@ -28,6 +28,6 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         'auth' => \FlashSaleApi\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'guest' => \FlashSaleApi\Http\Middleware\RedirectIfAuthenticated::class,
+        'guest' => \FlashSaleApi\Http\Middleware\RedirectIfAuthenticated::class
     ];
 }
