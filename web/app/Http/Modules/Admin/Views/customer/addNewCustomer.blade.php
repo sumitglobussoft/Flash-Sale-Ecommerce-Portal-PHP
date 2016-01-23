@@ -42,8 +42,8 @@
                         {!! $errors->first('email' ,'<font color="red">:message</font>') !!}
                     </div>
 
-                    <input type="submit" value="Signup" class="boton-color text-uppercase">
-                    <a class="btn-btn primary" href="/admin/available-customer">Back</a>
+                    <input type="submit" value="Signup" class="btn btn-info text-uppercase">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-primary" href="/admin/available-customer">Back</a>
 
                     {{--<div id="pw-suc-err"></div>--}}
                 </form>

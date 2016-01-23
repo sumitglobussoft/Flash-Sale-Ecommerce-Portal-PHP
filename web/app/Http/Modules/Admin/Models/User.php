@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use DB;
 
 class User extends Model implements AuthenticatableContract,
     AuthorizableContract,
@@ -19,7 +20,7 @@ class User extends Model implements AuthenticatableContract,
     private static $_instance = null;
 
     protected $table = 'users';
-    protected $fillable = ['name', 'email', 'password', 'username', 'last_name', 'role','status'];
+    protected $fillable = ['name', 'email', 'password', 'username', 'last_name', 'role', 'status'];
     protected $hidden = ['password', 'remember_token'];
 
     public static function getInstance()
@@ -74,7 +75,6 @@ class User extends Model implements AuthenticatableContract,
     public function getAvailableUserDetails()
     {
 
-
         try {
             $result = User::where('role', 1)
                 ->select(['id', 'username', 'email', 'created_at', 'updated_at', 'status'])
@@ -89,12 +89,12 @@ class User extends Model implements AuthenticatableContract,
     }
 
 
-    public function getAvailableSupplierDetails($where)
+    public function getAvailableSupplierDetails($where,$selectedColumns = ['*'])
     {
         try {
             $result = User::whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
-//                ->join('usersmeta', 'usersmeta.user_id', '=', 'users.id')
-//                ->join('location','location.location_id', '=', 'usersmeta.country')
+
+//                ->join('location','location.location_type', '=', 'usersmeta.state')
 //                ->join('usersmeta', function ($join) {
 //                    $join->on('usersmeta.user_id', '=', 'users.id');
 //                })
@@ -102,7 +102,8 @@ class User extends Model implements AuthenticatableContract,
 //                    $join->on('location.location_id', '=', 'usersmeta.country');
 //                })
 //                ->whereRaw($status['rawQuery'], isset($status['bindParams']) ? $status['bindParams'] : array())
-                ->select(['id', 'username', 'email', 'created_at', 'updated_at', 'status'])
+                ->select(['users.id', 'users.username', 'users.email', 'users.created_at', 'users.updated_at', 'users.status'])
+//                ->select(['usersmeta.*','location.*'])
                 ->get();
 
             return $result;
@@ -152,7 +153,7 @@ class User extends Model implements AuthenticatableContract,
      * @throws "Argument Not Passed"
      * @throws
      * @author Vini
-     * @uses Authentication::signup[1]
+     * @uses Delete User
      */
     public function deleteUserDetails($where)
     {
@@ -236,5 +237,43 @@ class User extends Model implements AuthenticatableContract,
             echo $e;
         }
     }
+
+    public function getAvailableManagerDetails($where)
+    {
+
+        try {
+            $result = User::whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                ->join('permission_user_relation', 'users.id', '=', 'permission_user_relation.user_id')
+                //   ->join('permissions', 'permission_user_relation.permission_ids','=','permissions.permission_id')
+                ->select(['id', 'username', 'email', 'created_at', 'updated_at', 'status'])
+                ->get();
+
+            return $result;
+
+        } catch (\Exception $e) {
+            return $e->getMessage();
+
+        }
+
+
+    }
+
+    public function getUserInfoById($where, $selectedColumns = ['*'])
+    {
+
+        try {
+            $result = DB::table($this->table)
+                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                ->join('permission_user_relation', 'permission_user_relation.user_id', '=', 'users.id')
+                ->select($selectedColumns)
+                ->first();
+            return $result;
+        } catch (\Exception $e) {
+            return $e->getMessage();
+
+        }
+
+    }
+
 
 }

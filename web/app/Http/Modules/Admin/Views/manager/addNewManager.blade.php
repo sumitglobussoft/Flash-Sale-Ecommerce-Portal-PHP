@@ -60,7 +60,7 @@
                                         value="nestable"><i
                                             class="fa fa-plus"></i> Permission
 
-                                </button>
+                                </button> <h4>Click On Icon To Assign Permissions</h4>
                             </div>
                             </br>
                             <div class="dd" id="nestable" style="display:none">
@@ -78,7 +78,9 @@
                             <div class="clearfix"></div>
 
                             <button class="btn btn-info saverow">Save</button>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-primary" href="/admin/available-manager">Back</a>
                         </form>
+
                     </div>
                 </div>
             </div>

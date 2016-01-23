@@ -111,6 +111,17 @@ Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), fun
         Route::get('/admin/manage-settings/{section_id}', 'SettingController@manageSettings');
         Route::post('/admin/manage-settings/{section_id}', 'SettingController@manageSettings');
 
+        /* Feature controller route start */
+        Route::resource('/admin/manage-features', 'FeaturesController@manageFeatures');
+        Route::resource('/admin/add-feature-group', 'FeaturesController@addFeatureGroup');
+        Route::get('/admin/edit-feature-group/{featureId}', 'FeaturesController@editFeatureGroup');
+        Route::post('/admin/edit-feature-group/{featureId}', 'FeaturesController@editFeatureGroup');
+//        Route::resource('/admin/edit-feature-group/{featureId}', 'FeaturesController@editFeatureGroup');
+        Route::resource('/admin/add-feature', 'FeaturesController@addFeature');
+        Route::get('/admin/edit-feature/{featureId}', 'FeaturesController@editFeature');
+        Route::post('/admin/edit-feature/{featureId}', 'FeaturesController@editFeature');
+//        Route::resource('/admin/edit-feature/{featureId}', 'FeaturesController@editFeature');
+        /* Feature controller route end */
 
         Route::resource('/admin/add-new-filtergroup', 'FilterController@addNewFiltergroup');
         Route::resource('/admin/manage-filtergroup', 'FilterController@manageFilterGroup');
@@ -146,6 +157,15 @@ Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), fun
         Route::resource('/admin/pending-manager', 'ManagerController@pendingManager');
      //   Route::resource('/admin/manage-manager-permission', 'ManagerController@pendingManager');
         Route::resource('/admin/manager-ajax-handler', 'ManagerController@managerAjaxHandler');
+
+
+        Route::resource('/admin/add-new-language', 'AdministrationController@addNewLanguage');
+        Route::resource('/admin/add-language-value', 'AdministrationController@addLanguageValue');
+        Route::resource('/admin/manage-language', 'AdministrationController@manageLanguage');
+        Route::resource('/admin/administration-ajax-handler', 'AdministrationController@administrationAjaxhandler');
+        Route::get('/admin/edit-language/{lid}', 'AdministrationController@editLanguage');
+        Route::post('/admin/edit-language/{lid}', 'AdministrationController@editLanguage');
+
 
 
         //-----------------------------ROUTES FOR MANAGER----------------------------------------

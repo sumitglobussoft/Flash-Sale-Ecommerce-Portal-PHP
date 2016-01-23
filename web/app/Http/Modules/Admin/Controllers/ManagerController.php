@@ -37,8 +37,8 @@ class ManagerController extends Controller
             //echo"<pre>";print_r($where);die("cfh");
             $permissionDetails = $ObjPermissions->getAllPermissions($where);
 
-            return view('Admin/Views/manager/addNewManager',['permissionlist' => $permissionDetails]);
-        }elseif($request->isMethod('POST')){
+            return view('Admin/Views/manager/addNewManager', ['permissionlist' => $permissionDetails]);
+        } elseif ($request->isMethod('POST')) {
             $postData = $request->all();
 
             $rules = array(
@@ -77,11 +77,11 @@ class ManagerController extends Controller
 
                 $data['user_id'] = $resultdata;
                 $permit = $postData['permitcheck'];
-                $mainpermission = implode(",",$permit);
+                $mainpermission = implode(",", $permit);
                 //$mainpermission = 1;
                 $data['permission_ids'] = $mainpermission;
 
-               $userPermission = $ObjPermissionUserRelation->insertmanagerpermission($data);
+                $userPermission = $ObjPermissionUserRelation->insertmanagerpermission($data);
 
                 if ($manager && $userPermission) {
 
@@ -169,24 +169,17 @@ class ManagerController extends Controller
             switch ($method) {
                 case "availableManager":
                     $objuser = User::getInstance();
-                    $available_customers = $objuser->getAvailableUserDetails();
-                    foreach ($available_customers as $key => $val) {
-                        $available[$key] = $val->status;
-                    }
-                    if ($available == 1) {
-                        //  echo"<pre>";print_r("bhk");die("kgkj");
-                        $avail = 'Active';
-                    } elseif ($available == 2) {
-                        $inactavail = 'Inactive';
-                    }
-                    // echo"<pre>";print_r($available);die("kgkj");
+                    $objPermissionModel = Permissions::getInstance();
+                    $objPermissionUserRelation = PermissionUserRelation::getInstance();
+                    $where = ['rawQuery' => 'role = ?', 'bindParams' => [4]];
+                    $available_customers = $objuser->getAvailableManagerDetails($where);
                     return Datatables::of($available_customers)
                         ->addColumn('action', function ($available_customers) {
-                            return '<span class="tooltips" title="Edit User Details." data-placement="top"> <a href="/admin/edit-customer/' . $available_customers->id . '" class="btn btn-sm grey-cascade" style="margin-left: 10%;">
+                            return '<span class="tooltips" title="Edit Manger Details." data-placement="top"> <a href="/admin/edit-manager/' . $available_customers->id . '" class="btn btn-sm grey-cascade" style="margin-left: 10%;">
                                                     <i class="fa fa-pencil-square-o"></i>
                                                 </a>
                                             </span> &nbsp;&nbsp;
-                                            <span class="tooltips" title="Delete User Details." data-placement="top"> <a href="#" data-cid="' . $available_customers->id . '" class="btn btn-danger delete-user" style="margin-left: 10%;">
+                                            <span class="tooltips" title="Delete Manger Details." data-placement="top"> <a href="#" data-cid="' . $available_customers->id . '" class="btn btn-danger delete-manager" style="margin-left: 10%;">
                                                     <i class="fa fa-trash-o"></i>
                                                 </a>
                                             </span>';
@@ -194,13 +187,106 @@ class ManagerController extends Controller
                         ->addColumn('status', function ($available_customers) {
 
                             $button = '<td style="text-align: center">';
-                            $button .= '<button class="btn ' . (($available_customers->status == 1) ? "btn-success" : "btn-danger") . ' customer-status" data-id="' . $available_customers->id . '">' . (($available_customers->status == 1) ? "Active" : "Inactve") . ' </button>';
+                            $button .= '<button class="btn ' . (($available_customers->status == 1) ? "btn-success" : "btn-danger") . ' manager-status" data-id="' . $available_customers->id . '">' . (($available_customers->status == 1) ? "Active" : "Inactve") . ' </button>';
                             $button .= '</td>';
                             return $button;
+                        })
+                        ->addColumn('permission', function ($available_customers) {
+
+                            return '<td><a class=" btn default permission" data-id=' . $available_customers->id . ' data-target="#permissionmodal" data-toggle="modal">Permission </a></td>';
+
                         })
                         ->removeColumn('name')
                         ->removeColumn('updated_at')
                         ->make();
+                    break;
+                case 'changePermissionStatus':
+                    $userId = $inputData['UserId'];
+                    $whereForUpdate = ['rawQuery' => 'id =?', 'bindParams' => [$userId]];
+                    $dataToUpdate['status'] = $inputData['status'];
+                    $updateResult = $ObjUser->updateUserWhere($dataToUpdate, $whereForUpdate);
+
+                    if ($updateResult == 1) {
+                        echo json_encode(['status' => 'success', 'msg' => 'Status has been changed.']);
+                    } else {
+                        echo json_encode(['status' => 'error', 'msg' => 'Something went wrong, please reload the page and try again.']);
+                    }
+                    break;
+                case 'deleteManagerStatus':
+                    $objuser = User::getInstance();
+                    $where = array('rawQuery' => 'role = ?', 'bindParams' => [3]);
+                    $status = array('rawQuery' => 'status = ?', 'bindParams' => [4]);
+                    $deleted_supplier = $objuser->getDeletedUserDetails($where, $status);
+
+                    return Datatables::of($deleted_supplier)
+                        ->addColumn('status', function ($deleted_manager) {
+                            return '<td style="text-align: center">
+                                            <button class="btn btn-primary customer-status"
+                                                    data-id=' . $deleted_manager->id . '>Deleted
+                                            </button>
+
+                                    </td>';
+                        })
+                        ->removeColumn('name')
+                        ->removeColumn('updated_at')
+                        ->make();
+                    break;
+                case 'pendingManager':
+                    $objuser = User::getInstance();
+                    $where = array('rawQuery' => 'role = ? and status = ?', 'bindParams' => [4, 0]);
+//                    $status = array('rawQuery' => 'status = ?', 'bindParams' => [0]);
+                    $pending_supplier = $objuser->getPendingUserDetails($where);
+
+                    return Datatables::of($pending_supplier)
+                        ->addColumn('status', function ($pending_manager) {
+                            return '<td style="text-align: center">
+                                            <button class="btn btn-primary customer-status"
+                                                    data-id=' . $pending_manager->id . '>Pending
+                                            </button>
+
+                                    </td>';
+                        })
+                        ->removeColumn('name')
+                        ->removeColumn('updated_at')
+                        ->make();
+
+                    break;
+                case 'getPermissionDetails':
+                    $objPermissionModel = Permissions::getInstance();
+                    $objPermissionUserRelation = PermissionUserRelation::getInstance();
+                    $userId = $request->input('UserId');
+                    $where = ['rawQuery' => 'user_id = ?', 'bindParams' => [$userId]];
+                    $selectedColumns = ['permission_user_relation.*'];
+                    $availPermissionRelation = $objPermissionUserRelation->getPermissiondetailsByUserId($where, $selectedColumns);
+
+//                    foreach ($availPermissionRelation as $filtergroupkey => $filtergroupvalue) {
+//                        $availPermissionRelation[$filtergroupkey]->filtergroup = array();
+                        if ($availPermissionRelation[0]->permission_ids != '') {
+//                            $catfilterName = array_values(array_unique(explode(',', $filtergroupvalue->permission_ids)));
+//                            $per = implode(",", $catfilterName);
+                            $where = ['rawQuery' => 'permission_id IN(' . $availPermissionRelation[0]->permission_ids . ')'];
+                            $getcategory = $objPermissionModel->getPermissionNameByIds($where);
+                            foreach ($getcategory as $catkey => $catval) {
+                                $availPermissionRelation[$catkey] = $catval;
+                            }
+                        }
+                    $expo = explode(",",$availPermissionRelation[0]->permission_details);
+//                    }
+                    echo json_encode($expo);
+                    break;
+                    case 'deleteStatus':
+                    $userId = $inputData['UserId'];
+                    $where = ['rawQuery' => 'id = ?', 'bindParams' => [$userId]];
+                    $deleteStatus = $ObjUser->deleteUserDetails($where);
+                    if ($deleteStatus) {
+                        echo json_encode(['status' => 'success', 'msg' => 'User Deleted']);
+
+                    } else {
+                        echo json_encode(['status' => 'error', 'msg' => 'Something went wrong, please reload the page and try again . ']);
+
+                    }
+                break;
+                default:
                     break;
             }
         }
@@ -208,10 +294,63 @@ class ManagerController extends Controller
 
     }
 
-    public function editManager(Request $request)
+    public function editManager(Request $request, $mid)
     {
 
-        return view('Admin/Views/manager/editManager');
+        $ObjPermissions = Permissions::getInstance();
+        $ObjUser = User::getInstance();
+        $postData = $request->all();
+        $ObjPermissionUserRelation = PermissionUserRelation::getInstance();
+        if ($request->isMethod('GET')) {
+            $where = ['rawQuery' => 'permission_id  NOT IN (1)'];
+            $permissionDetails = $ObjPermissions->getAllPermissions($where);
+            $wherepermission = ['rawQuery' => 'id = ?', 'bindParams' => [$mid]];
+            $permissionInfo = $ObjUser->getUserInfoById($wherepermission);
+            //   $catfilterName = array_unique(explode(',', $permissionInfo->permission_ids));
+            $wherepermit = ['rawQuery' => 'permission_id IN(' . $permissionInfo->permission_ids . ')'];
+            $Info = $ObjPermissions->getPermitDetail($wherepermit);
+            foreach ($Info as $key => $value) {
+                $permissionIds[$key] = $value->permission_id;
+            }
+
+
+            return view('Admin/Views/manager/editManager', ['permissionlist' => $permissionDetails, 'permissionInfo' => $permissionInfo, 'info' => $permissionIds]);
+
+        } elseif ($request->isMethod('POST')) {
+            $data['name'] = $postData['firstname'];
+            $data['last_name'] = $postData['lastname'];
+            $data['username'] = $postData['username'];
+            $data['email'] = $postData['email'];
+//            $where = ['rawQuery' => 'id = ?', 'bindParams' => [$mid]];
+            //$where['id'] = $mid;
+            $updateUser = $ObjUser->updateUserInfo($data, $mid);
+
+            if ($updateUser) {
+                $temp = array();
+                $cat = $postData['permitcheck'];
+                foreach ($cat as $catkey => $catval) {
+                    $category[$catkey] = $catval;
+                }
+
+//            $FilterGroup = $ObjProductCategory->getCategoryInfoById($category);
+                $where = ['rawQuery' => 'user_id = ?', 'bindParams' => [$mid]];
+                $FilterGroup = $ObjPermissionUserRelation->getPermissionDetailsById($where);
+                $catdata = $FilterGroup[0]->permission_ids;
+                $cata = explode(",", $catdata);
+                $categoryIds = implode(',', $category);
+                array_push($cata, $categoryIds);
+                //$catmain = implode(",", $cata);
+                $data1['permission_ids'] = $categoryIds;
+                $updatePermission = $ObjPermissionUserRelation->updatePermissionInfo($data1, $where);
+            }
+            if ($updateUser && $updatePermission) {
+                return Redirect::back()->with(['status' => 'success', 'msg' => 'Successfully Edited ']);
+            } else {
+                return Redirect::back()->with(['status' => 'success', 'msg' => 'Some Error']);
+            }
+        }
+
+
     }
 
 

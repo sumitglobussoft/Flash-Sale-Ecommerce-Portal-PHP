@@ -176,78 +176,10 @@
                         {{--</div>--}}
 
                     </div>
-                    <div class="clearfix"></div>
-                    <div class="clearfix"></div>
-                    {{--<div class="form-actions">--}}
-                    {{--<div class="portlet-title">--}}
-                    {{--<div class="caption">--}}
-                    {{--<i class="icon-crop font-blue-hoki"></i>--}}
-                    {{--<span class="caption-subject font-blue-hoki bold">Add filter options</span>--}}
-                    {{--<span class="caption-helper">[ optional ]</span><!--[duplicate filter options, if found in any other filter groups, will be ignored]-->--}}
-                    {{--</div>--}}
-                    {{--</div>--}}
-                    {{--</div>--}}
-                    {{--<div class="clearfix"></div>--}}
 
-                    {{--<div class="col-md-12">--}}
-                    {{--<span class="warning" style="color: orangered">NOTE: If same filter options are found in any other filter groups, then those filter options are ignored.</span>--}}
-                    {{--</div>--}}
-                    {{--<div class="clearfix"></div>--}}
-                    {{--</br>--}}
+                    <button type="submit" class="btn btn-info btn-rounded" id="submitadd">Add filter group</button>
+                    {{--<button class="btn-btn-success" type="submit" id="submitadd">Add filter group</button>--}}
 
-                    {{--<div class="alert">--}}
-                    {{--@if(Session::has('infoMsg'))--}}
-                    {{--<p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('infoMsg') }}</p>--}}
-                    {{--@endif--}}
-                    {{--<button class="close" data-close="alert"></button>--}}
-                    {{--<span>--}}
-                    {{--<?php if (isset($infoMsg)) echo $infoMsg; ?>--}}
-                    {{--</span>--}}
-                    {{--</div>--}}
-                    {{--<div class="clearfix"></div>--}}
-                    {{--</br>--}}
-
-                    {{--<div class="form-body">--}}
-
-                    {{--<div class="form-group">--}}
-                    {{--<label for="tag[]" class="col-md-1 control-label">Name:</label>--}}
-
-                    {{--<div class="col-md-2">--}}
-                    {{--<input type="text" class="form-control" placeholder="name" name="filter[]"--}}
-                    {{--id='filterinput1'>--}}
-                    {{--</div>--}}
-                    {{--<label for="productfilterdescription[]" class="col-md-1 control-label">Description:</label>--}}
-
-                    {{--<div class="col-md-4">--}}
-                    {{--<textarea class="form-control" placeholder="description"--}}
-                    {{--name="productfilterdescription[]"--}}
-                    {{--id="filterinput1"--}}
-                    {{--style="max-width: 100%; max-height: 150px; min-height: 40px; min-width: 100%;"></textarea>--}}
-                    {{--</div>--}}
-
-                    {{--<label for="productfiltergrouptatus[]" class="col-md-1 control-label">Status:</label>--}}
-
-                    {{--<div class="col-md-2">--}}
-                    {{--<select class="form-control" name="productfiltergrouptatus[]">--}}
-                    {{--<!--<option value="">set status</option>-->--}}
-                    {{--<option value="0">Inactive</option>--}}
-                    {{--<option value="1" selected>Active</option>--}}
-                    {{--</select>--}}
-                    {{--</div>--}}
-                    {{--<div class="col-md-1" id="addanotherfiltergroupdiv">--}}
-                    {{--<button class="btn btn-info fa fa-plus" id="addanotherfiltergroupdiv"></button>--}}
-                    {{--</div>--}}
-                    {{--</div>--}}
-                    {{--<div class="clearfix"></div>--}}
-                    {{--<div id="appendbeforehere"></div>--}}
-
-                    {{--</div>--}}
-
-                    <div class="form-actions">
-                        <div class="col-md-offset-3 col-md-9">
-                            <button class="btn-btn-success" type="submit" id="submitadd">Add filter group</button>
-                        </div>
-                    </div>
 
                 </form>
 

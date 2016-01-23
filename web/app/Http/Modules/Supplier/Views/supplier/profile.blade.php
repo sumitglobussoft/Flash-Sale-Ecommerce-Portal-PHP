@@ -1,4 +1,4 @@
-@extends('Supplier/layouts/supplierlayout')
+@extends('Supplier/Layouts/supplierlayout')
 
 @section('title', 'Profile')
 
@@ -24,9 +24,10 @@
                 <div class="portlet light profile-sidebar-portlet">
                     <!-- SIDEBAR USERPIC -->
                     <div class="profile-userpic">
+{{--                        <img src="{{url('images'.Session::get('fs_supplier')['profilepic'])}}" class="img-responsive">--}}
 {{--                        <img src="{{Storage::path(Session::get('fs_supplier')['profilepic'])}}" class="img-responsive">--}}
-                        <img src="{{'images/'. Session::get('fs_supplier')['profilepic']}}" class="img-responsive" title="{{Session::get('fs_supplier')['profilepic']}}">
-                        {{--<img src="{{url('images/ '.$uesrDetails['profilepic'].')}}" class="img-responsive">--}}
+                        <img src="{{'/images/'. Session::get('fs_supplier')['profilepic']}}" class="img-responsive" title="{{Session::get('fs_supplier')['profilepic']}}">
+{{--                        <img src="{{url('images/ '.Session::get('fs_supplier')['profilepic'].')}}" class="img-responsive">--}}
                     </div>
                     <!-- END SIDEBAR USERPIC -->
                     <!-- SIDEBAR USER TITLE -->

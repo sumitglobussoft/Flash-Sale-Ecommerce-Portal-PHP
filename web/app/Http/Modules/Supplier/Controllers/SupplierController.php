@@ -299,16 +299,23 @@ class SupplierController extends Controller
                         $destinationPath = 'uploads/useravatar/';
                         $filename = $userId . '_' . time() . ".jpg";
                         File::makeDirectory(storage_path($destinationPath), 0777, true, true);
-                        $filePath = '/' . $destinationPath . $filename;
+//                        $filePath = '/' . $destinationPath . $filename;
+                        $filePath = "useravatar_" . $filename;
+                        $fileval = '/' . $destinationPath . $filePath;
+//                         echo"<pre>";print_r($filePath);die("fch");
+
+//                        $filtemp = 'uploads_useravatar_' . $filename;
 
 
                         $quality = $this->imageQuality(Input::file('file'));
 
                         Image::make(Input::file('file'))->resize($this->imageWidth, $this->imageHeight, function ($constraint) {
                             $constraint->aspectRatio();
-                        })->save(storage_path($destinationPath . $filename), $quality);
+                        })->save(storage_path($destinationPath . $filePath), $quality);
                         $whereForUpdate['id'] = $userId;
                         $updateData['profilepic'] = $filePath;
+                       // echo"<pre>";print_r($updateData);die("xcgf");
+
 
                         $updatedResult = $objModelUser->updateUserWhere($updateData, $whereForUpdate);
                         if ($updatedResult) {
@@ -317,14 +324,15 @@ class SupplierController extends Controller
                             }
 //                            $path = storage_path().$filePath ;
 //                            echo"<pre>";print_r($path);die("fch");
-                            Session::put('fs_supplier.profilepic', $filePath);
-                            echo json_encode(array('status' => 1, 'message' => 'Successfully updated profile image.'));
+                            Session::put('fs_supplier . profilepic',$filePath);
+
+                            echo json_encode(array('status' => 1, 'message' => 'Successfully updated profile image . '));
                         } else {
-                            echo json_encode(array('status' => 0, 'message' => 'Something went wrong, please reload the page and try again.'));
+                            echo json_encode(array('status' => 0, 'message' => 'Something went wrong, please reload the page and try again . '));
                         }
                     }
                 } else {
-                    echo json_encode(array('status' => 2, 'message' => 'Please select file first.'));
+                    echo json_encode(array('status' => 2, 'message' => 'Please select file first . '));
                 }
 
                 break;
@@ -333,12 +341,12 @@ class SupplierController extends Controller
 
                 Validator::extend('passwordCheck', function ($attribute, $value, $parameters) {
                     return Hash::check($value, Auth::user()->getAuthPassword());
-                }, 'Your current password is incorrect.');
+                }, 'Your current password is incorrect . ');
 
                 $passwordRules = array(
-                    'current_password' => 'required|passwordCheck',
+                    'current_password' => 'required | passwordCheck',
                     'new_password' => 'required',
-                    'confirm_password' => 'required|same:new_password'
+                    'confirm_password' => 'required | same:new_password'
                 );
 
                 $passwordValidator = Validator::make($request->all(), $passwordRules);
@@ -348,7 +356,7 @@ class SupplierController extends Controller
                     $user = Auth::user();
                     $user->password = Hash::make($request->input('new_password'));
                     $user->save();
-                    echo json_encode(array('status' => 1, 'message' => 'Your password has been successfully updated.'));
+                    echo json_encode(array('status' => 1, 'message' => 'Your password has been successfully updated . '));
                 }
                 break;
             default:
@@ -361,7 +369,7 @@ class SupplierController extends Controller
         $method = $request->input('method');
         switch ($method) {
             case 'checkUserName':
-                $validator = Validator::make($request->all(), ['username' => 'required|unique:users,username']);
+                $validator = Validator::make($request->all(), ['username' => 'required | unique:users,username']);
                 if ($validator->fails()) {
                     echo json_encode(false);
                 } else {
@@ -370,7 +378,7 @@ class SupplierController extends Controller
                 break;
 
             case 'checkEmail':
-                $validator = Validator::make($request->all(), ['email' => 'required|unique:users,email']);
+                $validator = Validator::make($request->all(), ['email' => 'required | unique:users,email']);
                 if ($validator->fails()) {
                     echo json_encode(false);
                 } else {
@@ -380,6 +388,38 @@ class SupplierController extends Controller
 
             default:
                 break;
+        }
+    }
+
+    public function getImages(Request $request)
+    {
+        if (Input::hasFile('file')) {
+            $userId = Session::get('fs_supplier')['id'];
+            $objModelUser = User::getInstance();
+            $destinationPath = 'uploads / useravatar / ';
+            $filename = $userId . '_' . time() . ".jpg";
+            File::makeDirectory(storage_path($destinationPath), 0777, true, true);
+            $filePath = ' / ' . $destinationPath . $filename;
+//                        echo"<pre>";print_r($filePath);die("fch");
+
+
+            $quality = $this->imageQuality(Input::file('file'));
+
+            Image::make(Input::file('file'))->resize($this->imageWidth, $this->imageHeight, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save(storage_path($destinationPath . $filename), $quality);
+            $whereForUpdate['id'] = $userId;
+            $updateData['profilepic'] = $filePath;
+
+            $updatedResult = $objModelUser->updateUserWhere($updateData, $whereForUpdate);
+            if ($updatedResult) {
+                if (!strpos(Session::get('fs_supplier')['profilepic'], 'placeholder')) {
+                    File::delete(storage_path() . Session::get('fs_supplier')['profilepic']);
+                }
+//                            $path = storage_path().$filePath ;
+//                            echo"<pre>";print_r($path);die("fch");
+                Session::put('fs_supplier . profilepic', $filePath);
+            }
         }
     }
 

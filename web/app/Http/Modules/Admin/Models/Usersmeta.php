@@ -62,5 +62,25 @@ class Usersmeta extends Model
 
     }
 
+    public function getUserMetaInfoByUserId($where,$selectedColumns = ['*'])
+    {
+
+        try {
+            $result = DB::table($this->table)
+                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                ->join('users', function ($join) {
+                    $join->on('usersmeta.user_id', '=', 'users.id');
+                })
+                ->join('location','location.location_id', '=', 'usersmeta.country')
+                ->select($selectedColumns)
+                ->get();
+            return $result;
+        } catch (QueryException $e) {
+            echo $e;
+        }
+
+
+    }
+
 
 }

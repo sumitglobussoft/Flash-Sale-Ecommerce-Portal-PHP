@@ -40,6 +40,58 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="mymodel" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Suppliers Details:</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <div class="panel panel-white">
+
+                                <div class="panel-body">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th> Address Line 1</th>
+                                            <th> Address Line 2</th>
+                                            {{--<th> City</th>--}}
+                                            {{--<th> State</th>--}}
+                                            <th> Country</th>
+                                            <th> Zipcode</th>
+                                            <th> Phone</th>
+                                        </tr>
+                                        <tbody>
+
+                                        <tr>
+                                            <th scope="row"></th>
+                                            <td id="addressline1" rowspan="2" width="300px">picture detail</td>
+                                            <td id="addressline2" rowspan="2" width="300px"></td>
+                                            {{--<td id="city" rowspan="2" width="300px"></td>--}}
+                                            {{--<td id="state" rowspan="2" width="300px"></td>--}}
+                                            <td id="country" rowspan="2" width="300px"></td>
+                                            <td id="zipcode" rowspan="2" width="300px"></td>
+                                            <td id="phone" rowspan="2" width="300px"></td>
+                                        </tr>
+                                        </tbody>
+                                        </thead >
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div align="right">
+                        <button type="button" class="btn btn-default" data-dismiss="modal"> Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 
@@ -70,9 +122,40 @@
 
             });
 
+            var name = new Array();
+            var addressline1 = new Array();
+            var addressline2 = new Array();
+            var zipcode = new Array();
+            var phone = new Array();
             $(document.body).on("click", ".modaldescription", function () {
-                var desc = $(this).attr('data-desc');
-                $('#description').val(desc);
+                var UserId = $(this).attr('data-id');
+
+                $.ajax({
+                    url: '/admin/supplier-ajax-handler',
+                    type: 'POST',
+                    datatype: 'json',
+                    data: {
+                        method: 'getUsermetaInfoByUserId',
+                        UserId: UserId,
+                    },
+                    success: function (response) {
+                        response = $.parseJSON(response);
+                        $.each(response, function (i, v) {
+
+                            name = v['name'];
+                            addressline1 = v['addressline1'];
+                            addressline2 = v['addressline2'];
+                            zipcode = v['zipcode'];
+                            phone = v['phone'];
+                        });
+                        $('#addressline1').html(addressline1);
+                        $('#addressline2').html(addressline2);
+                        $('#country').html(name);
+                        $('#zipcode').html(zipcode);
+                        $('#phone').html(phone);
+                    }
+
+                });
 
             });
 
@@ -114,41 +197,40 @@
                         }
                     });
                 }
+            });
 
-                $(document.body).on('click', '.delete-supplier', function () {
-                    //   alert("cfh");
-                    var obj = $(this);
-                    var UserId = $(this).attr('data-cid');
-                    alert(UserId);
+            $(document.body).on('click', '.delete-supplier', function () {
+                var obj = $(this);
+                var UserId = $(this).attr('data-cid');
 
-                    $.ajax({
-                        url: '/admin/supplier-ajax-handler',
-                        type: 'POST',
-                        datatype: 'json',
-                        data: {
-                            method: 'deleteSupplierStatus',
-                            UserId: UserId,
-                        },
-                        success: function (response) {
-                            response = $.parseJSON(response);
-                            toastr[response['status']](response['msg']);
-                            if (response['status'] == "success") {
-                                if (obj.hasClass('btn-success')) {
-                                    obj.removeClass('btn-success');
-                                    obj.addClass('btn-danger');
-                                    obj.text('Inactive');
-                                } else {
-                                    obj.removeClass('btn-danger');
-                                    obj.addClass('btn-success');
-                                    obj.text('Active');
-                                }
+                $.ajax({
+                    url: '/admin/supplier-ajax-handler',
+                    type: 'POST',
+                    datatype: 'json',
+                    data: {
+                        method: 'deleteSupplierStatus',
+                        UserId: UserId,
+                    },
+                    success: function (response) {
+                        response = $.parseJSON(response);
+                        toastr[response['status']](response['msg']);
+                        if (response['status'] == "success") {
+                            if (obj.hasClass('btn-success')) {
+                                obj.removeClass('btn-success');
+                                obj.addClass('btn-danger');
+                                obj.text('Inactive');
+                            } else {
+                                obj.removeClass('btn-danger');
+                                obj.addClass('btn-success');
+                                obj.text('Active');
                             }
                         }
-                    });
-
+                    }
                 });
 
             });
+
+
         });
     </script>
 @endsection

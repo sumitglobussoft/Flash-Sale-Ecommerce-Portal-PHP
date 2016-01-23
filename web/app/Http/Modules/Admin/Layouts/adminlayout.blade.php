@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    @include('Admin/layouts/adminheadscripts')
+    @include('Admin/Layouts/adminheadscripts')
     @yield('headcontent')
 
 </head>
@@ -172,6 +172,7 @@
                                 {{--<li role="presentation" class="divider"></li>--}}
                                 <li role="presentation"><a href="/admin/control-panel"><i class="fa fa-cogs"></i>Control Panel</a></li>
                                 {{--<li role="presentation"><a href="/lock-screen"><i class="fa fa-lock"></i>Lock screen</a></li>--}}
+                                <li role="presentation"><a href="/admin/add-new-language"><i class="fa fa-cogs"></i>Languages</a></li>
                                 <li role="presentation"><a href="/admin/logout"><i class="fa fa-sign-out m-r-xs"></i>Log
                                         out</a></li>
                             </ul>
@@ -339,7 +340,7 @@
 </nav>-->
 <div class="cd-overlay"></div>
 
-@include('Admin/layouts/admincommonfooterscripts')
+@include('Admin/Layouts/admincommonfooterscripts')
 
 @yield('pagejavascripts')
 <script src="/assets/js/modern.js"></script>

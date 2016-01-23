@@ -226,36 +226,70 @@ class SupplierController extends Controller
                     $where = array('rawQuery' => 'role = ?', 'bindParams' => [3]);
                     $available_supplier = $objuser->getAvailableSupplierDetails($where);
 //                    echo"<pre>";print_r($available_supplier);die("gvj");
-                    foreach ($available_supplier as $key => $val) {
-                        $vail[$key] = $val['id'];
-                    }
+//                    foreach ($available_supplier as $key => $val) {
+//                        $vail[$key] = $val->id;
+//                        $available_supplier[$key] = $val;
+//                        $available_supplier[$key]->usermeta = array();
+//                        $available_supplier[$key] = $val;
+//                        $available_supplier[$key]->filter = array();
+//                    }
+//                    $supplier = implode(",",$vail);
+//                    echo"<pre>";print_r($supplier);die("cvjh");
                     //  $whereuser = ['rawQuery' => 'user_id = ?', 'bindParams' => $vail];
-                    $usermetaInfo = $ObjUsermeta->getAvaiableUserMetaDetails();
-//                    echo "<pre>";print_r($usermetaInfo);die();
+//                    $usermetaInfo = $ObjUsermeta->getAvaiableUserMetaDetails();
+//                    foreach($usermetaInfo as $keymeta => $valmeta){
+//                        $usermetaInfo[$keymeta] = $valmeta;
+////                        $usermetaInfo[$keymeta]->filter = array();
+//                    }
 //
-                    //  $whereuser = array('rawQuery' => 'user_id = ?', 'WhereIn','bindParams' => [$available_supplier->id]);
-                    //    $usermetadescription = $ObjUsermeta->getAvaiableUserMetaDetails($whereuser);
-                    //   echo "<pre>";print_r($usermetadescription);die();
-                    foreach ($available_supplier as $key => $val) {
-                        $available[$key] = $val->status;
-                    }
-                    if ($available == 1) {
-                        //  echo"<pre>";print_r("bhk");die("kgkj");
-                        $avail = 'Active';
-                    } elseif ($available == 2) {
-                        $inactavail = 'Inactive';
-                    }
-                    // echo"<pre>";print_r($available);die("kgkj");
+//                    if(!empty($usermetaInfo)){
+//
+//                        $available_supplier[$key]->usermeta =  $usermetaInfo;
+//
+//                    }
+//                    echo"<pre>";print_r($available_supplier);die("cvjh");
+
+
+                    //  echo"<pre>";print_r($usermetaInfo);die("cvjh");
+//
+//                    $whereuser = array('rawQuery' => 'user_id IN('.$supplier.')');
+
+//                    $available_supplier[$key] = $usermetadescription;
+
+////                    echo"<pre>";print_r($available_customers);die("cvjh");
+//
+                    //  $usermetaInfo = $ObjUsermeta->getAvaiableUserMetaDetails($whereuser);
+                    //  foreach ($usermetaInfo as $filtergroupkey => $filtergroupvalue) {
+                    //    $usermetaInfo[$filtergroupkey]->filtergroup = array();
+//                        if ($filtergroupvalue->permission_ids != '') {
+//                            $catfilterName = array_values(array_unique(explode(',', $filtergroupvalue->permission_ids)));
+//                            $per = implode(",", $catfilterName);
+//                            $where = ['rawQuery' => 'permission_id IN(' . $per . ')'];
+//                            $getcategory = $objPermissionModel->getPermissionNameByIds($where);
+//
+//                            foreach ($getcategory as $catkey => $catval) {
+//                                $availPermissionRelation[$filtergroupkey]->filter = $catval;
+//                                $available_customers[$key]->filter = $availPermissionRelation[$filtergroupkey]->filter;
+//                            }
+                    //    $available_supplier[$key]->filter = $usermetaInfo[$filtergroupkey]->filtergroup;
+
+//
+                    //   }
+
+//                    }
+
+
+//                    echo"<pre>";print_r($available_supplier);die("gvj");
                     return Datatables::of($available_supplier)
                         ->addColumn('action', function ($available_supplier) {
-                            return '<span class="tooltips" title="Edit Supplier Details." data-placement="top"> <a href="/admin/edit-supplier/' . $available_supplier->id . '" class="btn btn-sm grey-cascade" style="margin-left: 10%;">
-                                                    <i class="fa fa-pencil-square-o"></i>
-                                                </a>
-                                            </span> &nbsp;&nbsp;
-                                            <span class="tooltips" title="Delete Supplier Details." data-placement="top"> <a href="#" data-cid="' . $available_supplier->id . '" class="btn btn-danger delete-supplier" style="margin-left: 10%;">
-                                                    <i class="fa fa-trash-o"></i>
-                                                </a>
-                                            </span>';
+                            $action = '<span class="tooltips" title="Edit Supplier Details." data-placement="top"> <a href="/admin/edit-supplier/' . $available_supplier->id . '" class="btn btn-sm grey-cascade" style="margin-left: 10%;">';
+                            $action .= '<i class="fa fa-pencil-square-o"></i></a>';
+                            $action .= '</span> &nbsp;&nbsp;';
+                            $action .= '<span class="tooltips" title="Delete Supplier Details." data-placement="top"> <a href="#" data-cid="' . $available_supplier->id . '" class="btn btn-danger delete-supplier" style="margin-left: 10%;">';
+                            $action .= '<i class="fa fa-trash-o"></i>';
+                            $action .= '</a></span>';
+                            return $action;
+
                         })
                         ->addColumn('status', function ($available_supplier) {
 
@@ -266,66 +300,10 @@ class SupplierController extends Controller
 
                         })
                         ->addColumn('supplierdetail', function ($available_supplier) {
-                            return ' <div class="modal fade" id="mymodel" role="dialog">
-                        <div class="modal-dialog">
-                            <!-- Modal content-->
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h4 class="modal-title">Description:</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <div  class="form-horizontal" >
-                                        <div class="form-group" >
-                                              <div class="panel panel-white">
-
-                                <div class="panel-body">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Address Line 1</th>
-                                                <th>Address Line 2</th>
-                                                <th>City</th>
-                                                <th>State</th>
-                                                <th>Country</th>
-                                                <th>Zipcode</th>
-                                                <th>Phone</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <th scope="row">1</th>
-                                                <td id="addressline1">'.$available_supplier->addressline1.'</td>
-                                                <td id="addressline2">'.$available_supplier->addressline2.'</td>
-                                                <td id="city">'.$available_supplier->city.'</td>
-                                                <td id="state">'.$available_supplier->state.'</td>
-                                                <td id="country">'.$available_supplier->country.'</td>
-                                                <td id="zipcode">'.$available_supplier->zipcode.'</td>
-                                                <td id="phone">'.$available_supplier->phone.'</td>
-                                            </tr>
-
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div align="right">
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                                           <td style="text-align: center">
-                                            <div class="container" style="width: 50px " >
-                                                <span class="tooltips" title="Review Description." data-placement="top"><button data-desc="' . $available_supplier->addressline1 . '" type="button" class="btn btn-sm btn-default modaldescription" data-toggle="modal" data-target="#mymodel"><i class="fa fa-expand"></i></button></span>
-                                            </div>
-                                        </td> ';
-
+                            return '<td style = "text-align: center" ><div class="container" style = "width: 50px " >
+                             <span class="tooltips" title = "Review Description." data-placement = "top" ><button data-id = "' . $available_supplier->id . '" type = "button" class="btn btn-sm btn-default modaldescription" data-toggle = "modal" data-target = "#mymodel" ><i class="fa fa-expand" ></i ></button ></span >
+                               </div >
+                            </td >';
                         })
                         ->removeColumn('name')
                         ->removeColumn('updated_at')
@@ -340,12 +318,12 @@ class SupplierController extends Controller
 
                     return Datatables::of($pending_supplier)
                         ->addColumn('status', function ($pending_supplier) {
-                            return '<td style="text-align: center">
+                            return ' < td style = "text-align: center" >
                                             <button class="btn btn-primary customer-status"
-                                                    data-id=' . $pending_supplier->id . '>Pending
-                                            </button>
+                                                    data - id = ' . $pending_supplier->id . ' > Pending
+                                            </button >
 
-                                    </td>';
+                                    </td > ';
                         })
                         ->removeColumn('name')
                         ->removeColumn('updated_at')
@@ -360,12 +338,12 @@ class SupplierController extends Controller
 
                     return Datatables::of($deleted_supplier)
                         ->addColumn('status', function ($deleted_supplier) {
-                            return '<td style="text-align: center">
+                            return ' < td style = "text-align: center" >
                                             <button class="btn btn-primary customer-status"
-                                                    data-id=' . $deleted_supplier->id . '>Deleted
-                                            </button>
+                                                    data - id = ' . $deleted_supplier->id . ' > Deleted
+                                            </button >
 
-                                    </td>';
+                                    </td > ';
                         })
                         ->removeColumn('name')
                         ->removeColumn('updated_at')
@@ -378,9 +356,9 @@ class SupplierController extends Controller
                     $updateResult = $ObjUser->updateUserWhere($dataToUpdate, $whereForUpdate);
 
                     if ($updateResult == 1) {
-                        echo json_encode(['status' => 'success', 'msg' => 'Status has been changed.']);
+                        echo json_encode(['status' => 'success', 'msg' => 'Status has been changed . ']);
                     } else {
-                        echo json_encode(['status' => 'error', 'msg' => 'Something went wrong, please reload the page and try again.']);
+                        echo json_encode(['status' => 'error', 'msg' => 'Something went wrong, please reload the page and try again . ']);
                     }
                     break;
                 case 'deleteSupplierStatus':
@@ -391,7 +369,7 @@ class SupplierController extends Controller
                         echo json_encode(['status' => 'success', 'msg' => 'User Deleted']);
 
                     } else {
-                        echo json_encode(['status' => 'error', 'msg' => 'Something went wrong, please reload the page and try again.']);
+                        echo json_encode(['status' => 'error', 'msg' => 'Something went wrong, please reload the page and try again . ']);
 
                     }
                     break;
@@ -412,6 +390,15 @@ class SupplierController extends Controller
                     $where = array('rawQuery' => 'parent_id = ? and location_type = ?', 'bindParams' => [$countryId, 1]);
                     $cityInfo = $objModelLocation->getCityByCountryId($where);
                     echo json_encode($cityInfo);
+                    break;
+
+                case 'getUsermetaInfoByUserId':
+                    $UserId = $request->input('UserId');
+                    $where = array('rawQuery' => 'user_id = ?', 'bindParams' => [$UserId]);
+                    $selectedColumns=['location.*','usersmeta.addressline1','usersmeta.addressline2','usersmeta.city','usersmeta.state','usersmeta.zipcode','usersmeta.phone','usersmeta.user_id'];
+                    $userMetaInfo = $ObjUsermeta->getUserMetaInfoByUserId($where,$selectedColumns);
+//                    echo"<pre>";print_r($userMetaInfo);die("Cfh");
+                    echo json_encode($userMetaInfo);
                     break;
                 default:
                     break;
@@ -451,9 +438,9 @@ class SupplierController extends Controller
 
             $result = $ObjUser->updateUserInfo($data, $sid);
             if ($result) {
-                return Redirect::back()->with(['status' => 'success', 'msg' => 'Details Suuccesfully Edited.']);
+                return Redirect::back()->with(['status' => 'success', 'msg' => 'Details Suuccesfully Edited . ']);
             } else {
-                return Redirect::back()->with(['status' => 'success', 'msg' => 'Some Error Occured.']);
+                return Redirect::back()->with(['status' => 'success', 'msg' => 'Some Error Occured . ']);
             }
 
         }

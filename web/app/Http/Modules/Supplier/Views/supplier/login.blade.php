@@ -4,7 +4,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
-    @include('Supplier/layouts/supplierheadscripts')
+    @include('Supplier/Layouts/supplierheadscripts')
 
 </head>
 <body class="page-login">
@@ -48,7 +48,7 @@
 </main>
 <!-- Page Content -->
 
-@include('Supplier/layouts/suppliercommonfooterscripts')
+@include('Supplier/Layouts/suppliercommonfooterscripts')
 
 </body>
 </html>

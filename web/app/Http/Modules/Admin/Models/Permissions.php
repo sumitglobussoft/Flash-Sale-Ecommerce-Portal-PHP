@@ -33,4 +33,46 @@ class Permissions extends Model
 
 
     }
+
+    public function getPermissionNameByIds($where)
+    {
+        {
+            try {
+                $result = DB::table($this->table)
+                    ->select((array(DB::raw('GROUP_CONCAT(DISTINCT permission_details) AS permission_details', 'GROUP_CONCAT(DISTINCT permission_id) AS permission_id'))))
+                    ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+//                ->toSql();
+                    ->get();
+            } catch
+            (QueryException $e) {
+                echo $e;
+            }
+            if ($result) {
+                return $result;
+            } else {
+                return 0;
+            }
+
+        }
+    }
+
+    public function getPermitDetail($where)
+    {
+//echo"<pre>";print_r($where);die("xcfgb");
+        try {
+            $result = DB::table($this->table)
+                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+//                ->select()
+//                ->toSql();
+                ->get();
+//            die($result);
+//echo"<pre>";print_r($result);die("xcfgb");
+            return $result;
+        } catch (QueryException $e) {
+            echo $e;
+        }
+
+    }
+
+
 }

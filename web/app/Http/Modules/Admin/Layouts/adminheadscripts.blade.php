@@ -23,9 +23,6 @@
     <link href="/assets/plugins/metrojs/MetroJs.min.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/plugins/toastr/toastr.min.css" rel="stylesheet" type="text/css"/>
 
-    {{--ADDED BY DINANATH THAKUR, METRONIC COMPONETS CSS --}}
-    <link href="/assets/css/custom/components.css" id="style_components" rel="stylesheet" type="text/css"/>
-    {{--{{HTML::style('assets/plugins/pace-master/themes/blue/pace-theme-flash.css')}}--}}
 
     {{--FOR UI-NOTIFICATIONS--}}
     <link href="/assets/plugins/toastr/toastr.min.css" rel="stylesheet"/>
@@ -35,6 +32,9 @@
     <link href="/assets/css/themes/green.css" class="theme-color" rel="stylesheet" type="text/css"/>
     <!--white.css-->
     <link href="/assets/css/custom.css" rel="stylesheet" type="text/css"/>
+        {{--ADDED BY DINANATH THAKUR, METRONIC COMPONETS CSS --}}
+    <link href="/assets/css/custom/components.css" id="style_components" rel="stylesheet" type="text/css"/>
+    {{--{{HTML::style('assets/plugins/pace-master/themes/blue/pace-theme-flash.css')}}--}}
 
     <script src="/assets/plugins/3d-bold-navigation/js/modernizr.js"></script>
     <script src="/assets/plugins/offcanvasmenueffects/js/snap.svg-min.js"></script>
@@ -47,6 +47,8 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+<meta HTTP-EQUIV="Pragma" content="no-cache">
+<meta HTTP-EQUIV="Expires" content="-1">
 
 <style>
    label.error{

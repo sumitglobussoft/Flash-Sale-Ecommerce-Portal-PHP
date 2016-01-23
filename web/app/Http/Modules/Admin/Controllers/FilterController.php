@@ -46,19 +46,28 @@ class FilterController extends Controller
             }
 
             $whereFeature = ['rawQuery' => 'status=?', 'bindParams' => [1], 'rawQuery' => 'parent_id=?', 'bindParams' => [0]];
-            $allFeatures = $ObjProjectFilterFeatureGroup->getAllFeaturesWhere($whereFeature);
+            $allFeatures = $ObjProjectFilterFeatureGroup->getAllFeatureWhere($whereFeature);
 
             return view('Admin/Views/filter/add-new-filtergroup', ['categories' => $allCategories, 'features' => $allFeatures]);
         }
         if ($request->isMethod('post')) {
 
-            $validator = Validator::make($request->all(), [
-                'productfiltergroupname' => 'required',
-                'filterdescription' => 'required',
+            $rulesAddFilter = [
+                'productfiltergroupname' => 'required|regex:/(^[A-Za-z0-9 ]+$)+/|max:255',
+                'filterdescription' => 'required|max:255',
                 'productfiltergroupfeature' => 'required',
                 'productcategories' => 'required',
-            ]);
+            ];
 
+            $messagesAddFeature = ['productfiltergroupname.required' => 'Please enter a name',
+                'productfiltergroupname.regex' => 'Name can contain alphanumeric characters and spaces only',
+                'productfiltergroupname.max' => 'Name is too long to use. 255 characters max.',
+                'filterdescription.max' => 'Description should not exceed 255 characters',
+                'productfiltergroupfeature.required' => 'Please select a feature type',
+                'productcategories.required' => 'Please select atleast one category'
+            ];
+
+            $validator = Validator::make($request->all(), $rulesAddFilter, $messagesAddFeature);
             if ($validator->fails()) {
                 return redirect('/admin/add-new-filtergroup')
                     ->withErrors($validator)
@@ -294,6 +303,24 @@ class FilterController extends Controller
                     $deletefilter = $ObjProductFilterOption->deletefilteroption($where);
                     echo json_encode($deletefilter);
                     break;
+//                case 'manageFilterGroup':
+//                    $ObjProductFilterOption = ProductFilterOption::getInstance();
+//                    $ObjProductCategory = ProductCategory::getInstance();
+//
+//                    $getAllFilterGroup = $ObjProductFilterOption->getAllFilterGroup();
+//                    foreach ($getAllFilterGroup as $filtergroupkey => $filtergroupvalue) {
+//                        $getAllFilterGroup[$filtergroupkey]->filtergroup = array();
+//                        if ($filtergroupvalue->product_filter_category_id != '') {
+//                            $catfilterName = array_values(array_unique(explode(',', $filtergroupvalue->product_filter_category_id)));
+//                            $getcategory = $ObjProductCategory->getCategoryInfoById($catfilterName);
+//
+//                            foreach ($getcategory as $catkey => $catval) {
+//                                $getAllFilterGroup[$filtergroupkey]->filtergroup = $catval;
+//                            }
+//                        }
+//                    }
+
+//                    break;
                 default:
                     break;
 

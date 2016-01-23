@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use FlashSale\Http\Requests;
 use FlashSale\Http\Controllers\Controller;
 use DB;
+use Yajra\Datatables\Datatables;
+
 
 use Illuminate\Support\Facades\Session;
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    @include('Supplier/layouts/supplierheadscripts')
+    @include('Supplier/Layouts/supplierheadscripts')
 
     @yield('pageheadcontent')
 
@@ -164,7 +164,7 @@
                                data-toggle="dropdown">
                                 <span class="user-name">{{Session::get('fs_supplier')['name']}}<i
                                             class="fa fa-angle-down"></i></span>
-                                <img class="img-circle avatar" src="{{Session::get('fs_supplier')['profilepic']}}"
+                                <img class="img-circle avatar" src="/images/{{Session::get('fs_supplier')['profilepic']}}"
                                      width="40" height="40"
                                      alt="">
                             </a>
@@ -241,7 +241,7 @@
 </main>
 <div class="cd-overlay"></div>
 
-@include('Supplier/layouts/suppliercommonfooterscripts')
+@include('Supplier/Layouts/suppliercommonfooterscripts')
 
 @yield('pagejavascripts')
 
