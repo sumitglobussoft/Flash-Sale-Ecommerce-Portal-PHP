@@ -8,7 +8,7 @@ use FlashSale\Http\Controllers\Controller;
 use DB;
 use PDO;
 use Input;
-use Yajra\Datatables\Datatables;
+use Datatables;
 use FlashSale\Http\Modules\Admin\Models\User;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;

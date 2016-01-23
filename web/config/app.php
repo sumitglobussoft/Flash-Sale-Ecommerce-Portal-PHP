@@ -204,6 +204,7 @@ return [
         'Form'=>Illuminate\Html\FormFacade::class,//EXTRA ADDED COMPOSER ELEMENT BY DINANATH THAKUR TO USE FORM FUNCTIONS
 		'Image' => Intervention\Image\Facades\Image::class,//EXTRA ADDED COMPOSER ELEMENT BY DINANATH THAKUR TO USE IMAGE INTERVENTION
         'Datatables' => Yajra\Datatables\Datatables::class,
+
     ],
 
 ];

@@ -9,7 +9,7 @@ use DB;
 use PDO;
 use Input;
 use getPdo;
-use Yajra\Datatables\Datatables;
+use Datatables;
 use FlashSale\Http\Modules\Admin\Models\User;
 use FlashSale\Http\Modules\Admin\Models\Location;
 use FlashSale\Http\Modules\Admin\Models\Usersmeta;
