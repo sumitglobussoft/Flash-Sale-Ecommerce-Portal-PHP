@@ -46,6 +46,7 @@ class ProductController extends Controller
     public function productDetails(Request $request)
     {
         $postData = $request->all();
+
         $response = new stdClass();
         if ($postData) {
             $objProductModel = new Products();
@@ -70,11 +71,13 @@ class ProductController extends Controller
             $mytoken = 0;
             $authflag = false;
             if (isset($postData['mytoken'])) {
+
                 $mytoken = $postData['mytoken'];
                 if ($mytoken == env("API_TOKEN")) {
                     $authflag = true;
                 } else {
                     if ($userId != '') {
+
                         DB::setFetchMode(PDO::FETCH_ASSOC);
                         $Userscredentials = $objUserModel->getUsercredsWhere($whereForloginToken);
                         if ($mytoken == $Userscredentials['login_token']) {
@@ -85,6 +88,7 @@ class ProductController extends Controller
             }
             if ($authflag) {
                 if ($productId != '') {
+
                     // $whereProductName = "p.product_id = '" . $productId . "'";
                     DB::setFetchMode(PDO::FETCH_ASSOC);
                     $whereProductName = $productId;
@@ -286,7 +290,9 @@ class ProductController extends Controller
 
     public function productFilter(Request $request){
 
-
+        $postData = $request->all();
+        $response = new stdClass();
+        echo"<pre>";print_r($postData);die("dsgvmk");
 
     }
 

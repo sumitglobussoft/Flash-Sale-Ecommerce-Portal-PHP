@@ -114,4 +114,71 @@ class ProductCategory extends Model
     }
 
 
+    public function getParentCategoryId()
+    {
+
+        try {
+            $result = DB::table("product_categories")
+                ->where('parent_category_id', 0)
+                ->get();
+
+        } catch (QueryException $e) {
+            echo $e;
+        }
+        if ($result) {
+            return $result;
+        } else {
+            return 0;
+        }
+
+    }
+
+    public function getCategoryInfoById()
+    {
+
+        if (func_num_args() > 0) {
+            $categoryId = func_get_arg(0);
+            try {
+                $result = DB::table("product_categories")
+                    ->select(array(DB::raw('GROUP_CONCAT(DISTINCT category_name) AS category_name', 'GROUP_CONCAT(DISTINCT category_id) AS category_id')))
+                    //  ->where('GROUP_CONCAT(DISTINCT category_id) AS category_id')
+                    //  ->groupBy('category_name')
+
+                    ->whereIn('category_id', $categoryId)
+                    ->get();
+
+            } catch (QueryException $e) {
+                echo $e;
+            }
+            if ($result) {
+                return $result;
+            } else {
+                return 0;
+            }
+
+        }
+    }
+
+    public function getCategoryById()
+    {
+
+        if (func_num_args() > 0) {
+            $categoryId = func_get_arg(0);
+            try {
+                $result = DB::table("product_categories")
+                    ->select()
+                    ->whereIn('category_id', $categoryId)
+                    ->get();
+            } catch (QueryException $e) {
+                echo $e;
+            }
+            if ($result) {
+                return $result;
+            } else {
+                return 0;
+            }
+        }
+    }
+
+
 }

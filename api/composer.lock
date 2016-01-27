@@ -281,12 +281,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Intervention/image.git",
-                "reference": "9f29360b8ab94585cb9e80cf9045abd5b85feb89"
+                "reference": "86dfe2f2a95aa9eed58faf1cc1dae6534a6ce931"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Intervention/image/zipball/9f29360b8ab94585cb9e80cf9045abd5b85feb89",
-                "reference": "9f29360b8ab94585cb9e80cf9045abd5b85feb89",
+                "url": "https://api.github.com/repos/Intervention/image/zipball/86dfe2f2a95aa9eed58faf1cc1dae6534a6ce931",
+                "reference": "86dfe2f2a95aa9eed58faf1cc1dae6534a6ce931",
                 "shasum": ""
             },
             "require": {
@@ -335,7 +335,7 @@
                 "thumbnail",
                 "watermark"
             ],
-            "time": "2016-01-02 19:15:13"
+            "time": "2016-01-10 11:20:02"
         },
         {
             "name": "jakub-onderka/php-console-color",
@@ -915,16 +915,16 @@
         },
         {
             "name": "paragonie/random_compat",
-            "version": "1.1.4",
+            "version": "1.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/random_compat.git",
-                "reference": "d762ee5b099a29044603cd4649851e81aa66cb47"
+                "reference": "dd8998b7c846f6909f4e7a5f67fabebfc412a4f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/d762ee5b099a29044603cd4649851e81aa66cb47",
-                "reference": "d762ee5b099a29044603cd4649851e81aa66cb47",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/dd8998b7c846f6909f4e7a5f67fabebfc412a4f7",
+                "reference": "dd8998b7c846f6909f4e7a5f67fabebfc412a4f7",
                 "shasum": ""
             },
             "require": {
@@ -959,7 +959,7 @@
                 "pseudorandom",
                 "random"
             ],
-            "time": "2015-12-10 14:48:13"
+            "time": "2016-01-06 13:31:20"
         },
         {
             "name": "psr/http-message",

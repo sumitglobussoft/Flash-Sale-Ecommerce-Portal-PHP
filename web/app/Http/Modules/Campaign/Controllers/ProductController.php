@@ -88,9 +88,20 @@ class ProductController extends Controller
         }
     }
 
-    public function productFilter(Request $request){
 
+    public function productFilter(Request $request)  // Product filter action
+    {
+
+        $selectedcolorName = $request->input('selectedcolors');
+        $selectedbrandName = $request->input('selectedbrand');
+        $selectedsizeName = $request->input('selectedsize');
+        $selectedmaterialName = $request->input('selectedmaterial');
+        $selectedpatternName = $request->input('selectedpattern');
+//        echo"<pre>";print_r($sortbyName);die("xdgv");
+        return view('Campaign.Views.product.products');
+        die("szaf");
         $objCurl = CurlRequestHandler::getInstance();
+//        $subcategoryName = $request->input('');
         $url = env("API_URL") . '/' . "product-filter";
 
         $mytoken = env("API_TOKEN");
@@ -99,11 +110,13 @@ class ProductController extends Controller
             $user_id = Session::get('fs_customer')['id'];
 
         }
-        $data = array('mytoken' => $mytoken, 'id' => $user_id, );
-        //  echo "<pre>";print_r($data);die('ere');
+        $data = array('mytoken' => $mytoken, 'id' => $user_id, 'color' => $selectedcolorName, 'brand' => $selectedbrandName, 'size' => $selectedsizeName, 'material' => $selectedmaterialName, 'pattern' => $selectedpatternName);
+//          echo "<pre>";print_r($data);die('ere');
         DB::setFetchMode(PDO::FETCH_ASSOC);
         $curlResponse = $objCurl->curlUsingPost($url, $data);
-//        echo "<pre>";print_r((array)$curlResponse->data);die("xdg");
+        echo "<pre>";
+        print_r((array)$curlResponse->data);
+        die("xdg");
         if ($curlResponse->code == 200) {
             return view('Campaign.Views.product.products', ['productfilter' => (array)$curlResponse->data]);
         }

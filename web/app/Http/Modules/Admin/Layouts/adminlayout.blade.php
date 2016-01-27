@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    @include('Admin/layouts/adminheadscripts')
+    @include('Admin/Layouts/adminheadscripts')
     @yield('headcontent')
 
 </head>
@@ -200,6 +200,7 @@
                                 {{--<li role="presentation"><a href="/admin/control-panel"><i class="fa fa-cogs"></i>Control Panel</a></li>--}}
                                 {{--<li role="presentation"><a href="/admin/cacheClear"><i class="fa fa-trash "></i>Clear cache</a></li>--}}
                                 {{--<li role="presentation"><a href="/lock-screen"><i class="fa fa-lock"></i>Lock screen</a></li>--}}
+                                <li role="presentation"><a href="/admin/add-new-language"><i class="fa fa-cogs"></i>Languages</a></li>
                                 <li role="presentation"><a href="/admin/logout"><i class="fa fa-sign-out m-r-xs"></i>Log
                                         out</a></li>
                             </ul>
@@ -253,10 +254,11 @@
                         <p>Suppliers</p> <span class="arrow"></span>
                     </a>
                     <ul class="sub-menu">
-                        <li><a href="/admin/pending-suppliers">Pending requests</a></li>
-                        <li><a href="/admin/available-suppliers">Available suppliers</a></li>
-                        <li><a href="/admin/rejected-suppliers">Rejected suppliers</a></li>
-                        <li><a href="/admin/deleted-suppliers">Deleted suppliers</a></li>
+                        <li><a href="/admin/pending-supplier">Pending requests</a></li>
+                        <li><a href="/admin/available-supplier">Available suppliers</a></li>
+                        <li><a href="/admin/add-new-supplier">Add New suppliers</a></li>
+                        {{--<li><a href="/admin/rejected-suppliers">Rejected suppliers</a></li>--}}
+                        <li><a href="/admin/deleted-supplier">Deleted suppliers</a></li>
                     </ul>
                 </li>
 
@@ -267,9 +269,9 @@
                         <p>Customers</p> <span class="arrow"></span>
                     </a>
                     <ul class="sub-menu">
-                        <li><a href="/admin/pending-users">Pending Customers</a></li>
-                        <li><a href="/admin/available-users">Available Customers</a></li>
-                        <li><a href="/admin/deleted-users">Deleted Customers</a></li>
+                        <li><a href="/admin/pending-customer">Pending Customers</a></li>
+                        <li><a href="/admin/available-customer">Available Customers</a></li>
+                        <li><a href="/admin/deleted-customer">Deleted Customers</a></li>
                     </ul>
                 </li>
 
@@ -290,13 +292,27 @@
                     <a class="waves-effect waves-button">
                         <span class="menu-icon glyphicon glyphicon-envelope"></span>
 
+                        <p>Manager</p> <span class="arrow"></span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li><a href="/admin/add-new-manager">Add New Manager</a></li>
+                        <li><a href="/admin/pending-manager">Pending Manager</a></li>
+                        <li><a href="/admin/available-manager">Available Manager</a></li>
+                        <li><a href="/admin/deleted-manager">Deleted Manager</a></li>
+                    </ul>
+                </li>
+
+                <li class="droplink">
+                    <a class="waves-effect waves-button">
+                        <span class="menu-icon glyphicon glyphicon-envelope"></span>
+
                         <p>Products</p> <span class="arrow"></span>
                     </a>
                     <ul class="sub-menu">
                         <li><a href="/admin/manage-categories">Categories</a></li>
                         <li><a href="/admin/manage-products">Products</a></li>
                         <li><a href="/admin/manage-features">Features</a></li>
-                        <li><a href="/admin/manage-filters">Filters</a></li>
+                        <li><a href="/admin/manage-filtergroup">Filters</a></li>
                         <li><a href="/admin/manage-options">Options</a></li>
                     </ul>
                 </li>
@@ -352,7 +368,7 @@
 </nav>-->
 <div class="cd-overlay"></div>
 
-@include('Admin/layouts/admincommonfooterscripts')
+@include('Admin/Layouts/admincommonfooterscripts')
 
 @yield('pagejavascripts')
 <script src="/assets/js/modern.js"></script>

@@ -79,6 +79,7 @@ class AuthenticationController extends Controller
                         'username' => $postData['username']
                     ]);
                     if ($supplier) {
+
                         $objMailTemplate = new MailTemplate();
                         $temp_name = "signup_success_mail";
                         $mailTempContent = $objMailTemplate->getTemplateByName($temp_name);
@@ -114,6 +115,7 @@ class AuthenticationController extends Controller
                         );
 
                         $mailrespons = $mandrill->messages->send($message, $async, $ip_pool);
+
                         if ($mailrespons[0]['status'] == "sent") {
                             $response->code = 200;
                             $response->message = "Signup successful. Please check your email for Password";

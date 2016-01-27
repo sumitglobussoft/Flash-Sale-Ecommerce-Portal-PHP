@@ -97,6 +97,7 @@ Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), fun
         });
 
         Route::resource('/admin/pending-products', 'ProductController@pendingProducts');
+        Route::resource('/admin/add-product', 'ProductController@addProduct');
 
         Route::resource('/admin/manage-categories', 'CategoryController@manageCategories');
         Route::resource('/admin/add-category', 'CategoryController@addCategory');
@@ -124,6 +125,62 @@ Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), fun
         Route::get('/admin/edit-currency/{currencyId}', 'currencyController@editCurrency');
         Route::post('/admin/edit-currency/{currencyId}', 'currencyController@editCurrency');
         Route::post('/admin/currency-ajax-handler', 'currencyController@currencyAjaxHandler');
+
+        /* Feature controller route start */
+        Route::resource('/admin/manage-features', 'FeaturesController@manageFeatures');
+        Route::resource('/admin/add-feature-group', 'FeaturesController@addFeatureGroup');
+        Route::get('/admin/edit-feature-group/{featureId}', 'FeaturesController@editFeatureGroup');
+        Route::post('/admin/edit-feature-group/{featureId}', 'FeaturesController@editFeatureGroup');
+//        Route::resource('/admin/edit-feature-group/{featureId}', 'FeaturesController@editFeatureGroup');
+        Route::resource('/admin/add-feature', 'FeaturesController@addFeature');
+        Route::get('/admin/edit-feature/{featureId}', 'FeaturesController@editFeature');
+        Route::post('/admin/edit-feature/{featureId}', 'FeaturesController@editFeature');
+//        Route::resource('/admin/edit-feature/{featureId}', 'FeaturesController@editFeature');
+        /* Feature controller route end */
+
+        Route::resource('/admin/add-new-filtergroup', 'FilterController@addNewFiltergroup');
+        Route::resource('/admin/manage-filtergroup', 'FilterController@manageFilterGroup');
+
+        Route::resource('/admin/filter-ajax-handler', 'FilterController@filterAjaxHandler');
+
+        Route::get('/admin/edit-filtergroup/{id}', 'FilterController@editFilterGroup');
+        Route::post('/admin/edit-filtergroup/{id}', 'FilterController@editFilterGroup');
+
+        Route::resource('/admin/available-customer', 'CustomerController@availableCustomer');
+        Route::resource('/admin/customer-ajax-handler', 'CustomerController@customerAjaxHandler');
+        Route::resource('/admin/add-new-customer', 'CustomerController@addNewCustomer');
+        Route::get('/admin/edit-customer/{uid}', 'CustomerController@editCustomer');
+        Route::post('/admin/edit-customer/{uid}', 'CustomerController@editCustomer');
+        Route::resource('/admin/pending-customer', 'CustomerController@pendingCustomer');
+        Route::resource('/admin/deleted-customer', 'CustomerController@deletedCustomer');
+
+
+        Route::resource('/admin/add-new-supplier', 'SupplierController@addNewSupplier');
+        Route::resource('/admin/available-supplier', 'SupplierController@availableSupplier');
+        Route::resource('/admin/supplier-ajax-handler', 'SupplierController@supplierAjaxHandler');
+        Route::resource('/admin/pending-supplier', 'SupplierController@pendingSupplier');
+        Route::resource('/admin/deleted-supplier', 'SupplierController@deletedSupplier');
+        Route::get('/admin/edit-supplier/{sid}', 'SupplierController@editSupplier');
+        Route::post('/admin/edit-supplier/{sid}', 'SupplierController@editSupplier');
+//        Route::resource('/admin/supplier-detail', 'SupplierController@supplierDetail');
+
+
+        Route::resource('/admin/add-new-manager', 'ManagerController@addNewManager');
+        Route::resource('/admin/available-manager', 'ManagerController@availableManager');
+        Route::get('/admin/edit-manager/{mid}', 'ManagerController@editManager');
+        Route::post('/admin/edit-manager/{mid}', 'ManagerController@editManager');
+        Route::resource('/admin/pending-manager', 'ManagerController@pendingManager');
+     //   Route::resource('/admin/manage-manager-permission', 'ManagerController@pendingManager');
+        Route::resource('/admin/manager-ajax-handler', 'ManagerController@managerAjaxHandler');
+
+
+        Route::resource('/admin/add-new-language', 'AdministrationController@addNewLanguage');
+        Route::resource('/admin/add-language-value', 'AdministrationController@addLanguageValue');
+        Route::resource('/admin/manage-language', 'AdministrationController@manageLanguage');
+        Route::resource('/admin/administration-ajax-handler', 'AdministrationController@administrationAjaxhandler');
+        Route::get('/admin/edit-language/{lid}', 'AdministrationController@editLanguage');
+        Route::post('/admin/edit-language/{lid}', 'AdministrationController@editLanguage');
+
 
 
         //-----------------------------ROUTES FOR MANAGER----------------------------------------

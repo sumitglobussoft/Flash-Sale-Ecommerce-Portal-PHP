@@ -3,6 +3,7 @@
 namespace FlashSale\Http\Modules\Admin\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use \Exception;
 
@@ -17,6 +18,8 @@ class Location extends Model
     private static $_instance = null;
 
     protected $table = 'location';
+	protected $fillable = ['location_id', 'name', 'location_type', 'parent_id', 'is_visible'];
+
 
     /**
      * Get instance/object of this class
@@ -51,6 +54,51 @@ class Location extends Model
             return $result;
         } else {
             throw new Exception('Argument Not Passed');
+        }
+    }
+
+
+    public function getAllCountryDetails($where)
+    {
+
+        try {
+            $result = DB::table($this->table)
+                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                ->select()
+                ->get();
+            return $result;
+        } catch (QueryException $e) {
+            echo $e;
+        }
+
+    }
+
+
+    public function getStateByCountryId($where)
+    {
+
+        try {
+            $result = DB::table($this->table)
+                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                ->select()
+                ->get();
+            return $result;
+        } catch (QueryException $e) {
+            echo $e;
+        }
+    }
+
+    public function getCityByCountryId($where)
+    {
+
+        try {
+            $result = DB::table($this->table)
+                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                ->select()
+                ->get();
+            return $result;
+        } catch (QueryException $e) {
+            echo $e;
         }
     }
 
