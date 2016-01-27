@@ -3,69 +3,55 @@
 namespace FlashSale\Http\Modules\Admin\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use \Exception;
 
 /**
- * Settings section model
- * Class SettingsSection
+ * Location model
+ * Class Location
  * @package FlashSale\Http\Modules\Admin\Models
  */
-class SettingsSection extends Model
+class Location extends Model
 {
 
     private static $_instance = null;
 
-    /**
-     * @var string Table name
-     */
-    protected $table = 'settings_sections';
-
-    /**
-     * @var int Number of minutes for which the value should be cached.
-     */
-    private $minutes = 60;
-
+    protected $table = 'location';
 
     /**
      * Get instance/object of this class
-     * @return SettingsSection|null
-     * @since 02-01-2016
+     * @return Location|null
+     * @since 14-01-2016
      * @author Dinanath Thakur <dinanaththakur@globussoft.com>
      */
     public static function getInstance()
     {
         if (!is_object(self::$_instance))  //or if( is_null(self::$_instance) ) or if( self::$_instance == null )
-            self::$_instance = new SettingsSection();
+            self::$_instance = new Location();
         return self::$_instance;
     }
 
     /**
-     * Get all settings sections
-     * @param array $where
-     * @param array $selectedColumns
-     * @return array|bool|object
+     * Get all locations
+     * @param $where Where clause for DB-Query
+     * @param array $selectedColumns Column names to be fetched
+     * @return mixed
      * @throws Exception
-     * @since 06-01-2016
+     * @since 14-01-2016
      * @author Dinanath Thakur <dinanaththakur@globussoft.com>
      */
-    public function getAllSectionWhere($where, $selectedColumns = ['*'])
+    public function getAllLocationsWhere($where, $selectedColumns = ['*'])
     {
         if (func_num_args() > 0) {
             $where = func_get_arg(0);
-            $cacheKey = $this->table . "::" . implode('-', array_flatten($where));
-            if (cacheGet($cacheKey)) return cacheGet($cacheKey);
             $result = DB::table($this->table)
                 ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
                 ->select($selectedColumns)
                 ->get();
-            cacheForever($cacheKey, $result);
             return $result;
         } else {
             throw new Exception('Argument Not Passed');
         }
     }
-
 
 }

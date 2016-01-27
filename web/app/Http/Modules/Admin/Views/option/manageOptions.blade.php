@@ -142,7 +142,7 @@
             $(document.body).on("click", ".delete-option", function () {
                 var obj = $(this);
                 var optionId = $(this).attr('data-id');
-                var x = confirm("Are you sure, you want to delete this option?");
+                var x = confirm("Are you sure you want to proceed?");
                 if (x) {
                     $.ajax({
                         url: '/admin/option-ajax-handler',

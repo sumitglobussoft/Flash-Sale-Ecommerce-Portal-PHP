@@ -160,28 +160,56 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle waves-effect waves-button waves-classic"
                                data-toggle="dropdown">
-                                <span class="user-name">David<i class="fa fa-angle-down"></i></span>
+                                <span class="user-name">Administration<i class="fa fa-angle-down"></i></span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-list" role="menu">
+                                <li role="presentation"><a href="/admin/manage-currencies">Currencies</a></li>
+                                <li role="presentation"><a href="/admin/cacheClear">Clear cache</a></li>
+                            </ul>
+                        </li>
+                        <?php $allSections = \FlashSale\Http\Modules\Admin\Controllers\AdminController::getSettingsSection(); ?>
+                        @if(count($allSections))
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle waves-effect waves-button waves-classic"
+                                   data-toggle="dropdown">
+                                    <span class="user-name">Settings<i class="fa fa-angle-down"></i></span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-list" role="menu">
+                                    <li role="presentation"><a href="/admin/control-panel">Control panel</a></li>
+                                    <li role="presentation" class="divider"></li>
+                                    @foreach($allSections as $section)
+                                        <li role="presentation">
+                                            <a href="/admin/manage-settings/{{$section->name}}">{{str_replace('_',' ',$section->name)}}</a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </li>
+                        @endif
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle waves-effect waves-button waves-classic"
+                               data-toggle="dropdown">
+                                <span class="user-name">Admin<i class="fa fa-angle-down"></i></span>
                                 <img class="img-circle avatar" src="/assets/images/avatar1.png" width="40" height="40"
                                      alt="">
                             </a>
                             <ul class="dropdown-menu dropdown-list" role="menu">
-                                <li role="presentation"><a href="/admin/profile"><i class="fa fa-user"></i>Profile</a>
-                                </li>
+                                {{--<li role="presentation"><a href="/admin/profile"><i class="fa fa-user"></i>Profile</a></li>--}}
                                 {{--<li role="presentation"><a href="/calender"><i class="fa fa-calendar"></i>Calendar</a></li>--}}
                                 {{--<li role="presentation"><a href="/inbox"><i class="fa fa-envelope"></i>Inbox<span class="badge badge-success pull-right">4</span></a></li>--}}
                                 {{--<li role="presentation" class="divider"></li>--}}
-                                <li role="presentation"><a href="/admin/control-panel"><i class="fa fa-cogs"></i>Control Panel</a></li>
+                                {{--<li role="presentation"><a href="/admin/control-panel"><i class="fa fa-cogs"></i>Control Panel</a></li>--}}
+                                {{--<li role="presentation"><a href="/admin/cacheClear"><i class="fa fa-trash "></i>Clear cache</a></li>--}}
                                 {{--<li role="presentation"><a href="/lock-screen"><i class="fa fa-lock"></i>Lock screen</a></li>--}}
                                 <li role="presentation"><a href="/admin/logout"><i class="fa fa-sign-out m-r-xs"></i>Log
                                         out</a></li>
                             </ul>
                         </li>
-                        <li>
-                            <a href="/admin/logout" class="log-out waves-effect waves-button waves-classic">
-                                <span><i class="fa fa-sign-out m-r-xs"></i>Log out</span>
-                            </a>
-                        </li>
-                        <!--UNCOMMENT THIS BLOCK  WITH SCRIPT IN MODERN.JS TO SHOW CHAT BOX ON RIGHT-->
+                        {{--<li>--}}
+                        {{--<a href="/admin/logout" class="log-out waves-effect waves-button waves-classic">--}}
+                        {{--<span><i class="fa fa-sign-out m-r-xs"></i>Log out</span>--}}
+                        {{--</a>--}}
+                        {{--</li>--}}
+                                <!--UNCOMMENT THIS BLOCK  WITH SCRIPT IN MODERN.JS TO SHOW CHAT BOX ON RIGHT-->
                         <!--<li>
                             <a href="javascript:void(0);" class="waves-effect waves-button waves-classic"
                                id="showRight">
@@ -328,5 +356,38 @@
 
 @yield('pagejavascripts')
 <script src="/assets/js/modern.js"></script>
+
+{{--<script>--}}
+    {{--//FOR DESKTOP NOTIFICATION--}}
+    {{--//request permission on page load--}}
+    {{--document.addEventListener('DOMContentLoaded', function () {--}}
+        {{--if (Notification.permission !== "granted")--}}
+            {{--Notification.requestPermission();--}}
+    {{--});--}}
+
+    {{--function notifyMe() {--}}
+        {{--if (!Notification) {--}}
+            {{--alert('Desktop notifications not available in your browser. Try Chromium.');--}}
+            {{--return;--}}
+        {{--}--}}
+        {{--if (Notification.permission !== "granted")--}}
+            {{--Notification.requestPermission();--}}
+        {{--else {--}}
+            {{--var notification = new Notification('Execution time in sec', {--}}
+{{--//                icon: 'path/to/icon',--}}
+                {{--body: "Your notification",--}}
+                {{--body: "{{number_format((microtime(true) - \Illuminate\Support\Facades\Session::get('startTime')),5)}}",--}}
+
+            {{--});--}}
+            {{--setTimeout(notification.close.bind(notification), 2000);//Close notification--}}
+            {{--notification.onclick = function () {--}}
+                {{--return false;--}}
+{{--//                window.open(window.location.host);--}}
+            {{--};--}}
+        {{--}--}}
+    {{--}--}}
+    {{--window.onload = notifyMe;--}}
+    {{--<?php \Illuminate\Support\Facades\Session::forget('startTime'); ?>--}}
+{{--</script>--}}
 </body>
 </html>

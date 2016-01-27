@@ -67,12 +67,19 @@ Route::group(['middleware' => ['guest']], function () {
 
 
 Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), function () {
+    \Illuminate\Support\Facades\Session::put("startTime",microtime(true));//FOR CALCULATION IN EXECUTION TIME (ADMIN LAYOUT PAGE)
 
-//  \DB::listen(function($sql, $bindings, $time) {
-//    var_dump($sql);
-//    var_dump($bindings);
-//    var_dump($time);
-//});
+    Route::get('/admin/cacheClear', function () {
+        Cache::flush();
+        return Redirect::back()->with(['status' => 'success', 'msg' => 'Cache has been cleared.']);
+    });
+
+//    \DB::listen(function ($query, $bindings, $time, $connection) {
+//        $fullQuery = vsprintf(str_replace(array('%', '?'), array('%%', '%s'), $query), $bindings);
+//        $result = $connection . ' (' . $time . '): ' . $fullQuery;
+//        dump($result);
+//    });
+
     Route::resource('/admin/login', 'AdminController@adminlogin');
 
 
@@ -109,6 +116,14 @@ Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), fun
         Route::resource('/admin/control-panel', 'SettingController@controlPanel');
         Route::get('/admin/manage-settings/{section_id}', 'SettingController@manageSettings');
         Route::post('/admin/manage-settings/{section_id}', 'SettingController@manageSettings');
+        Route::post('/admin/settings-ajax-handler', 'SettingController@settingsAjaxHandler');
+
+
+        Route::resource('/admin/manage-currencies', 'currencyController@manageCurrencies');
+        Route::resource('/admin/add-currency', 'currencyController@addCurrency');
+        Route::get('/admin/edit-currency/{currencyId}', 'currencyController@editCurrency');
+        Route::post('/admin/edit-currency/{currencyId}', 'currencyController@editCurrency');
+        Route::post('/admin/currency-ajax-handler', 'currencyController@currencyAjaxHandler');
 
 
         //-----------------------------ROUTES FOR MANAGER----------------------------------------

@@ -1549,9 +1549,13 @@ h5 {
     padding: 0!important;
 }
 
-.modal-backdrop {
-    z-index: 999999;
-}
+/*Commented for modal issue on 21-01-2016 by Dinanath thakur*/
+
+/*.modal-backdrop {*/
+    /*z-index: 999999;*/
+/*}*/
+
+
 
 /* Pagination */
 

@@ -4,7 +4,13 @@ namespace FlashSale\Http\Modules\Admin\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use \Exception;
 
+/**
+ * Product-category model
+ * Class ProductCategory
+ * @package FlashSale\Http\Modules\Admin\Models
+ */
 class ProductCategory extends Model
 {
 
@@ -13,6 +19,12 @@ class ProductCategory extends Model
     protected $table = 'product_categories';
     protected $fillable = ['id_path', 'level'];
 
+    /**
+     * Get instance/object of this class
+     * @return ProductCategory|null
+     * @since 19-12-2015
+     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     */
     public static function getInstance()
     {
         if (!is_object(self::$_instance))  //or if( is_null(self::$_instance) ) or if( self::$_instance == null )

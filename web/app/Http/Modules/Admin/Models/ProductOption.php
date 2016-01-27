@@ -4,7 +4,13 @@ namespace FlashSale\Http\Modules\Admin\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use \Exception;
 
+/**
+ * Product-option model
+ * Class ProductOption
+ * @package FlashSale\Http\Modules\Admin\Models
+ */
 class ProductOption extends Model
 {
 
@@ -12,6 +18,12 @@ class ProductOption extends Model
 
     protected $table = 'product_options';
 
+    /**
+     * Get instance/object of this class
+     * @return ProductOption|null
+     * @since 28-12-2015
+     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     */
     public static function getInstance()
     {
         if (!is_object(self::$_instance))  //or if( is_null(self::$_instance) ) or if( self::$_instance == null )
@@ -20,6 +32,7 @@ class ProductOption extends Model
     }
 
     /**
+     * Add new option
      * @return string
      * @throws Exception
      * @since 28-12-2015

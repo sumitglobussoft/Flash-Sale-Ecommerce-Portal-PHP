@@ -2,19 +2,20 @@
 
 namespace FlashSale\Http\Modules\Admin\Controllers;
 
+use DB;
+use FlashSale\Http\Controllers\Controller;
 use FlashSale\Http\Modules\Admin\Models\ProductOption;
 use FlashSale\Http\Modules\Admin\Models\ProductOptionVariant;
-use Illuminate\Http\Request;
-
 use FlashSale\Http\Requests;
-use FlashSale\Http\Controllers\Controller;
-use DB;
-
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
-
+/**
+ * Class OptionController
+ * @package FlashSale\Http\Modules\Admin\Controllers
+ */
 class OptionController extends Controller
 {
 
@@ -24,7 +25,7 @@ class OptionController extends Controller
      * Manage option action
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws \FlashSale\Http\Modules\Admin\Models\Exception
-     * @since xx-xx-xxxx
+     * @since 19-12-2015
      * @author Dinanath Thakur <dinanaththakur@globussoft.com>
      */
     public function manageOptions()
@@ -90,12 +91,13 @@ class OptionController extends Controller
                 $optionData['comment'] = $inputData['comment'];
                 $optionData['added_by'] = $userId;
                 $optionData['status'] = '1';
+                $optionData['created_at'] = NULL;
                 if (isset($inputData['required']) && $inputData['required'] == 'on') {
                     $optionData['required'] = '1';
                 }
 
                 $insertedOptionId = $objProductOptionModel->addNewOption($optionData);
-                if ($insertedOptionId) {
+                if ($insertedOptionId > 0) {
                     $variantData = array();
                     foreach ($variantInputData as $variantKey => $variantValue) {
                         if ($variantValue['variant_name'] != '') {
@@ -103,6 +105,7 @@ class OptionController extends Controller
                             $variantData['variant_name'] = $variantValue['variant_name'];
                             $variantData['added_by'] = $userId;
                             $variantData['status'] = $variantValue['status'];
+                            $variantData['created_at'] = NULL;
                             if ($variantValue['price_modifier'] != '') {
                                 $variantData['price_modifier'] = $variantValue['price_modifier'];
                                 $variantData['price_modifier_type'] = $variantValue['price_modifier_type'];
@@ -154,7 +157,7 @@ class OptionController extends Controller
             foreach ($variantInputData as $variantKey => $variantVal) {
                 foreach ($filedNames as $key => $filedName) {
                     if ($filedName == 'variant_name') {
-                        $rules['variants.' . $variantKey . '.' . $filedName] = 'max:20|required_with:variants.' . $variantKey . '.price_modifier,variants.' . $variantKey . '.weight_modifier|unique:product_option_variants,variant_name,' .( isset($variantVal['variant_id']) ? $variantVal['variant_id'] : 'NULL') . ',variant_id,option_id,' . $id;
+                        $rules['variants.' . $variantKey . '.' . $filedName] = 'max:20|required_with:variants.' . $variantKey . '.price_modifier,variants.' . $variantKey . '.weight_modifier|unique:product_option_variants,variant_name,' . (isset($variantVal['variant_id']) ? $variantVal['variant_id'] : 'NULL') . ',variant_id,option_id,' . $id;
                         $messages['variants.' . $variantKey . '.' . $filedName . '.max'] = 'The variant name may not be greater than 20 characters.';
                         $messages['variants.' . $variantKey . '.' . $filedName . '.required_with'] = 'The variant name field is required.';
                         $messages['variants.' . $variantKey . '.' . $filedName . '.unique'] = 'The variant name has already been taken.';
@@ -285,22 +288,20 @@ class OptionController extends Controller
 
         switch ($method) {
             case 'changeOptionStatus':
-                $optionId = $inputData['optionId'];
-                $whereForUpdate = ['rawQuery' => 'option_id =?', 'bindParams' => [$optionId]];
-                $dataToUpdate['status'] = $inputData['status'];
-                $updateResult = $objProductOptionModel->updateOptionWhere($dataToUpdate, $whereForUpdate);
-                if ($updateResult) {
-                    echo json_encode(['status' => 'success', 'msg' => 'Status has been changed.']);
-                } else {
-                    echo json_encode(['status' => 'error', 'msg' => 'Something went wrong, please reload the page and try again.']);
-                }
+                echo json_encode(
+                    ($objProductOptionModel->updateOptionWhere(
+                            ['status' => $inputData['status']],
+                            ['rawQuery' => 'option_id =?', 'bindParams' => [$inputData['optionId']]]) == 1) ?
+                        ['status' => 'success', 'msg' => 'Status has been changed.'] :
+                        ['status' => 'error', 'msg' => 'Something went wrong, please reload the page and try again.']
+                );
                 break;
 
             case 'deleteOption':
                 $optionId = $inputData['optionId'];
                 $whereForDeleteOption = ['rawQuery' => 'option_id =?', 'bindParams' => [$optionId]];
                 $deleteOptionResult = $objProductOptionModel->deleteOptionWhere($whereForDeleteOption);
-                if ($deleteOptionResult) {//SEND NOTIFICATION TO ALL SUPPLIER
+                if ($deleteOptionResult) {//TODO NOTIFICATION TO ALL SUPPLIER
                     $deleteVariantResult = $objProductOptionVariantModel->deleteVariantWhere($whereForDeleteOption);
                     echo json_encode(['status' => 'success', 'msg' => 'Selected option has been deleted.']);
                 } else {

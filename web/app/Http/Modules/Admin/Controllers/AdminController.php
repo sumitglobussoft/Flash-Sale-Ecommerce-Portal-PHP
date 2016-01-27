@@ -2,6 +2,7 @@
 
 namespace FlashSale\Http\Modules\Admin\Controllers;
 
+use FlashSale\Http\Modules\Admin\Models\SettingsSection;
 use Illuminate\Http\Request;
 
 use FlashSale\Http\Requests;
@@ -190,5 +191,13 @@ class AdminController extends Controller
         return redirect()->guest('/manager/login');
     }
 
+
+    public static function getSettingsSection()
+    {
+        $objSettingsSection = SettingsSection::getInstance();
+        $whereForSetting = ['rawQuery' => 'parent_id =? AND type =? AND status =?', 'bindParams' => [0, 'CORE', 1]];
+        $allSections = $objSettingsSection->getAllSectionWhere($whereForSetting);
+        return $allSections;
+    }
 
 }

@@ -21,7 +21,10 @@ use File;
 use FlashSale\Http\Modules\Admin\Models\User;
 use Illuminate\Support\Facades\Session;
 
-
+/**
+ * Class CategoryController
+ * @package FlashSale\Http\Modules\Admin\Controllers
+ */
 class CategoryController extends Controller
 {
     private $imageWidth = 1024;//TO BE USED FOR IMAGE RESIZING
@@ -64,7 +67,7 @@ class CategoryController extends Controller
                 'category_desc' => 'max:255',
                 'parent_category' => 'integer',
                 'status' => 'required',
-//                'category_image' => 'array',
+//                'category_image' => 'array', //TODO-me Validation for image
                 'seo_name' => 'max:100',
                 'page_title' => 'max:70',
                 'meta_desc' => 'max:160',
@@ -101,14 +104,15 @@ class CategoryController extends Controller
                 $categoryData['page_title'] = $request->input('page_title');
                 $categoryData['meta_description'] = $request->input('meta_desc');
                 $categoryData['meta_keywords'] = $request->input('meta_keywords');
+                $categoryData['created_at'] = NULL;
 
                 $insertedId = $objCategoryModel->addCategory($categoryData);
 
                 if ($insertedId) {
-                    $whereForUpdate = ['rawQuery' => 'category_id =?', 'bindParams' => [$insertedId]];
-                    $dataToUpdate['id_path'] = $this->getParentCategoryIds($insertedId);
-                    $dataToUpdate['level'] = count(explode('/', $dataToUpdate['id_path']));
-                    $objCategoryModel->updateCategoryWhere($dataToUpdate, $whereForUpdate);
+//                    $whereForUpdate = ['rawQuery' => 'category_id =?', 'bindParams' => [$insertedId]];
+//                    $dataToUpdate['id_path'] = $this->getParentCategoryIds($insertedId);
+//                    $dataToUpdate['level'] = count(explode('/', $dataToUpdate['id_path']));
+//                    $objCategoryModel->updateCategoryWhere($dataToUpdate, $whereForUpdate);
 
                     return Redirect::back()->with(['status' => 'success', 'msg' => 'New category "' . $request->input('category_name') . '" has been added.']);
                 } else {

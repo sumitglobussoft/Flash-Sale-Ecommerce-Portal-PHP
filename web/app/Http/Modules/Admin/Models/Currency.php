@@ -7,44 +7,43 @@ use Illuminate\Support\Facades\DB;
 use \Exception;
 
 /**
- * Product-option-variant model
- * Class ProductOptionVariant
+ * Currency model
+ * Class Currency
  * @package FlashSale\Http\Modules\Admin\Models
  */
-class ProductOptionVariant extends Model
+class Currency extends Model
 {
 
     private static $_instance = null;
 
-    protected $table = 'product_option_variants';
-
+    protected $table = 'currencies';
 
     /**
      * Get instance/object of this class
-     * @return ProductOptionVariant|null
-     * @since 28-12-2015
+     * @return Currency|null
+     * @since 21-01-2016
      * @author Dinanath Thakur <dinanaththakur@globussoft.com>
      */
     public static function getInstance()
     {
         if (!is_object(self::$_instance))  //or if( is_null(self::$_instance) ) or if( self::$_instance == null )
-            self::$_instance = new ProductOptionVariant();
+            self::$_instance = new Currency();
         return self::$_instance;
     }
 
     /**
-     * Add new variant details
-     * @return string
+     * Add new currency
+     * @return string|int
      * @throws Exception
-     * @since 28-12-2015
+     * @since 21-01-2016
      * @author Dinanath Thakur <dinanaththakur@globussoft.com>
      */
-    public function addNewVariant()
+    public function addNewCurrency()
     {
         if (func_num_args() > 0) {
             $data = func_get_arg(0);
             try {
-                $result = DB::table($this->table)->insert($data);
+                $result = DB::table($this->table)->insertGetId($data);
                 return $result;
             } catch (\Exception $e) {
                 return $e->getMessage();
@@ -55,48 +54,62 @@ class ProductOptionVariant extends Model
     }
 
     /**
-     * @param $where
-     * @param array $selectedColumns Column names to be fetched
-     * @return mixed
-     * @since 30-12-2015
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
-     */
-    public function getAllVariantsWhere($where, $selectedColumns = ['*'])
-    {
-        $result = DB::table($this->table)
-            ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
-            ->select($selectedColumns)
-            ->get();
-        return $result;
-
-    }
-
-    /**
-     * Get a variant details
+     * Get all available currencies
      * @param $where
      * @param array $selectedColumns
      * @return mixed
-     * @since 02-01-2015
+     * @throws Exception
+     * @since 21-01-2016
      * @author Dinanath Thakur <dinanaththakur@globussoft.com>
      */
-    public function getVariantWhere($where, $selectedColumns = ['*'])
+    public function getAllCurrenciesWhere($where, $selectedColumns = ['*'])
     {
-        $result = DB::table($this->table)
-            ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
-            ->select($selectedColumns)
-            ->first();
-        return $result;
-
+        if (func_num_args() > 0) {
+            $where = func_get_arg(0);
+            try {
+                $result = DB::table($this->table)
+                    ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                    ->select($selectedColumns)
+                    ->orderBy('position')
+                    ->get();
+                return $result;
+            } catch (\Exception $e) {
+                return $e->getMessage();
+            }
+        } else {
+            throw new Exception('Argument Not Passed');
+        }
     }
 
     /**
-     * Update variant details
-     * @return string
-     * @throws Exception
-     * @since 04-01-2016
+     * Get a currency details
+     * @param $where
+     * @param array $selectedColumns
+     * @return mixed
+     * @since 21-01-2016
      * @author Dinanath Thakur <dinanaththakur@globussoft.com>
      */
-    public function updateVariantWhere()
+    public function getCurrencyWhere($where, $selectedColumns = ['*'])
+    {
+        try {
+            $result = DB::table($this->table)
+                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                ->select($selectedColumns)
+                ->first();
+            return $result;
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    /**
+     * Update currency details
+     * @return string|int
+     * @throws Exception
+     * @since 21-01-2016
+     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     */
+    public function updateCurrencyWhere()
     {
         if (func_num_args() > 0) {
             $data = func_get_arg(0);
@@ -115,13 +128,13 @@ class ProductOptionVariant extends Model
     }
 
     /**
-     * Delete variant details
-     * @return string
+     * Delete currency details
+     * @return string|int
      * @throws Exception
-     * @since 20-12-2015
+     * @since 21-01-2016
      * @author Dinanath Thakur <dinanaththakur@globussoft.com>
      */
-    public function deleteVariantWhere()
+    public function deleteCurrencyWhere()
     {
         if (func_num_args() > 0) {
             $where = func_get_arg(0);
@@ -137,5 +150,6 @@ class ProductOptionVariant extends Model
             throw new Exception('Argument Not Passed');
         }
     }
+
 
 }

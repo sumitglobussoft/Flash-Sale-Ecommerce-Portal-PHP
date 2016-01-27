@@ -216,13 +216,6 @@
     <script>
         $(document).ready(function () {
             UITree.init();
-//            FOR UI-NOTIFICATIONS
-            @if(session('msg')!='')
-                toastr["{{session('status')}}"]("{{session('msg')}}");
-            @endif
-
-
-
         });
     </script>
 @endsection

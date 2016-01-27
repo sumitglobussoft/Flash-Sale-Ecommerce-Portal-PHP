@@ -1,3 +1,6 @@
+<?php $weightSymbol = getSetting('weight_symbol'); $weightSymbol = $weightSymbol ? $weightSymbol : 'lbs';
+$priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceSymbol : '$';
+?>
 @extends('Admin/Layouts/adminlayout')
 
 @section('title', 'New Option') {{--TITLE GOES HERE--}}
@@ -150,7 +153,7 @@
                                                                 <div class="col-sm-4">
                                                                     <select name="option_data[variants][{{$variantKey}}][price_modifier_type]"
                                                                             class="form-control">
-                                                                        <?php $priceModifierType = array('1' => '$', '2' => '%'); ?>
+                                                                        <?php $priceModifierType = array('1' => $priceSymbol, '2' => '%'); ?>
                                                                         @foreach($priceModifierType as $key=>$value)
                                                                             <option value="{{$key}}"
                                                                                     @if(isset(old('option_data')['variants'])&&$key==old('option_data')['variants'][$variantKey]['price_modifier_type']) selected @endif>{{$value}}</option>
@@ -172,7 +175,7 @@
                                                                 <div class="col-sm-4">
                                                                     <select name="option_data[variants][{{$variantKey}}][weight_modifier_type]"
                                                                             class="form-control">
-                                                                        <?php $weightModifierType = array('1' => 'lbs', '2' => '%'); ?>
+                                                                        <?php $weightModifierType = array('1' => $weightSymbol, '2' => '%'); ?>
                                                                         @foreach($priceModifierType as $key=>$value)
                                                                             <option value="{{$key}}"
                                                                                     @if(isset(old('option_data')['variants'])&&$key==old('option_data')['variants'][$variantKey]['weight_modifier_type']) selected @endif>{{$value}}</option>
@@ -196,8 +199,10 @@
 
                                                         </td>
                                                         <td>
-                                                            <a class="col-sm-1 add-more"><i class="fa fa-plus"></i></a>
-                                                            <a class="col-sm-1 remove"><i class="fa fa-remove"></i></a>
+                                                            <a href="javascript:void(0);" class="col-sm-1 add-more"><i
+                                                                        class="fa fa-plus"></i></a>
+                                                            <a href="javascript:void(0);" class="col-sm-1 remove"><i
+                                                                        class="fa fa-remove"></i></a>
                                                         </td>
 
                                                     </tr>
@@ -218,7 +223,7 @@
                                                         <div class="col-sm-4">
                                                             <select name="option_data[variants][0][price_modifier_type]"
                                                                     class="form-control">
-                                                                <option value="1">$</option>
+                                                                <option value="1">{{$priceSymbol}}</option>
                                                                 <option value="2">%</option>
                                                             </select>
                                                         </div>
@@ -235,7 +240,7 @@
                                                         <div class="col-sm-4">
                                                             <select name="option_data[variants][0][weight_modifier_type]"
                                                                     class="form-control">
-                                                                <option value="1">lbs</option>
+                                                                <option value="1">{{$weightSymbol}}</option>
                                                                 <option value="2">%</option>
                                                             </select>
                                                         </div>
@@ -253,8 +258,10 @@
 
                                                 </td>
                                                 <td>
-                                                    <a class="col-sm-1 add-more"><i class="fa fa-plus"></i></a>
-                                                    <a class="col-sm-1 remove"><i class="fa fa-remove"></i></a>
+                                                    <a href="javascript:void(0);" class="col-sm-1 add-more"><i
+                                                                class="fa fa-plus"></i></a>
+                                                    <a href="javascript:void(0);" class="col-sm-1 remove"><i
+                                                                class="fa fa-remove"></i></a>
                                                 </td>
 
                                             </tr>
@@ -296,7 +303,7 @@
 
                 toAppendNewTableRow += '<div class="col-sm-4">';
                 toAppendNewTableRow += '<select name="option_data[variants][' + variantCounter + '][price_modifier_type]" class="form-control">';
-                toAppendNewTableRow += '<option value="1">$</option>';
+                toAppendNewTableRow += '<option value="1">{{$priceSymbol}}</option>';
                 toAppendNewTableRow += '<option value="2">%</option>';
                 toAppendNewTableRow += '</select>';
                 toAppendNewTableRow += '</div>';
@@ -311,7 +318,7 @@
 
                 toAppendNewTableRow += '<div class="col-sm-4">';
                 toAppendNewTableRow += '<select name="option_data[variants][' + variantCounter + '][weight_modifier_type]" class="form-control">';
-                toAppendNewTableRow += '<option value="1">lbs</option>';
+                toAppendNewTableRow += '<option value="1">{{$weightSymbol}}</option>';
                 toAppendNewTableRow += '<option value="2">%</option>';
                 toAppendNewTableRow += '</select>';
                 toAppendNewTableRow += '</div>';
@@ -328,8 +335,8 @@
 
                 toAppendNewTableRow += '</td>';
                 toAppendNewTableRow += '<td>';
-                toAppendNewTableRow += '<a class="col-sm-1 add-more"><i class="fa fa-plus"></i></a>';
-                toAppendNewTableRow += '<a class="col-sm-1 remove"><i class="fa fa-remove"></i></a>';
+                toAppendNewTableRow += ' <a href="javascript:void(0);" class="col-sm-1 add-more"><i class="fa fa-plus"></i></a>';
+                toAppendNewTableRow += ' <a href="javascript:void(0);" class="col-sm-1 remove"><i class="fa fa-remove"></i></a>';
                 toAppendNewTableRow += '</td>';
 
                 toAppendNewTableRow += ' </tr>';
@@ -358,18 +365,10 @@
                         } else {
                             $(".nav-tabs").children('li').last().addClass('active');
                         }
-                        console.log(id);
                         return false;
                     }
                 });
             }
-            @if(session('msg')!='')
-                    toastr["{{session('status')}}"]("{{session('msg')}}");
-            @endif
-
-
-
-
-        })
+        });
     </script>
 @endsection
