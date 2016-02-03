@@ -126,17 +126,18 @@ class Languages extends Model
         }
     }
 
-    public function getAllLanguages($selectedColumns = ['*']){
+    public function getAllLanguages($selectedColumns = ['*'])
+    {
 
-    try{
-        $result = DB::table($this->table)
-            ->select($selectedColumns)
-            ->get();
-         return $result;
-    }catch(QueryException $e){
-        echo $e;
+        try {
+            $result = DB::table($this->table)
+                ->select($selectedColumns)
+                ->get();
+            return $result;
+        } catch (QueryException $e) {
+            echo $e;
 
-    }
+        }
     }
 
 }
