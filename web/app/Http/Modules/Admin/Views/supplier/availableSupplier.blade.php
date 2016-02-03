@@ -29,8 +29,8 @@
                             <th>SupplierName</th>
                             <th>Email</th>
                             <th>Register Date</th>
-                            <th>Action</th>
                             <th>Status</th>
+                            <th>Action</th>
                             <th>Supplier Details</th>
                         </tr>
                         </thead>
@@ -70,7 +70,7 @@
 
                                         <tr>
                                             <th scope="row"></th>
-                                            <td id="addressline1" rowspan="2" width="300px">picture detail</td>
+                                            <td id="addressline1" rowspan="2" width="300px"></td>
                                             <td id="addressline2" rowspan="2" width="300px"></td>
                                             {{--<td id="city" rowspan="2" width="300px"></td>--}}
                                             {{--<td id="state" rowspan="2" width="300px"></td>--}}
@@ -140,19 +140,24 @@
                     },
                     success: function (response) {
                         response = $.parseJSON(response);
-                        $.each(response, function (i, v) {
+                        if (response != '') {
+                            $.each(response, function (i, v) {
 
-                            name = v['name'];
-                            addressline1 = v['addressline1'];
-                            addressline2 = v['addressline2'];
-                            zipcode = v['zipcode'];
-                            phone = v['phone'];
-                        });
-                        $('#addressline1').html(addressline1);
-                        $('#addressline2').html(addressline2);
-                        $('#country').html(name);
-                        $('#zipcode').html(zipcode);
-                        $('#phone').html(phone);
+                                name = v['name'];
+                                addressline1 = v['addressline1'];
+                                addressline2 = v['addressline2'];
+                                zipcode = v['zipcode'];
+                                phone = v['phone'];
+                            });
+                            $('#addressline1').html(addressline1);
+                            $('#addressline2').html(addressline2);
+                            $('#country').html(name);
+                            $('#zipcode').html(zipcode);
+                            $('#phone').html(phone);
+                        }
+                        else {
+                            $('#addressline1').html('No Data Available!!');
+                        }
                     }
 
                 });

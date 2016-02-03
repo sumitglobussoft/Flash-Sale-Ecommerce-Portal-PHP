@@ -291,15 +291,15 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
         $(document).ready(function () {
 
             var variantCounter = 1;
-            $(document.body).on('click', '.add-more', function () {
-                var toAppendNewTableRow = '<tr>';
-                toAppendNewTableRow += '<td><input type="text" class="form-control" name="option_data[variants][' + variantCounter + '][variant_name]"></td>';
-                toAppendNewTableRow += '<td>';
-                toAppendNewTableRow += '<div class="form-group">';
-                toAppendNewTableRow += '<div class="col-sm-6">';
-                toAppendNewTableRow += '<input type="text" class="form-control" name="option_data[variants][' + variantCounter + '][price_modifier]">';
-                toAppendNewTableRow += '</div>';
-                toAppendNewTableRow += '<span class="col-sm-1 separator">/</span>';
+                $(document.body).on('click', '.add-more', function () {
+                    var toAppendNewTableRow = '<tr>';
+                    toAppendNewTableRow += '<td><input type="text" class="form-control" name="option_data[variants][' + variantCounter + '][variant_name]"></td>';
+                    toAppendNewTableRow += '<td>';
+                    toAppendNewTableRow += '<div class="form-group">';
+                    toAppendNewTableRow += '<div class="col-sm-6">';
+                    toAppendNewTableRow += '<input type="text" class="form-control" name="option_data[variants][' + variantCounter + '][price_modifier]">';
+                    toAppendNewTableRow += '</div>';
+                    toAppendNewTableRow += '<span class="col-sm-1 separator">/</span>';
 
                 toAppendNewTableRow += '<div class="col-sm-4">';
                 toAppendNewTableRow += '<select name="option_data[variants][' + variantCounter + '][price_modifier_type]" class="form-control">';

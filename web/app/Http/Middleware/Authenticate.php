@@ -25,6 +25,8 @@ class Authenticate
     public function __construct(Guard $auth)
     {
         $this->auth = $auth;
+        $lang = Session::get ('locale');
+        if ($lang != null) \App::setLocale($lang);
     }
 
     /**

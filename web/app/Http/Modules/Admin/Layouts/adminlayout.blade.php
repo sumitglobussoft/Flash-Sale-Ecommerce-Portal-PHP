@@ -3,6 +3,7 @@
 <head>
     @include('Admin/Layouts/adminheadscripts')
     @yield('headcontent')
+
 </head>
 <body class="page-header-fixed compact-menu page-sidebar-fixed">
 <div class="overlay"></div>
@@ -159,19 +160,49 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle waves-effect waves-button waves-classic"
                                data-toggle="dropdown">
-                                <span class="user-name">Administration<i class="fa fa-angle-down"></i></span>
+                                <span class="user-name">{{ trans('message.changelanguage') }}<i
+                                            class="fa fa-angle-down"></i></span>
+                            </a>
+                        <ul class="dropdown-menu"><?php $langinfo = \FlashSale\Http\Modules\Admin\Controllers\AdministrationController::getLanguageDetails();?>
+
+                            <?php if(isset($langinfo) && !(empty($langinfo))){ ?>
+
+                            @foreach($langinfo as  $val)
+
+                                <li><a href="/lang/{{$val->lang_code}}">{{$val->name}}</a></li>
+                                {{--<li> <a href="/lang/{{$val->lang_code}}">{{$val->name}}</a></li>--}}
+                                {{--<option value="/lang/pt">Portuguese</option>--}}
+                            @endforeach
+                            <?php } ?>
+
+                        </ul>
+                                </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle waves-effect waves-button waves-classic"
+                               data-toggle="dropdown">
+                                <span class="user-name">{{ trans('message.administration') }}<i
+                                            class="fa fa-angle-down"></i></span>
                             </a>
                             <ul class="dropdown-menu dropdown-list" role="menu">
-                                <li role="presentation"><a href="/admin/manage-currencies">Currencies</a></li>
-                                <li role="presentation"><a href="/admin/cacheClear">Clear cache</a></li>
+                                <li role="presentation"><a
+                                            href="/admin/manage-currencies">{{ trans('message.currencies') }}</a></li>
+                                <li role="presentation"><a
+                                            href="/admin/cacheClear">{{ trans('message.clearcache') }}</a></li>
+                                <li role="presentation"><a href="/admin/manage-language"><i class="fa fa-cogs"></i>{{ trans('message.languages') }}</a>
+                                </li>
+                                <li role="presentation"><a href="/admin/add-language-value"><i
+                                                class="fa fa-cogs"></i>{{ trans('message.language_variable') }}
+                                        </a>
+                                </li>
+
                             </ul>
                         </li>
-                        <?php $allSections = \FlashSale\Http\Modules\Admin\Controllers\AdminController::getSettingsSection(); ?>
+                        <?php $allSections = \FlashSale\Http\Modules\Admin\Controllers\AdminController::getSettingsSection();?>
                         @if(count($allSections))
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle waves-effect waves-button waves-classic"
                                    data-toggle="dropdown">
-                                    <span class="user-name">Settings<i class="fa fa-angle-down"></i></span>
+                                    <span class="user-name">{{ trans('message.settings') }}<i class="fa fa-angle-down"></i></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-list" role="menu">
                                     <li role="presentation"><a href="/admin/control-panel">Control panel</a></li>
@@ -184,10 +215,11 @@
                                 </ul>
                             </li>
                         @endif
+
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle waves-effect waves-button waves-classic"
                                data-toggle="dropdown">
-                                <span class="user-name">Admin<i class="fa fa-angle-down"></i></span>
+                                <span class="user-name">{{ trans('message.admin') }}<i class="fa fa-angle-down"></i></span>
                                 <img class="img-circle avatar" src="/assets/images/avatar1.png" width="40" height="40"
                                      alt="">
                             </a>
@@ -199,18 +231,17 @@
                                 {{--<li role="presentation"><a href="/admin/control-panel"><i class="fa fa-cogs"></i>Control Panel</a></li>--}}
                                 {{--<li role="presentation"><a href="/admin/cacheClear"><i class="fa fa-trash "></i>Clear cache</a></li>--}}
                                 {{--<li role="presentation"><a href="/lock-screen"><i class="fa fa-lock"></i>Lock screen</a></li>--}}
-                                <li role="presentation"><a href="/admin/add-new-language"><i class="fa fa-cogs"></i>Languages</a>
-                                </li>
-                                <li role="presentation"><a href="/admin/logout"><i class="fa fa-sign-out m-r-xs"></i>Log
-                                        out</a></li>
+                                <li role="presentation"><a href="/admin/logout"><i class="fa fa-sign-out m-r-xs"></i>{{ trans('message.logout') }}
+                                        </a></li>
                             </ul>
                         </li>
+
                         {{--<li>--}}
                         {{--<a href="/admin/logout" class="log-out waves-effect waves-button waves-classic">--}}
                         {{--<span><i class="fa fa-sign-out m-r-xs"></i>Log out</span>--}}
                         {{--</a>--}}
                         {{--</li>--}}
-                                <!--UNCOMMENT THIS BLOCK  WITH SCRIPT IN MODERN.JS TO SHOW CHAT BOX ON RIGHT-->
+                        <!--UNCOMMENT THIS BLOCK  WITH SCRIPT IN MODERN.JS TO SHOW CHAT BOX ON RIGHT-->
                         <!--<li>
                             <a href="javascript:void(0);" class="waves-effect waves-button waves-classic"
                                id="showRight">
@@ -244,14 +275,14 @@
                     <a href="/admin/dashboard" class="waves-effect waves-button">
                         <span class="menu-icon glyphicon glyphicon-home"></span>
 
-                        <p>Dashboard</p>
+                        <p>{{ trans('message.dashboard') }}</p>
                     </a>
                 </li>
                 <li class="droplink">
                     <a class="waves-effect waves-button">
-                        <span class="menu-icon fa fa-users"></span>
+                        <span class="menu-icon glyphicon glyphicon-user"></span>
 
-                        <p>Suppliers</p> <span class="arrow"></span>
+                        <p>{{ trans('message.suppliers') }}</p> <span class="arrow"></span>
                     </a>
                     <ul class="sub-menu">
                         <li><a href="/admin/pending-supplier">Pending requests</a></li>
@@ -264,9 +295,9 @@
 
                 <li class="droplink">
                     <a class="waves-effect waves-button">
-                        <span class="menu-icon fa fa-users"></span>
+                        <span class="menu-icon glyphicon glyphicon-envelope"></span>
 
-                        <p>Customers</p> <span class="arrow"></span>
+                        <p>{{ trans('message.customers') }}</p> <span class="arrow"></span>
                     </a>
                     <ul class="sub-menu">
                         <li><a href="/admin/pending-customer">Pending Customers</a></li>
@@ -277,9 +308,9 @@
 
                 <li class="droplink">
                     <a class="waves-effect waves-button">
-                        <span class="menu-icon fa fa-users"></span>
+                        <span class="menu-icon glyphicon glyphicon-envelope"></span>
 
-                        <p>Buyers</p> <span class="arrow"></span>
+                        <p>{{ trans('message.buyers') }}</p> <span class="arrow"></span>
                     </a>
                     <ul class="sub-menu">
                         <li><a href="/admin/pending-users">Pending Buyers</a></li>
@@ -290,9 +321,9 @@
 
                 <li class="droplink">
                     <a class="waves-effect waves-button">
-                        <span class="menu-icon fa fa-users"></span>
+                        <span class="menu-icon glyphicon glyphicon-envelope"></span>
 
-                        <p>Manager</p> <span class="arrow"></span>
+                        <p>{{ trans('message.manager') }}</p> <span class="arrow"></span>
                     </a>
                     <ul class="sub-menu">
                         <li><a href="/admin/add-new-manager">Add New Manager</a></li>
@@ -304,13 +335,13 @@
 
                 <li class="droplink">
                     <a class="waves-effect waves-button">
-                        <span class="menu-icon glyphicon glyphicon-shopping-cart"></span>
+                        <span class="menu-icon glyphicon glyphicon-envelope"></span>
 
-                        <p>Products</p> <span class="arrow"></span>
+                        <p>{{ trans('message.products') }}</p> <span class="arrow"></span>
                     </a>
                     <ul class="sub-menu">
-                        <li><a href="/admin/manage-products">Products</a></li>
                         <li><a href="/admin/manage-categories">Categories</a></li>
+                        <li><a href="/admin/manage-products">Products</a></li>
                         <li><a href="/admin/manage-features">Features</a></li>
                         <li><a href="/admin/manage-filtergroup">Filters</a></li>
                         <li><a href="/admin/manage-options">Options</a></li>
@@ -374,36 +405,36 @@
 <script src="/assets/js/modern.js"></script>
 
 {{--<script>--}}
-    {{--//FOR DESKTOP NOTIFICATION--}}
-    {{--//request permission on page load--}}
-    {{--document.addEventListener('DOMContentLoaded', function () {--}}
-        {{--if (Notification.permission !== "granted")--}}
-            {{--Notification.requestPermission();--}}
-    {{--});--}}
+{{--//FOR DESKTOP NOTIFICATION--}}
+{{--//request permission on page load--}}
+{{--document.addEventListener('DOMContentLoaded', function () {--}}
+{{--if (Notification.permission !== "granted")--}}
+{{--Notification.requestPermission();--}}
+{{--});--}}
 
-    {{--function notifyMe() {--}}
-        {{--if (!Notification) {--}}
-            {{--alert('Desktop notifications not available in your browser. Try Chromium.');--}}
-            {{--return;--}}
-        {{--}--}}
-        {{--if (Notification.permission !== "granted")--}}
-            {{--Notification.requestPermission();--}}
-        {{--else {--}}
-            {{--var notification = new Notification('Execution time in sec', {--}}
-                {{--icon: '/assets/images/fs.png',--}}
-                {{--body: "Your notification",--}}
-                {{--body: "{{number_format((microtime(true) - \Illuminate\Support\Facades\Session::get('startTime')),5)}}",--}}
+{{--function notifyMe() {--}}
+{{--if (!Notification) {--}}
+{{--alert('Desktop notifications not available in your browser. Try Chromium.');--}}
+{{--return;--}}
+{{--}--}}
+{{--if (Notification.permission !== "granted")--}}
+{{--Notification.requestPermission();--}}
+{{--else {--}}
+{{--var notification = new Notification('Execution time in sec', {--}}
+{{--//                icon: 'path/to/icon',--}}
+{{--body: "Your notification",--}}
+{{--body: "{{number_format((microtime(true) - \Illuminate\Support\Facades\Session::get('startTime')),5)}}",--}}
 
-            {{--});--}}
-            {{--setTimeout(notification.close.bind(notification), 2000);//Close notification--}}
-            {{--notification.onclick = function () {--}}
-                {{--return false;--}}
+{{--});--}}
+{{--setTimeout(notification.close.bind(notification), 2000);//Close notification--}}
+{{--notification.onclick = function () {--}}
+{{--return false;--}}
 {{--//                window.open(window.location.host);--}}
-            {{--};--}}
-        {{--}--}}
-    {{--}--}}
-    {{--window.onload = notifyMe;--}}
-    {{--<?php \Illuminate\Support\Facades\Session::forget('startTime'); ?>--}}
+{{--};--}}
+{{--}--}}
+{{--}--}}
+{{--window.onload = notifyMe;--}}
+{{--<?php \Illuminate\Support\Facades\Session::forget('startTime'); ?>--}}
 {{--</script>--}}
 </body>
 </html>

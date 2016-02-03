@@ -184,6 +184,36 @@ if (!function_exists('getSetting')) {
         }
         return $settingValue;
     }
+
+    if(!function_exists('getTranslatedLanguage')){
+
+//        function getTranslatedLanguage($locale){
+//            $local = LaravelGettext::getLocale($locale);
+//            $domain = LaravelGettext::getDomain();
+//            $contextString = $local;
+//            $translation = [$domain,'LC_MESSAGES',$local];
+////            echo '<pre>';
+////            print_r($translation);die;
+//            if ($translation == $contextString)  return $locale;
+//            else  return $translation;
+
+            function getTranslatedLanguage($msgid,$msgstr)
+            {
+                $contextString = "{$msgid}\004{$msgstr}";
+                $domain = LaravelGettext::getDomain();
+                $local = LaravelGettext::getLocale();
+                $translation = gettext($contextString);
+//                echo"<pre>";print_r($translation);die("szdg");
+                if ($translation == $contextString)  return $msgid;
+                else  return $translation;
+
+
+            }
+        }
+
+
+
+
 }
 
 if (!function_exists('uploadImageToStoragePath')) {

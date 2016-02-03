@@ -1,6 +1,6 @@
 @extends('Admin/Layouts/adminlayout')
 
-@section('title', 'Available Manager') {{--TITLE GOES HERE--}}
+@section('title', 'Available Language Variable') {{--TITLE GOES HERE--}}
 
 @section('headcontent')
     {{--OPTIONAL--}}
@@ -19,47 +19,21 @@
         <div class="col-md-12">
             <div class="panel panel-white">
                 <div class="panel-body">
-                    <a href="/admin/add-new-manager" class="btn btn-success"><i class="fa fa-plus "></i>&nbsp;Add New
-                        Manager
+                    <a href="/admin/add-language-value" class="btn btn-success"><i class="fa fa-plus "></i>&nbsp;Add New
+                        Language Variable
                     </a>
-                    <table id="available_manager" class="display" cellspacing="0" width="100%">
+                    <table id="manage_language_value" class="display" cellspacing="0" width="100%">
                         <thead>
                         <tr>
                             <th>Id</th>
-                            <th>ManagerName</th>
-                            <th>Email</th>
-                            <th>Register Date</th>
-                            <th>Status</th>
+                            <th>Variable Name</th>
+                            <th>Value</th>
                             <th>Action</th>
-                            <th>Permission</th>
+                            {{--<th><input type="button" class="check" value="Check All" /><input type="button" class="uncheck" value="UnCheck All" /></th>--}}
+
                         </tr>
                         </thead>
-
                     </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="permissionmodal" class="modal fade" tabindex="-1" data-width="400">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h4 class="modal-title">Permission</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <li class="dd-item" id="permi" data-id="">
-
-                            </li>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" data-dismiss="modal" class="btn">Close</button>
-
                 </div>
             </div>
         </div>
@@ -78,13 +52,13 @@
 
     <script>
         $(document).ready(function () {
-            $('#available_manager').DataTable({
+            $('#manage_language_value').DataTable({
                 "processing": true,
                 "serverSide": true,
                 "ajax": {
-                    url: "/admin/manager-ajax-handler",
+                    url: "/admin/administration-ajax-handler",
                     data: {
-                        method: 'availableManager'
+                        method: 'manageLanguageValue'
                     },
                 },
 //                columns:  { data: 'id', name: 'id' },
@@ -104,23 +78,26 @@
 //            });
 
 
-            $(document.body).on('click', '.manager-status', function () {
+
+
+
+            $(document.body).on('click', '.language-status', function () {
 
                 var obj = $(this);
                 var UserId = $(this).attr('data-id');
-                var status = 0;
+                var status = 1;
                 if (obj.hasClass('btn-success')) {
-                    status = 2;
+                    status = 0;
                 } else if (obj.hasClass('btn-danger')) {
                     status = 1;
                 }
-                if (status == 1 || status == 2) {
+                if (status == 1 || status == 0) {
                     $.ajax({
-                        url: '/admin/manager-ajax-handler',
+                        url: '/admin/administration-ajax-handler',
                         type: 'POST',
                         datatype: 'json',
                         data: {
-                            method: 'changePermissionStatus',
+                            method: 'changeLanguageStatus',
                             UserId: UserId,
                             status: status
                         },
@@ -143,32 +120,32 @@
                 }
             });
 
-            $(document.body).on('click', '.delete-manager', function () {
+            $(document.body).on('click', '.delete-language', function () {
                 var obj = $(this);
                 var UserId = $(this).attr('data-cid');
 
                 $.ajax({
-                    url: '/admin/manager-ajax-handler',
+                    url: '/admin/administration-ajax-handler',
                     type: 'POST',
                     datatype: 'json',
                     data: {
-                        method: 'deleteStatus',
+                        method: 'deleteLanguageStatus',
                         UserId: UserId,
                     },
                     success: function (response) {
                         response = $.parseJSON(response);
                         toastr[response['status']](response['msg']);
-                        if (response['status'] == "success") {
-                            if (obj.hasClass('btn-success')) {
-                                obj.removeClass('btn-success');
-                                obj.addClass('btn-danger');
-                                obj.text('Inactive');
-                            } else {
-                                obj.removeClass('btn-danger');
-                                obj.addClass('btn-success');
-                                obj.text('Active');
-                            }
-                        }
+//                        if (response['status'] == "success") {
+////                            if (obj.hasClass('btn-success')) {
+////                                obj.removeClass('btn-success');
+////                                obj.addClass('btn-danger');
+////                                obj.text('Inactive');
+//                            } else {
+//                                obj.removeClass('btn-danger');
+//                                obj.addClass('btn-success');
+//                                obj.text('Active');
+//                            }
+//                        }
                     }
                 });
             });
@@ -188,13 +165,6 @@
                     success: function (response) {
                         response = $.parseJSON(response);
                         var res = response;
-//                        $('.permi').remove();
-                        $.each(res, function (index, val) {
-                            $('#permi').html('<div class="dd-handle" id="permitid">' + val + '</div>');
-                        });
-
-
-//                        console.log(res);
 //                        var fold = res.split("");
 //                        $.each(res, function (index, val) {
                         // permission_details =  val['permission_details'];
@@ -204,7 +174,7 @@
                         // var permit = JSON.stringify(permission_detail);
 //                            var permit =  permission_detail.split(",");
 //                            console.log(permit);
-//                            $('#permitid').html(res);
+                        $('#permitid').html(res);
 //                            console.log(permission_detail);
 //                        });
 
@@ -219,6 +189,19 @@
                     // alert(permit);
                 });
 
+            });
+        });
+        $(function () {
+            $('.check').on('click', function () {
+                alert("xgd");
+                $('.questionCheckBox').each(function(){ this.checked = true; });
+            });
+        });
+
+        $(function () {
+            $('.uncheck').on('click', function () {
+                alert("cfh2");
+                $('.questionCheckBox').each(function(){ this.checked = false; });
             });
         });
 

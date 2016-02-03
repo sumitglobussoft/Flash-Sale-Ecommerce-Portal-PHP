@@ -37,8 +37,8 @@
                             <div class="col-md-4">
                                 <input type="text" class="form-control" id="lang_code"
                                        placeholder="Language Code" name="lang_code">
+                                {!!  $errors->first('lang_code', '<font color="red">:message</font>') !!}
                             </div>
-                            {!!  $errors->first('lang_code', '<font color="red">:message</font>') !!}
                         </div>
 
                         <div class="clearfix"></div>
@@ -54,8 +54,8 @@
                             <div class="col-md-4">
                                 <input type="text" class="form-control" id="name"
                                        placeholder="Language Name" name="name">
+                                {!!  $errors->first('name', '<font color="red">:message</font>') !!}
                             </div>
-                            {!!  $errors->first('name', '<font color="red">:message</font>') !!}
                         </div>
                         <div class="clearfix"></div>
                         <div class="form-group">
@@ -71,8 +71,8 @@
                                         <?php } ?>
                                     </optgroup>
                                 </select>
+                                {!!  $errors->first('country_code', '<font color="red">:message</font>') !!}
                             </div>
-                            {!!  $errors->first('country_code', '<font color="red">:message</font>') !!}
                         </div>
                         <div class="clearfix"></div>
 
@@ -90,13 +90,13 @@
                         <div class="form-group">
                             <div class="checkbox">
                                 <label for="statact" class="col-md-3 control-label">Active</label>
-                                    <input type="checkbox" name="statact">
+                                <input type="checkbox" name="statact">
+
                                 <div class="clearfix"></div>
                                 <label for="statact" class="col-md-3 control-label">Inactive</label>
                                 <input type="checkbox" name="statact">
-
+                                {!!  $errors->first('statact', '<font color="red">:message</font>') !!}
                             </div>
-                            {!!  $errors->first('statact', '<font color="red">:message</font>') !!}
                         </div>
 
                         <button type="submit" class="btn btn-primary btn-rounded" id="submitadd">Save</button>
@@ -120,9 +120,9 @@
                 alert(checkactiveflag);
             });
 
-                {{--@if(Session::has('msg') != ''){--}}
+            {{--@if(Session::has('msg') != ''){--}}
 
-                {{--toastr[Session['status']](Session['msg']);--}}
+            {{--toastr[Session['status']](Session['msg']);--}}
             {{--}--}}
             {{--@endif--}}
 

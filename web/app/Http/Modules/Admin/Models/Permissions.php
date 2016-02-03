@@ -58,15 +58,10 @@ class Permissions extends Model
 
     public function getPermitDetail($where)
     {
-//echo"<pre>";print_r($where);die("xcfgb");
         try {
             $result = DB::table($this->table)
                 ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
-//                ->select()
-//                ->toSql();
                 ->get();
-//            die($result);
-//echo"<pre>";print_r($result);die("xcfgb");
             return $result;
         } catch (QueryException $e) {
             echo $e;

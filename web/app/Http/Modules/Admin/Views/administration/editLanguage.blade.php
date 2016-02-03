@@ -1,6 +1,8 @@
+<?php //echo getTranslatedLanguage('Edit Langauge','Editar idioma');  ?>
+
 @extends('Admin/Layouts/adminlayout')
 
-@section('title', 'Edit Language') {{--TITLE GOES HERE--}}
+@section('title',trans('message.editlanguage')) {{--TITLE GOES HERE--}}
 
 @section('headcontent')
 
@@ -8,6 +10,7 @@
 @endsection
 
 @section('content')
+    <?php //echo Session::get('transval');die("Gvjh");?>
     {{--PAGE CONTENT GOES HERE--}}
     <div class="row">
         <div class="col-md-12">
@@ -15,8 +18,11 @@
 
                 <div class="portlet-title">
 
+                    <?php //echo _('Edit Language'); ?>
+{{--                    {{LaravelGettext::getLocale()}}--}}
+
                     <div class="actions">
-                        <a class="btn btn-default" href="/admin/manage-language">Back to list </a>
+                        <a class="btn btn-default" href="/admin/manage-language">{{trans('message.backtolist')}}</a>
                     </div>
 
                 </div>
@@ -35,10 +41,11 @@
                                 Code:</label>
 
                             <div class="col-md-4">
-                                <input type="text" class="form-control" id="lang_code" value="{{$languagedetails->lang_code}}"
+                                <input type="text" class="form-control" id="lang_code"
+                                       value="{{$languagedetails->lang_code}}" readonly="readonly"
                                        placeholder="Language Code" name="lang_code">
+                                {!!  $errors->first('lang_code', '<font color="red">:message</font>') !!}
                             </div>
-                            {!!  $errors->first('lang_code', '<font color="red">:message</font>') !!}
                         </div>
 
                         <div class="clearfix"></div>
@@ -54,8 +61,8 @@
                             <div class="col-md-4">
                                 <input type="text" class="form-control" id="name" value="{{$languagedetails->name}}"
                                        placeholder="Language Name" name="name">
+                                {!!  $errors->first('name', '<font color="red">:message</font>') !!}
                             </div>
-                            {!!  $errors->first('name', '<font color="red">:message</font>') !!}
                         </div>
                         <div class="clearfix"></div>
                         <div class="form-group">
@@ -67,12 +74,12 @@
                                     <option value=""></option>
                                     <optgroup label="Select">
                                         <?php foreach($countrydetail as $key => $val) { ?>
-                                        <option value="<?php echo $val->location_id ?>" <?php if($val->location_id == $languagedetails->country_code) echo ' selected="selected"' ?>><?php echo $val->name; ?></option>
+                                        <option value="<?php echo $val->location_id ?>" <?php if ($val->location_id == $languagedetails->country_code) echo ' selected="selected"' ?>><?php echo $val->name; ?></option>
                                         <?php } ?>
                                     </optgroup>
                                 </select>
+                                {!!  $errors->first('country_code', '<font color="red">:message</font>') !!}
                             </div>
-                            {!!  $errors->first('country_code', '<font color="red">:message</font>') !!}
                         </div>
                         <div class="clearfix"></div>
 
@@ -114,6 +121,7 @@
             {{--toastr[Session['status']](Session['msg']);--}}
             {{--}--}}
             {{--@endif--}}
+
 
 
         });

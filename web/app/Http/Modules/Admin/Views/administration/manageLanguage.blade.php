@@ -1,6 +1,6 @@
 @extends('Admin/Layouts/adminlayout')
 
-@section('title', 'Available Languages') {{--TITLE GOES HERE--}}
+@section('title',trans('message.managelanguage')) {{--TITLE GOES HERE--}}
 
 @section('headcontent')
     {{--OPTIONAL--}}
@@ -13,24 +13,23 @@
 @endsection
 
 @section('content')
-
     {{--PAGE CONTENT GOES HERE--}}
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-white">
                 <div class="panel-body">
-                    <a href="/admin/add-new-language" class="btn btn-success"><i class="fa fa-plus "></i>&nbsp;Add New
-                        Language
+                    <a href="/admin/add-new-language" class="btn btn-success"><i class="fa fa-plus "></i>&nbsp;  {{ trans('message.addnewlangauge') }}
                     </a>
                     <table id="available_language" class="display" cellspacing="0" width="100%">
                         <thead>
                         <tr>
-                            <th>Id</th>
-                            <th>Language Code</th>
-                            <th>Name</th>
-                            <th>Country</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th>{{ trans('message.languageid') }}</th>
+                            <th>{{ trans('message.languagecode') }}</th>
+                            <th>{{ trans('message.languagename') }}</th>
+                            <th>{{ trans('message.langaugecountry') }}</th>
+                            <th>{{ trans('message.langaugestatus') }}</th>
+                            <th>{{ trans('message.langaugeaction') }}</th>
+                            <th>Language Variable</th>
                         </tr>
                         </thead>
 
