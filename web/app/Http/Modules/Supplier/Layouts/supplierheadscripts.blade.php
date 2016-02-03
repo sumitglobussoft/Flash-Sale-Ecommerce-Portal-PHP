@@ -1,11 +1,11 @@
- <!-- Title -->
-    <title>FlashSale Supplier | @yield('title')</title>
+<!-- Title -->
+<title>FlashSale Supplier | @yield('title')</title>
 
-    <meta content="width=device-width, initial-scale=1" name="viewport"/>
-    <meta charset="UTF-8">
-    <meta name="description" content="FlashSale"/>
-    <meta name="keywords" content="flashsale,discount,shopping,online shopping,paypal"/>
-    <meta name="author" content="FlashSale Supplier"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta charset="UTF-8">
+<meta name="description" content="FlashSale"/>
+<meta name="keywords" content="flashsale,discount,shopping,online shopping,paypal"/>
+<meta name="author" content="FlashSale Supplier"/>
 
 <!-- Styles -->
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600' rel='stylesheet' type='text/css'>
@@ -21,12 +21,14 @@
 <link href="/assets/plugins/slidepushmenus/css/component.css" rel="stylesheet" type="text/css"/>
 <link href="/assets/plugins/bootstrap-datepicker/css/datepicker3.css" rel="stylesheet" type="text/css"/>
 
-
-
+<link href="/assets/plugins/weather-icons-master/css/weather-icons.min.css" rel="stylesheet" type="text/css"/>
+<link href="/assets/plugins/metrojs/MetroJs.min.css" rel="stylesheet" type="text/css"/>
+{{--FOR UI-NOTIFICATIONS--}}
+<link href="/assets/plugins/toastr/toastr.min.css" rel="stylesheet"/>
 
 <!-- Theme Styles -->
 <link href="/assets/css/modern.min.css" rel="stylesheet" type="text/css"/>
-<link href="/assets/css/themes/white.css" class="theme-color" rel="stylesheet" type="text/css"/>
+<link href="/assets/css/themes/blue.css" class="theme-color" rel="stylesheet" type="text/css"/>
 <link href="/assets/css/custom.css" rel="stylesheet" type="text/css"/>
 
 <script src="/assets/plugins/3d-bold-navigation/js/modernizr.js"></script>
@@ -40,12 +42,13 @@
 <![endif]-->
 
 <style>
-   label.error{
-      font-weight:normal;
-      color:#FF0000 !important;
-   }
-   span.error{
-      font-weight:normal;
-      color:#FF0000 !important;
-   }
+    label.error {
+        font-weight: normal;
+        color: #FF0000 !important;
+    }
+
+    span.error {
+        font-weight: normal;
+        color: #FF0000 !important;
+    }
 </style>

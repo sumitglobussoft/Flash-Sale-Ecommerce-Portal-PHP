@@ -1,17 +1,17 @@
-@extends('Admin/Layouts/adminlayout')
+@extends('Supplier/Layouts/supplierlayout')
 
 @section('title', 'Editing category: '.(isset($categoryDetails->category_name) ? $categoryDetails->category_name : '')) {{--TITLE GOES HERE--}}
 
-@section('headcontent')
+@section('pageheadcontent')
     {{--OPTIONAL--}}
     {{--PAGE STYLES OR SCRIPTS LINKS--}}
     <link href="/assets/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" type="text/css" href="/assets/plugins/jstree/dist/themes/default/style.min.css"/>
 
     <style>
-        .jstree li a i {
-            display: none !important;
-        }
+        /*.jstree li a i {*/
+        /*display: none !important;*/
+        /*}*/
     </style>
 @endsection
 
@@ -23,7 +23,7 @@
             @if(!isset($categoryDetails))
                 <div style="text-align: center">
                     <span class="">Sorry, no such category found.</span><br>
-                    <a href="/admin/manage-categories">
+                    <a href="/supplier/manage-categories">
                         <button class="btn btn-xs btn-success">Go back</button>
                     </a>
                 </div>
@@ -44,11 +44,14 @@
                                             if ($category->parent_category_id == 0) $class = "dropdown"; else $class = "sub_menu";
                                             if ($currLevel > $prevLevel) echo " <ul class='$class'> ";
                                             if ($currLevel == $prevLevel) echo " </li> ";
-                                            if ($array['selectedId'] == $category->category_id) $dataJSTree = '{ "selected" : true,"opened" : true,"icon":false }'; else $dataJSTree = '';
-                                            echo "<li  data-jstree='$dataJSTree'><a href='/admin/edit-category/$category->category_id '> $category->category_name</a>";
-                                            if ($currLevel > $prevLevel) {
-                                                $prevLevel = $currLevel;
-                                            }
+
+                                            $dataJSTree = ($array['selectedId'] == $category->category_id) ? ' "selected" : true,"opened" : true,"icon":false,"icon":"fa fa-edit icon-state-success " ' : '';
+                                            if (\Illuminate\Support\Facades\Session::get('fs_supplier')['id'] == $category->created_by)
+                                                echo "<li data-jstree='{" . $dataJSTree . "}'><a href='/supplier/edit-category/$category->category_id '> $category->category_name</a>";
+                                            else
+                                                echo "<li data-jstree='{\"disabled\" : true" . ($dataJSTree != '' ? ',' . $dataJSTree : '') . "}'><a data-toggle='tooltip' title='You can edit your category only.' href='javascript:void(0);'> $category->category_name</a>";
+
+                                            if ($currLevel > $prevLevel) $prevLevel = $currLevel;
                                             $currLevel++;
                                             createTree($array, $category->category_id, $currLevel, $prevLevel);
                                             $currLevel--;
@@ -129,7 +132,8 @@
 
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Image</label>
-
+                                    <input type="hidden" name="old_image"
+                                           value="{{$categoryDetails->category_banner_url}}">
                                     <div class="col-sm-8">
                                         <div class="fileinput fileinput-new" data-provides="fileinput">
                                             <div class="fileinput-new thumbnail"
@@ -144,7 +148,7 @@
                                                  style="max-width: 200px; max-height: 150px;">
                                             </div>
                                             <div>
-                                                            <span class="btn btn-circle default btn-file">
+                                                            <span class="btn btn-circle btn-default btn-file">
                                                                 <span class="fileinput-new">
                                                                     Select image </span>
                                                                 <span class="fileinput-exists">
@@ -152,7 +156,7 @@
                                                                 <input type="file" name="category_image"
                                                                        accept="image/*">
                                                             </span>
-                                                <a href="#" class="btn btn-circle default fileinput-exists"
+                                                <a href="#" class="btn btn-circle btn-default fileinput-exists"
                                                    data-dismiss="fileinput">
                                                     Remove </a>
                                             </div>
@@ -202,7 +206,7 @@
                                 </div>
                                 <div class="form-actions" align="center">
                                     <button type="submit" class="btn btn-primary">Save</button>
-                                    <a href="/admin/manage-categories" class="btn btn-default">Cancel</a>
+                                    <a href="/supplier/manage-categories" class="btn btn-default">Cancel</a>
                                 </div>
                             </form>
                         </div>

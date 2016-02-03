@@ -21,6 +21,10 @@ use FlashSale\Http\Modules\Supplier\Models\Usersmeta;
 use Illuminate\Support\Facades\Session;
 
 
+/**
+ * Class SupplierController
+ * @package FlashSale\Http\Modules\Supplier\Controllers
+ */
 class SupplierController extends Controller
 {
 
@@ -29,19 +33,28 @@ class SupplierController extends Controller
     private $imageHeight = 1024;//TO BE USED FOR IMAGE RESIZING
 
 
+    /**
+     * Dashboard action
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|Redirect
+     * @since 09-12-2015
+     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     */
     public function dashboard()
     {
         if (!Session::has('fs_supplier')) {
             return redirect('/supplier/login');
         }
-
-//        echo "<pre>";
-//        print_r(Session::get('fs_supplier')['id']);
-//        die;
         return view("Supplier/Views/supplier/dashboard");
 
     }
 
+    /**
+     * Login action
+     * @param Request $request
+     * @return $this|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|Redirect
+     * @since 09-12-2015
+     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     */
     public function login(Request $request)
     {
         if (Session::has('fs_supplier')) {
@@ -85,6 +98,13 @@ class SupplierController extends Controller
 
     }
 
+    /**
+     * Register action
+     * @param Request $request
+     * @return $this|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|Redirect
+     * @since 09-12-2015
+     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     */
     public function register(Request $request)
     {
         if (Session::has('fs_supplier')) {
@@ -141,12 +161,26 @@ class SupplierController extends Controller
     }
 
 
+    /**
+     * Logout action
+     * @return Redirect
+     * @since 09-12-2015
+     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     */
     public function logout()
     {
         Session::forget('fs_supplier');
         return redirect('/supplier/login');
     }
 
+    /**
+     * Profile page action
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \FlashSale\Http\Modules\Supplier\Models\Exception
+     * @since 09-12-2015
+     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     */
     public function profile(Request $request)
     {
         $objModelUser = User::getInstance();
@@ -166,6 +200,14 @@ class SupplierController extends Controller
         }
     }
 
+    /**
+     * Supplier details action
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \FlashSale\Http\Modules\Supplier\Models\Exception
+     * @since 12-12-2015
+     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     */
     public function supplierDetails(Request $request)
     {
         $objModelUser = User::getInstance();
@@ -224,6 +266,13 @@ class SupplierController extends Controller
         return view("Supplier/Views/supplier/supplierDetails");
     }
 
+    /**
+     * Ajax handler
+     * @param Request $request
+     * @throws \FlashSale\Http\Modules\Supplier\Models\Exception
+     * @since 09-12-2015
+     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     */
     public function ajaxHandler(Request $request)
     {
         $objModelUser = User::getInstance();
@@ -288,53 +337,32 @@ class SupplierController extends Controller
 
                 break;
             case 'updateAvatar':
-
                 if (Input::hasFile('file')) {
-
                     $validator = Validator::make($request->all(), ['file' => 'image']);
-
                     if ($validator->fails()) {
                         echo json_encode(array('status' => 2, 'message' => $validator->messages()->all()));
                     } else {
-                        $destinationPath = 'uploads/useravatar/';
-                        $filename = $userId . '_' . time() . ".jpg";
-                        File::makeDirectory(storage_path($destinationPath), 0777, true, true);
-//                        $filePath = '/' . $destinationPath . $filename;
-                        $filePath = "useravatar_" . $filename;
-                        $fileval = '/' . $destinationPath . $filePath;
-//                         echo"<pre>";print_r($filePath);die("fch");
-
-//                        $filtemp = 'uploads_useravatar_' . $filename;
-
-
-                        $quality = $this->imageQuality(Input::file('file'));
-
-                        Image::make(Input::file('file'))->resize($this->imageWidth, $this->imageHeight, function ($constraint) {
-                            $constraint->aspectRatio();
-                        })->save(storage_path($destinationPath . $filePath), $quality);
-                        $whereForUpdate['id'] = $userId;
-                        $updateData['profilepic'] = $filePath;
-                       // echo"<pre>";print_r($updateData);die("xcgf");
-
-
-                        $updatedResult = $objModelUser->updateUserWhere($updateData, $whereForUpdate);
-                        if ($updatedResult) {
-                            if (!strpos(Session::get('fs_supplier')['profilepic'], 'placeholder')) {
-                                File::delete(storage_path() . Session::get('fs_supplier')['profilepic']);
+                        $filePath = uploadImageToStoragePath(Input::file('file'), 'useravatar', 'useravatar_' . $userId . '_' . time() . ".jpg");
+                        if ($filePath) {
+                            $updateData['profilepic'] = $filePath;
+                            $whereForUpdate['id'] = $userId;
+                            $updatedResult = $objModelUser->updateUserWhere($updateData, $whereForUpdate);
+                            if ($updatedResult) {
+                                if (!strpos(Session::get('fs_supplier')['profilepic'], 'placeholder')) {
+                                   deleteImageFromStoragePath(Session::get('fs_supplier')['profilepic']);
+                                }
+                                Session::put('fs_supplier.profilepic', $filePath);
+                                echo json_encode(array('status' => 1, 'message' => 'Successfully updated profile image . '));
+                            } else {
+                                echo json_encode(array('status' => 0, 'message' => 'Something went wrong, please reload the page and try again.'));
                             }
-//                            $path = storage_path().$filePath ;
-//                            echo"<pre>";print_r($path);die("fch");
-                            Session::put('fs_supplier . profilepic',$filePath);
-
-                            echo json_encode(array('status' => 1, 'message' => 'Successfully updated profile image . '));
                         } else {
-                            echo json_encode(array('status' => 0, 'message' => 'Something went wrong, please reload the page and try again . '));
+                            echo json_encode(array('status' => 0, 'message' => 'Something went wrong, please reload the page and try again.'));
                         }
                     }
                 } else {
-                    echo json_encode(array('status' => 2, 'message' => 'Please select file first . '));
+                    echo json_encode(array('status' => 2, 'message' => 'Please select file first.'));
                 }
-
                 break;
 
             case 'updatePassword':
@@ -364,6 +392,12 @@ class SupplierController extends Controller
         }
     }
 
+    /**
+     * Ajax handler to be used for pre-login request
+     * @param Request $request
+     * @since 15-12-2015
+     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     */
     public function userAjaxHandler(Request $request)
     {
         $method = $request->input('method');
@@ -423,22 +457,22 @@ class SupplierController extends Controller
         }
     }
 
+    /**
+     * Get image quality for compression
+     * @param $image
+     * @return int
+     * @since 09-12-2015
+     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     */
     public function imageQuality($image)
     {
         $imageSize = filesize($image) / (1024 * 1024);
-        if ($imageSize < 0.5) {
-            return 70;
-        } elseif ($imageSize > 0.5 && $imageSize < 1) {
-            return 60;
-        } elseif ($imageSize > 1 && $imageSize < 2) {
-            return 50;
-        } elseif ($imageSize > 2 && $imageSize < 5) {
-            return 40;
-        } elseif ($imageSize > 5) {
-            return 30;
-        } else {
-            return 50;
-        }
+        if ($imageSize < 0.5) return 70;
+        elseif ($imageSize > 0.5 && $imageSize < 1) return 60;
+        elseif ($imageSize > 1 && $imageSize < 2) return 50;
+        elseif ($imageSize > 2 && $imageSize < 5) return 40;
+        elseif ($imageSize > 5) return 30;
+        else return 50;
     }
 
 

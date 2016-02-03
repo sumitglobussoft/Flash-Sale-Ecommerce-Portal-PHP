@@ -61,10 +61,13 @@ class CurrencyController extends Controller
                 try {
                     $inputData['currency_code'] = strtoupper($inputData['currency_code']);
                     $inputData['position'] = DB::table('currencies')->max('position') + 1;
+                    //$inputData = array_filter($inputData);
+                    $inputData = array_diff($inputData, array(''));
+
                     $insertResult = $objCurrencyModel->addNewCurrency($inputData);
                     return Redirect::back()->with(
                         ($insertResult > 0) ?
-                            ['status' => 'success', 'msg' => 'New currency "' . $insertResult . $inputData['currency_name'] . '" has been added.'] :
+                            ['status' => 'success', 'msg' => 'New currency "' . $inputData['currency_name'] . '" has been added.'] :
                             ['status' => 'error', 'msg' => 'Something went wrong, please reload the page and try again.']
                     );
                 } catch (\Exception $e) {
@@ -110,6 +113,8 @@ class CurrencyController extends Controller
                     $inputData['is_primary'] = ($isPrimaryFlag || array_key_exists('is_primary_old', $request->all())) ? 'Y' : 'N';
                     $inputData['coefficient'] = ($isPrimaryFlag) ? '1' : $inputData['coefficient'];
 
+                    $inputData = array_diff($inputData, array(''));
+                    
                     $whereForUpdateCurrency = ['rawQuery' => 'currency_id =?', 'bindParams' => [$currencyId]];
                     $updateResult = $objCurrencyModel->updateCurrencyWhere($inputData, $whereForUpdateCurrency);
                     if ($updateResult == 1) {

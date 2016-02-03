@@ -286,7 +286,8 @@ class CustomerController extends Controller
 
     }
 
-    public function deletedCustomer(Request $request){
+    public function deletedCustomer(Request $request)
+    {
 
         return view('Admin/Views/customer/deletedCustomer');
 

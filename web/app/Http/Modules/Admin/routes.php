@@ -120,11 +120,11 @@ Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), fun
         Route::post('/admin/settings-ajax-handler', 'SettingController@settingsAjaxHandler');
 
 
-        Route::resource('/admin/manage-currencies', 'currencyController@manageCurrencies');
-        Route::resource('/admin/add-currency', 'currencyController@addCurrency');
-        Route::get('/admin/edit-currency/{currencyId}', 'currencyController@editCurrency');
-        Route::post('/admin/edit-currency/{currencyId}', 'currencyController@editCurrency');
-        Route::post('/admin/currency-ajax-handler', 'currencyController@currencyAjaxHandler');
+        Route::resource('/admin/manage-currencies', 'CurrencyController@manageCurrencies');
+        Route::resource('/admin/add-currency', 'CurrencyController@addCurrency');
+        Route::get('/admin/edit-currency/{currencyId}', 'CurrencyController@editCurrency');
+        Route::post('/admin/edit-currency/{currencyId}', 'CurrencyController@editCurrency');
+        Route::post('/admin/currency-ajax-handler', 'CurrencyController@currencyAjaxHandler');
 
         /* Feature controller route start */
         Route::resource('/admin/manage-features', 'FeaturesController@manageFeatures');

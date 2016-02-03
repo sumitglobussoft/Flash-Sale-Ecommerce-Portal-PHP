@@ -14,6 +14,11 @@ Route::group(['middleware' => ['guest']], function () {
 });
 
 Route::group(array('module' => 'Supplier', 'namespace' => 'Supplier\Controllers'), function () {
+//    \DB::listen(function ($query, $bindings, $time, $connection) {
+//        $fullQuery = vsprintf(str_replace(array('%', '?'), array('%%', '%s'), $query), $bindings);
+//        $result = $connection . ' (' . $time . '): ' . $fullQuery;
+//        dump($result);
+//    });
 
     Route::resource('/supplier/login', 'SupplierController@login');
     Route::resource('/supplier/register', 'SupplierController@register');
@@ -22,7 +27,7 @@ Route::group(array('module' => 'Supplier', 'namespace' => 'Supplier\Controllers'
 
 
 //IF  YOU NEED TO USE GET POST, USE THIS FORMAT AS IN BELOW BLOCK COMMENT
-    /*Route::get('admin/dashboard', function () {
+    /*Route::get('supplier/dashboard', function () {
         return view("Admin/Views/dashboard");
     }); */
 
@@ -52,6 +57,40 @@ Route::group(array('module' => 'Supplier', 'namespace' => 'Supplier\Controllers'
         });
 //        Product Controller
         Route::resource('/supplier/add-product', 'ProductController@addProduct');
+
+//        Category Controller
+        Route::resource('/supplier/manage-categories', 'CategoryController@manageCategories');
+        Route::resource('/supplier/add-category', 'CategoryController@addCategory');
+        Route::get('/supplier/edit-category/{id}', 'CategoryController@editCategory');
+        Route::post('/supplier/edit-category/{id}', 'CategoryController@editCategory');
+
+        Route::resource('/supplier/manage-options', 'OptionController@manageOptions');
+        Route::resource('/supplier/add-option', 'OptionController@addOption');
+        Route::get('/supplier/edit-option/{id}', 'OptionController@editOption');
+        Route::post('/supplier/edit-option/{id}', 'OptionController@editOption');
+        Route::post('/supplier/option-ajax-handler', 'OptionController@optionAjaxHandler');
+
+        Route::get('image/{filename}', function ($filename) {
+            $filePath = explode("_", $filename);
+            $folderPath = '';
+            switch ($filePath[0]) {
+                case 'useravatar':
+                    $folderPath = $filePath[0];
+                    break;
+                default:
+                    unset($filePath[count($filePath) - 1]);
+                    $folderPath = implode('/', array_map(function ($value) {
+                        return $value;
+                    }, $filePath));
+                    break;
+            }
+            $path = storage_path() . '/uploads/' . $folderPath . '/' . $filename;
+            $file = File::get($path);
+            $type = File::mimeType($path);
+            $response = Response::make($file, 200);
+            $response->header("Content-Type", $type);
+            return $response;
+        });
     });
 
 });

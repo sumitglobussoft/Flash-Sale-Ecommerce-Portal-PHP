@@ -1,4 +1,3 @@
-
 <!-- Javascripts -->
 <script src="/assets/plugins/jquery/jquery-2.1.3.min.js"></script>
 <script src="/assets/plugins/jquery-ui/jquery-ui.min.js"></script>
@@ -11,3 +10,34 @@
 <script src="/assets/plugins/offcanvasmenueffects/js/classie.js"></script>
 {{--<script src="/assets/plugins/offcanvasmenueffects/js/main.js"></script>--}}
 <script src="/assets/plugins/waves/waves.min.js"></script>
+
+{{--FOR UI-NOTIFICATIONS--}}
+<script src="/assets/plugins/toastr/toastr.min.js"></script>
+<script src="/assets/js/pages/notifications.js"></script>
+
+<script>
+    $(document).ready(function () {
+        //FOR UI-NOTIFICATIONS
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-center",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "3000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "slideDown",
+            "hideMethod": "slideUp"
+        };
+        @if(session('msg')!='')
+                toastr["{{session('status')}}"]("{{session('msg')}}");
+        @endif
+
+    });
+</script>

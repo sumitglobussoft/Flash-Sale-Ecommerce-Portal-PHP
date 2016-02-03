@@ -1,8 +1,8 @@
 <?php
 
-namespace FlashSale\Http\Modules\Admin\Controllers;
+namespace FlashSale\Http\Modules\Supplier\Controllers;
 
-use FlashSale\Http\Modules\Admin\Models\ProductCategory;
+use FlashSale\Http\Modules\Supplier\Models\ProductCategory;
 use Illuminate\Http\Request;
 
 use FlashSale\Http\Requests;
@@ -18,12 +18,12 @@ use Redirect;
 use File;
 
 
-use FlashSale\Http\Modules\Admin\Models\User;
+use FlashSale\Http\Modules\Supplier\Models\User;
 use Illuminate\Support\Facades\Session;
 
 /**
  * Class CategoryController
- * @package FlashSale\Http\Modules\Admin\Controllers
+ * @package FlashSale\Http\Modules\Supplier\Controllers
  */
 class CategoryController extends Controller
 {
@@ -33,16 +33,16 @@ class CategoryController extends Controller
     /**
      * Manage categories action
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * @since 20-12-2015
+     * @since 29-01-2016
      * @author Dinanath Thakur <dinanaththakur@globussoft.com>
      */
     public function manageCategories()
     {
         $objCategoryModel = ProductCategory::getInstance();
-//        $where = ['rawQuery' => 'category_status =?', 'bindParams' => [1]];
-        $where = ['rawQuery' => '1'];
-        $allCategories = $objCategoryModel->getAllCategoriesWhere($where);
-        return view('Admin/Views/category/manageCategories', ['allCategories' => $allCategories]);
+        return view('Supplier/Views/category/manageCategories', ['allCategories' => $objCategoryModel->getAllCategoriesWhere(
+            ['rawQuery' => 'created_by IN (' . DB::raw("SELECT `id` FROM `users` WHERE `role` IN(4,5)") . ') OR created_by=? AND  category_status IN(0,1,2)',
+                'bindParams' => [Session::get('fs_supplier')['id']]]
+        )]);
     }
 
 
@@ -50,14 +50,14 @@ class CategoryController extends Controller
      * Add new category action
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * @throws \FlashSale\Http\Modules\Admin\Models\Exception
-     * @since 20-12-2015
+     * @throws \FlashSale\Http\Modules\Supplier\Models\Exception
+     * @since 29-01-2016
      * @author Dinanath Thakur <dinanaththakur@globussoft.com>
      */
     public function addCategory(Request $request)
     {
         $objCategoryModel = ProductCategory::getInstance();
-        $userId = Session::get('fs_admin')['id'];
+        $userId = Session::get('fs_supplier')['id'];
         if ($request->isMethod('post')) {
 
             Validator::extend('word_count', function ($field, $value, $parameters) {
@@ -84,19 +84,9 @@ class CategoryController extends Controller
                     ->withInput();
             } else {
                 $categoryData = array();
-
                 if (Input::hasFile('category_image')) {
-                    $destinationPath = 'assets/uploads/categories/';
-                    $filename = 'category_' . time() . ".jpg";
-                    File::makeDirectory($destinationPath, 0777, true, true);
-                    $filePath = '/' . $destinationPath . $filename;
-
-                    $imageResult = Image::make(Input::file('category_image'))->resize($this->imageWidth, $this->imageHeight, function ($constraint) {
-                        $constraint->aspectRatio();
-                    })->save($destinationPath . $filename, 80);
-                    if ($imageResult) {
-                        $categoryData['category_banner_url'] = $filePath;
-                    }
+                    $filePath = uploadImageToStoragePath(Input::file('category_image'), 'category');
+                    if ($filePath) $categoryData['category_banner_url'] = $filePath;
                 }
                 $categoryData['category_name'] = $request->input('category_name');
                 $categoryData['category_desc'] = $request->input('category_desc');
@@ -117,12 +107,10 @@ class CategoryController extends Controller
                 );
             }
         }
-
-
-//        $where = ['rawQuery' => 'category_status =?', 'bindParams' => [1]];
-        $where = ['rawQuery' => '1'];
-        $allCategories = $objCategoryModel->getAllCategoriesWhere($where);
-        return view('Admin/Views/category/addCategory', ['allCategories' => $allCategories]);
+        return view('Supplier/Views/category/addCategory', ['allCategories' => $objCategoryModel->getAllCategoriesWhere(
+            ['rawQuery' => 'created_by IN (' . DB::raw("SELECT `id` FROM `users` WHERE `role` IN(4,5)") . ') OR created_by=? AND  category_status IN(0,1,2)',
+                'bindParams' => [$userId]]
+        )]);
     }
 
     /**
@@ -130,14 +118,14 @@ class CategoryController extends Controller
      * @param Request $request
      * @param $id Category id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * @throws \FlashSale\Http\Modules\Admin\Models\Exception
-     * @since 20-12-2015
+     * @throws \FlashSale\Http\Modules\Supplier\Models\Exception
+     * @since 29-01-2016
      * @author Dinanath Thakur <dinanaththakur@globussoft.com>
      */
     public function editCategory(Request $request, $id)
     {
-
         $objCategoryModel = ProductCategory::getInstance();
+        $userId = Session::get('fs_supplier')['id'];
         if ($request->isMethod('post')) {
             Validator::extend('word_count', function ($field, $value, $parameters) {
                 if (count(explode(' ', $value)) > 10)
@@ -162,17 +150,8 @@ class CategoryController extends Controller
                     ->withInput();
             } else {
                 if (Input::hasFile('category_image')) {
-                    $destinationPath = 'assets/uploads/categories/';
-                    $filename = 'category_' . time() . ".jpg";
-                    File::makeDirectory($destinationPath, 0777, true, true);
-                    $filePath = '/' . $destinationPath . $filename;
-
-                    $imageResult = Image::make(Input::file('category_image'))->resize($this->imageWidth, $this->imageHeight, function ($constraint) {
-                        $constraint->aspectRatio();
-                    })->save($destinationPath . $filename, 80);
-                    if ($imageResult) {
-                        $dataToUpdate['category_banner_url'] = $filePath;
-                    }
+                    $filePath = uploadImageToStoragePath(Input::file('category_image'), 'category');
+                    if ($filePath) $dataToUpdate['category_banner_url'] = $filePath;
                 }
                 $dataToUpdate['category_name'] = $request->input('category_name');
                 $dataToUpdate['category_desc'] = $request->input('category_desc');
@@ -184,27 +163,25 @@ class CategoryController extends Controller
 
                 $whereForUpdate = ['rawQuery' => 'category_id =?', 'bindParams' => [$id]];
                 $updateResult = $objCategoryModel->updateCategoryWhere($dataToUpdate, $whereForUpdate);
-
-                return Redirect::back()->with(
-                    ($updateResult == 1) ?
-                        ['status' => 'success', 'msg' => 'Category details has been updated.'] :
-                        ['status' => 'info', 'msg' => 'Nothing to update.']
-                );
+                if ($updateResult > 0) {
+                    if ($filePath) deleteImageFromStoragePath($request->input('old_image'));
+                    return Redirect::back()->with(['status' => 'success', 'msg' => 'Category details has been updated.']);
+                } else {
+                    return Redirect::back()->with(['status' => 'info', 'msg' => 'Nothing to update.']);
+                }
             }
         }
 
-        $where = ['rawQuery' => 'category_id =?', 'bindParams' => [$id]];
+        $where = ['rawQuery' => 'category_id =? AND category_status IN(0,1,2) AND created_by=?', 'bindParams' => [$id, $userId]];
         $categoryDetails = $objCategoryModel->getCategoryDetailsWhere($where);
         $allCategories = '';
         if ($categoryDetails) {
-//            $where = ['rawQuery' => 'category_status =?', 'bindParams' => [1]];
-            $where = ['rawQuery' => '1'];
-            $allCategories = $objCategoryModel->getAllCategoriesWhere($where);
-//            foreach ($allCategories as $key => $value) {
-//                $allCategories[$key]->display_name = $this->getCategoryDisplayName($value->category_id);
-//            }
+            $allCategories = $objCategoryModel->getAllCategoriesWhere(
+                ['rawQuery' => 'created_by IN (' . DB::raw("SELECT `id` FROM `users` WHERE `role` IN(4,5)") . ') OR created_by=? AND  category_status IN(0,1,2)',
+                    'bindParams' => [$userId]]
+            );
         }
-        return view('Admin/Views/category/editCategory', ['categoryDetails' => $categoryDetails, 'allCategories' => $allCategories]);
+        return view('Supplier/Views/category/editCategory', ['categoryDetails' => $categoryDetails, 'allCategories' => $allCategories]);
 
     }
 

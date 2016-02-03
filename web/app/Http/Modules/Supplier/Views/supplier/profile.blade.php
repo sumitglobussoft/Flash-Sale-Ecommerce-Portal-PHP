@@ -26,7 +26,7 @@
                     <div class="profile-userpic">
 {{--                        <img src="{{url('images'.Session::get('fs_supplier')['profilepic'])}}" class="img-responsive">--}}
 {{--                        <img src="{{Storage::path(Session::get('fs_supplier')['profilepic'])}}" class="img-responsive">--}}
-                        <img src="{{'/images/'. Session::get('fs_supplier')['profilepic']}}" class="img-responsive" title="{{Session::get('fs_supplier')['profilepic']}}">
+                        <img src="{{Session::get('fs_supplier')['profilepic']}}" class="img-responsive" alt="{{Session::get('fs_supplier')['name'].' '.Session::get('fs_supplier')['last_name']}}">
 {{--                        <img src="{{url('images/ '.Session::get('fs_supplier')['profilepic'].')}}" class="img-responsive">--}}
                     </div>
                     <!-- END SIDEBAR USERPIC -->
@@ -433,6 +433,7 @@
                             alertMsg = response['message'];
                         }
                         alert(alertMsg);
+                        location.reload();
                     },
                     error: function (response) {
                     }

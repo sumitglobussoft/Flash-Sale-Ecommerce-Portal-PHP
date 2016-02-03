@@ -1,6 +1,4 @@
-<?php
-
-function test()
+<?php function test()
 {
     return 'test_helper';
 }
@@ -66,8 +64,6 @@ if (!function_exists('cacheForever')) {
         }
     }
 }
-
-
 if (!function_exists('cacheGet')) {
     /**
      * Get data from cache
@@ -78,11 +74,9 @@ if (!function_exists('cacheGet')) {
      */
     function cacheGet($key)
     {
-        if (Cache::has(md5($key)))
-            return Cache::get(md5($key));
+        if (Cache::has(md5($key))) return Cache::get(md5($key));
         return false;
     }
-
 }
 if (!function_exists('cacheClearByKey')) {
     /**
@@ -93,11 +87,9 @@ if (!function_exists('cacheClearByKey')) {
      */
     function cacheClearByKey($key)
     {
-        if (Cache::has(md5($key)))
-            Cache::forget(md5($key));
+        if (Cache::has(md5($key))) Cache::forget(md5($key));
     }
 }
-
 if (!function_exists('cacheClearByGroupNames')) {
     /**
      * Clear cache by group names
@@ -112,8 +104,7 @@ if (!function_exists('cacheClearByGroupNames')) {
                 if (Cache::has(md5($groupName))) {
                     $groupValues = json_decode(Cache::get(md5($groupName)));
                     foreach ($groupValues as $groupValue) {
-                        if (Cache::has($groupValue))
-                            Cache::forget($groupValue);
+                        if (Cache::has($groupValue)) Cache::forget($groupValue);
                     }
                     Cache::forget(md5($groupName));
                 }
@@ -122,15 +113,12 @@ if (!function_exists('cacheClearByGroupNames')) {
             if (Cache::has(md5($groupNames))) {
                 $groupValues = json_decode(Cache::get(md5($groupNames)));
                 foreach ($groupValues as $groupValue) {
-                    if (Cache::has($groupValue))
-                        Cache::forget($groupValue);
+                    if (Cache::has($groupValue)) Cache::forget($groupValue);
                 }
                 Cache::forget(md5($groupNames));
             }
         }
-
     }
-
 }
 if (!function_exists('cacheClearByTableNames')) {
     /**
@@ -146,8 +134,7 @@ if (!function_exists('cacheClearByTableNames')) {
                 if (Cache::has(md5($tableName))) {
                     $tableNameValues = json_decode(Cache::get(md5($tableName)));
                     foreach ($tableNameValues as $tableNameValue) {
-                        if (Cache::has($tableNameValue))
-                            Cache::forget($tableNameValue);
+                        if (Cache::has($tableNameValue)) Cache::forget($tableNameValue);
                     }
                     Cache::forget(md5($tableName));
                 }
@@ -199,4 +186,86 @@ if (!function_exists('getSetting')) {
     }
 }
 
+if (!function_exists('uploadImageToStoragePath')) {
+    /**
+     * Upload image to storage path
+     * @param $image
+     * @param null $folderName Folder name
+     * @param null $fileName
+     * @param int $imageWidth
+     * @param int $imageHeight
+     * @return bool|string
+     * @since 02-02-2016
+     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     */
+    function uploadImageToStoragePath($image, $folderName = null, $fileName = null, $imageWidth = 1024, $imageHeight = 1024)
+    {
+        $destinationFolder = 'uploads/';
+        if ($folderName != '') {
+            $folderNames = explode('_', $folderName);
+            $folderPath = implode('/', array_map(function ($value) {
+                return $value;
+            }, $folderNames));
+            $destinationFolder .= $folderPath . '/';
+        }
+        $destinationPath = storage_path($destinationFolder);
+        if (!File::exists($destinationPath)) File::makeDirectory($destinationPath, 0777, true, true);
+        $filename = ($fileName != '') ? $fileName : $folderName . '_' . time() . '.jpg';
+        $imageResult = Image::make($image)->resize($imageWidth, $imageHeight, function ($constraint) {
+            $constraint->aspectRatio();
+        })->save($destinationPath . $filename, imageQuality($image));
+        if ($imageResult) return '/image/' . $filename;
+        return false;
+    }
+}
+
+if (!function_exists('imageQuality')) {
+    /**
+     * Get image quality for compression
+     * @param $image
+     * @return int
+     * @since 02-02-2016
+     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     */
+    function imageQuality($image)
+    {
+        $imageSize = filesize($image) / (1024 * 1024);
+        if ($imageSize < 0.5) return 70;
+        elseif ($imageSize > 0.5 && $imageSize < 1) return 60;
+        elseif ($imageSize > 1 && $imageSize < 2) return 50;
+        elseif ($imageSize > 2 && $imageSize < 5) return 40;
+        elseif ($imageSize > 5) return 30;
+        else return 50;
+    }
+}
+
+
+if (!function_exists('deleteImageFromStoragePath')) {
+    /**
+     * Delete an image from storage path
+     * @param $fileName Name of the image (Ex. category_2_1432423423.jpg)
+     * @return int
+     * @since 03-02-2016
+     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     */
+    function deleteImageFromStoragePath($fileName)
+    {
+        if ($fileName != '') {
+            $folderNames = explode('_', explode('/', $fileName)[2]);
+            $filePath = '/uploads/';
+            switch ($folderNames[0]) {
+                case 'product'://Todo-not yet complete for product
+                    $folderPath = implode('/', array_map(function ($value) {
+                        return $value;
+                    }, $folderNames));
+                    $filePath .= $folderPath . '/' . $fileName;
+                    break;
+                default:
+                    $filePath .= $folderNames[0] . '/' . explode('/', $fileName)[2];
+                    break;
+            }
+            return (\Illuminate\Support\Facades\File::delete(storage_path() . $filePath));
+        }
+    }
+}
 ?>

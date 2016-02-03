@@ -33,9 +33,9 @@
                 <div class="col-md-9" id="main-content">
                     @if(isset($allObjectsOfSection)&&!empty($allObjectsOfSection))
                         <form class="form-horizontal" method="post">
-                            <div class="form-actions" align="center">
-                                <button type="submit" class="btn btn-primary">Save</button>
-                            </div>
+                            {{--<div class="form-actions" align="center">--}}
+                            {{--<button type="submit" class="btn btn-primary">Save</button>--}}
+                            {{--</div>--}}
                             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                                 <?php
                                 $firstHead = 0;
@@ -289,8 +289,16 @@
                                                 <div class="panel-body" style="height:300px; overflow-y:auto;">
                                                     <?php $firstHead++; ?>
                                                     @endif
-                                                    @endforeach
+                                                    @if($firstHead!=0&&$key==(count($allObjectsOfSection)-1))
                                                 </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                @endforeach
+                            </div>
+                            <div class="form-actions" align="center">
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
 
                         </form>
                     @else

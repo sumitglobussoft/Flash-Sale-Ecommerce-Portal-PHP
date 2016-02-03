@@ -2,9 +2,7 @@
 <html>
 <head>
     @include('Supplier/Layouts/supplierheadscripts')
-
     @yield('pageheadcontent')
-
 </head>
 <body class="page-header-fixed compact-menu page-sidebar-fixed">
 <div class="overlay"></div>
@@ -164,7 +162,8 @@
                                data-toggle="dropdown">
                                 <span class="user-name">{{Session::get('fs_supplier')['name']}}<i
                                             class="fa fa-angle-down"></i></span>
-                                <img class="img-circle avatar" src="/images/{{Session::get('fs_supplier')['profilepic']}}"
+                                <img class="img-circle avatar"
+                                     src="{{Session::get('fs_supplier')['profilepic']}}"
                                      width="40" height="40"
                                      alt="">
                             </a>
@@ -200,15 +199,16 @@
                 </li>
                 <li class="droplink">
                     <a class="waves-effect waves-button">
-                        <span class="menu-icon glyphicon glyphicon-user"></span>
+                        <span class="menu-icon glyphicon glyphicon-shopping-cart"></span>
 
                         <p>Products</p> <span class="arrow"></span>
                     </a>
                     <ul class="sub-menu">
-                        <li><a href="/supplier/pending-products">Pending Products</a></li>
-                        <li><a href="/supplier/available-products">Available Products</a></li>
-                        <li><a href="/supplier/rejected-products">Rejected Products</a></li>
-                        <li><a href="/supplier/deleted-products">Deleted Products</a></li>
+                        {{--<li><a href="/supplier/manage-products">Products</a></li>--}}
+                        <li><a href="/supplier/manage-categories">Categories</a></li>
+                        {{--<li><a href="/supplier/manage-features">Features</a></li>--}}
+                        {{--<li><a href="/supplier/manage-filtergroup">Filters</a></li>--}}
+                        <li><a href="/supplier/manage-options">Options</a></li>
                     </ul>
                 </li>
             </ul>
@@ -219,7 +219,7 @@
 
     <div class="page-inner">
         <div class="page-title">
-            <h3>@yield('title')</h3>
+            <h3><b>@yield('title')</b></h3>
             <!--<div class="page-breadcrumb">
                 <ol class="breadcrumb">
                     <li>Admin</li>

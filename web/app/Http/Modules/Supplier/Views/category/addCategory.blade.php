@@ -1,8 +1,8 @@
-@extends('Admin/Layouts/adminlayout')
+@extends('Supplier/Layouts/supplierlayout')
 
 @section('title', 'New Category') {{--TITLE GOES HERE--}}
 
-@section('headcontent')
+@section('pageheadcontent')
     {{--OPTIONAL--}}
     {{--PAGE STYLES OR SCRIPTS LINKS--}}
     <link href="/assets/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
@@ -87,7 +87,7 @@
                                          style="max-width: 200px; max-height: 150px;">
                                     </div>
                                     <div>
-                                                            <span class="btn btn-circle default btn-file">
+                                                            <span class="btn btn-circle btn-default btn-file">
                                                                 <span class="fileinput-new">
                                                                     Select image </span>
                                                                 <span class="fileinput-exists">
@@ -95,7 +95,7 @@
                                                                 <input type="file" name="category_image"
                                                                        accept="image/*">
                                                             </span>
-                                        <a href="#" class="btn btn-circle default fileinput-exists"
+                                        <a href="#" class="btn btn-circle btn-default fileinput-exists"
                                            data-dismiss="fileinput">
                                             Remove </a>
                                     </div>

@@ -3,7 +3,6 @@
 <head>
     @include('Admin/Layouts/adminheadscripts')
     @yield('headcontent')
-
 </head>
 <body class="page-header-fixed compact-menu page-sidebar-fixed">
 <div class="overlay"></div>
@@ -200,7 +199,8 @@
                                 {{--<li role="presentation"><a href="/admin/control-panel"><i class="fa fa-cogs"></i>Control Panel</a></li>--}}
                                 {{--<li role="presentation"><a href="/admin/cacheClear"><i class="fa fa-trash "></i>Clear cache</a></li>--}}
                                 {{--<li role="presentation"><a href="/lock-screen"><i class="fa fa-lock"></i>Lock screen</a></li>--}}
-                                <li role="presentation"><a href="/admin/add-new-language"><i class="fa fa-cogs"></i>Languages</a></li>
+                                <li role="presentation"><a href="/admin/add-new-language"><i class="fa fa-cogs"></i>Languages</a>
+                                </li>
                                 <li role="presentation"><a href="/admin/logout"><i class="fa fa-sign-out m-r-xs"></i>Log
                                         out</a></li>
                             </ul>
@@ -249,7 +249,7 @@
                 </li>
                 <li class="droplink">
                     <a class="waves-effect waves-button">
-                        <span class="menu-icon glyphicon glyphicon-user"></span>
+                        <span class="menu-icon fa fa-users"></span>
 
                         <p>Suppliers</p> <span class="arrow"></span>
                     </a>
@@ -264,7 +264,7 @@
 
                 <li class="droplink">
                     <a class="waves-effect waves-button">
-                        <span class="menu-icon glyphicon glyphicon-envelope"></span>
+                        <span class="menu-icon fa fa-users"></span>
 
                         <p>Customers</p> <span class="arrow"></span>
                     </a>
@@ -277,7 +277,7 @@
 
                 <li class="droplink">
                     <a class="waves-effect waves-button">
-                        <span class="menu-icon glyphicon glyphicon-envelope"></span>
+                        <span class="menu-icon fa fa-users"></span>
 
                         <p>Buyers</p> <span class="arrow"></span>
                     </a>
@@ -290,7 +290,7 @@
 
                 <li class="droplink">
                     <a class="waves-effect waves-button">
-                        <span class="menu-icon glyphicon glyphicon-envelope"></span>
+                        <span class="menu-icon fa fa-users"></span>
 
                         <p>Manager</p> <span class="arrow"></span>
                     </a>
@@ -304,13 +304,13 @@
 
                 <li class="droplink">
                     <a class="waves-effect waves-button">
-                        <span class="menu-icon glyphicon glyphicon-envelope"></span>
+                        <span class="menu-icon glyphicon glyphicon-shopping-cart"></span>
 
                         <p>Products</p> <span class="arrow"></span>
                     </a>
                     <ul class="sub-menu">
-                        <li><a href="/admin/manage-categories">Categories</a></li>
                         <li><a href="/admin/manage-products">Products</a></li>
+                        <li><a href="/admin/manage-categories">Categories</a></li>
                         <li><a href="/admin/manage-features">Features</a></li>
                         <li><a href="/admin/manage-filtergroup">Filters</a></li>
                         <li><a href="/admin/manage-options">Options</a></li>
@@ -390,7 +390,7 @@
             {{--Notification.requestPermission();--}}
         {{--else {--}}
             {{--var notification = new Notification('Execution time in sec', {--}}
-{{--//                icon: 'path/to/icon',--}}
+                {{--icon: '/assets/images/fs.png',--}}
                 {{--body: "Your notification",--}}
                 {{--body: "{{number_format((microtime(true) - \Illuminate\Support\Facades\Session::get('startTime')),5)}}",--}}
 
