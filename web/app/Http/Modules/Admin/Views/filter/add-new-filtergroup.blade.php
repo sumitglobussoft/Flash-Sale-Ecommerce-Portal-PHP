@@ -41,8 +41,8 @@
                             <div class="col-md-4">
                                 <input type="text" class="form-control" id="productfiltergroupname"
                                        placeholder="filter name" name="productfiltergroupname">
+                                {!!  $errors->first('productfiltergroupname', '<font color="red">:message</font>') !!}
                             </div>
-                            {!!  $errors->first('productfiltergroupname', '<font color="red">:message</font>') !!}
                         </div>
 
                         <div class="clearfix"></div>
@@ -59,8 +59,8 @@
                             <div class="col-md-4">
                                 <input type="text" class="form-control" id="filterdescription"
                                        placeholder="filter description" name="filterdescription">
+                                {!!  $errors->first('filterdescription', '<font color="red">:message</font>') !!}
                             </div>
-                            {!!  $errors->first('filterdescription', '<font color="red">:message</font>') !!}
                         </div>
                         <div class="clearfix"></div>
                         <div class="form-group">
@@ -81,8 +81,8 @@
                                         <option value="0-3">Free Shiping</option>
                                     </optgroup>
                                 </select>
+                                {!!  $errors->first('productfiltergroupfeature', '<font color="red">:message</font>') !!}
                             </div>
-                            {!!  $errors->first('productfiltergroupfeature', '<font color="red">:message</font>') !!}
                         </div>
                         <div class="clearfix"></div>
                         {{--<div class="form-group">--}}

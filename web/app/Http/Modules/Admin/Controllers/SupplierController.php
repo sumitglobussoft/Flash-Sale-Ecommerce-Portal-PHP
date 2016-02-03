@@ -318,9 +318,9 @@ class SupplierController extends Controller
 
                     return Datatables::of($pending_supplier)
                         ->addColumn('status', function ($pending_supplier) {
-                            return ' < td style = "text-align: center" >
+                            return ' <td style = "text-align: center" >
                                             <button class="btn btn-primary customer-status"
-                                                    data - id = ' . $pending_supplier->id . ' > Pending
+                                                    data-id = ' . $pending_supplier->id . ' >Pending
                                             </button >
 
                                     </td > ';

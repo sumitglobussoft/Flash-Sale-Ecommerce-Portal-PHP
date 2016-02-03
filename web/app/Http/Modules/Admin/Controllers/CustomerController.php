@@ -44,15 +44,9 @@ class CustomerController extends Controller
                 case "availableCustomer":
                     $objuser = User::getInstance();
                     $available_customers = $objuser->getAvailableUserDetails();
-                    foreach ($available_customers as $key => $val) {
-                        $available[$key] = $val->status;
-                    }
-                    if ($available == 1) {
-                        //  echo"<pre>";print_r("bhk");die("kgkj");
-                        $avail = 'Active';
-                    } elseif ($available == 2) {
-                        $inactavail = 'Inactive';
-                    }
+//                    foreach ($available_customers as $key => $val) {
+//                        $available[$key] = $val->status;
+//                    }
                     // echo"<pre>";print_r($available);die("kgkj");
                     return Datatables::of($available_customers)
                         ->addColumn('action', function ($available_customers) {

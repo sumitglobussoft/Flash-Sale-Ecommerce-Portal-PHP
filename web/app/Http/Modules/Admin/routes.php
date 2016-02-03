@@ -180,6 +180,17 @@ Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), fun
         Route::resource('/admin/administration-ajax-handler', 'AdministrationController@administrationAjaxhandler');
         Route::get('/admin/edit-language/{lid}', 'AdministrationController@editLanguage');
         Route::post('/admin/edit-language/{lid}', 'AdministrationController@editLanguage');
+        Route::resource('/admin/manage-language-value', 'AdministrationController@manageLanguageValue');
+        Route::get('/admin/edit-language-value/{vid}', 'AdministrationController@editLanguageValue');
+        Route::post('/admin/edit-language-value/{vid}', 'AdministrationController@editLanguageValue');
+
+        Route::get('/lang/{locale}', [
+            'as'=>'lang',
+            'uses'=>'AdministrationController@changeLang'
+        ]);
+
+        Route::resource('/admin/multi-lang-text/{lcode}','AdministrationController@addmultilangtext');
+
 
 
 
