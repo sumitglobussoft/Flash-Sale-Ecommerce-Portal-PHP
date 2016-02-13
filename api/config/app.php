@@ -149,7 +149,7 @@ return [
          *Added by: Akash M. Pai
          *Date: 16-01-2016
          */
-        Yajra\Datatables\DatatablesServiceProvider::class,
+        //Yajra\Datatables\DatatablesServiceProvider::class,
 
         /*
          *Added by: Dinanath thakur
@@ -206,7 +206,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Image' => Intervention\Image\Facades\Image::class,//EXTRA ADDED COMPOSER ELEMENT BY DINANATH THAKUR TO USE IMAGE INTERVENTION
-        'Datatables' => 'yajra\Datatables\Facades\Datatables',//EXTRA ADDED COMPOSER ELEMENT BY AKASH M PAI TO USE LARAVEL DATATABLES
+        //'Datatables' => 'yajra\Datatables\Facades\Datatables',//EXTRA ADDED COMPOSER ELEMENT BY AKASH M PAI TO USE LARAVEL DATATABLES
 
     ],
 

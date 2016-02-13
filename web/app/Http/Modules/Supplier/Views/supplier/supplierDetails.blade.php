@@ -62,7 +62,8 @@
                        value="{{ old('phone') }}">
                 <span class="error">{!! $errors->first('phone') !!}</span>
             </div>
-            <button type="submit" class="btn btn-success btn-block m-t-xs">Submit</button>
+            <button type="submit" class="btn btn-success btn-block m-t-xs">Submit</button><br>
+            <span style="color: green;"> @if(isset($success_msg)) {{ $success_msg }} @endif</span>
         </form>
     </div>
 </div>

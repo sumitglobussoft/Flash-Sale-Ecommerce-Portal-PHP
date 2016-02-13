@@ -24,7 +24,7 @@ Route::group(array('module' => 'Supplier', 'namespace' => 'Supplier\Controllers'
     Route::resource('/supplier/register', 'SupplierController@register');
     Route::resource('/supplier/logout', 'SupplierController@logout');
     Route::post('/userAjaxHandler', 'SupplierController@userAjaxHandler');
-
+    Route::resource('/supplier/supplierDetails', 'SupplierController@supplierDetails');
 
 //IF  YOU NEED TO USE GET POST, USE THIS FORMAT AS IN BELOW BLOCK COMMENT
     /*Route::get('supplier/dashboard', function () {
@@ -35,8 +35,12 @@ Route::group(array('module' => 'Supplier', 'namespace' => 'Supplier\Controllers'
 //        Supplier Controller
         Route::resource('/supplier/dashboard', 'SupplierController@dashboard');
         Route::resource('/supplier/profile', 'SupplierController@profile');
-        Route::resource('/supplier/supplierDetails', 'SupplierController@supplierDetails');
-        Route::post('/supplier/ajaxHandler', 'SupplierController@ajaxHandler');
+       // Route::resource('/supplier/supplierDetails', 'SupplierController@supplierDetails');
+        Route::resource('/supplier/ajaxHandler', 'SupplierController@ajaxHandler');
+        Route::resource('/supplier/addNewShop', 'SupplierController@addNewShop');
+        Route::resource('/supplier/shopList', 'SupplierController@shopList');
+        Route::get('/supplier/editShop/{shop_id}', 'SupplierController@editShop');
+        Route::post('/supplier/editShop/{shop_id}', 'SupplierController@editShop');
 
         Route::get('images/{filename}', function ($filename) {
 //            die($filename);
@@ -75,6 +79,12 @@ Route::group(array('module' => 'Supplier', 'namespace' => 'Supplier\Controllers'
             $folderPath = '';
             switch ($filePath[0]) {
                 case 'useravatar':
+                    $folderPath = $filePath[0];
+                    break;
+               case 'shopbanner':
+                    $folderPath = $filePath[0];
+                    break;
+               case 'shoplogo':
                     $folderPath = $filePath[0];
                     break;
                 default:

@@ -189,7 +189,8 @@ Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), fun
             'uses'=>'AdministrationController@changeLang'
         ]);
 
-        Route::resource('/admin/multi-lang-text/{lcode}','AdministrationController@addmultilangtext');
+        Route::get('/admin/multi-lang-text/{lcode}','AdministrationController@addmultilangtext');
+        Route::post('/admin/multi-lang-text/{lcode}','AdministrationController@addmultilangtext');
 
 
 

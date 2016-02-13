@@ -159,7 +159,7 @@ class User extends Model implements AuthenticatableContract,
     public function deleteUserDetails($where)
     {
         $sql = User::whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
-            ->delete();
+            ->delete();//Todo notify to vini for modification
         if ($sql) {
             return $sql;
         } else {

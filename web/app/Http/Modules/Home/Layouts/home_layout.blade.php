@@ -939,9 +939,9 @@
                     success: function (response) {
 //                    console.log(response);
                         if (response) {
-                            if (response['code'] == 200) {
+                            if (response == 200) {
                                 $('#pw-suc-err').show();
-                                $('#pw-suc-err').html(response['message']);
+                                $('#pw-suc-err').html("Signup successful. Please check your email for Password");
                                 $('#pw-suc-err').css('color', 'green');
                                 $('#pw-suc-err').delay(6000).hide('slow');
                             } else {
@@ -1004,9 +1004,9 @@
                     success: function (response) {
 //                    console.log(response);
                         if (response) {
-                            if (response['code'] == 200) {
+                            if (response == 200) {
                                 $('#login-suc-err').show();
-                                $('#login-suc-err').html(response['message']);
+                                $('#login-suc-err').html("Login successful");
                                 $('#login-suc-err').css('color', 'green');
                                 $('#login-suc-err').delay(6000).hide('slow');
                                 window.location = "/";

@@ -19,6 +19,11 @@ use Illuminate\Support\Facades\Storage;
 use FlashSale\Http\Modules\Supplier\Models\User;
 use FlashSale\Http\Modules\Supplier\Models\Usersmeta;
 use Illuminate\Support\Facades\Session;
+use FlashSale\Http\Modules\Supplier\Models\ProductCategory;
+use FlashSale\Http\Modules\Supplier\Models\Location;
+use FlashSale\Http\Modules\Supplier\Models\Shop;
+use FlashSale\Http\Modules\Supplier\Models\ShopMetadata;
+use Datatables;
 
 
 /**
@@ -81,8 +86,25 @@ class SupplierController extends Controller
                 $objModelUsers = User::getInstance();
                 $userDetails = $objModelUsers->getUserById(Auth::id());
                 if ($userDetails->role == 3) {
-                    Session::put('fs_supplier', $userDetails['original']);
-                    return redirect()->intended('supplier/dashboard');
+                    if ($userDetails->status == 1) {
+                        Session::put('fs_supplier', $userDetails['original']);
+                        return redirect()->intended('supplier/dashboard');
+                    } else if ($userDetails->status == 0) {
+                        $where['users.id'] = Auth::id();
+                        $uesrData = $objModelUsers->getUserDetailsWhere($where);
+                        if (!$uesrData) {
+                            Session::put('fs_supplier', $userDetails['original']);
+                            return redirect('/supplier/supplierDetails');
+                        } else {
+                            return view("Supplier/Views/supplier/login")->withErrors([
+                                'errMsg' => 'This account is pending for Admin approval.',
+                            ]);
+                        }
+                    } else {
+                        return view("Supplier/Views/supplier/login")->withErrors([
+                            'errMsg' => 'This account is reatricted from logging in.',
+                        ]);
+                    }
                 } else {
                     return view("Supplier/Views/supplier/login")->withErrors([
                         'errMsg' => 'Invalid credentials.',
@@ -210,6 +232,9 @@ class SupplierController extends Controller
      */
     public function supplierDetails(Request $request)
     {
+        if (!Session::has('fs_supplier')) {
+            return redirect('/supplier/login');
+        }
         $objModelUser = User::getInstance();
 
         $where['users.id'] = Session::get('fs_supplier')['id'];
@@ -250,7 +275,10 @@ class SupplierController extends Controller
                     );
 
                     if ($supplierDetails) {
-                        return redirect()->intended('supplier/dashboard');
+
+                        //return view("Supplier/Views/supplier/supplierDetails", ['success_msg' => "Registration Successful, Waiting for Admin approval."]);
+                        return redirect('/supplier/logout');
+                        // return redirect()->intended('supplier/dashboard');
 //                        echo '<pre>';
 //                        print_r($supplierDetails);
                     } else {
@@ -278,13 +306,22 @@ class SupplierController extends Controller
         $objModelUser = User::getInstance();
         $objModelUsersmeta = Usersmeta::getInstance();
 
+
         $userId = Session::get('fs_supplier')['id'];
 
         $where['user_id'] = $userId;
         $usersMetaDetails = $objModelUsersmeta->getUsersMetaDetailsWhere($where);
 
-        $method = $request->input('method');
-
+        $field = $request->input('name');
+        if ($field) {
+            $formEditableMethod = explode('/', $field);
+            $method = $formEditableMethod[0];
+        } else {
+            $method = $request->input('method');
+        }
+        $objLocationModel = Location::getInstance();
+        $objshopModal = Shop::getInstance();
+        $objshopMetadataModal = ShopMetadata::getInstance();
 
         switch ($method) {
             case 'checkContactNumber':
@@ -349,7 +386,7 @@ class SupplierController extends Controller
                             $updatedResult = $objModelUser->updateUserWhere($updateData, $whereForUpdate);
                             if ($updatedResult) {
                                 if (!strpos(Session::get('fs_supplier')['profilepic'], 'placeholder')) {
-                                   deleteImageFromStoragePath(Session::get('fs_supplier')['profilepic']);
+                                    deleteImageFromStoragePath(Session::get('fs_supplier')['profilepic']);
                                 }
                                 Session::put('fs_supplier.profilepic', $filePath);
                                 echo json_encode(array('status' => 1, 'message' => 'Successfully updated profile image . '));
@@ -387,6 +424,169 @@ class SupplierController extends Controller
                     echo json_encode(array('status' => 1, 'message' => 'Your password has been successfully updated . '));
                 }
                 break;
+            case 'getState':
+                $countryId = $request->input('countryId');
+
+                $where = ['rawQuery' => 'is_visible =? and location_type =? and parent_id =?', 'bindParams' => [0, 1, $countryId]];
+                $allstates = $objLocationModel->getAllLocationsWhere($where);
+                echo json_encode($allstates);
+                break;
+            case 'getCity':
+                $stateId = $request->input('stateId');
+                $where = ['rawQuery' => 'is_visible =? and location_type =? and parent_id =?', 'bindParams' => [0, 2, $stateId]];
+                $allcities = $objLocationModel->getAllLocationsWhere($where);
+                echo json_encode($allcities);
+                break;
+            case 'available_Shop':
+                $available_Shops = $objshopModal->getAvailableShopDetails($userId);
+                //echo "<pre>";print_r($available_Shops);die;
+                return Datatables::of($available_Shops)
+                    ->addColumn('action', function ($available_Shops) {
+                        return '<span class="tooltips" title="Edit Shop Details." data-placement="top"> <a href="/supplier/editShop/' . $available_Shops->shop_id . '" class="btn btn-sm grey-cascade">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </a>
+                                            </span> &nbsp;&nbsp;
+                                            ';
+                    })
+                    ->addColumn('status', function ($available_Shops) {
+                        $button = '<td style="text-align: center">';
+                        $button .= '<button class="btn ' . (($available_Shops->shop_status == "1" || $available_Shops->shop_status == "2") ? (($available_Shops->shop_status == "1") ? "btn-success" : "btn-danger") : "btn-default") . ' customer-status" data-id="' . $available_Shops->shop_id . '"' . (($available_Shops->shop_status == "0" || $available_Shops->shop_status == "3") ? "disabled" : "") . '>' . (($available_Shops->shop_status == "1" || $available_Shops->shop_status == "2") ? (($available_Shops->shop_status == "1") ? "Active" : "Inactive") : (($available_Shops->shop_status == "0") ? "Pending" : "Rejected")) . ' </button>';
+                        $button .= '</td>';
+                        return $button;
+                    })
+                    ->removeColumn('shop_status')
+                    ->make();
+                break;
+            case 'changeShopStatus':
+                $Shop_Id = $request->input('ShopId');
+                $Status = $request->input('status');
+                $data1['shop_status'] = $Status;
+                $where1 = ['rawQuery' => 'shop_id =? ', 'bindParams' => [$Shop_Id]];
+                $updateResult = $objshopModal->updateShopWhere($data1, $where1);
+                if ($updateResult) {
+                    echo json_encode(['status' => 'success', 'msg' => 'Status has been changed.']);
+                } else {
+                    echo json_encode(['status' => 'error', 'msg' => 'Something went wrong, please reload the page and try again.']);
+                }
+                break;
+            case 'updateStoreDetails':
+                $field = $request->input('name');
+
+                $field = explode('/', $field);
+                $fieldName = $field[1];
+                $store_metadata_id = $request->input('pk');
+                $value = $request->input('value');
+                $shopFlag = true;
+                $data = array(
+                    $fieldName => $value
+                );
+//                echo "<pre>";print_r($store_metadata_id);die;
+                if ($fieldName == 'shop_type' && $value == '0') {//change shop_type to main
+                    $merchantId = $field[2];
+                    $shopId = $field[3];
+                    $whereforShop = ['rawQuery' => 'shop_id =?', 'bindParams' => [$shopId]];
+                    $data1 = array(
+                        'shop_type' => 1
+                    );
+                    $updateStoreType = $objshopMetadataModal->updateShopMetadataWhere($data1, $whereforShop);
+                }
+                if ($fieldName == 'shop_type' && $value == '1') {//change shop_type to secondary
+                    $merchantId = $field[2];
+                    $shopId = $field[3];
+                    $whereforShop = ['rawQuery' => 'shop_id =? and shop_metadata_id != ?', 'bindParams' => [$shopId, $store_metadata_id]];
+                    $merchantStoreDetails = $objshopMetadataModal->getAllshopsMetadataWhere($whereforShop);
+                    if (!empty($merchantStoreDetails)) {
+                        $dataforstype = array(//Make other shop main
+                            'shop_type' => 0
+                        );
+                        $whereforShopt = ['rawQuery' => 'shop_id =? and shop_metadata_id = ?', 'bindParams' => [$merchantStoreDetails[0]->shop_id, $merchantStoreDetails[0]->shop_metadata_id]];
+                        $merchantStoreDetails = $objshopMetadataModal->updateShopMetadataWhere($dataforstype, $whereforShopt);
+                    } else {
+                        $shopFlag = false;
+                        echo json_encode("You cant change main shop to secondary");
+                        break;
+                    }
+
+                }
+                if ($shopFlag) {
+                    $whereforShopMeta = ['rawQuery' => 'shop_metadata_id =?', 'bindParams' => [$store_metadata_id]];
+                    $updateResult = $objshopMetadataModal->updateShopMetadataWhere($data, $whereforShopMeta);
+                    if ($updateResult) {
+                        echo json_encode($updateResult);
+                    }
+                }
+                break;
+            case 'updateShopBanner':
+                $shop_id = $request->input('shop_id');
+                $whereforShop = ['rawQuery' => 'shop_id =? ', 'bindParams' => [$shop_id]];
+                $selectedColumns = array('shop_id', 'shop_banner');
+                $shopDetails = $objshopModal->getAllshopsWhere($whereforShop, $selectedColumns);
+                if (isset($_FILES["shop_banner"]["name"]) && !empty($_FILES["shop_banner"]["name"])) {
+                    $bannerFilePath = uploadImageToStoragePath(Input::file('shop_banner'), 'shopbanner', 'shopbanner_' . $userId . '_' . time() . ".jpg");
+                } else {
+                    $bannerFilePath = uploadImageToStoragePath($_SERVER['DOCUMENT_ROOT'] . "/assets/images/no-image.png", 'shopbanner', 'shopbanner_' . $userId . '_' . time() . ".jpg");
+                }
+                $shopdata = array(
+                    'shop_banner' => $bannerFilePath
+                );
+                $updateBanner = $objshopModal->updateShopWhere($shopdata, $whereforShop);
+                if ($updateBanner) {
+                    deleteImageFromStoragePath($shopDetails[0]->shop_banner);
+                    echo json_encode($updateBanner);
+                }
+                break;
+            case 'updateShopLogo':
+                $shop_id = $request->input('shop_id');
+                $whereforShop = ['rawQuery' => 'shop_id =? ', 'bindParams' => [$shop_id]];
+                $selectedColumns = array('shop_id', 'shop_logo');
+                $shopDetails = $objshopModal->getAllshopsWhere($whereforShop, $selectedColumns);
+                if (isset($_FILES["shop_logo"]["name"]) && !empty($_FILES["shop_logo"]["name"])) {
+                    $logoFilePath = uploadImageToStoragePath(Input::file('shop_logo'), 'shoplogo', 'shoplogo_' . $userId . '_' . time() . ".jpg");
+                } else {
+                    $logoFilePath = uploadImageToStoragePath($_SERVER['DOCUMENT_ROOT'] . "/assets/images/no-image.png", 'shoplogo', 'shoplogo_' . $userId . '_' . time() . ".jpg");
+                }
+                $shopdata = array(
+                    'shop_logo' => $logoFilePath
+                );
+                $updatelogo = $objshopModal->updateShopWhere($shopdata, $whereforShop);
+                if ($updatelogo) {
+                    deleteImageFromStoragePath($shopDetails[0]->shop_logo);
+                    echo json_encode($updatelogo);
+                }
+                break;
+            case 'updateSellerShop':
+                $field = $request->input('name');
+                $fieldName = explode('/', $field);
+                $fieldName = $fieldName[1];
+
+                $shop_id = $request->input('pk');
+                $value = $request->input('value');
+
+                $data = array(
+                    $fieldName => $value
+                );
+                $whereforShop = ['rawQuery' => 'shop_id =? ', 'bindParams' => [$shop_id]];
+                $updateResult = $objshopModal->updateShopWhere($data, $whereforShop);
+                if ($updateResult) {
+                    echo json_encode($updateResult);
+                }
+
+                break;
+            case 'updateShopStatus':
+                $shopMetaId = $request->input('shopMetaId');
+                $status = $request->input('value');
+                $supplierId = $request->input('supplierId');
+                $data = array(
+                    'sm_status_set_by' => $supplierId,
+                    'shop_metadata_status' => $status
+                );
+                $whereforShopMeta = ['rawQuery' => 'shop_metadata_id =? ', 'bindParams' => [$shopMetaId]];
+                $updateResult = $objshopMetadataModal->updateShopMetadataWhere($data, $whereforShopMeta);
+                if ($updateResult) {
+                    echo json_encode($updateResult);
+                }
+
+                break;
             default:
                 break;
         }
@@ -419,7 +619,6 @@ class SupplierController extends Controller
                     echo json_encode(true);
                 }
                 break;
-
             default:
                 break;
         }
@@ -475,5 +674,249 @@ class SupplierController extends Controller
         else return 50;
     }
 
+    public function addNewShop(Request $request)
+    {
+
+        $userId = Session::get('fs_supplier')['id'];
+        $objCategoryModel = ProductCategory::getInstance();
+        $objLocationModel = Location::getInstance();
+        $objShopModel = Shop::getInstance();
+        $objShopMetadataModel = ShopMetadata::getInstance();
+        $whereforCategory = ['rawQuery' => 'category_status =? and parent_category_id =?', 'bindParams' => [1, 0]];
+        $allCategories = $objCategoryModel->getAllCategoriesWhere($whereforCategory);
+
+        $whereforCountry = ['rawQuery' => 'is_visible =? and location_type =?', 'bindParams' => [0, 0]];
+        $allCountry = $objLocationModel->getAllLocationsWhere($whereforCountry);
+
+        $whereforShop = ['rawQuery' => 'user_id =?', 'bindParams' => [$userId]];
+        $allShop = $objShopModel->getAllshopsWhere($whereforShop);
+        //echo "<pre>";print_r($allShop);die;
+        /////////////////////////////Flag Set By admin side///////////////Todo- Flag Set By admin side
+        $multiple_store_flag = 1; // Value 1 if flag is set
+        $sub_store_flag = 1; // Value 1 if flag is set
+        $parent_category_flag = 1; // Value 1 if flag is set
+        /////////////////////////////////////////////////////////////////
+        $flag['multiple_store_flag'] = $multiple_store_flag;
+        $flag['sub_store_flag'] = $sub_store_flag;
+        $flag['parent_category_flag'] = $parent_category_flag;
+        $data['allCategories'] = $allCategories;
+        $data['Country'] = $allCountry;
+        $data['Shop'] = $allShop;
+
+        if (!empty($allShop) && $multiple_store_flag != 1) {//Error msg if multiple shop not allowed and shopeady added
+            return view("Supplier/Views/supplier/addNewShop", ['multiple_store_err' => "Shop already added, Can not add Multiple Shop"]);
+        } else {
+            $parentCategoryId = 0;
+            if (isset($request['parent_category']) && !empty($request['parent_category'])) {
+                $parentCategoryId = $request['parent_category'];
+            }
+            $parentShopId = "";
+            if (isset($request['parent_shop']) && !empty($request['parent_shop'])) {
+                $parentShopId = $request['parent_shop'];
+            }
+
+            if ($request->isMethod('post')) {
+                if ($parentShopId == '') { //Sub store flag is not set
+                    $rules = array(
+                        'shop_name' => 'required'
+                    );
+                } else { //Sub store flag is set
+                    $rules = array();
+                }
+                $validator = Validator::make($request->all(), $rules);
+
+                if ($validator->fails()) {
+                    return Redirect::back()
+                        ->withErrors($validator)
+                        ->withInput();
+                } else {
+                    try {
+                        $addressLine1 = "";
+                        if (isset($request['address_line_1'])) {
+                            $addressLine1 = $request['address_line_1'];
+                        }
+                        $addressLine2 = "";
+                        if (isset($request['address_line_2'])) {
+                            $addressLine2 = $request['address_line_2'];
+                        }
+                        $country = "";
+                        if (isset($request['country'])) {
+                            $country = $request['country'];
+                        }
+                        $state = "";
+                        if (isset($request['state'])) {
+                            $state = $request['state'];
+                        }
+                        $city = "";
+                        if (isset($request['city'])) {
+                            $city = $request['city'];
+                        }
+                        $zipcode = "";
+                        if (isset($request['zipcode'])) {
+                            $zipcode = $request['zipcode'];
+                        }
+
+                        $shop_flag = 1;
+                        if (isset($request['shop_flag'])) {
+                            $shop_flag = $request['shop_flag'];
+                        }
+                        $show_shop = 2;
+                        if (isset($request['show_shop'])) {
+                            $show_shop = $request['show_shop'];
+                        }
+
+                        ////////////Upload Shop Banner Start///////////////////////
+                        if (isset($_FILES["shop_banner"]["name"]) && !empty($_FILES["shop_banner"]["name"])) {
+                            $bannerFilePath = uploadImageToStoragePath(Input::file('shop_banner'), 'shopbanner', 'shopbanner_' . $userId . '_' . time() . ".jpg");
+                        } else {
+                            $bannerFilePath = uploadImageToStoragePath($_SERVER['DOCUMENT_ROOT'] . "/assets/images/no-image.png", 'shopbanner', 'shopbanner_' . $userId . '_' . time() . ".jpg");
+                        }
+
+                        ////////////Upload Shop banner End///////////////////////
+
+                        ////////////Upload Shop Logo Start///////////////////////
+                        if (isset($_FILES["shop_logo"]["name"]) && !empty($_FILES["shop_logo"]["name"])) {
+                            $logoFilePath = uploadImageToStoragePath(Input::file('shop_logo'), 'shoplogo', 'shoplogo_' . $userId . '_' . time() . ".jpg");
+                        } else {
+                            $logoFilePath = uploadImageToStoragePath($_SERVER['DOCUMENT_ROOT'] . "/assets/images/no-image.png", 'shoplogo', 'shoplogo_' . $userId . '_' . time() . ".jpg");
+                        }
+
+                        ////////////Upload Shop Logo End///////////////////////
+
+                        if ($parentShopId == "") { //Sub store flag is not set
+                            $shopdata = array(
+                                'user_id' => $userId,
+                                'shop_name' => $request['shop_name'],
+                                'shop_banner' => $bannerFilePath,
+                                'shop_logo' => $logoFilePath,
+                                'parent_category_id' => $parentCategoryId,
+                                'shop_flag' => $shop_flag,
+                            );
+                            $addShop = $objShopModel->addShop($shopdata);
+                            $shop_id = $addShop;
+                            $shopType = "0";
+                        } else { //Sub store flag is set
+                            $shopType = "1";
+                            $shop_id = $parentShopId;
+                        }
+
+                        $shopMatadata = array(
+                            'shop_id' => $shop_id,
+                            'shop_type' => $shopType,
+                            'address_line_1' => $addressLine1,
+                            'address_line_2' => $addressLine2,
+                            'city' => $city,
+                            'state' => $state,
+                            'country' => $country,
+                            'zipcode' => $zipcode,
+                            'added_date' => time(),
+                            'show_shop_address' => $show_shop,
+                            'shop_metadata_status' => 1
+                        );
+                        $addShop = $objShopMetadataModel->addShopMetadata($shopMatadata);
+                        if ($addShop) {
+                            if ($parentShopId == "") {
+                                return redirect()->back()->with('shop_success_msg', 'Shop Added Successfully, Waiting for Admin Approval.');
+                            } else {
+                                return redirect()->back()->with('shop_success_msg', 'Shop Added Successfully.');
+                            }
+                        }
+                    } catch (\Exception $ex) {
+                        return redirect()->back()->with('exception', 'An exception occurred, please reload the page and try again.');
+                    }
+
+                }
+            }
+            return view("Supplier/Views/supplier/addNewShop", ['data' => $data], ['flag' => $flag]);
+        }
+
+    }
+
+    public function shopList(Request $request)
+    {
+
+        return view("Supplier/Views/supplier/shopList");
+    }
+
+    public function editShop(Request $request, $shop_id)
+    {
+        $supplierId = Session::get('fs_supplier')['id'];
+
+        if (is_numeric($shop_id)) {
+            $objSupplierStore = Shop::getInstance();
+            $objSupplierStoreMetaData = ShopMetadata::getInstance();
+            $objLocationModel = Location::getInstance();
+//            $objReview = Reviews::getInstance();//Need to be modified later for shop reviews
+            $whereforShop = ['rawQuery' => 'user_id =? and shop_id = ?', 'bindParams' => [$supplierId, $shop_id]];
+            $SupplierShopDetails = $objSupplierStore->getAllshopsWhere($whereforShop);
+//            echo "<pre>";print_r($SupplierShopDetails);die;
+            if ($SupplierShopDetails) {
+//                $this->view->merchantStoreDetails = $merchantStoreDetails;
+
+                $shopId = $SupplierShopDetails[0]->shop_id;
+                $whereforShopMeta = ['rawQuery' => 'shop_id =?', 'bindParams' => [$shopId]];
+                $ShopMetaData = $objSupplierStoreMetaData->getAllshopsMetadataWhere($whereforShopMeta);
+
+                $whereforcountry = ['rawQuery' => 'is_visible =? and location_type =? ', 'bindParams' => [0, 0]];
+                $allcountry = $objLocationModel->getAllLocationsWhere($whereforcountry);
+
+                $whereforstate = ['rawQuery' => 'is_visible =? and location_type =? ', 'bindParams' => [0, 1]];
+                $allstates = $objLocationModel->getAllLocationsWhere($whereforstate);
+
+                $whereforcity = ['rawQuery' => 'is_visible =? and location_type =? ', 'bindParams' => [0, 2]];
+                $allcities = $objLocationModel->getAllLocationsWhere($whereforcity);
+//                $this->view->storeMetaData = $storeMetaData;
+                $SupplierData['supplierId'] = $supplierId;
+                $SupplierData['SupplierShopDetails'] = $SupplierShopDetails[0];
+                $SupplierData['ShopMetaData'] = $ShopMetaData;
+                $SupplierData['country'] = $allcountry;
+                $SupplierData['state'] = $allstates;
+                $SupplierData['city'] = $allcities;
+//                echo "<pre>";print_r($SupplierData);die;
+
+//                $reviews = $objReview->getStoreReviews($shopId);
+                $reviews = "";
+//                $this->view->reviews = $reviews;
+                $r1 = $r2 = $r3 = $r4 = $r5 = 0;
+                $rating = array($r5, $r4, $r3, $r2, $r1);
+                $total = 0;
+                $overAllRating = 0;
+                if ($reviews != '') {
+                    foreach ($reviews as $key => $value) {
+                        if ($value['review_rating'] == 1)
+                            $r1++;
+                        elseif ($value['review_rating'] == 2)
+                            $r2++;
+                        elseif ($value['review_rating'] == 3)
+                            $r3++;
+                        elseif ($value['review_rating'] == 4)
+                            $r4++;
+                        elseif ($value['review_rating'] == 5)
+                            $r5++;
+                    }
+
+                    $rating = array($r5, $r4, $r3, $r2, $r1);
+                    $total = $r1 + $r2 + $r3 + $r4 + $r5;
+                    $overAllRating = (1 * $r1 + 2 * $r2 + 3 * $r3 + 4 * $r4 + 5 * $r5) / $total;
+                    $overAllRating = round($overAllRating, 1);
+                }
+                $reviewData['rating'] = $rating;
+                $reviewData['total'] = $total;
+                $reviewData['overAllRating'] = $overAllRating;
+//                $reviewData['followersCount']= $SupplierShopDetails->store_followers_count;
+//                $this->view->rating = $rating;
+//                $this->view->total = $total;
+//                $this->view->overAllRating = $overAllRating;
+//                $this->view->followersCount = $merchantStoreDetails['store_followers_count'];
+
+            } else {
+//                $this->view->ErrorMsg = "Page you are looking for does not exist";
+            }
+            return view("Supplier/Views/supplier/editShop", ['shopData' => $SupplierData], ['reviewData' => $reviewData]);
+        } else {
+//            $this->view->ErrorMsg = "Page you are looking for does not exist";
+        }
+        return view("Supplier/Views/supplier/editShop");
+    }
 
 }

@@ -459,7 +459,7 @@
     <script src="/assets/js/modern.js"></script>
 
 
-    <script src="/assets/plugins/jquery-validation/jquery.validate.min.js"></script>
+    {{--<script src="/assets/plugins/jquery-validation/jquery.validate.min.js"></script>--}}
     {{--<script src="/assets/js/pages/dashboard.js"></script>--}}
 
     <script src="/assets/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>

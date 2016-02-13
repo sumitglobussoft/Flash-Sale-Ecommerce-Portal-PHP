@@ -55,11 +55,11 @@ class HomeController extends Controller
                     $url = $api_url . "/signup";
                     $curlResponse = $objCurlHandler->curlUsingPost($url, $data);
 //                    echo "<pre>";print_r($curlResponse);die;
-                    if ($curlResponse) {
-                        echo json_encode($curlResponse);
+                    if ($curlResponse->code == 200) {
+                        echo json_encode($curlResponse->code);
                         die();
                     } else {
-                        echo 0;
+                        echo json_encode($curlResponse);
                         die();
                     }
                     break;
@@ -74,7 +74,7 @@ class HomeController extends Controller
                         $sessionName = 'fs_user';
                         Session::put($sessionName, $curlResponse->data);
 //                        return redirect('/');
-                        echo json_encode($curlResponse);
+                        echo json_encode($curlResponse->code);
 //                        die();
                     } else {
                         echo json_encode($curlResponse);

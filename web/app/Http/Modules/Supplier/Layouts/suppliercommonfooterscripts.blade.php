@@ -14,7 +14,8 @@
 {{--FOR UI-NOTIFICATIONS--}}
 <script src="/assets/plugins/toastr/toastr.min.js"></script>
 <script src="/assets/js/pages/notifications.js"></script>
-
+<!-- added by Harshal-->
+<script src="/assets/plugins/jquery-validation/jquery.validate.min.js"></script>
 <script>
     $(document).ready(function () {
         //FOR UI-NOTIFICATIONS

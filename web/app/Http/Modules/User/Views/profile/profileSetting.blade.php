@@ -287,14 +287,14 @@
                                             <div class="form-group ">
                                                 <label class="control-label">Current Password <span
                                                             class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" name="opassword"
+                                                <input type="password" class="form-control" name="opassword"
                                                        id="opassword"/>
                                             </div>
                                             <div class="opassword_err"></div>
                                             <div class="form-group ">
                                                 <label class="control-label">Confirm Password <span
                                                             class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" name="rnpassword"
+                                                <input type="password" class="form-control" name="rnpassword"
                                                        id="rnpassword"/>
                                             </div>
                                             <div class="rnpassword_err"></div>
@@ -303,7 +303,7 @@
                                             <div class="form-group ">
                                                 <label class="control-label">New Password <span
                                                             class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" name="npassword"
+                                                <input type="password" class="form-control" name="npassword"
                                                        id="npassword"/>
                                             </div>
                                             <div class="npassword_err"></div>

@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Support\Facades\Auth as AuthUser;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use FlashSale\Http\Modules\Supplier\Models\User;
 
 class Authenticate
 {
@@ -127,6 +128,16 @@ class Authenticate
             } else if ($parentmodule == "supplier") {
                 if (Session::has('fs_supplier')) { //$userRole == 3) {
                     $userRoleFlag = true;
+                    $objModelUser = User::getInstance();
+                    $where['users.id'] = Session::get('fs_supplier')['id'];
+                    $uesrDetails = $objModelUser->getUserDetailsWhere($where);
+                    if (!$uesrDetails) {
+                        return redirect('/supplier/supplierDetails');
+                    }else{
+                        if(!($uesrDetails->role == 3 && $uesrDetails->status == 1 )){
+                            return redirect('/supplier/logout');
+                        }
+                    }
                 }
                 if (!$userRoleFlag) {
                     return redirect('/supplier/login');

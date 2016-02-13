@@ -211,6 +211,17 @@
                         <li><a href="/supplier/manage-options">Options</a></li>
                     </ul>
                 </li>
+                <li class="droplink">
+                    <a class="waves-effect waves-button">
+                        <span class="menu-icon glyphicon glyphicon-shopping-cart"></span>
+
+                        <p>Shop</p> <span class="arrow"></span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li><a href="/supplier/shopList">Shop List</a></li>
+                        <li><a href="/supplier/addNewShop">Add New Shop</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
         <!-- Page Sidebar Inner -->
