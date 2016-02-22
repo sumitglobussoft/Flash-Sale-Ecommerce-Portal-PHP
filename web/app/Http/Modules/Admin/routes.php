@@ -67,7 +67,7 @@ Route::group(['middleware' => ['guest']], function () {
 
 
 Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), function () {
-    \Illuminate\Support\Facades\Session::put("startTime",microtime(true));//FOR CALCULATION IN EXECUTION TIME (ADMIN LAYOUT PAGE)
+    \Illuminate\Support\Facades\Session::put("startTime", microtime(true));//FOR CALCULATION IN EXECUTION TIME (ADMIN LAYOUT PAGE)
 
     Route::get('/admin/cacheClear', function () {
         Cache::flush();
@@ -96,8 +96,13 @@ Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), fun
             return view("Admin/Views/accessdenied");
         });
 
+//        Route::resource('/admin/pending-products', 'ProductController@pendingProducts');
+//        Route::resource('/admin/add-product', 'ProductController@addProduct');
+        /* Product controller route start */
         Route::resource('/admin/pending-products', 'ProductController@pendingProducts');
         Route::resource('/admin/add-product', 'ProductController@addProduct');
+        Route::post('/admin/product-ajax-handler', 'ProductController@productAjaxHandler');
+        /* Product controller route end */
 
         Route::resource('/admin/manage-categories', 'CategoryController@manageCategories');
         Route::resource('/admin/add-category', 'CategoryController@addCategory');
@@ -170,7 +175,7 @@ Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), fun
         Route::get('/admin/edit-manager/{mid}', 'ManagerController@editManager');
         Route::post('/admin/edit-manager/{mid}', 'ManagerController@editManager');
         Route::resource('/admin/pending-manager', 'ManagerController@pendingManager');
-     //   Route::resource('/admin/manage-manager-permission', 'ManagerController@pendingManager');
+        //   Route::resource('/admin/manage-manager-permission', 'ManagerController@pendingManager');
         Route::resource('/admin/manager-ajax-handler', 'ManagerController@managerAjaxHandler');
 
 
@@ -185,14 +190,12 @@ Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), fun
         Route::post('/admin/edit-language-value/{vid}', 'AdministrationController@editLanguageValue');
 
         Route::get('/lang/{locale}', [
-            'as'=>'lang',
-            'uses'=>'AdministrationController@changeLang'
+            'as' => 'lang',
+            'uses' => 'AdministrationController@changeLang'
         ]);
 
-        Route::get('/admin/multi-lang-text/{lcode}','AdministrationController@addmultilangtext');
-        Route::post('/admin/multi-lang-text/{lcode}','AdministrationController@addmultilangtext');
-
-
+        Route::get('/admin/multi-lang-text/{lcode}', 'AdministrationController@addmultilangtext');
+        Route::post('/admin/multi-lang-text/{lcode}', 'AdministrationController@addmultilangtext');
 
 
         //-----------------------------ROUTES FOR MANAGER----------------------------------------

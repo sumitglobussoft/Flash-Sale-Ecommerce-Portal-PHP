@@ -164,7 +164,7 @@ class CategoryController extends Controller
                 $whereForUpdate = ['rawQuery' => 'category_id =?', 'bindParams' => [$id]];
                 $updateResult = $objCategoryModel->updateCategoryWhere($dataToUpdate, $whereForUpdate);
                 if ($updateResult > 0) {
-                    if ($filePath) deleteImageFromStoragePath($request->input('old_image'));
+                    if (isset($filePath)) deleteImageFromStoragePath($request->input('old_image'));
                     return Redirect::back()->with(['status' => 'success', 'msg' => 'Category details has been updated.']);
                 } else {
                     return Redirect::back()->with(['status' => 'info', 'msg' => 'Nothing to update.']);

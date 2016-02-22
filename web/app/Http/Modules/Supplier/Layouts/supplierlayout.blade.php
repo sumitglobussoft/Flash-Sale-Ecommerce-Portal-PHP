@@ -255,6 +255,7 @@
 @include('Supplier/Layouts/suppliercommonfooterscripts')
 
 @yield('pagejavascripts')
+<script src="/assets/js/modern.js"></script>
 
 </body>
 </html>

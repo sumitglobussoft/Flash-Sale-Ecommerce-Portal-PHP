@@ -42,23 +42,6 @@ Route::group(array('module' => 'Supplier', 'namespace' => 'Supplier\Controllers'
         Route::get('/supplier/editShop/{shop_id}', 'SupplierController@editShop');
         Route::post('/supplier/editShop/{shop_id}', 'SupplierController@editShop');
 
-        Route::get('images/{filename}', function ($filename) {
-//            die($filename);
-            $fileInfo = explode("_", $filename);
-            $path = storage_path() . '/uploads/' . $fileInfo[0] . '/' . $filename;
-//            die($path);
-
-            $file = File::get($path);
-            $type = File::mimeType($path);
-
-            $response = Response::make($file, 200);
-            $response->header("Content-Type", $type);
-
-            return $response;
-
-//            Route::get('images/{filename}', 'SupplierController@getImages');
-
-        });
 //        Product Controller
         Route::resource('/supplier/add-product', 'ProductController@addProduct');
 
@@ -74,24 +57,19 @@ Route::group(array('module' => 'Supplier', 'namespace' => 'Supplier\Controllers'
         Route::post('/supplier/edit-option/{id}', 'OptionController@editOption');
         Route::post('/supplier/option-ajax-handler', 'OptionController@optionAjaxHandler');
 
+//        Get image source
         Route::get('image/{filename}', function ($filename) {
             $filePath = explode("_", $filename);
             $folderPath = '';
             switch ($filePath[0]) {
-                case 'useravatar':
-                    $folderPath = $filePath[0];
-                    break;
-               case 'shopbanner':
-                    $folderPath = $filePath[0];
-                    break;
-               case 'shoplogo':
-                    $folderPath = $filePath[0];
-                    break;
-                default:
+                case 'specialCase'://TODO- CHANGE THIS FOR PRODUCT RELATED IMAES
                     unset($filePath[count($filePath) - 1]);
                     $folderPath = implode('/', array_map(function ($value) {
                         return $value;
                     }, $filePath));
+                    break;
+                default:
+                    $folderPath = $filePath[0];
                     break;
             }
             $path = storage_path() . '/uploads/' . $folderPath . '/' . $filename;
@@ -102,5 +80,4 @@ Route::group(array('module' => 'Supplier', 'namespace' => 'Supplier\Controllers'
             return $response;
         });
     });
-
 });

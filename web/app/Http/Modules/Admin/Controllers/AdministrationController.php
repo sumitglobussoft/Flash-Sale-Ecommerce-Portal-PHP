@@ -510,7 +510,7 @@ class AdministrationController extends Controller
 
     public function addmultilangtext(Request $request, $lcode)
     {
-        return view('Admin/Views/administration/addmultilangtext');
+        return view('Admin/Views/administration/addMultiLangText');
     }
 
 

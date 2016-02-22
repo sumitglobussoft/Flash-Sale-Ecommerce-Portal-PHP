@@ -1,8 +1,4 @@
-<?php function test()
-{
-    return 'test_helper';
-}
-
+<?php
 if (!function_exists('cachePut')) {
     /**
      * Store data into cache
@@ -184,43 +180,13 @@ if (!function_exists('getSetting')) {
         }
         return $settingValue;
     }
-
-    if(!function_exists('getTranslatedLanguage')){
-
-//        function getTranslatedLanguage($locale){
-//            $local = LaravelGettext::getLocale($locale);
-//            $domain = LaravelGettext::getDomain();
-//            $contextString = $local;
-//            $translation = [$domain,'LC_MESSAGES',$local];
-////            echo '<pre>';
-////            print_r($translation);die;
-//            if ($translation == $contextString)  return $locale;
-//            else  return $translation;
-
-            function getTranslatedLanguage($msgid,$msgstr)
-            {
-                $contextString = "{$msgid}\004{$msgstr}";
-                $domain = LaravelGettext::getDomain();
-                $local = LaravelGettext::getLocale();
-                $translation = gettext($contextString);
-//                echo"<pre>";print_r($translation);die("szdg");
-                if ($translation == $contextString)  return $msgid;
-                else  return $translation;
-
-
-            }
-        }
-
-
-
-
 }
 
 if (!function_exists('uploadImageToStoragePath')) {
     /**
      * Upload image to storage path
      * @param $image
-     * @param null $folderName Folder name
+     * @param null $folderName Folder name (mainFolder_subFolder_subSubFolder)
      * @param null $fileName
      * @param int $imageWidth
      * @param int $imageHeight
@@ -230,6 +196,12 @@ if (!function_exists('uploadImageToStoragePath')) {
      */
     function uploadImageToStoragePath($image, $folderName = null, $fileName = null, $imageWidth = 1024, $imageHeight = 1024)
     {
+        //Naming structure
+        //Product Images: "product_<productId>_<serialNumber>_time().jpg"   serialNumber: 0 for main image
+        //UserAvatar: "useravatar_<userId>_time().jpg"  e.g.: useravatar_35_1454480540.jpg
+        //Category: "category_time().jpg"  e.g.: category_1454572999.jpg
+
+
         $destinationFolder = 'uploads/';
         if ($folderName != '') {
             $folderNames = explode('_', $folderName);
@@ -296,6 +268,21 @@ if (!function_exists('deleteImageFromStoragePath')) {
             }
             return (\Illuminate\Support\Facades\File::delete(storage_path() . $filePath));
         }
+    }
+}
+
+if (!function_exists('print_a')) {
+    /**
+     * Print human-readable information about a variable and stop execution(die)
+     * @param $data
+     * @since 08-02-2016
+     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     */
+    function print_a($data)
+    {
+        echo '<pre>';
+        print_r($data);
+        die;
     }
 }
 ?>

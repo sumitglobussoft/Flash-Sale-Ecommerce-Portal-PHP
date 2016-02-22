@@ -3,8 +3,8 @@
 @section('title', 'Profile')
 
 @section('pageheadcontent')
-    {{--OPTIONAL--}}
-    {{--PAGE STYLES OR SCRIPTS LINKS--}}
+{{--OPTIONAL--}}
+{{--PAGE STYLES OR SCRIPTS LINKS--}}
 
         <!-- BEGIN PAGE LEVEL STYLES -->
 <link href="/assets/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
@@ -24,10 +24,11 @@
                 <div class="portlet light profile-sidebar-portlet">
                     <!-- SIDEBAR USERPIC -->
                     <div class="profile-userpic">
-{{--                        <img src="{{url('images'.Session::get('fs_supplier')['profilepic'])}}" class="img-responsive">--}}
-{{--                        <img src="{{Storage::path(Session::get('fs_supplier')['profilepic'])}}" class="img-responsive">--}}
-                        <img src="{{Session::get('fs_supplier')['profilepic']}}" class="img-responsive" alt="{{Session::get('fs_supplier')['name'].' '.Session::get('fs_supplier')['last_name']}}">
-{{--                        <img src="{{url('images/ '.Session::get('fs_supplier')['profilepic'].')}}" class="img-responsive">--}}
+                        {{--                        <img src="{{url('images'.Session::get('fs_supplier')['profilepic'])}}" class="img-responsive">--}}
+                        {{--                        <img src="{{Storage::path(Session::get('fs_supplier')['profilepic'])}}" class="img-responsive">--}}
+                        <img src="{{Session::get('fs_supplier')['profilepic']}}" class="img-responsive"
+                             alt="{{Session::get('fs_supplier')['name'].' '.Session::get('fs_supplier')['last_name']}}">
+                        {{--                        <img src="{{url('images/ '.Session::get('fs_supplier')['profilepic'].')}}" class="img-responsive">--}}
                     </div>
                     <!-- END SIDEBAR USERPIC -->
                     <!-- SIDEBAR USER TITLE -->
@@ -330,23 +331,28 @@
                 if ($('#profile-info').valid()) {
                     var profileData = $('#profile-info').serializeArray();
                     profileData.push({name: 'method', value: 'updateProfileInfo'});
+                    $(document).ajaxStart($.blockUI);
                     $.ajax({
                         type: "POST",
                         url: "/supplier/ajaxHandler",
                         dataType: "json",
                         data: profileData,
                         success: function (response) {
+                            $(document).ajaxStop($.unblockUI);
                             var alertMsg = '';
-                            if ($.isArray(response['message'])) {
+                            if ($.isArray(response['message']) && response['error']) {
                                 $.each(response['message'], function (index, value) {
                                     alertMsg += '\u2666\xA0\xA0' + value + '\n';
                                 })
+//                                toastr["error"](alertMsg);
+                                toastr[ response['status'] ](alertMsg );
                             } else {
-                                alertMsg = response['message'];
+                                toastr[response['status']](response['message']);
+//                                toastr["success"](response['message']);
                             }
-                            alert(alertMsg);
                         },
                         error: function (response) {
+                            $(document).ajaxStop($.unblockUI);
                         }
                     });
                 }
@@ -383,24 +389,27 @@
                 if ($('#password-change').valid()) {
                     var passwordData = $('#password-change').serializeArray();
                     passwordData.push({name: 'method', value: 'updatePassword'});
+                    $(document).ajaxStart($.blockUI);
                     $.ajax({
                         type: "POST",
                         url: "/supplier/ajaxHandler",
                         dataType: "json",
                         data: passwordData,
                         success: function (response) {
+                            $(document).ajaxStop($.unblockUI);
                             var alertMsg = '';
-                            if ($.isArray(response['message'])) {
+                            if ($.isArray(response['message']) && response['error']) {
                                 $.each(response['message'], function (index, value) {
                                     alertMsg += '\u2666\xA0\xA0' + value + '\n';
                                 })
+                                toastr[ response['status'] ](alertMsg );
                             } else {
-                                alertMsg = response['message'];
+                                toastr[response['status']](response['message']);
                             }
-                            alert(alertMsg);
                             $('#password-change').trigger("reset");
                         },
                         error: function (response) {
+                            $(document).ajaxStop($.unblockUI);
                             $('#password-change').trigger("reset");
                         }
                     });
@@ -414,7 +423,7 @@
                 formData.append('method', 'updateAvatar');
 
                 formData.append('file', $('input[type=file]')[0].files[0]);
-
+                $(document).ajaxStart($.blockUI);
                 $.ajax({
                     type: "POST",
                     url: "/supplier/ajaxHandler",
@@ -424,18 +433,21 @@
                     processData: false,
                     data: formData,
                     success: function (response) {
+                        $(document).ajaxStop($.unblockUI);
                         var alertMsg = '';
-                        if ($.isArray(response['message'])) {
+                        if ($.isArray(response['message']) && response['error']) {
                             $.each(response['message'], function (index, value) {
                                 alertMsg += '\u2666\xA0\xA0' + value + '\n';
                             })
+                            toastr[ response['status'] ](alertMsg );
+                            location.reload();
                         } else {
-                            alertMsg = response['message'];
+                            toastr[response['status']](response['message']);
+//                            alert(response['message']);
                         }
-                        alert(alertMsg);
-                        location.reload();
                     },
                     error: function (response) {
+                        $(document).ajaxStop($.unblockUI);
                     }
                 });
             });

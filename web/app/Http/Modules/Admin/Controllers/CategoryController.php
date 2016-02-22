@@ -86,17 +86,8 @@ class CategoryController extends Controller
                 $categoryData = array();
 
                 if (Input::hasFile('category_image')) {
-                    $destinationPath = 'assets/uploads/categories/';
-                    $filename = 'category_' . time() . ".jpg";
-                    File::makeDirectory($destinationPath, 0777, true, true);
-                    $filePath = '/' . $destinationPath . $filename;
-
-                    $imageResult = Image::make(Input::file('category_image'))->resize($this->imageWidth, $this->imageHeight, function ($constraint) {
-                        $constraint->aspectRatio();
-                    })->save($destinationPath . $filename, 80);
-                    if ($imageResult) {
-                        $categoryData['category_banner_url'] = $filePath;
-                    }
+                    $filePath = uploadImageToStoragePath(Input::file('category_image'), 'category');
+                    if ($filePath) $categoryData['category_banner_url'] = $filePath;
                 }
                 $categoryData['category_name'] = $request->input('category_name');
                 $categoryData['category_desc'] = $request->input('category_desc');
@@ -162,17 +153,8 @@ class CategoryController extends Controller
                     ->withInput();
             } else {
                 if (Input::hasFile('category_image')) {
-                    $destinationPath = 'assets/uploads/categories/';
-                    $filename = 'category_' . time() . ".jpg";
-                    File::makeDirectory($destinationPath, 0777, true, true);
-                    $filePath = '/' . $destinationPath . $filename;
-
-                    $imageResult = Image::make(Input::file('category_image'))->resize($this->imageWidth, $this->imageHeight, function ($constraint) {
-                        $constraint->aspectRatio();
-                    })->save($destinationPath . $filename, 80);
-                    if ($imageResult) {
-                        $dataToUpdate['category_banner_url'] = $filePath;
-                    }
+                    $filePath = uploadImageToStoragePath(Input::file('category_image'), 'category');
+                    if ($filePath) $dataToUpdate['category_banner_url'] = $filePath;
                 }
                 $dataToUpdate['category_name'] = $request->input('category_name');
                 $dataToUpdate['category_desc'] = $request->input('category_desc');
@@ -185,11 +167,12 @@ class CategoryController extends Controller
                 $whereForUpdate = ['rawQuery' => 'category_id =?', 'bindParams' => [$id]];
                 $updateResult = $objCategoryModel->updateCategoryWhere($dataToUpdate, $whereForUpdate);
 
-                return Redirect::back()->with(
-                    ($updateResult == 1) ?
-                        ['status' => 'success', 'msg' => 'Category details has been updated.'] :
-                        ['status' => 'info', 'msg' => 'Nothing to update.']
-                );
+                if ($updateResult > 0) {
+                    if (isset($filePath)) deleteImageFromStoragePath($request->input('old_image'));
+                    return Redirect::back()->with(['status' => 'success', 'msg' => 'Category details has been updated.']);
+                } else {
+                    return Redirect::back()->with(['status' => 'info', 'msg' => 'Nothing to update.']);
+                }
             }
         }
 

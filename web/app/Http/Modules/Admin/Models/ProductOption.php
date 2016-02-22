@@ -77,6 +77,7 @@ class ProductOption extends Model
     }
 
     /**
+     * Get an option details
      * @param $where
      * @param array $selectedColumns
      * @return mixed

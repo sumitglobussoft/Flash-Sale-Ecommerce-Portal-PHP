@@ -111,6 +111,7 @@
                     status = 1;
                 }
                 if (status == 1 || status == 2) {
+                    $(document).ajaxStart($.blockUI);
                     $.ajax({
                         url: '/admin/option-ajax-handler',
                         type: 'POST',
@@ -121,6 +122,7 @@
                             status: status
                         },
                         success: function (response) {
+                            $(document).ajaxStop($.unblockUI);
                             response = $.parseJSON(response);
                             toastr[response['status']](response['msg']);
                             if (response['status'] == "success") {
@@ -144,6 +146,7 @@
                 var optionId = $(this).attr('data-id');
                 var x = confirm("Are you sure you want to proceed?");
                 if (x) {
+                    $(document).ajaxStart($.blockUI);
                     $.ajax({
                         url: '/admin/option-ajax-handler',
                         type: 'POST',
@@ -153,6 +156,7 @@
                             optionId: optionId
                         },
                         success: function (response) {
+                            $(document).ajaxStop($.unblockUI);
                             response = $.parseJSON(response);
                             toastr[response['status']](response['msg']);
                             if (response['status'] == 'success') {

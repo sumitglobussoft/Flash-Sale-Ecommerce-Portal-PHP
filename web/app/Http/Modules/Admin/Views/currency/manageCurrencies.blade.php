@@ -130,6 +130,7 @@
                     $.each($('tbody tr'), function (i, a) {
                         position[i] = $(this).attr('data-id');
                     });
+                    $(document).ajaxStart($.blockUI);
                     $.ajax({
                         url: '/admin/currency-ajax-handler',
                         type: 'POST',
@@ -139,10 +140,12 @@
                             position: position,
                         },
                         success: function (response) {
+                            $(document).ajaxStop($.unblockUI);
                             response = $.parseJSON(response);
                             toastr[response['status']](response['msg']);
                         },
                         error: function (response) {
+                            $(document).ajaxStop($.unblockUI);
 //                            toastr["error"]("Sorry an exception occurred, please reload the page try again.");
                         }
                     });
@@ -160,6 +163,7 @@
                     status = 1;
                 }
                 if (status == 1 || status == 2) {
+                    $(document).ajaxStart($.blockUI);
                     $.ajax({
                         url: '/admin/currency-ajax-handler',
                         type: 'POST',
@@ -170,6 +174,7 @@
                             status: status
                         },
                         success: function (response) {
+                            $(document).ajaxStop($.unblockUI);
                             response = $.parseJSON(response);
                             toastr[response['status']](response['msg']);
                             if (response['status'] == "success") {
@@ -185,6 +190,7 @@
                             }
                         },
                         error: function (response) {
+                            $(document).ajaxStop($.unblockUI);
 //                            toastr["error"]("Sorry an exception occurred, please reload the page try again.");
                         }
                     });
@@ -196,6 +202,7 @@
                 var currencyId = $(this).attr('data-id');
                 var x = confirm("Are you sure you want to proceed?");
                 if (x) {
+                    $(document).ajaxStart($.blockUI);
                     $.ajax({
                         url: '/admin/currency-ajax-handler',
                         type: 'POST',
@@ -205,6 +212,7 @@
                             currencyId: currencyId
                         },
                         success: function (response) {
+                            $(document).ajaxStop($.unblockUI);
                             response = $.parseJSON(response);
                             toastr[response['status']](response['msg']);
                             if (response['status'] == 'success') {
@@ -212,6 +220,7 @@
                             }
                         },
                         error: function (response) {
+                            $(document).ajaxStop($.unblockUI);
 //                            toastr["error"]("Sorry an exception occurred, please reload the page try again.");
                         }
                     });

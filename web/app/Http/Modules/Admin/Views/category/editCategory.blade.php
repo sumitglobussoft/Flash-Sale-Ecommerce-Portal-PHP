@@ -129,7 +129,8 @@
 
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Image</label>
-
+                                    <input type="hidden" name="old_image"
+                                           value="{{$categoryDetails->category_banner_url}}">
                                     <div class="col-sm-8">
                                         <div class="fileinput fileinput-new" data-provides="fileinput">
                                             <div class="fileinput-new thumbnail"

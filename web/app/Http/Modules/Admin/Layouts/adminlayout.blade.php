@@ -306,18 +306,18 @@
                     </ul>
                 </li>
 
-                <li class="droplink">
-                    <a class="waves-effect waves-button">
-                        <span class="menu-icon glyphicon glyphicon-envelope"></span>
+                {{--<li class="droplink">--}}
+                    {{--<a class="waves-effect waves-button">--}}
+                        {{--<span class="menu-icon glyphicon glyphicon-envelope"></span>--}}
 
-                        <p>{{ trans('message.buyers') }}</p> <span class="arrow"></span>
-                    </a>
-                    <ul class="sub-menu">
-                        <li><a href="/admin/pending-users">Pending Buyers</a></li>
-                        <li><a href="/admin/available-users">Available Buyers</a></li>
-                        <li><a href="/admin/deleted-users">Deleted Buyers</a></li>
-                    </ul>
-                </li>
+                        {{--<p>{{ trans('message.buyers') }}</p> <span class="arrow"></span>--}}
+                    {{--</a>--}}
+                    {{--<ul class="sub-menu">--}}
+                        {{--<li><a href="/admin/pending-users">Pending Buyers</a></li>--}}
+                        {{--<li><a href="/admin/available-users">Available Buyers</a></li>--}}
+                        {{--<li><a href="/admin/deleted-users">Deleted Buyers</a></li>--}}
+                    {{--</ul>--}}
+                {{--</li>--}}
 
                 <li class="droplink">
                     <a class="waves-effect waves-button">
@@ -329,7 +329,7 @@
                         <li><a href="/admin/add-new-manager">Add New Manager</a></li>
                         <li><a href="/admin/pending-manager">Pending Manager</a></li>
                         <li><a href="/admin/available-manager">Available Manager</a></li>
-                        <li><a href="/admin/deleted-manager">Deleted Manager</a></li>
+                        {{--<li><a href="/admin/deleted-manager">Deleted Manager</a></li>--}}
                     </ul>
                 </li>
 
@@ -434,7 +434,7 @@
 {{--}--}}
 {{--}--}}
 {{--window.onload = notifyMe;--}}
-{{--<?php \Illuminate\Support\Facades\Session::forget('startTime'); ?>--}}
+<?php \Illuminate\Support\Facades\Session::forget('startTime'); ?>
 {{--</script>--}}
 </body>
 </html>

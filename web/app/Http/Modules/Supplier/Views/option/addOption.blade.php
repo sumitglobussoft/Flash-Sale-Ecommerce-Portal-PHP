@@ -50,22 +50,22 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                                     </div>
                                 </div>
 
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Supplier</label>
+                                {{--<div class="form-group">--}}
+                                    {{--<label class="col-sm-2 control-label">Supplier</label>--}}
                                     {{--Todo-Supplier id required--}}
-                                    <div class="col-sm-4">
-                                        <select name="option_data[shop_id]" class="form-control m-b-sm">
-                                            <option value="0">None</option>
-                                            @if(isset($allShop))
-                                                @foreach($allShop as $key=>$value)
-                                                    <option value="{{$value->id}}"
-                                                            @if(isset(old('option_data')['shop_id'])&&$value->id==old('option_data')['shop_id']) selected @endif>{{$value->shop_name}}</option>
-                                                @endforeach
-                                            @endif
+                                    {{--<div class="col-sm-4">--}}
+                                        {{--<select name="option_data[shop_id]" class="form-control m-b-sm">--}}
+                                            {{--<option value="0">None</option>--}}
+                                            {{--@if(isset($allShop))--}}
+                                                {{--@foreach($allShop as $key=>$value)--}}
+                                                    {{--<option value="{{$value->id}}"--}}
+                                                            {{--@if(isset(old('option_data')['shop_id'])&&$value->id==old('option_data')['shop_id']) selected @endif>{{$value->shop_name}}</option>--}}
+                                                {{--@endforeach--}}
+                                            {{--@endif--}}
 
-                                        </select>
-                                    </div>
-                                </div>
+                                        {{--</select>--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
 
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">Type</label>
