@@ -34,7 +34,7 @@ class CategoryController extends Controller
      * Manage categories action
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @since 20-12-2015
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function manageCategories()
     {
@@ -52,7 +52,7 @@ class CategoryController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws \FlashSale\Http\Modules\Admin\Models\Exception
      * @since 20-12-2015
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function addCategory(Request $request)
     {
@@ -123,7 +123,7 @@ class CategoryController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws \FlashSale\Http\Modules\Admin\Models\Exception
      * @since 20-12-2015
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function editCategory(Request $request, $id)
     {

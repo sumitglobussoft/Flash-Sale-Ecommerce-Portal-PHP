@@ -41,7 +41,7 @@ class Usersmeta extends Model
      * @return mixed|int
      * @throws Exception
      * @since 09-12-2015
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function updateUsersMetaDetailsWhere()
     {

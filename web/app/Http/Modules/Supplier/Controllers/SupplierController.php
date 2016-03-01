@@ -29,6 +29,7 @@ use Datatables;
 /**
  * Class SupplierController
  * @package FlashSale\Http\Modules\Supplier\Controllers
+ * @author Dinanath Thakur <dinanaththakur@globussoft.in>
  */
 class SupplierController extends Controller
 {
@@ -42,7 +43,7 @@ class SupplierController extends Controller
      * Dashboard action
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|Redirect
      * @since 09-12-2015
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function dashboard()
     {
@@ -58,7 +59,7 @@ class SupplierController extends Controller
      * @param Request $request
      * @return $this|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|Redirect
      * @since 09-12-2015
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function login(Request $request)
     {
@@ -125,7 +126,7 @@ class SupplierController extends Controller
      * @param Request $request
      * @return $this|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|Redirect
      * @since 09-12-2015
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function register(Request $request)
     {
@@ -187,7 +188,7 @@ class SupplierController extends Controller
      * Logout action
      * @return Redirect
      * @since 09-12-2015
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function logout()
     {
@@ -201,7 +202,7 @@ class SupplierController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws \FlashSale\Http\Modules\Supplier\Models\Exception
      * @since 09-12-2015
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function profile(Request $request)
     {
@@ -228,7 +229,7 @@ class SupplierController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws \FlashSale\Http\Modules\Supplier\Models\Exception
      * @since 12-12-2015
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function supplierDetails(Request $request)
     {
@@ -299,7 +300,7 @@ class SupplierController extends Controller
      * @param Request $request
      * @throws \FlashSale\Http\Modules\Supplier\Models\Exception
      * @since 09-12-2015
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function ajaxHandler(Request $request)
     {
@@ -596,7 +597,7 @@ class SupplierController extends Controller
      * Ajax handler to be used for pre-login request
      * @param Request $request
      * @since 15-12-2015
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function userAjaxHandler(Request $request)
     {
@@ -661,7 +662,7 @@ class SupplierController extends Controller
      * @param $image
      * @return int
      * @since 09-12-2015
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function imageQuality($image)
     {

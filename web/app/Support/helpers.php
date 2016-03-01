@@ -6,7 +6,7 @@ if (!function_exists('cachePut')) {
      * @param $value
      * @param int $minutes
      * @since 15-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     function cachePut($key, $value, $minutes = 10)
     {
@@ -36,7 +36,7 @@ if (!function_exists('cacheForever')) {
      * @param $key
      * @param $value
      * @since 18-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     function cacheForever($key, $value)
     {
@@ -66,7 +66,7 @@ if (!function_exists('cacheGet')) {
      * @param $key
      * @return bool|array|object
      * @since 15-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     function cacheGet($key)
     {
@@ -79,7 +79,7 @@ if (!function_exists('cacheClearByKey')) {
      * Clear cache by key
      * @param $key
      * @since 16-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     function cacheClearByKey($key)
     {
@@ -91,7 +91,7 @@ if (!function_exists('cacheClearByGroupNames')) {
      * Clear cache by group names
      * @param array|string $groupNames Group names to be cleared from cache data
      * @since 16-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     function cacheClearByGroupNames($groupNames)
     {
@@ -121,7 +121,7 @@ if (!function_exists('cacheClearByTableNames')) {
      * Clear cache by table names
      * @param array|string $tableNames Array of table names or a table name
      * @since 16-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     function cacheClearByTableNames($tableNames)
     {
@@ -145,11 +145,8 @@ if (!function_exists('cacheClearByTableNames')) {
                 Cache::forget(md5($tableNames));
             }
         }
-
     }
-
 }
-
 
 if (!function_exists('getSetting')) {
     /**
@@ -158,7 +155,7 @@ if (!function_exists('getSetting')) {
      * @return mixed
      * @throws Exception
      * @since 19-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     function getSetting($settingObject)
     {
@@ -192,16 +189,10 @@ if (!function_exists('uploadImageToStoragePath')) {
      * @param int $imageHeight
      * @return bool|string
      * @since 02-02-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     function uploadImageToStoragePath($image, $folderName = null, $fileName = null, $imageWidth = 1024, $imageHeight = 1024)
     {
-        //Naming structure
-        //Product Images: "product_<productId>_<serialNumber>_time().jpg"   serialNumber: 0 for main image
-        //UserAvatar: "useravatar_<userId>_time().jpg"  e.g.: useravatar_35_1454480540.jpg
-        //Category: "category_time().jpg"  e.g.: category_1454572999.jpg
-
-
         $destinationFolder = 'uploads/';
         if ($folderName != '') {
             $folderNames = explode('_', $folderName);
@@ -227,7 +218,7 @@ if (!function_exists('imageQuality')) {
      * @param $image
      * @return int
      * @since 02-02-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     function imageQuality($image)
     {
@@ -248,7 +239,7 @@ if (!function_exists('deleteImageFromStoragePath')) {
      * @param $fileName Name of the image (Ex. category_2_1432423423.jpg)
      * @return int
      * @since 03-02-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     function deleteImageFromStoragePath($fileName)
     {
@@ -256,13 +247,10 @@ if (!function_exists('deleteImageFromStoragePath')) {
             $folderNames = explode('_', explode('/', $fileName)[2]);
             $filePath = '/uploads/';
             switch ($folderNames[0]) {
-                case 'product'://Todo-not yet complete for product
-                    $folderPath = implode('/', array_map(function ($value) {
-                        return $value;
-                    }, $folderNames));
-                    $filePath .= $folderPath . '/' . $fileName;
+                case 'product': //product_14_0_1456562271.jpg
+                    $filePath .= $folderNames[0] . '/' . $folderNames[1] . '/' . explode('/', $fileName)[2];
                     break;
-                default:
+                default://folderName_id_timeStamp.jpg
                     $filePath .= $folderNames[0] . '/' . explode('/', $fileName)[2];
                     break;
             }
@@ -276,7 +264,7 @@ if (!function_exists('print_a')) {
      * Print human-readable information about a variable and stop execution(die)
      * @param $data
      * @since 08-02-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     function print_a($data)
     {

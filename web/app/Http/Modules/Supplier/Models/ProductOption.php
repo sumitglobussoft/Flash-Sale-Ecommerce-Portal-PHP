@@ -10,6 +10,7 @@ use \Exception;
  * Product-option model
  * Class ProductOption
  * @package FlashSale\Http\Modules\Supplier\Models
+ * @author Dinanath Thakur <dinanaththakur@globussoft.in>
  */
 class ProductOption extends Model
 {
@@ -22,7 +23,7 @@ class ProductOption extends Model
      * Get instance/object of this class
      * @return ProductOption|null
      * @since 28-12-2015
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public static function getInstance()
     {
@@ -36,7 +37,7 @@ class ProductOption extends Model
      * @return string
      * @throws Exception
      * @since 28-12-2015
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function addNewOption()
     {
@@ -60,7 +61,7 @@ class ProductOption extends Model
      * @return mixed
      * @throws Exception
      * @since 28-12-2015
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function getAllOptionsWhere($where, $selectedColumns = ['*'])
     {
@@ -81,7 +82,7 @@ class ProductOption extends Model
      * @param array $selectedColumns
      * @return mixed
      * @since 23-12-2015
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function getOptionWhere($where, $selectedColumns = ['*'])
     {
@@ -106,7 +107,7 @@ class ProductOption extends Model
      * @return string
      * @throws Exception
      * @since 31-12-2015
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function updateOptionWhere()
     {
@@ -131,7 +132,7 @@ class ProductOption extends Model
      * @return string
      * @throws Exception
      * @since 05-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function deleteOptionWhere()
     {

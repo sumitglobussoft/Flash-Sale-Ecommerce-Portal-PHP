@@ -1,4 +1,7 @@
 <?php
+Route::get('/supplier', function () {
+    return redirect('supplier/login');
+});
 
 Route::group(['middleware' => ['guest']], function () {
 
@@ -35,7 +38,7 @@ Route::group(array('module' => 'Supplier', 'namespace' => 'Supplier\Controllers'
 //        Supplier Controller
         Route::resource('/supplier/dashboard', 'SupplierController@dashboard');
         Route::resource('/supplier/profile', 'SupplierController@profile');
-       // Route::resource('/supplier/supplierDetails', 'SupplierController@supplierDetails');
+        // Route::resource('/supplier/supplierDetails', 'SupplierController@supplierDetails');
         Route::resource('/supplier/ajaxHandler', 'SupplierController@ajaxHandler');
         Route::resource('/supplier/addNewShop', 'SupplierController@addNewShop');
         Route::resource('/supplier/shopList', 'SupplierController@shopList');
@@ -62,13 +65,10 @@ Route::group(array('module' => 'Supplier', 'namespace' => 'Supplier\Controllers'
             $filePath = explode("_", $filename);
             $folderPath = '';
             switch ($filePath[0]) {
-                case 'specialCase'://TODO- CHANGE THIS FOR PRODUCT RELATED IMAES
-                    unset($filePath[count($filePath) - 1]);
-                    $folderPath = implode('/', array_map(function ($value) {
-                        return $value;
-                    }, $filePath));
+                case 'product'://product_14_0_1456562271.jpg
+                    $folderPath = $filePath[0] . '/' . $filePath[1];
                     break;
-                default:
+                default://folderName_id_timeStamp.jpg
                     $folderPath = $filePath[0];
                     break;
             }

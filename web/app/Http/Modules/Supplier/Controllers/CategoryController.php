@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Session;
 /**
  * Class CategoryController
  * @package FlashSale\Http\Modules\Supplier\Controllers
+ * @author Dinanath Thakur <dinanaththakur@globussoft.in>
  */
 class CategoryController extends Controller
 {
@@ -34,7 +35,7 @@ class CategoryController extends Controller
      * Manage categories action
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @since 29-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function manageCategories()
     {
@@ -52,7 +53,7 @@ class CategoryController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws \FlashSale\Http\Modules\Supplier\Models\Exception
      * @since 29-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function addCategory(Request $request)
     {
@@ -120,7 +121,7 @@ class CategoryController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws \FlashSale\Http\Modules\Supplier\Models\Exception
      * @since 29-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function editCategory(Request $request, $id)
     {

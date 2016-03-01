@@ -10,6 +10,7 @@ use \Exception;
  * Currency model
  * Class Currency
  * @package FlashSale\Http\Modules\Admin\Models
+ * @author Dinanath Thakur <dinanaththakur@globussoft.in>
  */
 class Currency extends Model
 {
@@ -22,7 +23,7 @@ class Currency extends Model
      * Get instance/object of this class
      * @return Currency|null
      * @since 21-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public static function getInstance()
     {
@@ -36,7 +37,7 @@ class Currency extends Model
      * @return string|int
      * @throws Exception
      * @since 21-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function addNewCurrency()
     {
@@ -60,7 +61,7 @@ class Currency extends Model
      * @return mixed
      * @throws Exception
      * @since 21-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function getAllCurrenciesWhere($where, $selectedColumns = ['*'])
     {
@@ -87,7 +88,7 @@ class Currency extends Model
      * @param array $selectedColumns
      * @return mixed
      * @since 21-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function getCurrencyWhere($where, $selectedColumns = ['*'])
     {
@@ -107,7 +108,7 @@ class Currency extends Model
      * @return string|int
      * @throws Exception
      * @since 21-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function updateCurrencyWhere()
     {
@@ -132,7 +133,7 @@ class Currency extends Model
      * @return string|int
      * @throws Exception
      * @since 21-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function deleteCurrencyWhere()
     {

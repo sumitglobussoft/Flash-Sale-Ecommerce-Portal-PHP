@@ -10,6 +10,7 @@ use \Exception;
  * Product-category model
  * Class ProductCategory
  * @package FlashSale\Http\Modules\Admin\Models
+ * @author Dinanath Thakur <dinanaththakur@globussoft.in>
  */
 class ProductCategory extends Model
 {
@@ -23,7 +24,7 @@ class ProductCategory extends Model
      * Get instance/object of this class
      * @return ProductCategory|null
      * @since 19-12-2015
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public static function getInstance()
     {
@@ -37,7 +38,7 @@ class ProductCategory extends Model
      * @return string|array
      * @throws Exception
      * @since 19-12-2015
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function addCategory()
     {
@@ -60,7 +61,7 @@ class ProductCategory extends Model
      * @param array $selectedColumns
      * @return mixed
      * @since 21-12-2015
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function getAllCategoriesWhere($where, $selectedColumns = ['*'])
     {
@@ -77,7 +78,7 @@ class ProductCategory extends Model
      * @param array $selectedColumns
      * @return mixed
      * @since 21-12-2015
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function getCategoryDetailsWhere($where, $selectedColumns = ['*'])
     {
@@ -93,7 +94,7 @@ class ProductCategory extends Model
      * @return string
      * @throws Exception
      * @since 24-12-2015
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function updateCategoryWhere()
     {

@@ -10,6 +10,7 @@ use \Exception;
  * Settings object model
  * Class SettingsObject
  * @package FlashSale\Http\Modules\Admin\Models
+ * @author Dinanath Thakur <dinanaththakur@globussoft.in>
  */
 class SettingsObject extends Model
 {
@@ -30,7 +31,7 @@ class SettingsObject extends Model
      * Get instance/object of this class
      * @return SettingsObject|null
      * @since 07-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public static function getInstance()
     {
@@ -46,7 +47,7 @@ class SettingsObject extends Model
      * @return mixed
      * @throws Exception
      * @since 07-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function getAllObjectWhere($where, $selectedColumns = ['*'])
     {
@@ -69,7 +70,7 @@ class SettingsObject extends Model
      * @return mixed
      * @throws Exception
      * @since 08-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function getAllObjectsAndVariantsOfASectionWhere($where, $selectedColumns = ['*'])
     {
@@ -110,7 +111,7 @@ class SettingsObject extends Model
      * @return string|int
      * @throws Exception
      * @since 12-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function updateObjectWhere()
     {
@@ -138,7 +139,7 @@ class SettingsObject extends Model
      * @param array $selectedColumns
      * @return array|bool|object
      * @since 20-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function getSettingObjectWhere($where, $selectedColumns = ['*'])
     {

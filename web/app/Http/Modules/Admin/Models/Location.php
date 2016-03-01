@@ -11,6 +11,7 @@ use \Exception;
  * Location model
  * Class Location
  * @package FlashSale\Http\Modules\Admin\Models
+ * @author Dinanath Thakur <dinanaththakur@globussoft.in>
  */
 class Location extends Model
 {
@@ -25,7 +26,7 @@ class Location extends Model
      * Get instance/object of this class
      * @return Location|null
      * @since 14-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public static function getInstance()
     {
@@ -41,7 +42,7 @@ class Location extends Model
      * @return mixed
      * @throws Exception
      * @since 14-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function getAllLocationsWhere($where, $selectedColumns = ['*'])
     {

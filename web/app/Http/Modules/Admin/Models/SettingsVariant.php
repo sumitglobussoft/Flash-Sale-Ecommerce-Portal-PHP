@@ -10,6 +10,7 @@ use \Exception;
  * Settings variant model
  * Class SettingsVariant
  * @package FlashSale\Http\Modules\Admin\Models
+ * @author Dinanath Thakur <dinanaththakur@globussoft.in>
  */
 class SettingsVariant extends Model
 {
@@ -28,7 +29,7 @@ class SettingsVariant extends Model
      * Get instance/object of this class
      * @return SettingsVariant|null
      * @since 06-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public static function getInstance()
     {
@@ -44,7 +45,7 @@ class SettingsVariant extends Model
      * @return array|bool|object
      * @throws Exception
      * @since 06-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function getAllVariantWhere($where, $selectedColumns = ['*'])
     {

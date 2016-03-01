@@ -19,6 +19,7 @@ use Redirect;
 /**
  * Class SettingController
  * @package FlashSale\Http\Modules\Admin\Controllers
+ * @author Dinanath Thakur <dinanaththakur@globussoft.in>
  */
 class SettingController extends Controller
 {
@@ -27,7 +28,7 @@ class SettingController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws \Exception
      * @since 06-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function controlPanel()
     {
@@ -44,7 +45,7 @@ class SettingController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws \FlashSale\Http\Modules\Admin\Models\Exception
      * @since 07-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function manageSettings(Request $request, $section_id)
     {
@@ -103,7 +104,7 @@ class SettingController extends Controller
      * @param Request $request
      * @throws \Exception
      * @since 07-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function settingsAjaxHandler(Request $request)
     {

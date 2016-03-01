@@ -10,6 +10,7 @@ use \Exception;
  * Product-option-variant model
  * Class ProductOptionVariant
  * @package FlashSale\Http\Modules\Admin\Models
+ * @author Dinanath Thakur <dinanaththakur@globussoft.in>
  */
 class ProductOptionVariant extends Model
 {
@@ -23,7 +24,7 @@ class ProductOptionVariant extends Model
      * Get instance/object of this class
      * @return ProductOptionVariant|null
      * @since 28-12-2015
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public static function getInstance()
     {
@@ -34,10 +35,10 @@ class ProductOptionVariant extends Model
 
     /**
      * Add new variant details
-     * @return string
+     * @return string|int
      * @throws Exception
      * @since 28-12-2015
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function addNewVariant()
     {
@@ -55,11 +56,33 @@ class ProductOptionVariant extends Model
     }
 
     /**
+     * Add new variant details and return id
+     * @return string|int
+     * @throws Exception
+     * @since 28-12-2015
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
+     */
+    public function addNewVariantAndGetID()
+    {
+        if (func_num_args() > 0) {
+            $data = func_get_arg(0);
+            try {
+                $result = DB::table($this->table)->insertGetId($data);
+                return $result;
+            } catch (\Exception $e) {
+                return $e->getMessage();
+            }
+        } else {
+            throw new Exception('Argument Not Passed');
+        }
+    }
+
+    /**
      * @param $where
      * @param array $selectedColumns Column names to be fetched
      * @return mixed
      * @since 30-12-2015
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function getAllVariantsWhere($where, $selectedColumns = ['*'])
     {
@@ -77,7 +100,7 @@ class ProductOptionVariant extends Model
      * @param array $selectedColumns
      * @return mixed
      * @since 02-01-2015
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function getVariantWhere($where, $selectedColumns = ['*'])
     {
@@ -94,7 +117,7 @@ class ProductOptionVariant extends Model
      * @return string
      * @throws Exception
      * @since 04-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function updateVariantWhere()
     {
@@ -119,7 +142,7 @@ class ProductOptionVariant extends Model
      * @return string
      * @throws Exception
      * @since 20-12-2015
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function deleteVariantWhere()
     {

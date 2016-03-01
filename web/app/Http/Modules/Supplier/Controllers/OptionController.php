@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Validator;
 /**
  * Class OptionController
  * @package FlashSale\Http\Modules\Supplier\Controllers
+ * @author Dinanath Thakur <dinanaththakur@globussoft.in>
  */
 class OptionController extends Controller
 {
@@ -26,7 +27,7 @@ class OptionController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws \FlashSale\Http\Modules\Supplier\Models\Exception
      * @since 19-12-2015
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function manageOptions()
     {
@@ -42,7 +43,7 @@ class OptionController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws \FlashSale\Http\Modules\Supplier\Models\Exception
      * @since 19-12-2015
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function addOption(Request $request)
     {
@@ -135,7 +136,7 @@ class OptionController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws \FlashSale\Http\Modules\Supplier\Models\Exception
      * @since 31-12-2015
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function editOption(Request $request, $id)
     {
@@ -277,7 +278,7 @@ class OptionController extends Controller
      * @param Request $request
      * @throws \FlashSale\Http\Modules\Supplier\Models\Exception
      * @since 22-12-2015
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function optionAjaxHandler(Request $request)
     {

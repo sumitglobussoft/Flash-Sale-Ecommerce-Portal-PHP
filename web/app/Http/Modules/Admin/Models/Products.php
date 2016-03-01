@@ -5,6 +5,11 @@ namespace FlashSale\Http\Modules\Admin\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Class Products
+ * @package FlashSale\Http\Modules\Admin\Models
+ * @author Dinanath Thakur <dinanaththakur@globussoft.in>
+ */
 class Products extends Model
 {
 
@@ -16,7 +21,7 @@ class Products extends Model
      * Get instance/object of this class
      * @return Products|null
      * @since 17-02-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public static function getInstance()
     {
@@ -30,7 +35,7 @@ class Products extends Model
      * @return string
      * @throws Exception
      * @since 17-02-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function addNewProduct()
     {

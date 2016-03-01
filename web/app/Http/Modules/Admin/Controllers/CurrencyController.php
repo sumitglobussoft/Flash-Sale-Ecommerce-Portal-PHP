@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Redirect;
 /**
  * Class CurrencyController
  * @package FlashSale\Http\Modules\Admin\Controllers
+ * @author Dinanath Thakur <dinanaththakur@globussoft.in>
  */
 class CurrencyController extends Controller
 {
@@ -21,7 +22,7 @@ class CurrencyController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws \Exception
      * @since 20-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function manageCurrencies()
     {
@@ -37,7 +38,7 @@ class CurrencyController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @since 20-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function addCurrency(Request $request)
     {
@@ -85,7 +86,7 @@ class CurrencyController extends Controller
      * @param $currencyId
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @since 21-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function editCurrency(Request $request, $currencyId)
     {
@@ -145,7 +146,7 @@ class CurrencyController extends Controller
      * @param Request $request
      * @throws \Exception
      * @since 20-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function currencyAjaxHandler(Request $request)
     {

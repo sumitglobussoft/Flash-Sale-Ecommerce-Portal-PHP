@@ -4,45 +4,48 @@ namespace FlashSale\Http\Modules\Admin\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use \Exception;
 
 /**
- * Class ProductMeta
+ * Class ProductOptionVariantRelation
  * @package FlashSale\Http\Modules\Admin\Models
+ * @since 29-02-2016
  * @author Dinanath Thakur <dinanaththakur@globussoft.in>
  */
-class ProductMeta extends Model
+class ProductOptionVariantRelation extends Model
 {
 
     private static $_instance = null;
 
-    protected $table = 'productmeta';
+    protected $table = 'product_option_variant_relation';
+
 
     /**
      * Get instance/object of this class
-     * @return ProductMeta|null
-     * @since 17-02-2016
+     * @return ProductOptionVariantRelation|null
+     * @since 29-02-2016
      * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public static function getInstance()
     {
         if (!is_object(self::$_instance))  //or if( is_null(self::$_instance) ) or if( self::$_instance == null )
-            self::$_instance = new ProductMeta();
+            self::$_instance = new ProductOptionVariantRelation();
         return self::$_instance;
     }
 
     /**
-     * Add product metadata
-     * @return string
+     * Add new option-variant relation data
+     * @return string|int
      * @throws Exception
-     * @since 17-02-2016
+     * @since 29-02-2016
      * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
-    public function addProductMetaData()
+    public function addNewOptionVariantRelation()
     {
         if (func_num_args() > 0) {
             $data = func_get_arg(0);
             try {
-                $result = DB::table($this->table)->insertGetId($data);
+                $result = DB::table($this->table)->insert($data);
                 return $result;
             } catch (\Exception $e) {
                 return $e->getMessage();

@@ -335,7 +335,7 @@ class FilterController extends Controller
      * @return string
      * @throws Exception
      * @since 21-12-2015
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function getCategoryDisplayName($id)
     {

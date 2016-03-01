@@ -11,6 +11,7 @@ use \Exception;
  * Settings section model
  * Class SettingsSection
  * @package FlashSale\Http\Modules\Admin\Models
+ * @author Dinanath Thakur <dinanaththakur@globussoft.in>
  */
 class SettingsSection extends Model
 {
@@ -32,7 +33,7 @@ class SettingsSection extends Model
      * Get instance/object of this class
      * @return SettingsSection|null
      * @since 02-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public static function getInstance()
     {
@@ -48,7 +49,7 @@ class SettingsSection extends Model
      * @return array|bool|object
      * @throws Exception
      * @since 06-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function getAllSectionWhere($where, $selectedColumns = ['*'])
     {

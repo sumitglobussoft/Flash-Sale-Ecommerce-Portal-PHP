@@ -10,6 +10,7 @@ use \Exception;
  * Settings description model
  * Class SettingsDescription
  * @package FlashSale\Http\Modules\Admin\Models
+ * @author Dinanath Thakur <dinanaththakur@globussoft.in>
  */
 class SettingsDescription extends Model
 {
@@ -29,7 +30,7 @@ class SettingsDescription extends Model
      * Get instance/object of this class
      * @return SettingsSection|null
      * @since 02-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public static function getInstance()
     {
@@ -45,7 +46,7 @@ class SettingsDescription extends Model
      * @return mixed
      * @throws Exception
      * @since 02-01-2016
-     * @author Dinanath Thakur <dinanaththakur@globussoft.com>
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
      */
     public function getAllSettingsDescriptionWhere($where, $selectedColumns = ['*'])
     {

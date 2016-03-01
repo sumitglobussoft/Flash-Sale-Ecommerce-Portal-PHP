@@ -2,7 +2,9 @@
 
 namespace FlashSale\Http\Modules\Admin\Controllers;
 
+use FlashSale\Http\Modules\Admin\Models\ProductImage;
 use FlashSale\Http\Modules\Admin\Models\ProductMeta;
+use FlashSale\Http\Modules\Admin\Models\ProductOptionVariantRelation;
 use Illuminate\Http\Request;
 
 use FlashSale\Http\Requests;
@@ -56,6 +58,11 @@ class ProductController extends Controller
         $objModelFeatures = ProductFeatures::getInstance();
         $objModelProducts = Products::getInstance();
         $objModelProductMeta = ProductMeta::getInstance();
+        $objModelProductImage = ProductImage::getInstance();
+        $objModelProductOptionVariant = ProductOptionVariant::getInstance();
+        $objModelProductOptionVariantRelation = ProductOptionVariantRelation::getInstance();
+
+
         $userId = Session::get('fs_admin')['id'];
 
         $whereForCat = ['rawQuery' => 'category_status =?', 'bindParams' => [1]];
@@ -72,11 +79,10 @@ class ProductController extends Controller
 //            $inputData = $request->input('product_data');//Excludes image
             $inputData = $request->all()['product_data'];//Includes image
 
-//            $productImages = $_FILES['product_data'];
-//            print_a($productImages['name']['mainimage']);
-
-
+//            print_a($inputData['options']);
 //            print_a($_FILES);
+
+
             $rules = [
                 'product_name' => 'required',
                 'price' => 'required',
@@ -84,11 +90,6 @@ class ProductController extends Controller
                 'comment' => 'max:100',
                 'mainimage' => 'required|image|mimes:jpeg,bmp,png|max:1000'
             ];
-//
-//            foreach ($inputData['$inputData'] as  => ) {
-//
-//            }
-
 
             $messages['mainimage.required'] = 'Please select a main image for the product.';
             $validator = Validator::make($inputData, $rules, $messages);
@@ -123,37 +124,58 @@ class ProductController extends Controller
                     $productMetaData['full_description'] = trim($inputData['full_description']);
                     $productMetaData['short_description'] = trim($inputData['short_description']);
 
-                    $newOptionData = array();
-                    foreach ($inputData['options'] as $key => $optionValue) {
-                        $optionTempData = array();
+                    if (array_key_exists('options', $inputData)) {
+                        $finalOptionVariantRelationData = array();
+                        foreach ($inputData['options'] as $key => $optionValue) {
+                            $optionVariantRelationData['product_id'] = $insertedProductId;
+                            $optionVariantRelationData['option_id'] = $optionValue['option_id'];
+                            $optionVariantRelationData['status'] = $optionValue['status'];
 
-                        $optionTempData['ON'] = $optionValue['option_name'];
-                        $optionTempData['OID'] = $optionValue['option_id'];
-                        $optionTempData['SID'] = $optionValue['shop_id'];
-                        $optionTempData['OT'] = $optionValue['option_type'];
-                        $optionTempData['DESC'] = $optionValue['description'];
-                        $optionTempData['CMNT'] = $optionValue['comment'];
-                        $optionTempData['STTS'] = $optionValue['status'];
-                        $optionTempData['RQRD'] = ($optionValue['required'] == 'on' || $optionValue['required'] == '1') ? 1 : 0;
+                            $tempOptionVariantData = array();
+                            $variantIds = array();
+                            if (array_key_exists('variantData', $optionValue)) {
+                                foreach ($optionValue['variantData'] as $variantKey => $variantValue) {
+                                    $temp = array();
+                                    if ($variantValue['variant_id'] == 0) {
+                                        $variantData['option_id'] = $optionValue['option_id'];
+                                        $variantData['variant_name'] = $variantValue['variant_name'];
+                                        $variantData['added_by'] = $userId;
+                                        $variantData['status'] = $variantValue['status'];
+                                        $variantData['created_at'] = NULL;
 
-                        if (array_key_exists('variantData', $optionValue)) {
-                            foreach ($optionValue['variantData'] as $variantKey => $variantValue) {
-                                $temp = array();
-                                $temp['VID'] = $variantValue['variant_id'];
-                                $temp['VN'] = $variantValue['variant_name'];
-                                $temp['PM'] = $variantValue['price_modifier'];
-                                $temp['PMT'] = $variantValue['price_modifier_type'];
-                                $temp['WM'] = $variantValue['weight_modifier'];
-                                $temp['WMT'] = $variantValue['weight_modifier_type'];
-                                $temp['STTS'] = $variantValue['status'];
-                                $optionTempData['VD'][] = $temp;
+                                        $insertedVariantId = $objModelProductOptionVariant->addNewVariantAndGetID($variantData);
+                                        if ($insertedVariantId > 0) {
+                                            array_push($variantIds, $insertedVariantId);
+                                            $temp['VID'] = $insertedVariantId;
+                                            $temp['VN'] = $variantValue['variant_name'];
+                                            $temp['PM'] = $variantValue['price_modifier'];
+                                            $temp['PMT'] = $variantValue['price_modifier_type'];
+                                            $temp['WM'] = $variantValue['weight_modifier'];
+                                            $temp['WMT'] = $variantValue['weight_modifier_type'];
+                                            $temp['STTS'] = $variantValue['status'];
+                                        }
+                                    } else {
+                                        array_push($variantIds, $variantValue['variant_id']);
+                                        $temp['VID'] = $variantValue['variant_id'];
+                                        $temp['VN'] = $variantValue['variant_name'];
+                                        $temp['PM'] = $variantValue['price_modifier'];
+                                        $temp['PMT'] = $variantValue['price_modifier_type'];
+                                        $temp['WM'] = $variantValue['weight_modifier'];
+                                        $temp['WMT'] = $variantValue['weight_modifier_type'];
+                                        $temp['STTS'] = $variantValue['status'];
+                                    }
+                                    $tempOptionVariantData[] = $temp;
+                                }
+                                if (!empty($variantIds) && !empty($tempOptionVariantData)) {
+                                    $optionVariantRelationData['variant_ids'] = implode(',', $variantIds);
+                                    $optionVariantRelationData['variant_data'] = json_encode($tempOptionVariantData);
+                                }
                             }
+                            $finalOptionVariantRelationData[] = $optionVariantRelationData;
                         }
-                        $newOptionData[] = $optionTempData;
-
-                    }
-                    if (!empty($newOptionData)) {
-                        $productMetaData['product_options'] = json_encode($newOptionData);
+                        if (!empty($finalOptionVariantRelationData)) {
+                            $objModelProductOptionVariantRelation->addNewOptionVariantRelation($finalOptionVariantRelationData);
+                        }
                     }
                     $productMetaData['weight'] = $inputData['shipping_properties']['weight'];
                     $productMetaData['shipping_freight'] = $inputData['shipping_properties']['shipping_freight'];
@@ -180,22 +202,38 @@ class ProductController extends Controller
 
 
                     //----------------------------PRODUCT-IMAGES------------------------------//
-
                     $productImages = $_FILES['product_data'];
-                    print_a($productImages);
-                    $imageURLS = array();
-
+                    $imageData = array();
                     if ($productImages['error']['mainimage'] == 0) {
-                        $imageURLS[] = uploadImageToStoragePath($productImages['tmp_name']['mainimage'], 'product_' . $insertedProductId, 'product_' . $insertedProductId . '_0_' . time());
+                        $mainImageURL = uploadImageToStoragePath($productImages['tmp_name']['mainimage'], 'product_' . $insertedProductId, 'product_' . $insertedProductId . '_0_' . time() . '.jpg');
+                        if ($mainImageURL) {
+                            $mainImageData['for_product_id'] = $insertedProductId;
+                            $mainImageData['image_type'] = 0;
+                            $mainImageData['image_upload_type'] = 0;
+                            $mainImageData['image_url'] = $mainImageURL;
+                            $imageData[] = $mainImageData;
+                        }
                     } else {
                         $errors[] = 'Sorry, something went wrong. Main image could not be uploaded, You can upload it on edit section.';
                     }
 
-//                    if ($productImages['error']['otherimages'] == 0) {
-//                        $mainImageURL = uploadImageToStoragePath($productImages['tmp_name']['mainimage'], 'product_' . $insertedProductId, 'product_' . $insertedProductId . '_0_' . time());
-//                    }
-
-
+                    if (array_key_exists('otherimages', $productImages['name'])) {
+                        foreach ($productImages['tmp_name']['otherimages'] as $otherImageKey => $otherImage) {
+                            if ($otherImage != '') {
+                                $otherImageURL = uploadImageToStoragePath($otherImage, 'product_' . $insertedProductId, 'product_' . $insertedProductId . '_' . ($otherImageKey + 1) . '_' . time() . '.jpg');
+                                if ($otherImageURL) {
+                                    $otherImageData['for_product_id'] = $insertedProductId;
+                                    $otherImageData['image_type'] = 1;
+                                    $otherImageData['image_upload_type'] = 0;
+                                    $otherImageData['image_url'] = $otherImageURL;
+                                    $imageData[] = $otherImageData;
+                                }
+                            }
+                        }
+                    }
+                    if (!empty($imageData)) {
+                        $objModelProductImage->addNewImage($imageData);
+                    }
                     //--------------------------END PRODUCT-IMAGES----------------------------//
 
                 }
