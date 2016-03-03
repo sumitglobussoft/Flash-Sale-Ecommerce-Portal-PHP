@@ -163,20 +163,20 @@
                                 <span class="user-name">{{ trans('message.changelanguage') }}<i
                                             class="fa fa-angle-down"></i></span>
                             </a>
-                        <ul class="dropdown-menu"><?php $langinfo = \FlashSale\Http\Modules\Admin\Controllers\AdministrationController::getLanguageDetails();?>
+                            <ul class="dropdown-menu"><?php $langinfo = \FlashSale\Http\Modules\Admin\Controllers\AdministrationController::getLanguageDetails();?>
 
-                            <?php if(isset($langinfo) && !(empty($langinfo))){ ?>
+                                <?php if(isset($langinfo) && !(empty($langinfo))){ ?>
 
-                            @foreach($langinfo as  $val)
+                                @foreach($langinfo as  $val)
 
-                                <li><a href="/lang/{{$val->lang_code}}">{{$val->name}}</a></li>
-                                {{--<li> <a href="/lang/{{$val->lang_code}}">{{$val->name}}</a></li>--}}
-                                {{--<option value="/lang/pt">Portuguese</option>--}}
-                            @endforeach
-                            <?php } ?>
+                                    <li><a href="/lang/{{$val->lang_code}}">{{$val->name}}</a></li>
+                                    {{--<li> <a href="/lang/{{$val->lang_code}}">{{$val->name}}</a></li>--}}
+                                    {{--<option value="/lang/pt">Portuguese</option>--}}
+                                @endforeach
+                                <?php } ?>
 
-                        </ul>
-                                </li>
+                            </ul>
+                        </li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle waves-effect waves-button waves-classic"
                                data-toggle="dropdown">
@@ -184,17 +184,27 @@
                                             class="fa fa-angle-down"></i></span>
                             </a>
                             <ul class="dropdown-menu dropdown-list" role="menu">
-                                <li role="presentation"><a
-                                            href="/admin/manage-currencies">{{ trans('message.currencies') }}</a></li>
-                                <li role="presentation"><a
-                                            href="/admin/cacheClear">{{ trans('message.clearcache') }}</a></li>
-                                <li role="presentation"><a href="/admin/manage-language"><i class="fa fa-cogs"></i>{{ trans('message.languages') }}</a>
+                                <li role="presentation">
+                                    <a href="/admin/manage-currencies">{{trans('message.currencies')}}</a>
                                 </li>
-                                <li role="presentation"><a href="/admin/add-language-value"><i
-                                                class="fa fa-cogs"></i>{{ trans('message.language_variable') }}
-                                        </a>
-                                </li>
+                                <li class="dropdown-submenu">
+                                    <a>{{trans('message.languages')}}</a>
+                                    <ul class="dropdown-menu">
+                                      <li><a  href="/admin/manage-language">xyz</a></li>
+                                      <li><a href="#">xyz</a></li>
 
+
+                                    </ul>
+                                </li>
+                                <li role="presentation">
+                                    <a href="/admin/add-language-value">{{trans('message.language_variable')}}</a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="/admin/add-language-value">{{trans('message.shipping_and_taxes')}}</a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="/admin/cacheClear">{{trans('message.clearcache')}}</a>
+                                </li>
                             </ul>
                         </li>
                         <?php $allSections = \FlashSale\Http\Modules\Admin\Controllers\AdminController::getSettingsSection();?>
@@ -202,7 +212,8 @@
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle waves-effect waves-button waves-classic"
                                    data-toggle="dropdown">
-                                    <span class="user-name">{{ trans('message.settings') }}<i class="fa fa-angle-down"></i></span>
+                                    <span class="user-name">{{ trans('message.settings') }}<i
+                                                class="fa fa-angle-down"></i></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-list" role="menu">
                                     <li role="presentation"><a href="/admin/control-panel">Control panel</a></li>
@@ -219,7 +230,8 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle waves-effect waves-button waves-classic"
                                data-toggle="dropdown">
-                                <span class="user-name">{{ trans('message.admin') }}<i class="fa fa-angle-down"></i></span>
+                                <span class="user-name">{{ trans('message.admin') }}<i
+                                            class="fa fa-angle-down"></i></span>
                                 <img class="img-circle avatar" src="/assets/images/avatar1.png" width="40" height="40"
                                      alt="">
                             </a>
@@ -231,8 +243,9 @@
                                 {{--<li role="presentation"><a href="/admin/control-panel"><i class="fa fa-cogs"></i>Control Panel</a></li>--}}
                                 {{--<li role="presentation"><a href="/admin/cacheClear"><i class="fa fa-trash "></i>Clear cache</a></li>--}}
                                 {{--<li role="presentation"><a href="/lock-screen"><i class="fa fa-lock"></i>Lock screen</a></li>--}}
-                                <li role="presentation"><a href="/admin/logout"><i class="fa fa-sign-out m-r-xs"></i>{{ trans('message.logout') }}
-                                        </a></li>
+                                <li role="presentation"><a href="/admin/logout"><i
+                                                class="fa fa-sign-out m-r-xs"></i>{{ trans('message.logout') }}
+                                    </a></li>
                             </ul>
                         </li>
 
@@ -241,7 +254,7 @@
                         {{--<span><i class="fa fa-sign-out m-r-xs"></i>Log out</span>--}}
                         {{--</a>--}}
                         {{--</li>--}}
-                        <!--UNCOMMENT THIS BLOCK  WITH SCRIPT IN MODERN.JS TO SHOW CHAT BOX ON RIGHT-->
+                                <!--UNCOMMENT THIS BLOCK  WITH SCRIPT IN MODERN.JS TO SHOW CHAT BOX ON RIGHT-->
                         <!--<li>
                             <a href="javascript:void(0);" class="waves-effect waves-button waves-classic"
                                id="showRight">
@@ -307,16 +320,16 @@
                 </li>
 
                 {{--<li class="droplink">--}}
-                    {{--<a class="waves-effect waves-button">--}}
-                        {{--<span class="menu-icon glyphicon glyphicon-envelope"></span>--}}
+                {{--<a class="waves-effect waves-button">--}}
+                {{--<span class="menu-icon glyphicon glyphicon-envelope"></span>--}}
 
-                        {{--<p>{{ trans('message.buyers') }}</p> <span class="arrow"></span>--}}
-                    {{--</a>--}}
-                    {{--<ul class="sub-menu">--}}
-                        {{--<li><a href="/admin/pending-users">Pending Buyers</a></li>--}}
-                        {{--<li><a href="/admin/available-users">Available Buyers</a></li>--}}
-                        {{--<li><a href="/admin/deleted-users">Deleted Buyers</a></li>--}}
-                    {{--</ul>--}}
+                {{--<p>{{ trans('message.buyers') }}</p> <span class="arrow"></span>--}}
+                {{--</a>--}}
+                {{--<ul class="sub-menu">--}}
+                {{--<li><a href="/admin/pending-users">Pending Buyers</a></li>--}}
+                {{--<li><a href="/admin/available-users">Available Buyers</a></li>--}}
+                {{--<li><a href="/admin/deleted-users">Deleted Buyers</a></li>--}}
+                {{--</ul>--}}
                 {{--</li>--}}
 
                 <li class="droplink">
