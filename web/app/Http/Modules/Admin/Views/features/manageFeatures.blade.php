@@ -17,34 +17,14 @@
                 <div class="panel-heading clearfix">
                     <h4 class="panel-title">Manage feature groups and features</h4>
                     <div class="panel-control">
-                        <div style="text-align: center">
-                            <div role="group" class="btn-group ">
-                                <button aria-expanded="true" data-toggle="dropdown"
-                                        class="btn btn-default dropdown-toggle" type="button">
-                                    <i class="fa fa-cog"></i>&nbsp;Add
-                                    <span class="caret"></span>
-                                </button>
-                                <ul role="menu" class="dropdown-menu">
-                                    <li>
-                                        <a href="/admin/add-feature-group">
-                                            <i class="fa fa-plus"></i>&nbsp;Add feature group
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/admin/add-feature">
-                                            <i class="fa fa-plus"></i>&nbsp;Add feature
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
 
                 <div class="panel-body">
 
-                    @if($errMsg == NULL)
-                        <div class="col-md-6">
+                    <div class="col-md-6">
+                        @if($errMsg == NULL)
                             <div id="tree_1" class="tree-demo">
                                 <?php
                                 function createTree($array, $curParent, $currLevel = 0, $prevLevel = -1)
@@ -73,11 +53,28 @@
                                 ?>
 
                             </div>
-                        </div>
-                    @else
-                        {{$errMsg}}
-                    @endif
+                        @else
+                            {{$errMsg}}
+                        @endif
+                    </div>
+                    <div class="col-md-5" align="right">
 
+                        <div role="group" class="btn-group ">
+                            <button aria-expanded="false" data-toggle="dropdown"
+                                    class="btn btn-default dropdown-toggle" type="button">
+                                <i class="fa fa-cog"></i>&nbsp;Add new&nbsp;<span class="caret"></span>
+                            </button>
+                            <ul role="menu" class="dropdown-menu">
+                                <li>
+                                    <a href="/admin/add-feature-group"> <i class="fa fa-plus"></i>&nbsp;Add feature
+                                        group </a>
+                                </li>
+                                <li>
+                                    <a href="/admin/add-feature"> <i class="fa fa-plus"></i>&nbsp;Add feature </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                     {{--@if($errMsg == NULL)--}}
                     {{--<pre>--}}
                     {{--@foreach($allFeatures['data'] as $keyFD => $valueFD)--}}

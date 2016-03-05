@@ -32,6 +32,16 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
             height: 300px;
             overflow-y: auto;
         }
+
+        hr {
+            margin: 7px;
+            border-color: #ddd;
+        }
+
+        .hrfeaturegroup {
+            margin: 7px;
+            border-color: #aaa;
+        }
     </style>
 @endsection
 
@@ -52,13 +62,13 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                             <li><a href="#tab_1_4" data-toggle="tab">Options</a></li>
                             <li><a href="#tab_1_5" data-toggle="tab">Shipping properties</a></li>
                             <li><a href="#tab_1_6" data-toggle="tab">Quantity discounts</a></li>
-                            <li><a href="#tab_1_7" data-toggle="tab">Features</a></li>
+                            <li id="featureTab" class="hidden"><a href="#tab_1_7" data-toggle="tab">Features</a></li>
                             <li><a href="#tab_1_8" data-toggle="tab">Product tabs</a></li>
                             <li><a href="#tab_1_9" data-toggle="tab">Tags</a></li>
                         </ul>
                     </div>
                     <form class="form-horizontal" method="post" enctype="multipart/form-data" autocomplete="on"
-                          id="addProductForm">
+                            id="addProductForm">
                         <div class="tab-content">
                             {{--GENERAL DETAILS TAB--}}
                             <div class="tab-pane active" id="tab_1_1">
@@ -67,21 +77,20 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                                         <div class="panel-heading" role="tab" id="headingInfo">
                                             <h4 class="panel-title">
                                                 <a data-toggle="collapse" data-parent="#accordion" href="#collapseInfo"
-                                                   aria-expanded="true" aria-controls="collapseInfo">
-                                                    Information
-                                                </a>
+                                                        aria-expanded="true" aria-controls="collapseInfo">
+                                                    Information </a>
                                             </h4>
                                         </div>
                                         <div id="collapseInfo" class="panel-collapse collapse in" role="tabpanel"
-                                             aria-labelledby="headingInfo">
+                                                aria-labelledby="headingInfo">
                                             <div class="panel-body">
                                                 <div class="form-group">
                                                     <label class="col-sm-3 control-label">Name</label>
 
                                                     <div class="col-sm-4">
                                                         <input type="text" class="form-control" id="product_name"
-                                                               name="product_data[product_name]"
-                                                               value="{{old('product_data')['product_name']}}">
+                                                                name="product_data[product_name]"
+                                                                value="{{old('product_data')['product_name']}}">
                                                         <span class="error">{!! $errors->first('product_name') !!}</span>
                                                     </div>
                                                 </div>
@@ -141,13 +150,13 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
 
 
                                                 <div class="form-group">
-                                                    <label class="col-sm-3 control-label">
-                                                        Price ({{$priceSymbol}})</label>
+                                                    <label class="col-sm-3 control-label"> Price ({{$priceSymbol}}
+                                                        )</label>
 
                                                     <div class="col-sm-4">
                                                         <input type="text" class="form-control float-type" id="price"
-                                                               name="product_data[price]"
-                                                               value="{{old('product_data')['price']}}">
+                                                                name="product_data[price]"
+                                                                value="{{old('product_data')['price']}}">
                                                         <span class="error">{!! $errors->first('price') !!}</span>
                                                     </div>
                                                 </div>
@@ -158,7 +167,7 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
 
                                                     <div class="col-sm-4">
                                                     <textarea name="product_data[full_description]"
-                                                              class="form-control">{{old('product_data')['full_description']}}</textarea>
+                                                            class="form-control">{{old('product_data')['full_description']}}</textarea>
                                                         <span class="error">{!! $errors->first('full_description') !!}</span>
                                                     </div>
                                                 </div>
@@ -169,14 +178,12 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                                                     <div class="col-sm-4">
                                                         <label for="status_active" class="col-sm-6">
                                                             <input type="radio" class="form-control" id="status_active"
-                                                                   name="product_data[status]" checked value="1">
-                                                            Active
-                                                        </label>
+                                                                    name="product_data[status]" checked value="1">
+                                                            Active </label>
                                                         <label for="status_inactive" class="col-sm-6">
                                                             <input type="radio" class="form-control"
-                                                                   id="status_inactive"
-                                                                   name="product_data[status]" value="2">
-                                                            Inactive
+                                                                    id="status_inactive"
+                                                                    name="product_data[status]" value="2"> Inactive
                                                         </label>
                                                     </div>
                                                 </div>
@@ -186,9 +193,9 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
 
                                                     <div class="col-sm-4">
                                                         <input type="checkbox" name="product_data[product_type]"
-                                                               class="form-control m-b-sm"
-                                                               id="product_type"
-                                                               @if(isset(old('product_data')['product_type'])) checked @endif />
+                                                                class="form-control m-b-sm"
+                                                                id="product_type"
+                                                                @if(isset(old('product_data')['product_type'])) checked @endif />
                                                     </div>
                                                 </div>
 
@@ -238,24 +245,23 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                                         <div class="panel-heading" role="tab" id="headingPrice">
                                             <h4 class="panel-title">
                                                 <a class="collapsed" data-toggle="collapse" data-parent="#accordion"
-                                                   href="#collapsePrice" aria-expanded="false"
-                                                   aria-controls="collapsePrice"> Pricing / inventory </a>
+                                                        href="#collapsePrice" aria-expanded="false"
+                                                        aria-controls="collapsePrice"> Pricing / inventory </a>
                                             </h4>
                                         </div>
                                         <div id="collapsePrice" class="panel-collapse collapse" role="tabpanel"
-                                             aria-labelledby="headingPrice">
+                                                aria-labelledby="headingPrice">
                                             <div class="panel-body">
                                                 <div class="form-group">
-                                                    <label class="col-sm-3 control-label">
-                                                        List price ({{$priceSymbol}})
+                                                    <label class="col-sm-3 control-label"> List price ({{$priceSymbol}})
                                                         <i class="fa fa-question-circle" data-toggle="tooltip"
-                                                           title="Manufacturer suggested retail price."></i></label>
+                                                                title="Manufacturer suggested retail price."></i></label>
 
                                                     <div class="col-sm-4">
                                                         <input type="text" class="form-control float-type"
-                                                               id="list_price"
-                                                               name="product_data[list_price]"
-                                                               value="{{old('product_data')['list_price']}}">
+                                                                id="list_price"
+                                                                name="product_data[list_price]"
+                                                                value="{{old('product_data')['list_price']}}">
                                                         <span class="error">{!! $errors->first('list_price') !!}</span>
                                                     </div>
                                                 </div>
@@ -264,9 +270,9 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
 
                                                     <div class="col-sm-4">
                                                         <input type="text" class="form-control integer-type"
-                                                               id="in_stock"
-                                                               name="product_data[in_stock]"
-                                                               value="{{old('product_data')['in_stock']}}">
+                                                                id="in_stock"
+                                                                name="product_data[in_stock]"
+                                                                value="{{old('product_data')['in_stock']}}">
                                                         <span class="error">{!! $errors->first('in_stock') !!}</span>
                                                     </div>
                                                 </div>
@@ -277,9 +283,9 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
 
                                                     <div class="col-sm-4">
                                                         <input type="text" class="form-control integer-type"
-                                                               id="minimum_order_quantity"
-                                                               name="product_data[minimum_order_quantity]"
-                                                               value="{{old('product_data')['minimum_order_quantity']}}">
+                                                                id="minimum_order_quantity"
+                                                                name="product_data[minimum_order_quantity]"
+                                                                value="{{old('product_data')['minimum_order_quantity']}}">
                                                         <span class="error">{!! $errors->first('minimum_order_quantity') !!}</span>
                                                     </div>
                                                 </div>
@@ -289,9 +295,9 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
 
                                                     <div class="col-sm-4">
                                                         <input type="text" class="form-control integer-type"
-                                                               id="maximum_order_quantity"
-                                                               name="product_data[maximum_order_quantity]"
-                                                               value="{{old('product_data')['maximum_order_quantity']}}">
+                                                                id="maximum_order_quantity"
+                                                                name="product_data[maximum_order_quantity]"
+                                                                value="{{old('product_data')['maximum_order_quantity']}}">
                                                         <span class="error">{!! $errors->first('maximum_order_quantity') !!}</span>
                                                     </div>
                                                 </div>
@@ -300,8 +306,8 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
 
                                                     <div class="col-sm-4">
                                                         <input type="checkbox" class="form-control" id="taxes"
-                                                               name="product_data[taxes]"
-                                                               @if(isset(old('product_data')['taxes'])) checked @endif>
+                                                                name="product_data[taxes]"
+                                                                @if(isset(old('product_data')['taxes'])) checked @endif>
                                                     </div>
                                                 </div>
                                             </div>
@@ -311,12 +317,12 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                                         <div class="panel-heading" role="tab" id="headingExtra">
                                             <h4 class="panel-title">
                                                 <a class="collapsed" data-toggle="collapse" data-parent="#accordion"
-                                                   href="#collapseExtra" aria-expanded="false"
-                                                   aria-controls="collapseExtra"> Extra </a>
+                                                        href="#collapseExtra" aria-expanded="false"
+                                                        aria-controls="collapseExtra"> Extra </a>
                                             </h4>
                                         </div>
                                         <div id="collapseExtra" class="panel-collapse collapse" role="tabpanel"
-                                             aria-labelledby="headingExtra">
+                                                aria-labelledby="headingExtra">
                                             <div class="panel-body">
                                                 <div class="form-group">
                                                     {{--Todo-Use editor here--}}
@@ -324,7 +330,7 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
 
                                                     <div class="col-sm-4">
                                                     <textarea name="product_data[short_description]"
-                                                              class="form-control">{{old('product_data')['short_description']}}</textarea>
+                                                            class="form-control">{{old('product_data')['short_description']}}</textarea>
                                                         <span class="error">{!! $errors->first('short_description') !!}</span>
                                                     </div>
                                                 </div>
@@ -333,7 +339,7 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
 
                                                     <div class="col-sm-4">
                                                     <textarea name="product_data[search_words]"
-                                                              class="form-control">{{old('product_data')['search_words']}}</textarea>
+                                                            class="form-control">{{old('product_data')['search_words']}}</textarea>
                                                         <span class="error">{!! $errors->first('search_words') !!}</span>
                                                     </div>
                                                 </div>
@@ -343,7 +349,7 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
 
                                                     <div class="col-sm-4">
                                                         <textarea name="product_data[promo_text]"
-                                                                  class="form-control">{{old('product_data')['promo_text']}}</textarea>
+                                                                class="form-control">{{old('product_data')['promo_text']}}</textarea>
                                                         <span class="error">{!! $errors->first('promo_text') !!}</span>
                                                     </div>
                                                 </div>
@@ -363,15 +369,14 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                                         <div class="panel-heading" role="tab" id="headingMainImage">
                                             <h4 class="panel-title">
                                                 <a data-toggle="collapse" data-parent="#accordion"
-                                                   href="#collapseMainImage"
-                                                   aria-expanded="true" aria-controls="collapseMainImage">
-                                                    Main Image
-                                                </a>
+                                                        href="#collapseMainImage"
+                                                        aria-expanded="true" aria-controls="collapseMainImage"> Main
+                                                    Image </a>
                                             </h4>
                                         </div>
                                         <div id="collapseMainImage" class="panel-collapse collapse in"
-                                             role="tabpanel"
-                                             aria-labelledby="headingMainImage">
+                                                role="tabpanel"
+                                                aria-labelledby="headingMainImage">
                                             <div class="panel-body">
                                                 <div class="form-group">
                                                     {{--<h4 class="note note-info note-bordered"--}}
@@ -380,26 +385,24 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                                                     <div class="text-center col-md-6">
 
                                                         <div class="fileinput fileinput-new"
-                                                             data-provides="fileinput">
+                                                                data-provides="fileinput">
                                                             <div class="fileinput-new thumbnail"
-                                                                 style="width: 200px; height: 150px;">
+                                                                    style="width: 200px; height: 150px;">
                                                                 <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image"
-                                                                     alt=""/>
+                                                                        alt=""/>
                                                             </div>
                                                             <div class="fileinput-preview fileinput-exists thumbnail"
-                                                                 style="max-width: 200px; max-height: 150px;">
+                                                                    style="max-width: 200px; max-height: 150px;">
                                                             </div>
                                                             <div>
                                                                 <span class="btn default btn-info btn-file">
                                                                     <span class="fileinput-new"> Select image </span>
                                                                     <span class="fileinput-exists"> Change </span>
                                                                     <input id="main-image" type="file"
-                                                                           name="product_data[mainimage]">
-                                                                </span>
+                                                                            name="product_data[mainimage]"> </span>
                                                                 <a href="#"
-                                                                   class="btn default btn-danger fileinput-exists"
-                                                                   data-dismiss="fileinput">
-                                                                    Remove </a>
+                                                                        class="btn default btn-danger fileinput-exists"
+                                                                        data-dismiss="fileinput"> Remove </a>
                                                             </div>
                                                             <span class="error">{!! $errors->first('mainimage') !!}</span>
                                                         </div>
@@ -416,21 +419,17 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                                                         <br>
 
                                                         <p class="margin-top-10">
-                                                            Counterfeit products are prohibited on
-                                                            FlashSale.
+                                                            Counterfeit products are prohibited on FlashSale.
                                                         </p>
 
-                                                        <p class="margin-top-10">Products with multiple high
-                                                            quality images
-                                                            get the most sales.</p>
+                                                        <p class="margin-top-10">Products with multiple high quality
+                                                            images get the most sales.</p>
 
-                                                        <p class="margin-top-10">Add images that are at
-                                                            least 800x800
+                                                        <p class="margin-top-10">Add images that are at least 800x800
                                                             pixels.</p>
 
-                                                        <p class="margin-top-10">Do not steal images from
-                                                            other merchants,
-                                                            or your product will be deleted.</p>
+                                                        <p class="margin-top-10">Do not steal images from other
+                                                            merchants, or your product will be deleted.</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -440,14 +439,14 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                                         <div class="panel-heading" role="tab" id="headingOtherImages">
                                             <h4 class="panel-title">
                                                 <a class="collapsed" data-toggle="collapse"
-                                                   data-parent="#accordion"
-                                                   href="#collapseOtherImages" aria-expanded="false"
-                                                   aria-controls="collapseOtherImages"> Other Images </a>
+                                                        data-parent="#accordion"
+                                                        href="#collapseOtherImages" aria-expanded="false"
+                                                        aria-controls="collapseOtherImages"> Other Images </a>
                                             </h4>
                                         </div>
                                         <div id="collapseOtherImages" class="panel-collapse collapse"
-                                             role="tabpanel"
-                                             aria-labelledby="headingOtherImages">
+                                                role="tabpanel"
+                                                aria-labelledby="headingOtherImages">
                                             <div class="panel-body">
                                                 <div class="form-group last">
                                                     {{--<h4 class="note note-info note-bordered"--}}
@@ -455,27 +454,27 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                                                     {{--Other Images</h4>--}}
                                                     <div class="col-md-12">
                                                         <div class="fileinput fileinput-new"
-                                                             data-provides="fileinput"
-                                                             id="otherimagesdiv">
+                                                                data-provides="fileinput"
+                                                                id="otherimagesdiv">
                                                             <div class="fileinput-new thumbnail"
-                                                                 style="width: 200px; height: 150px;">
+                                                                    style="width: 200px; height: 150px;">
                                                                 <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image"
-                                                                     alt=""/>
+                                                                        alt=""/>
                                                             </div>
                                                             <!--<div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;">-->
                                                         </div>
                                                         <div>
-                                                        <span class="btn default btn-file btn-info">
-                                                            <span class="fileinput-new" id="otherimageselect"> Select images </span>
-                                                            <span class="fileinput-exists hidden" id="otherimagechange"> Change </span>
-                                                            <input type="file" name="product_data[otherimages][]"
-                                                                   multiple=""
-                                                                   accept="image/*" id="otherimages">
-                                                        </span>
+                                                            <span class="btn default btn-file btn-info">
+                                                                <span class="fileinput-new" id="otherimageselect">
+                                                                    Select images </span>
+                                                                <span class="fileinput-exists hidden" id="otherimagechange">
+                                                                    Change </span>
+                                                                <input type="file" name="product_data[otherimages][]"
+                                                                        multiple=""
+                                                                        accept="image/*" id="otherimages"> </span>
                                                             <a class="btn default fileinput-exists btn-danger hidden"
-                                                               data-dismiss="fileinput"
-                                                               id="otherimagesremove">
-                                                                Remove All</a>
+                                                                    data-dismiss="fileinput"
+                                                                    id="otherimagesremove"> Remove All</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -505,9 +504,14 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div>
+                                    <div class="col-sm-3">
                                         <button type="button" class="btn btn-info" id="add-another-option">Add another
                                             option
+                                        </button>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <button type="button" class="btn btn-default" id="option-combinations">Option
+                                            combinations
                                         </button>
                                     </div>
                                 </div>
@@ -583,13 +587,12 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
 
                             <div class="tab-pane" id="tab_1_5">
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label">
-                                        Weight ({{$weightSymbol}})</label>
+                                    <label class="col-sm-3 control-label"> Weight ({{$weightSymbol}})</label>
 
                                     <div class="col-sm-4">
                                         <input type="text" class="form-control float-type" id="weight"
-                                               name="product_data[shipping_properties][weight]"
-                                               value="{{old('product_data')['shipping_properties']['weight']}}">
+                                                name="product_data[shipping_properties][weight]"
+                                                value="{{old('product_data')['shipping_properties']['weight']}}">
                                         <span class="error">{!! $errors->first('weight') !!}</span>
                                     </div>
                                 </div>
@@ -598,42 +601,40 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
 
                                     <div class="col-sm-4">
                                         <input type="checkbox" name="product_data[shipping_properties][free_shipping]"
-                                               class="form-control m-b-sm"
-                                               id="free_shipping"
-                                               @if(isset(old('product_data')['shipping_properties']['free_shipping'])) checked @endif />
+                                                class="form-control m-b-sm"
+                                                id="free_shipping"
+                                                @if(isset(old('product_data')['shipping_properties']['free_shipping'])) checked @endif />
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label">
-                                        Shipping freight ({{$priceSymbol}})</label>
+                                    <label class="col-sm-3 control-label"> Shipping freight ({{$priceSymbol}})</label>
 
                                     <div class="col-sm-4">
                                         <input type="text" class="form-control float-type" id="shipping_freight"
-                                               name="product_data[shipping_properties][shipping_freight]"
-                                               value="{{old('product_data')['shipping_properties']['shipping_freight']}}">
+                                                name="product_data[shipping_properties][shipping_freight]"
+                                                value="{{old('product_data')['shipping_properties']['shipping_freight']}}">
                                         <span class="error">{!! $errors->first('shipping_freight') !!}</span>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label">
-                                        Items in a box
+                                    <label class="col-sm-3 control-label"> Items in a box
                                         <i class="fa fa-question-circle" data-toggle="tooltip"
-                                           title="Use this field to define to minimum and maximum number of product item to be shipped in a separate box. Enter non-zero value and specify the box dimensions below"></i></label>
+                                                title="Use this field to define to minimum and maximum number of product item to be shipped in a separate box. Enter non-zero value and specify the box dimensions below"></i></label>
 
                                     <div class="col-sm-4">
                                         <div class="col-sm-3">
                                             <input type="text" class="form-control items_in_a_box integer-type"
-                                                   id="min_items"
-                                                   name="product_data[shipping_properties][min_items]"
-                                                   value="{{old('product_data')['shipping_properties']['min_items']}}"
-                                                   placeholder="min">
+                                                    id="min_items"
+                                                    name="product_data[shipping_properties][min_items]"
+                                                    value="{{old('product_data')['shipping_properties']['min_items']}}"
+                                                    placeholder="min">
                                         </div>
                                         <div class="col-sm-3">
                                             <input type="text" class="form-control items_in_a_box integer-type"
-                                                   id="max_items"
-                                                   name="product_data[shipping_properties][max_items]"
-                                                   value="{{old('product_data')['shipping_properties']['max_items']}}"
-                                                   placeholder="max">
+                                                    id="max_items"
+                                                    name="product_data[shipping_properties][max_items]"
+                                                    value="{{old('product_data')['shipping_properties']['max_items']}}"
+                                                    placeholder="max">
                                         </div>
                                     </div>
                                 </div>
@@ -642,12 +643,12 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
 
                                     <div class="col-sm-4">
                                         <input type="text" class="form-control box_dimension float-type"
-                                               id="box_length"
-                                               name="product_data[shipping_properties][box_length]"
-                                               @if(isset(old('product_data')['shipping_properties']['box_length']))
-                                               value="{{old('product_data')['shipping_properties']['box_length']}}"
-                                               @endif
-                                               disabled>
+                                                id="box_length"
+                                                name="product_data[shipping_properties][box_length]"
+                                                @if(isset(old('product_data')['shipping_properties']['box_length']))
+                                                value="{{old('product_data')['shipping_properties']['box_length']}}"
+                                                @endif
+                                                disabled>
                                         <span class="error">{!! $errors->first('box_length') !!}</span>
                                     </div>
                                 </div>
@@ -656,13 +657,12 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
 
                                     <div class="col-sm-4">
                                         <input type="text" class="form-control box_dimension float-type"
-                                               id="box_width"
-                                               name="product_data[shipping_properties][box_width]"
-                                               @if(isset(old('product_data')['shipping_properties']['box_width']))
-                                               value="{{old('product_data')['shipping_properties']['box_width']}}"
-                                               @endif
-                                               disabled>
-                                        <span class="error">{!! $errors->first('box_width') !!}</span>
+                                                id="box_width"
+                                                name="product_data[shipping_properties][box_width]"
+                                                @if(isset(old('product_data')['shipping_properties']['box_width']))
+                                                value="{{old('product_data')['shipping_properties']['box_width']}}"
+                                                @endif
+                                                disabled> <span class="error">{!! $errors->first('box_width') !!}</span>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -670,12 +670,12 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
 
                                     <div class="col-sm-4">
                                         <input type="text" class="form-control box_dimension float-type"
-                                               id="box_height"
-                                               name="product_data[shipping_properties][box_height]"
-                                               @if(isset(old('product_data')['shipping_properties']['box_height']))
-                                               value="{{old('product_data')['shipping_properties']['box_height']}}"
-                                               @endif
-                                               disabled>
+                                                id="box_height"
+                                                name="product_data[shipping_properties][box_height]"
+                                                @if(isset(old('product_data')['shipping_properties']['box_height']))
+                                                value="{{old('product_data')['shipping_properties']['box_height']}}"
+                                                @endif
+                                                disabled>
                                         <span class="error">{!! $errors->first('box_height') !!}</span>
                                     </div>
                                 </div>
@@ -690,7 +690,7 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                                             <th style="width: 25%">Value</th>
                                             <th style="width: 25%">Type
                                                 <i class="fa fa-question-circle" data-toggle="tooltip"
-                                                   title="Fixed amount/percentage to be taken off the price."></i>
+                                                        title="Fixed amount/percentage to be taken off the price."></i>
                                             </th>
                                             {{--<th>User group</th>--}}
                                             <th style="width: 15%">Action</th>
@@ -704,16 +704,16 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                                                 @if($quantityDiscountValue['quantity']!=''||$quantityDiscountValue['value']!='')
                                                     <tr>
                                                         <td><input type="text" class="form-control integer-type"
-                                                                   name="product_data[quantity_discount][{{$quantityDiscountKey}}][quantity]"
-                                                                   value="{{$quantityDiscountValue['quantity']}}">
+                                                                    name="product_data[quantity_discount][{{$quantityDiscountKey}}][quantity]"
+                                                                    value="{{$quantityDiscountValue['quantity']}}">
                                                             <span class="error">{!! $errors->first('quantity_discount.'.$quantityDiscountKey.'.quantity') !!}</span>
                                                         </td>
                                                         <td>
                                                             <div class="form-group">
                                                                 <div class="col-sm-6">
                                                                     <input type="text" class="form-control float-type"
-                                                                           name="product_data[quantity_discount][{{$quantityDiscountKey}}][value]"
-                                                                           value="{{$quantityDiscountValue['value']}}">
+                                                                            name="product_data[quantity_discount][{{$quantityDiscountKey}}][value]"
+                                                                            value="{{$quantityDiscountValue['value']}}">
                                                                     <span class="error">{!! $errors->first('quantity_discount.'.$quantityDiscountKey.'.value') !!}</span>
                                                                 </div>
                                                             </div>
@@ -759,9 +759,9 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                                         @else
                                             <tr>
                                                 <td><input type="text" class="form-control integer-type"
-                                                           name="product_data[quantity_discount][0][quantity]"></td>
+                                                            name="product_data[quantity_discount][0][quantity]"></td>
                                                 <td><input type="text" class="form-control float-type"
-                                                           name="product_data[quantity_discount][0][value]"></td>
+                                                            name="product_data[quantity_discount][0][value]"></td>
                                                 <td>
                                                     <select name="product_data[quantity_discount][0][type]"
                                                             class="form-control">
@@ -807,15 +807,12 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                                         <td>
                                             <label for="product_tabs_description_active" class="col-sm-3">
                                                 <input type="radio"
-                                                       name="product_data[product_tabs][description]"
-                                                       id="product_tabs_description_active" value="1" checked>
-                                                Active
-                                            </label>
-                                            <label for="product_tabs_description_disabled" class="col-sm-3">
+                                                        name="product_data[product_tabs][description]"
+                                                        id="product_tabs_description_active" value="1" checked> Active
+                                            </label> <label for="product_tabs_description_disabled" class="col-sm-3">
                                                 <input type="radio"
-                                                       name="product_data[product_tabs][description]"
-                                                       id="product_tabs_description_disabled" value="2">
-                                                Disabled
+                                                        name="product_data[product_tabs][description]"
+                                                        id="product_tabs_description_disabled" value="2"> Disabled
                                             </label>
                                         </td>
                                     </tr>
@@ -824,33 +821,24 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                                         <td>
                                             <label for="product_tabs_features_active" class="col-sm-3">
                                                 <input type="radio"
-                                                       name="product_data[product_tabs][features]"
-                                                       id="product_tabs_features_active" value="1" checked>
-                                                Active
-                                            </label>
-                                            <label for="product_tabs_features_disabled" class="col-sm-3">
+                                                        name="product_data[product_tabs][features]"
+                                                        id="product_tabs_features_active" value="1" checked> Active
+                                            </label> <label for="product_tabs_features_disabled" class="col-sm-3">
                                                 <input type="radio"
-                                                       name="product_data[product_tabs][features]"
-                                                       id="product_tabs_features_disabled" value="2">
-                                                Disabled
-                                            </label>
+                                                        name="product_data[product_tabs][features]"
+                                                        id="product_tabs_features_disabled" value="2"> Disabled </label>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>Tags</td>
                                         <td>
-                                            <label for="product_tabs_tags_active" class="col-sm-3">
-                                                <input type="radio"
-                                                       name="product_data[product_tabs][tags]"
-                                                       id="product_tabs_tags_active" value="1" checked>
-                                                Active
-                                            </label>
+                                            <label for="product_tabs_tags_active" class="col-sm-3"> <input type="radio"
+                                                        name="product_data[product_tabs][tags]"
+                                                        id="product_tabs_tags_active" value="1" checked> Active </label>
                                             <label for="product_tabs_tags_disabled" class="col-sm-3">
                                                 <input type="radio"
-                                                       name="product_data[product_tabs][tags]"
-                                                       id="product_tabs_tags_disabled" value="2">
-                                                Disabled
-                                            </label>
+                                                        name="product_data[product_tabs][tags]"
+                                                        id="product_tabs_tags_disabled" value="2"> Disabled </label>
                                         </td>
                                     </tr>
                                     <tr>
@@ -858,16 +846,12 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                                         <td>
                                             <label for="product_tabs_reviews_active" class="col-sm-3">
                                                 <input type="radio"
-                                                       name="product_data[product_tabs][reviews]"
-                                                       id="product_tabs_reviews_active" value="1" checked>
-                                                Active
-                                            </label>
-                                            <label for="product_tabs_reviews_disabled" class="col-sm-3">
+                                                        name="product_data[product_tabs][reviews]"
+                                                        id="product_tabs_reviews_active" value="1" checked> Active
+                                            </label> <label for="product_tabs_reviews_disabled" class="col-sm-3">
                                                 <input type="radio"
-                                                       name="product_data[product_tabs][reviews]"
-                                                       id="product_tabs_reviews_disabled" value="2">
-                                                Disabled
-                                            </label>
+                                                        name="product_data[product_tabs][reviews]"
+                                                        id="product_tabs_reviews_disabled" value="2"> Disabled </label>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -882,6 +866,57 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                             <button type="submit" class="btn btn-primary">Submit</button>
                             <button type="reset" class="btn btn-default">Reset</button>
                         </div>
+                        <!-- OPTION COMBINATION MODAL START-->
+                        <div class="modal fade bs-modal-lg" id="option_combinations_modal" role="dialog">
+                            <div class="modal-dialog  modal-lg">
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title"><b>Option Combinations</b></h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-horizontal">
+                                            <div class="form-group">
+                                                <div class="panel panel-white">
+                                                    {{--<div class="panel-heading clearfix">--}}
+                                                    {{--<h4 class="panel-title">Option Combinations</h4>--}}
+                                                    {{--</div>--}}
+                                                    <div class="panel-body">
+                                                        <div class="row" style="  height: 300px; overflow-y: auto;">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-bordered" id="option-combination-table">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th>Name</th>
+                                                                        <th>Quantity</th>
+                                                                        <th>Bar code</th>
+                                                                        <th>Exclude combination</th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody id="variantCombinationTBody">
+                                                                    <!-- OPTION COMBINATIONS WILL BE ADDED/UPDATED/REMOVED HERE-->
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer" style="text-align: center">
+                                        <button data-dismiss="modal" class="btn default" type="button">Close</button>
+                                        <button class="btn blue" type="button" id="save-option-combinations">Save
+                                            changes
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- OPTION COMBINATION MODAL END-->
                     </form>
                 </div>
             </div>
@@ -913,12 +948,12 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                                         <div class="tab-pane active" id="option_tab">
                                             <div class="form-group">
                                                 <input type="hidden" class="form-control" id="option_id_for_edit"
-                                                       for="option_id">
+                                                        for="option_id">
                                                 <label class="col-sm-2 control-label">Name</label>
 
                                                 <div class="col-sm-4">
                                                     <input type="text" class="form-control" id="option_name_for_edit"
-                                                           for="option_name">
+                                                            for="option_name">
                                                 </div>
                                             </div>
 
@@ -959,8 +994,8 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
 
                                                 <div class="col-sm-4">
                                                     <textarea name="option_data[description]"
-                                                              class="form-control"
-                                                              id="option_desc_for_edit" for="description"></textarea>
+                                                            class="form-control"
+                                                            id="option_desc_for_edit" for="description"></textarea>
                                                 </div>
                                             </div>
 
@@ -969,8 +1004,8 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
 
                                                 <div class="col-sm-4">
                                                     <input type="text" class="form-control"
-                                                           name="option_data[comment]"
-                                                           id="option_comment_for_edit" for="comment">
+                                                            name="option_data[comment]"
+                                                            id="option_comment_for_edit" for="comment">
                                                     <small>Enter your comment to appear below the option</small>
                                                 </div>
                                             </div>
@@ -979,9 +1014,9 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
 
                                                 <div class="col-sm-4">
                                                     <input type="checkbox" class="form-control"
-                                                           name="option_data[required]"
-                                                           @if(isset(old('option_data')['required'])) checked @endif
-                                                           id="option_required_for_edit" for="required">
+                                                            name="option_data[required]"
+                                                            @if(isset(old('option_data')['required'])) checked @endif
+                                                    id="option_required_for_edit" for="required">
                                                 </div>
                                             </div>
                                         </div>
@@ -1500,6 +1535,205 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                 });
                 return true;
             });
+
+            $(document.body).on('change', '#select_category', function () {
+                var catid = $(this).val();
+                $("#featuresTableBody").html('');
+                $('#select_feature').html('');
+                if (catid) {
+                    $.ajax({
+                        url: '/admin/product-ajax-handler',
+                        type: 'POST',
+                        datatype: 'json',
+                        data: {
+                            method: 'getFeaturesWhereCatIdLike',
+                            catid: catid
+                        },
+                        success: function (response) {
+                            response = $.parseJSON(response);
+                            console.log(response);
+                            if (response['code'] == 200) {
+                                $('#featureTab').removeClass('hidden');
+                                var toAppend = '';
+                                $.each(response['data']['featureDetails'], function (i, a) {
+
+                                    var toAppendStatus = '<div class="col-md-offset-1 col-md-4"><label for="product_feature_status_' + a['feature_id'] + '_active" class="col-sm-6">';
+                                    toAppendStatus += '<input type="radio" name="product_data[features][' + a['feature_id'] + '][status]" id="product_feature_status_' + a['feature_id'] + '_active" value="1" checked> Active </label>';
+                                    toAppendStatus += '<label for="product_feature_status_' + a['feature_id'] + '_disabled" class="col-sm-6">';
+                                    toAppendStatus += '<input type="radio" name="product_data[features][' + a['feature_id'] + '][status]" id="product_feature_status_' + a['feature_id'] + '_disabled" value="0"> Disabled </label></div>';
+
+                                    toAppend += '<hr><div class="form-group"><label class="col-sm-3 control-label">' + a['feature_name'] + '</label>';
+                                    if (a['feature_type'] == 0) {
+                                        toAppend += '<div class="col-md-3"><input class="form-control" type="checkbox" name="product_data[features][' + a['feature_id'] + '][single]"/></div>';//value="' + a['feature_id'] + '"//<div class="clearfix"></div>
+                                        toAppend += toAppendStatus;
+                                        toAppend += '<div class="clearfix"></div>';
+                                    } else if (a['feature_type'] == 1) {
+                                        if (a['variant_ids'] != null) {
+                                            var variantIds = a['variant_ids'].split(",");
+                                            var variantNames = a['variant_names'].split(",");
+                                            var variantDescs = a['variant_descriptions'].split(",");
+                                            $.each(variantIds, function (iVIds, aVIds) {
+                                                toAppend += '<div class="col-md-3"><input class="form-control" type="checkbox" name="product_data[features][' + a['feature_id'] + '][multiple][' + aVIds + ']"/>' + variantNames[iVIds] + '</div>';// value="' + a['feature_id'] + '.' + aVIds + '"//<div class="clearfix"></div>
+                                                if (iVIds == 0) {
+                                                    toAppend += toAppendStatus;
+                                                }
+                                                toAppend += '<div class="clearfix"></div>';
+                                            });
+                                        }
+                                    } else if (a['feature_type'] == 2 || a['feature_type'] == 3) {
+                                        if (a['variant_ids'] != null) {
+                                            var variantIds = a['variant_ids'].split(",");
+                                            var variantNames = a['variant_names'].split(",");
+                                            var variantDescs = a['variant_descriptions'].split(",");
+                                            toAppend += '<div class="col-md-3"><select class="form-control" name="product_data[features][' + a['feature_id'] + '][select]">';
+                                            $.each(variantIds, function (iVIds, aVIds) {
+                                                toAppend += '<option value="' + aVIds + '">' + variantNames[iVIds] + '</option>';//+ a['feature_id'] + '.'
+                                            });
+                                            toAppend += '</select></div>';//<div class="clearfix"></div>
+                                            toAppend += toAppendStatus;
+                                            toAppend += '<div class="clearfix"></div>';
+                                        }
+                                    }
+                                    toAppend += '</div>';
+                                    toAppend += '<div class="clearfix"></div>';
+                                });
+                                $.each(response['data']['featureGroupDetails'], function (iFG, aFG) {
+                                    toAppend += '<hr class="hrfeaturegroup"><strong>' + aFG['feature_name'] + '</strong><br>';
+                                    $.each(aFG['featureDetails'], function (i, a) {
+
+                                        var toAppendStatus = '<div class="col-md-offset-1 col-md-4"><label for="product_feature_status_' + a['feature_id'] + '_active" class="col-sm-6">';
+                                        toAppendStatus += '<input type="radio" name="product_data[features][' + a['feature_id'] + '][status]" id="product_feature_status_' + a['feature_id'] + '_active" value="1" checked> Active </label>';
+                                        toAppendStatus += '<label for="product_option_status_' + a['feature_id'] + '_disabled" class="col-sm-6">';
+                                        toAppendStatus += '<input type="radio" name="product_data[features][' + a['feature_id'] + '][status]" id="product_feature_status_' + a['feature_id'] + '_disabled" value="0"> Disabled </label></div>';
+
+                                        toAppend += '<hr><div class="form-group"><label class="col-sm-3 control-label">' + a['feature_name'] + '</label>';
+                                        if (a['feature_type'] == 0) {
+                                            toAppend += '<div class="col-md-3"><input class="form-control" type="checkbox" name="product_data[features][' + a['feature_id'] + '][single]"/></div>';//value="' + a['feature_id'] + '"//<div class="clearfix"></div>
+                                            toAppend += toAppendStatus;
+                                            toAppend += '<div class="clearfix"></div>';
+                                        } else if (a['feature_type'] == 1) {
+                                            if (a['variant_ids'] != null) {
+                                                var variantIds = a['variant_ids'].split(",");
+                                                var variantNames = a['variant_names'].split(",");
+                                                var variantDescs = a['variant_descriptions'].split(",");
+                                                $.each(variantIds, function (iVIds, aVIds) {
+                                                    toAppend += '<div class="col-md-3"><input class="form-control" type="checkbox" name="product_data[features][' + a['feature_id'] + '][multiple][' + aVIds + ']"/>' + variantNames[iVIds] + '</div>';// value="' + a['feature_id'] + '.' + aVIds + '"//<div class="clearfix"></div>
+                                                    if (iVIds == 0) {
+                                                        toAppend += toAppendStatus;
+                                                    }
+                                                    toAppend += '<div class="clearfix"></div>';
+                                                });
+                                            }
+                                        } else if (a['feature_type'] == 2 || a['feature_type'] == 3) {
+                                            if (a['variant_ids'] != null) {
+                                                var variantIds = a['variant_ids'].split(",");
+                                                var variantNames = a['variant_names'].split(",");
+                                                var variantDescs = a['variant_descriptions'].split(",");
+                                                toAppend += '<div class="col-md-3"><select class="form-control" name="product_data[features][' + a['feature_id'] + '][select]">';
+                                                $.each(variantIds, function (iVIds, aVIds) {
+                                                    toAppend += '<option value="' + aVIds + '">' + variantNames[iVIds] + '</option>';//+ a['feature_id'] + '.'
+                                                });
+                                                toAppend += '</select></div>';//<div class="clearfix"></div>
+                                                toAppend += toAppendStatus;
+                                                toAppend += '<div class="clearfix"></div>';
+                                            }
+                                        }
+                                        toAppend += '</div><div class="clearfix"></div>';
+                                    });
+                                });
+                                $('#tab_1_7').html(toAppend);
+                                App.initAjax();
+                            } else {
+                                $('#featureTab').addClass('hidden');
+                                console.log(response['message']);
+                            }
+                        },
+                        error: function (response) {
+                            console.log(response['message']);
+                        }
+                    });
+                }
+            });
+
+//            $('#option-combination-table').DataTables
+
+            $(document.body).on('click', '#option-combinations', function () {
+                var options = $('#optionTableBody > tr');
+                var optionsData = [];
+                $.each(options, function (i, a) {
+                    var optionId = $(a).attr('option-id');
+                    var temp = [];
+                    temp['variantData'] = $(a).find('.all-data-of-a-variant');
+                    temp['optionId'] = optionId;
+                    optionsData.push(temp);
+                });
+//                console.log(optionsData);
+//                function optionComination(array, currentIndex, toAppendString) {
+//                    $.each(array, function (i, a) {
+//                        toAppendString += a['variantData'];
+//                        if (array[i + 1] != undefined) {
+//                            toAppendString += optionCombination(array, i, toAppendString);
+//                        }
+//                    });
+//                    return toAppendString;
+//                }
+//                optionCombination(optionsData, 0, '');
+
+                var combinations = [];
+
+                $.each(optionsData, function (i, a) {
+                    combinations.push(optionCombination(optionsData, i, ''));
+                });
+
+                console.log(combinations);
+                alert(combinations);
+                var toAppend = '<tr class="combination_trs">';
+                toAppend += '<td>oId1: vId1<br>oId2:vId3</td>';
+                toAppend += '<td><input name="product_data[opt_combination][v1_v3][quantity]"/></td>';
+                toAppend += '<td><input name="product_data[opt_combination][v1_v3][barcode]"/></td>';
+                toAppend += '<td><input name="product_data[opt_combination][v1_v3][excludeflag]" type="checkbox"/></td>';
+                toAppend += '</tr>';
+
+                toAppend += '<tr class="combination_trs">';
+                toAppend += '<td>oId1: vId1<br>oId2:vId4</td>';
+                toAppend += '<td><input name="product_data[opt_combination][v1_v4][quantity]"/></td>';
+                toAppend += '<td><input name="product_data[opt_combination][v1_v4][barcode]"/></td>';
+                toAppend += '<td><input name="product_data[opt_combination][v1_v4][excludeflag]" type="checkbox"/></td>';
+                toAppend += '</tr>';
+
+                toAppend += '<tr class="combination_trs">';
+                toAppend += '<td>oId1: vId2<br>oId2:vId3</td>';
+                toAppend += '<td><input name="product_data[opt_combination][v2_v3][quantity]"/></td>';
+                toAppend += '<td><input name="product_data[opt_combination][v2_v3][barcode]"/></td>';
+                toAppend += '<td><input name="product_data[opt_combination][v2_v3][excludeflag]" type="checkbox"/></td>';
+                toAppend += '</tr>';
+
+                toAppend += '<tr class="combination_trs">';
+                toAppend += '<td>oId1: vId2<br>oId2:vId4</td>';
+                toAppend += '<td><input name="product_data[opt_combination][v2_v4][quantity]"/></td>';
+                toAppend += '<td><input name="product_data[opt_combination][v2_v4][barcode]"/></td>';
+                toAppend += '<td><input name="product_data[opt_combination][v2_v4][excludeflag]" type="checkbox"/></td>';
+                toAppend += '</tr>';
+
+                $('#variantCombinationTBody').append(toAppend);
+                $("#option_combinations_modal").modal('show');
+            });
+
         })
+
+        function optionCombination(array, currentIndex, toAppendString) {
+//            console.log(currentIndex);
+            var tempArray = [];
+            $.each(array[currentIndex]['variantData'], function (iVD, aVD) {
+                tempArray.push(toAppendString + $(aVD).attr('variant_id'));
+                if (array[currentIndex + 1] != undefined) {
+                    console.log('next option exists');
+                    tempArray.push(optionCombination(array, currentIndex + 1, toAppendString + $(aVD).attr('variant_id') + '_'));//toAppendString =
+//                    console.log(toAppendString);
+                }
+            });
+//            console.log(tempArray);
+            return tempArray;
+        }
     </script>
 @endsection

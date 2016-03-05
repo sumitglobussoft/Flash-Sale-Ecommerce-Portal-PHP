@@ -234,7 +234,7 @@
 
                         <div class="form-actions">
                             <div class="col-md-offset-3 col-md-9">
-                                <button class="btn blue" type="submit">Add feature</button>
+                                <button class="btn blue btn-info" type="submit">Add feature</button>
                             </div>
                         </div>
                     </form>

@@ -204,11 +204,17 @@ class FeaturesController extends Controller
             $featureVariants = $request->input('feature_variant')['name'];
             $featureVariantsDesc = $request->input('feature_variant')['description'];
 //            echo '<pre>'; print_r($featureVariants); die;
+//            dd($request->input('feature_variant'));
             foreach ($featureVariants as $keyFV => $valueFV) {
-                //NEED MORE VALIDATION HERE
-                $rulesAddFeature['feature_variant.name.' . $keyFV] = 'regex:/(^[A-Za-z0-9 ]+$)+/|max:255';
-                $messagesAddFeature['feature_variant.name.' . $keyFV . '.regex'] = 'Name can contain alphanumeric characters and spaces only';
-                $messagesAddFeature['feature_variant.name.' . $keyFV . '.max'] = 'Name is too long to use. 255 characters max.';
+                //TODO NEED TO INCLUDE VALIDATION TO VARIANTS BASED ON FEATURE TYPE
+                if ($valueFV == "") {
+                    unset($featureVariants[$keyFV]);
+                }
+                if (array_key_exists($keyFV, $featureVariants)) {
+                    $rulesAddFeature['feature_variant.name.' . $keyFV] = 'regex:/(^[A-Za-z0-9 ]+$)+/|max:255';
+                    $messagesAddFeature['feature_variant.name.' . $keyFV . '.regex'] = 'Name can contain alphanumeric characters and spaces only';
+                    $messagesAddFeature['feature_variant.name.' . $keyFV . '.max'] = 'Name is too long to use. 255 characters max.';
+                }
             }
 //            $this->validate($request, $rulesAddFeature, $messagesAddFeature);
             $validator = Validator::make($request->all(), $rulesAddFeature, $messagesAddFeature);
@@ -218,6 +224,12 @@ class FeaturesController extends Controller
                     ->withErrors($validator)
                     ->withInput();
             } else {
+                if ($request->input('feature_type') != 0 && count($featureVariants) < 2) {
+                    return Redirect::back()
+                        ->with(["code" => '400', 'message' => 'Please add atleast two variants for this feature type..'])
+                        ->withErrors($validator)
+                        ->withInput();
+                }
                 $dataAddFeature['feature_name'] = $request->input('feature_name');
                 $dataAddFeature['full_description'] = $request->input('full_description');
                 $dataAddFeature['feature_type'] = $request->input('feature_type');
@@ -293,16 +305,20 @@ class FeaturesController extends Controller
 
             $featureVariants = $request->input('feature_variant')['name'];
             $featureVariantsDesc = $request->input('feature_variant')['description'];
-            $featureVariantIds = $request->input('feature_variant')['variant_id'];
-//            echo '<pre>'; print_r($featureVariantIds); die;
+            $featureVariantsData = $request->input('feature_variant');
+//            echo '<pre>'; print_r($featureVariantsData['variant_id']); die;
             foreach ($featureVariants as $keyFV => $valueFV) {
-                //NEED MORE VALIDATION HERE
-                $rulesEditdFeature['feature_variant.name.' . $keyFV] = 'regex:/(^[A-Za-z0-9 ]+$)+/|max:255|unique:product_feature_variants,variant_name,' . (isset($featureVariantIds[$keyFV]) ? $featureVariantIds[$keyFV] : 'NULL') . ',variant_id,feature_id,' . $featureId;
-                $rulesEditdFeature['feature_variant.description.' . $keyFV] = 'regex:/(^[A-Za-z0-9 ]+$)+/|max:255';
-                $messagesEditFeature['feature_variant.name.' . $keyFV . '.regex'] = 'Name can contain alphanumeric characters and spaces only';
-                $messagesEditFeature['feature_variant.name.' . $keyFV . '.max'] = 'Name is too long to use. 255 characters max.';
-                $messagesEditFeature['feature_variant.name.' . $keyFV . '.unique'] = 'Variant name already in use.';
-                $messagesEditFeature['feature_variant.description.' . $keyFV . '.regex'] = 'Invalid description.';
+                //TODO NEED TO INCLUDE VALIDATION TO VARIANTS BASED ON FEATURE TYPE
+                if ($valueFV != "") {
+                    $rulesEditdFeature['feature_variant.name.' . $keyFV] = 'regex:/(^[A-Za-z0-9 ]+$)+/|max:255|unique:product_feature_variants,variant_name,' . (isset($featureVariantsData['variant_id'][$keyFV]) ? $featureVariantsData['variant_id'][$keyFV] : 'NULL') . ',variant_id,feature_id,' . $featureId;
+                    $rulesEditdFeature['feature_variant.description.' . $keyFV] = 'regex:/(^[A-Za-z0-9 ]+$)+/|max:255';
+                    $messagesEditFeature['feature_variant.name.' . $keyFV . '.regex'] = 'Name can contain alphanumeric characters and spaces only';
+                    $messagesEditFeature['feature_variant.name.' . $keyFV . '.max'] = 'Name is too long to use. 255 characters max.';
+                    $messagesEditFeature['feature_variant.name.' . $keyFV . '.unique'] = 'Variant name already in use.';
+                    $messagesEditFeature['feature_variant.description.' . $keyFV . '.regex'] = 'Invalid description.';
+                } else {
+                    unset($featureVariants[$keyFV]);
+                }
             }
 //            $this->validate($request, $rulesEditdFeature, $messagesEditFeature);
             $validator = Validator::make($request->all(), $rulesEditdFeature, $messagesEditFeature);
@@ -312,6 +328,12 @@ class FeaturesController extends Controller
                     ->withErrors($validator)
                     ->withInput();
             } else {
+                if ($request->input('feature_type') != 0 && count($featureVariants) < 2) {
+                    return Redirect::back()
+                        ->with(["code" => '400', 'message' => 'Please correct the following errors.'])
+                        ->withErrors($validator)
+                        ->withInput();
+                }
                 $dataUpdateFeature['feature_name'] = $request->input('feature_name');
                 $dataUpdateFeature['full_description'] = $request->input('full_description');
                 $dataUpdateFeature['feature_type'] = $request->input('feature_type');
@@ -343,12 +365,12 @@ class FeaturesController extends Controller
                 if ($dataUpdateFeature['feature_type'] != 0) {
                     foreach ($featureVariants as $keyFV => $valueFV) {
                         if ($valueFV != '') {
-                            if (isset($featureVariantIds[$keyFV]) && in_array($featureVariantIds[$keyFV], $oldVariantIds)) {//UPDATE VARIANT DETAILS
-                                $inputVariantIds[] = $featureVariantIds[$keyFV];
+                            if (isset($featureVariantsData['variant_id'][$keyFV]) && in_array($featureVariantsData['variant_id'][$keyFV], $oldVariantIds)) {//UPDATE VARIANT DETAILS
+                                $inputVariantIds[] = $featureVariantsData['variant_id'][$keyFV];
                                 $updateVariantData = '';
                                 $updateVariantData['variant_name'] = $valueFV;
                                 $updateVariantData['description'] = $featureVariantsDesc[$keyFV];
-                                $whereForUpdateVariant = ['rawQuery' => 'variant_id =?', 'bindParams' => [$featureVariantIds[$keyFV]]];
+                                $whereForUpdateVariant = ['rawQuery' => 'variant_id =?', 'bindParams' => [$featureVariantsData['variant_id'][$keyFV]]];
                                 $updateVariantResult = $objModelFeatureVariants->updateFeatureVariantWhere($updateVariantData, $whereForUpdateVariant);
                                 if ($updateVariantResult) {
                                     $updateVariantResultFlag = true;

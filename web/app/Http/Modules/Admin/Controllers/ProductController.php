@@ -15,6 +15,7 @@ use FlashSale\Http\Modules\Admin\Models\ProductCategory;
 use FlashSale\Http\Modules\Admin\Models\ProductFeatures;
 use FlashSale\Http\Modules\Admin\Models\Products;
 use FlashSale\Http\Modules\Admin\Models\ProductFeatureVariants;
+use FlashSale\Http\Modules\Admin\Models\ProductFeatureVariantRelation;
 use FlashSale\Http\Modules\Admin\Models\ProductOption;
 use FlashSale\Http\Modules\Admin\Models\ProductOptionVariant;
 use Illuminate\Support\Facades\Validator;
@@ -61,7 +62,7 @@ class ProductController extends Controller
         $objModelProductImage = ProductImage::getInstance();
         $objModelProductOptionVariant = ProductOptionVariant::getInstance();
         $objModelProductOptionVariantRelation = ProductOptionVariantRelation::getInstance();
-
+        $objModelProductFeatureVariantRelation = ProductFeatureVariantRelation::getInstance();
 
         $userId = Session::get('fs_admin')['id'];
 
@@ -176,6 +177,12 @@ class ProductController extends Controller
                         if (!empty($finalOptionVariantRelationData)) {
                             $objModelProductOptionVariantRelation->addNewOptionVariantRelation($finalOptionVariantRelationData);
                         }
+
+                        //TODO CODE TO ADD OPTION VARIANT RELATION COMBINATION
+                        //------------------------PRODUCT OPTION COMBINATIONS START HERE---------------------//
+
+                        //------------------------PRODUCT OPTION COMBINATIONS END HERE---------------------//
+
                     }
                     $productMetaData['weight'] = $inputData['shipping_properties']['weight'];
                     $productMetaData['shipping_freight'] = $inputData['shipping_properties']['shipping_freight'];
@@ -235,6 +242,24 @@ class ProductController extends Controller
                         $objModelProductImage->addNewImage($imageData);
                     }
                     //--------------------------END PRODUCT-IMAGES----------------------------//
+
+                    //------------------------PRODUCT FEATURES START HERE---------------------//
+                    $productDataFeatures = $inputData['features'];
+                    $fvrDataToInsert = array();
+                    foreach ($productDataFeatures as $keyPDF => $valuePDF) {
+                        if (array_key_exists("single", $productDataFeatures[$keyPDF])) {
+//                            $fvrDataToInsert[] = ['product_id' => $insertedProductId, 'feature_id' => $keyPDF, 'variant_ids' => 0, 'display_status' => $productDataFeatures[$keyPDF]['status']];
+                            $objModelProductFeatureVariantRelation->addFeatureVariantRelation(['product_id' => $insertedProductId, 'feature_id' => $keyPDF, 'variant_ids' => 0, 'display_status' => $productDataFeatures[$keyPDF]['status']]);
+                        } else if (array_key_exists("muliple", $productDataFeatures[$keyPDF])) {
+//                            $fvrDataToInsert[] = ['product_id' => $insertedProductId, 'feature_id' => $keyPDF, 'variant_ids' => implode(",", array_keys($valuePDF['multiple'])), 'display_status' => $valuePDF['status']];
+                            $objModelProductFeatureVariantRelation->addFeatureVariantRelation(['product_id' => $insertedProductId, 'feature_id' => $keyPDF, 'variant_ids' => implode(",", array_keys($valuePDF['multiple'])), 'display_status' => $valuePDF['status']]);
+                        } else if (array_key_exists("select", $productDataFeatures[$keyPDF])) {
+//                            $fvrDataToInsert[] = ['product_id' => $insertedProductId, 'feature_id' => $keyPDF, 'variant_ids' => $valuePDF['select'], 'display_status' => $valuePDF['status']];
+                            $objModelProductFeatureVariantRelation->addFeatureVariantRelation(['product_id' => $insertedProductId, 'feature_id' => $keyPDF, 'variant_ids' => "" . $valuePDF['select'], 'display_status' => $valuePDF['status']]);
+                        }
+                    }
+//                    $objModelProductFeatureVariantRelation->addFeatureVariantRelation($fvrDataToInsert);
+                    //------------------------PRODUCT FEATURES END HERE---------------------//
 
                 }
 
@@ -300,6 +325,65 @@ class ProductController extends Controller
                         $response['message'] = 'Option data';
                         $response['data']['optionDetails'] = $optionDetails;
                         $response['data']['optionVariants'] = $allOptionVariants;
+                    }
+                    break;
+
+                //26-02-2016
+                case "getFeaturesWhereCatIdLike":
+                    $response['code'] = 400;
+                    $response['data'] = array();
+                    $response['message'] = "";
+                    if (isset($inputData['catid']) && $inputData['catid'] != '') {
+                        $objModelProductCategories = ProductCategory::getInstance();
+                        $catId = (int)$inputData['catid'];
+                        $catFlag = true;
+                        $parentCategory = array();
+                        $count = 1;
+                        $bindParamsForFeature = array();
+                        $queryForFeature = "";
+                        $queryForFeatureGroup = "";
+                        while ($catFlag) {
+                            if ($count == 1) {
+                                $queryForFeatureGroup = '(product_features.group_flag = 1) and (product_features.for_categories LIKE ? OR product_features.for_categories LIKE ? OR product_features.for_categories LIKE ? OR product_features.for_categories LIKE ?';
+                                $queryForFeature = '(group_flag = 0 and parent_id = 0) and (for_categories LIKE ? OR for_categories LIKE ? OR for_categories LIKE ? OR for_categories LIKE ?';
+                            } else {
+                                $count++;
+                                $catId = $parentCategory['category_id'];
+                                $queryForFeatureGroup .= 'OR product_features.for_categories LIKE ? OR product_features.for_categories LIKE ? OR product_features.for_categories LIKE ? OR product_features.for_categories LIKE ?';
+                                $queryForFeature .= 'OR for_categories LIKE ? OR for_categories LIKE ? OR for_categories LIKE ? OR for_categories LIKE ?';
+                            }
+                            array_push($bindParamsForFeature, "%,$catId");
+                            array_push($bindParamsForFeature, "%,$catId,%");
+                            array_push($bindParamsForFeature, "$catId,%");
+                            array_push($bindParamsForFeature, "$catId");
+                            $parentCategory = array();
+                            $whereForCat = ['rawQuery' => 'parent_category_id = ?', "bindParams" => [$catId]];
+                            $parentCategory = $objModelProductCategories->getCategoryDetailsWhere($whereForCat);
+                            if (!$parentCategory) {
+                                $catFlag = false;
+                            }
+                        }
+                        $queryForFeature .= ")";
+                        $queryForFeatureGroup .= ")";
+                        $objModelProductFeature = ProductFeatures::getInstance();
+                        $whereForFeature = ['rawQuery' => $queryForFeature, 'bindParams' => $bindParamsForFeature];
+//                        $featureDetails = json_decode($objModelProductFeature->getAllFeaturesWhere($whereForFeature), true);
+                        $featureDetails = json_decode($objModelProductFeature->getAllFeaturesWithVariantsWhere($whereForFeature), true);
+
+                        $whereForFeatureGroup = ['rawQuery' => $queryForFeatureGroup, 'bindParams' => $bindParamsForFeature];
+                        $featureGroups = json_decode($objModelProductFeature->getAllFGsWithFsWhere($whereForFeatureGroup), true);
+//                        dd($featureGroups);
+                        foreach ($featureGroups['data'] as $keyFG => $valueFG) {
+                            $whereForFs = ['rawQuery' => "product_features.parent_id IN (?)", "bindParams" => [$valueFG['feature_ids']]];
+                            $featureGroups['data'][$keyFG]['featureDetails'] = json_decode($objModelProductFeature->getAllFeaturesWithVariantsWhere($whereForFs), true)['data'];
+                        }
+//                        dd($featureGroups);
+//                        dd($featureDetails);
+                        $response['code'] = $featureDetails['code'];
+                        $response['message'] = $featureDetails['message'];
+                        $response['data']['featureDetails'] = $featureDetails['data'];
+                        $response['data']['featureGroupDetails'] = $featureGroups['data'];
+//                        dd($response);
                     }
                     break;
 

@@ -33,11 +33,11 @@
                     @if(session('code')) @if(session('code') == 400) alert-danger @elseif(session('code') == 200) alert-success @else display-hide @endif
                         @else display-hide @endif">
                             <button class="close" data-close="alert"></button>
-                        <span>
-                            @if(session('code') == 400 || session('code') == 200)
-                                <?php echo session('message'); ?>
-                            @endif
-                        </span>
+                            <span>
+                                @if(session('code') == 400 || session('code') == 200)
+                                    <?php echo session('message'); ?>
+                                @endif
+                            </span>
                         </div>
 
                         <div class="portlet-title tabbable-line">
@@ -80,8 +80,7 @@
                                                     @foreach($featureGroups['data'] as $keyFG => $valueFG)
                                                         <option value="{{$valueFG['feature_id']}}" @if(old('parent_id') == $valueFG['feature_id']) {{$fgSelectedFlag = true}} selected @elseif($featureDetails['data']['parent_id'] == $valueFG['feature_id'] && !$fgSelectedFlag) selected @endif>{{$valueFG['feature_name']}}</option>
                                                     @endforeach
-                                                </select>
-                                                <span class="error">{!! $errors->first('parent_id') !!}</span>
+                                                </select> <span class="error">{!! $errors->first('parent_id') !!}</span>
                                             </div>
                                         </div>
                                         <div class="clearfix"></div>
@@ -130,8 +129,7 @@
                                                     <li data-jstree='{"opened":true}'>
                                                         <?php echo $array[$keyArray]->category_name;
                                                         $catId = $array[$keyArray]->category_id; ?>
-                                                        <span class="catinputdivs" data-id="<?php echo $array[$keyArray]->category_id; ?>" data-checked="{{(isset(old('for_categories')[$catId]) || in_array($array[$keyArray]->category_id, explode(",", $initVals['data']['for_categories']))) ? "checked" : ""}}">
-                                            </span>
+                                                        <span class="catinputdivs" data-id="<?php echo $array[$keyArray]->category_id; ?>" data-checked="{{(isset(old('for_categories')[$catId]) || in_array($array[$keyArray]->category_id, explode(",", $initVals['data']['for_categories']))) ? "checked" : ""}}"> </span>
                                                         <?php treeView($array, $array[$keyArray]->category_id, $initVals); ?>
                                                     </li>
                                                 </ul>
@@ -151,8 +149,7 @@
                                                     </ul>
                                                 </div>
 
-                                                <br>
-                                                <span class="error">{!! $errors->first('for_categories') !!}</span>
+                                                <br> <span class="error">{!! $errors->first('for_categories') !!}</span>
                                             </div>
                                         </div>
                                         <div class="clearfix"></div>
@@ -197,8 +194,8 @@
                                                                 <td>
                                                                     <div class="col-sm-12">
                                                                         <input type="hidden"
-                                                                               name="feature_variant[variant_id][{{$keyFV}}]"
-                                                                               @if(isset(old('feature_variant')['variant_id'][$keyFV])) value="{{old('feature_variant')['variant_id'][$keyFV]}}" @endif>
+                                                                                name="feature_variant[variant_id][{{$keyFV}}]"
+                                                                                @if(isset(old('feature_variant')['variant_id'][$keyFV])) value="{{old('feature_variant')['variant_id'][$keyFV]}}" @endif>
                                                                         <input type="text" class="form-control" name="feature_variant[name][{{$keyFV}}]" value="{{$valueFV}}" placeholder="Ex: Polka, Dotted">
                                                                         <span class="error">{!! $errors->first('feature_variant.name.'.$keyFV) !!}</span>
                                                                     </div>
@@ -222,8 +219,8 @@
                                                             <td>
                                                                 <div class="col-sm-12">
                                                                     <input type="hidden"
-                                                                           name="feature_variant[variant_id][{{$keyFV}}]"
-                                                                           value="{{$valueFV['variant_id']}}">
+                                                                            name="feature_variant[variant_id][{{$keyFV}}]"
+                                                                            value="{{$valueFV['variant_id']}}">
                                                                     <input type="text" class="form-control" name="feature_variant[name][{{$keyFV}}]" value="{{$valueFV['variant_name']}}" placeholder="Ex: Polka, Dotted">
                                                                 </div>
                                                             </td>
@@ -268,7 +265,7 @@
 
                             <div class="form-actions">
                                 <div class="col-md-offset-3 col-md-9">
-                                    <button class="btn blue" type="submit">Save changes</button>
+                                    <button class="btn blue btn-info" type="submit">Save changes</button>
                                 </div>
                             </div>
 
@@ -396,6 +393,11 @@
             @endif
             toastr[status]("{{session('message')}}");
             @endif
+
+
+
+
+
 
 
 

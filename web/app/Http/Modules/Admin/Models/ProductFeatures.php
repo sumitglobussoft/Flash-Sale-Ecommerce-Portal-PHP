@@ -56,8 +56,13 @@ class ProductFeatures extends Model
                 ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
                 ->select($selectedColumns)
                 ->get();
-            $returnData['code'] = 200;
-            $returnData['message'] = 'All features.';
+            if ($result) {
+                $returnData['code'] = 200;
+                $returnData['message'] = 'All features.';
+            } else {
+                $returnData['code'] = 400;
+                $returnData['message'] = 'No data found.';
+            }
             $returnData['data'] = $result;
         }
         return json_encode($returnData);
@@ -265,4 +270,70 @@ class ProductFeatures extends Model
         }
 
     }
+
+    public function getAllFeaturesWithVariantsWhere($where, $selectedColumns = ['*'])
+    {
+        $returnData = array('code' => 400, 'message' => 'Argument Not Passed.', 'data' => null);
+        if (func_num_args() > 0) {
+            $where = func_get_arg(0);
+            $result = DB::table($this->table)
+                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                ->leftJoin('product_feature_variants', 'product_features.feature_id', '=', 'product_feature_variants.feature_id')
+                ->select(DB::raw('product_features.*,
+                    GROUP_CONCAT(product_feature_variants.variant_id ORDER BY product_feature_variants.feature_id) AS variant_ids,
+                    GROUP_CONCAT(product_feature_variants.variant_name ORDER BY product_feature_variants.feature_id) AS variant_names,
+                    GROUP_CONCAT(product_feature_variants.description ORDER BY product_feature_variants.feature_id) AS variant_descriptions'))
+                ->groupBy('product_features.feature_id')
+                ->get();
+
+            //EXTRA: MYSQL UNION TEST QUERY START--------------------
+//                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+//                ->select(['feature_id'])
+//                ->union(DB::table('product_feature_variants')->select(['feature_id'])->whereRaw("(SELECT feature_id from product_features WHERE feature_id = feature_id) = feature_id"))
+////                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+////                ->union(DB::table('product_feature_variants')->select()->whereRaw('product_feature.feature_id = product_feature_variants.feature_id')->get())
+//                ->get();
+            //EXTRA: MYSQL UNION TEST QUERY END--------------------
+
+            if ($result) {
+                $returnData['code'] = 200;
+                $returnData['message'] = 'All features.';
+            } else {
+                $returnData['code'] = 400;
+                $returnData['message'] = 'No data found.';
+            }
+            $returnData['data'] = $result;
+        }
+        return json_encode($returnData);
+
+    }
+
+    public function getAllFGsWithFsWhere()
+    {
+        $returnData = array('code' => 400, 'message' => 'Argument Not Passed.', 'data' => null);
+        if (func_num_args() > 0) {
+            $where = func_get_arg(0);
+            $result = DB::table($this->table)
+                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                ->leftJoin('product_features as pf', function ($join) {
+                    $join->on('pf.feature_id', '=', 'product_features.feature_id');
+                })
+                ->select(DB::raw('product_features.*,
+                    GROUP_CONCAT(product_features.feature_id ORDER BY product_features.feature_id) AS feature_ids'))
+                ->groupBy('product_features.feature_id')
+                ->get();
+            if ($result) {
+                $returnData['code'] = 200;
+                $returnData['message'] = 'All features.';
+            } else {
+                $returnData['code'] = 400;
+                $returnData['message'] = 'No data found.';
+            }
+            $returnData['data'] = $result;
+        }
+        return json_encode($returnData);
+
+    }
+
+
 }

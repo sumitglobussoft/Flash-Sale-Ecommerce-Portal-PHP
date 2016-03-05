@@ -116,7 +116,7 @@
 
                         <div class="form-actions">
                             <div class="col-md-offset-3 col-md-9">
-                                <button class="btn blue" type="submit">Add feature group</button>
+                                <button class="btn blue btn-info" type="submit">Add feature group</button>
                             </div>
                         </div>
 

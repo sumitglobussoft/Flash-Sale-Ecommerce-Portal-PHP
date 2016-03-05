@@ -122,7 +122,7 @@
 
                             <div class="form-actions">
                                 <div class="col-md-offset-3 col-md-9">
-                                    <button class="btn blue" type="submit">Save changes</button>
+                                    <button class="btn blue btn-info" type="submit">Save changes</button>
                                 </div>
                             </div>
 
