@@ -3,7 +3,49 @@
 <head>
     @include('Admin/Layouts/adminheadscripts')
     @yield('headcontent')
+    <style>
+        .bg-white {
+            background: #fff !important;
+            text-align: left !important;
+            border-bottom: 1px solid #e3e3e3 !important;
+            color: #5f5f5f !important;
+        }
 
+        .bg-white:hover {
+            background: #f7f7f7 !important;
+        }
+
+        .bg-white:hover {
+            background: #f7f7f7 !important;
+        }
+
+        .text-left {
+            text-align: left !important;
+        }
+
+        .arrows::before {
+            margin-top: 0px !important;
+        }
+
+        .bg_grey {
+            background: #f9f9f9 !important;
+            padding: 0 !important;
+        }
+
+        ul.bg_grey li a {
+            padding: 7px 10px !important;
+            border-bottom: 1px solid #e3e3e3;
+        }
+
+        ul.bg_grey li a:hover {
+            background: #fff !important;
+        }
+
+        .top-menu .accordion-menu a {
+            padding: 9px 19px !important;
+
+        }
+    </style>
 </head>
 <body class="page-header-fixed compact-menu page-sidebar-fixed">
 <div class="overlay"></div>
@@ -183,28 +225,46 @@
                                 <span class="user-name">{{ trans('message.administration') }}<i
                                             class="fa fa-angle-down"></i></span>
                             </a>
-                            <ul class="dropdown-menu dropdown-list" role="menu">
-                                <li role="presentation">
-                                    <a href="/admin/manage-currencies">{{trans('message.currencies')}}</a>
-                                </li>
-                                <li class="dropdown-submenu">
-                                    <a>{{trans('message.languages')}}</a>
-                                    <ul class="dropdown-menu">
-                                      <li><a  href="/admin/manage-language">xyz</a></li>
-                                      <li><a href="#">xyz</a></li>
+                            <ul class="dropdown-menu" role="menu">
 
+                                <div class="sidebar" style="background: transparent !important; margin-top: 15px;">
+                                    <div class="slimScrollDiv">
+                                        <ul class="menu accordion-menu">
+                                            <li class="droplink">
+                                                <a class="waves-effect waves-button bg-white"
+                                                   href="/admin/manage-currencies">{{trans('message.currencies')}}</a>
+                                            </li>
+                                            <li class="droplink">
+                                                <a class="waves-effect waves-button bg-white"
+                                                   href="#">{{trans('message.languages')}}
+                                                    <span class="arrow arrows"></span>
+                                                </a>
+                                                <ul class="sub-menu bg_grey" style="display: none;">
+                                                    <li><a class="text-left"
+                                                           href="/admin/manage-language">{{trans('message.managelanguage')}}</a>
+                                                    </li>
+                                                    <li><a class="text-left"
+                                                           href="/admin/add-language-value">{{trans('message.language_variable')}}</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="droplink">
+                                                <a class="waves-effect waves-button bg-white"
+                                                   href="/admin/add-language-value">{{trans('message.shipping_and_taxes')}}
+                                                    <span class="arrow arrows"></span></a>
+                                                <ul class="sub-menu bg_grey" style="display: none;">
+                                                    {{--<li><a class="text-left" href="/admin/manage-shippings">{{trans('message.shipping_methods')}}</a></li>--}}
+                                                    <li><a class="text-left" href="/admin/manage-taxes">{{trans('message.taxes')}}</a></li>
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                <a class="waves-effect waves-button bg-white"
+                                                   href="/admin/cacheClear">{{trans('message.clearcache')}}</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div><!-- Page Sidebar Inner -->
 
-                                    </ul>
-                                </li>
-                                <li role="presentation">
-                                    <a href="/admin/add-language-value">{{trans('message.language_variable')}}</a>
-                                </li>
-                                <li role="presentation">
-                                    <a href="/admin/add-language-value">{{trans('message.shipping_and_taxes')}}</a>
-                                </li>
-                                <li role="presentation">
-                                    <a href="/admin/cacheClear">{{trans('message.clearcache')}}</a>
-                                </li>
                             </ul>
                         </li>
                         <?php $allSections = \FlashSale\Http\Modules\Admin\Controllers\AdminController::getSettingsSection();?>
@@ -353,11 +413,11 @@
                         <p>{{ trans('message.products') }}</p> <span class="arrow"></span>
                     </a>
                     <ul class="sub-menu">
-                        <li><a href="/admin/manage-categories">Categories</a></li>
-                        <li><a href="/admin/manage-products">Products</a></li>
-                        <li><a href="/admin/manage-features">Features</a></li>
-                        <li><a href="/admin/manage-filtergroup">Filters</a></li>
-                        <li><a href="/admin/manage-options">Options</a></li>
+                        <li><a href="/admin/manage-categories">{{trans('message.categories')}}</a></li>
+                        <li><a href="/admin/manage-products">{{trans('message.products')}}</a></li>
+                        <li><a href="/admin/manage-features">{{trans('message.features')}}</a></li>
+                        <li><a href="/admin/manage-filtergroup">{{trans('message.filters')}}</a></li>
+                        <li><a href="/admin/manage-options">{{trans('message.options')}}</a></li>
                     </ul>
                 </li>
 

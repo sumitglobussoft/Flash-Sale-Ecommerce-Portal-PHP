@@ -27,7 +27,7 @@
                     </div>
 
                     <div class="panel-body">
-                        <table class="dynamicTable table table-bordered table-condensed" style="width: 100%"
+                        <table class="table table-hover" style="width: 100%"
                                id='optionTable'>
                             <thead>
                             <tr>
@@ -39,7 +39,7 @@
                             <tbody>
                             @foreach($allOptions as $optionKey=>$optionValue)
                                 <tr id="option-{{$optionValue->option_id}}">
-                                    <td>{{$optionValue->option_name}}</td>
+                                    <td><a href="/admin/edit-option/{{$optionValue->option_id}}"  style="text-decoration: none;">{{$optionValue->option_name}}</a></td>
                                     <td style="text-align: center">
                                         <div role="group" class="btn-group ">
                                             <button aria-expanded="false" data-toggle="dropdown"

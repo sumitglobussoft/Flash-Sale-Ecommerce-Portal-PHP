@@ -468,7 +468,6 @@
     <script src="/assets/plugins/flot/jquery.flot.tooltip.min.js"></script>
     <script src="/assets/plugins/curvedlines/curvedLines.js"></script>
     <script src="/assets/plugins/metrojs/MetroJs.min.js"></script>
-    <script src="/assets/js/modern.js"></script>
 
 
     {{--<script src="/assets/plugins/jquery-validation/jquery.validate.min.js"></script>--}}

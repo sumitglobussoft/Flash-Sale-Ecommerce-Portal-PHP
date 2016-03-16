@@ -143,7 +143,7 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                                                         <td>
                                                             <div class="form-group">
                                                                 <div class="col-sm-6">
-                                                                    <input type="text" class="form-control"
+                                                                    <input type="text" class="form-control float-type"
                                                                            name="option_data[variants][{{$variantKey}}][price_modifier]"
                                                                            value="{{$variantValue['price_modifier']}}">
                                                                     <span class="error">{!! $errors->first('variants.'.$variantKey.'.price_modifier') !!}</span>
@@ -165,7 +165,7 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                                                         <td>
                                                             <div class="form-group">
                                                                 <div class="col-sm-6">
-                                                                    <input type="text" class="form-control"
+                                                                    <input type="text" class="form-control float-type"
                                                                            name="option_data[variants][{{$variantKey}}][weight_modifier]"
                                                                            value="{{$variantValue['weight_modifier']}}">
                                                                     <span class="error">{!! $errors->first('variants.'.$variantKey.'.weight_modifier') !!}</span>
@@ -215,7 +215,7 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                                                 <td>
                                                     <div class="form-group">
                                                         <div class="col-sm-6">
-                                                            <input type="text" class="form-control"
+                                                            <input type="text" class="form-control float-type"
                                                                    name="option_data[variants][0][price_modifier]">
                                                         </div>
                                                         <span class="col-sm-1 separator">/</span>
@@ -232,7 +232,7 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                                                 <td>
                                                     <div class="form-group">
                                                         <div class="col-sm-6">
-                                                            <input type="text" class="form-control"
+                                                            <input type="text" class="form-control float-type"
                                                                    name="option_data[variants][0][weight_modifier]">
                                                         </div>
                                                         <span class="col-sm-1 separator">/</span>
@@ -291,15 +291,15 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
         $(document).ready(function () {
 
             var variantCounter = 1;
-                $(document.body).on('click', '.add-more', function () {
-                    var toAppendNewTableRow = '<tr>';
-                    toAppendNewTableRow += '<td><input type="text" class="form-control" name="option_data[variants][' + variantCounter + '][variant_name]"></td>';
-                    toAppendNewTableRow += '<td>';
-                    toAppendNewTableRow += '<div class="form-group">';
-                    toAppendNewTableRow += '<div class="col-sm-6">';
-                    toAppendNewTableRow += '<input type="text" class="form-control" name="option_data[variants][' + variantCounter + '][price_modifier]">';
-                    toAppendNewTableRow += '</div>';
-                    toAppendNewTableRow += '<span class="col-sm-1 separator">/</span>';
+            $(document.body).on('click', '.add-more', function () {
+                var toAppendNewTableRow = '<tr>';
+                toAppendNewTableRow += '<td><input type="text" class="form-control" name="option_data[variants][' + variantCounter + '][variant_name]"></td>';
+                toAppendNewTableRow += '<td>';
+                toAppendNewTableRow += '<div class="form-group">';
+                toAppendNewTableRow += '<div class="col-sm-6">';
+                toAppendNewTableRow += '<input type="text" class="form-control float-type" name="option_data[variants][' + variantCounter + '][price_modifier]">';
+                toAppendNewTableRow += '</div>';
+                toAppendNewTableRow += '<span class="col-sm-1 separator">/</span>';
 
                 toAppendNewTableRow += '<div class="col-sm-4">';
                 toAppendNewTableRow += '<select name="option_data[variants][' + variantCounter + '][price_modifier_type]" class="form-control">';
@@ -312,7 +312,7 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                 toAppendNewTableRow += '<td>';
                 toAppendNewTableRow += '<div class="form-group">';
                 toAppendNewTableRow += '<div class="col-sm-6">';
-                toAppendNewTableRow += '<input type="text" class="form-control" name="option_data[variants][' + variantCounter + '][weight_modifier]">';
+                toAppendNewTableRow += '<input type="text" class="form-control float-type" name="option_data[variants][' + variantCounter + '][weight_modifier]">';
                 toAppendNewTableRow += '</div>';
                 toAppendNewTableRow += '<span class="col-sm-1 separator">/</span>';
 

@@ -126,6 +126,6 @@
         });
     </script>
 
-    <script src="/assets/js/modern.js"></script>
+
 
 @endsection

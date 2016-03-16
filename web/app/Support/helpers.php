@@ -150,7 +150,7 @@ if (!function_exists('cacheClearByTableNames')) {
 
 if (!function_exists('getSetting')) {
     /**
-     * Get setting value
+     * Get setting value and cache the value for a day
      * @param string $settingObject
      * @return mixed
      * @throws Exception
@@ -164,14 +164,27 @@ if (!function_exists('getSetting')) {
                 $objCurrencyModel = \FlashSale\Http\Modules\Admin\Models\Currency::getInstance();
                 $whereForPrice = ['rawQuery' => 'is_primary=? AND status=?', 'bindParams' => ['Y', 1]];
                 $selectedColumns = ['symbol'];
-                $priceSymbol = $objCurrencyModel->getCurrencyWhere($whereForPrice, $selectedColumns);
+                $cacheKey = "settings_objects::" . implode('-', array_flatten($whereForPrice));
+                if (cacheGet($cacheKey)) {
+                    $priceSymbol = cacheGet($cacheKey);
+                } else {
+                    $priceSymbol = $objCurrencyModel->getCurrencyWhere($whereForPrice, $selectedColumns);
+                    cachePut($cacheKey, $priceSymbol, 86400);
+                }
                 $settingValue = $priceSymbol->symbol;
                 break;
             default:
                 $objSettingObject = \FlashSale\Http\Modules\Admin\Models\SettingsObject::getInstance();
                 $whereForSettingObject = ['rawQuery' => 'name=?', 'bindParams' => [$settingObject]];
                 $selectedColumns = ['value'];
-                $settingValue = $objSettingObject->getSettingObjectWhere($whereForSettingObject, $selectedColumns);
+
+                $cacheKey = "settings_objects::" . implode('-', array_flatten($whereForSettingObject));
+                if (cacheGet($cacheKey)) {
+                    $settingValue = cacheGet($cacheKey);
+                } else {
+                    $settingValue = $objSettingObject->getSettingObjectWhere($whereForSettingObject, $selectedColumns);
+                    cachePut($cacheKey, $settingValue, 86400);
+                }
                 $settingValue = $settingValue->value;
                 break;
         }

@@ -159,7 +159,7 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                                                                 <td>
                                                                     <div class="form-group">
                                                                         <div class="col-sm-6">
-                                                                            <input type="text" class="form-control"
+                                                                            <input type="text" class="form-control float-type"
                                                                                    name="option_data[variants][{{$variantKey}}][price_modifier]"
                                                                                    value="{{$variantValue['price_modifier']}}">
                                                                             <span class="error">{!! $errors->first('variants.'.$variantKey.'.price_modifier') !!}</span>
@@ -181,7 +181,7 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                                                                 <td>
                                                                     <div class="form-group">
                                                                         <div class="col-sm-6">
-                                                                            <input type="text" class="form-control"
+                                                                            <input type="text" class="form-control float-type"
                                                                                    name="option_data[variants][{{$variantKey}}][weight_modifier]"
                                                                                    value="{{$variantValue['weight_modifier']}}">
                                                                             <span class="error">{!! $errors->first('variants.'.$variantKey.'.weight_modifier') !!}</span>
@@ -216,13 +216,14 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                                                                 </td>
                                                                 <td>
                                                                     <a href="javascript:void(0);"
-                                                                       class="col-sm-1 add-more"><i
-                                                                                class="fa fa-plus"></i></a>
+                                                                       class="col-sm-1 add-more">
+                                                                        <i class="fa fa-plus"></i>
+                                                                    </a>
                                                                     <a href="javascript:void(0);"
-                                                                       class="col-sm-1 remove"><i
-                                                                                class="fa fa-remove"></i></a>
+                                                                       class="col-sm-1 remove">
+                                                                        <i class="fa fa-remove"></i>
+                                                                    </a>
                                                                 </td>
-
                                                             </tr>
                                                         @endif
                                                     @endforeach
@@ -241,7 +242,7 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                                                                 <td>
                                                                     <div class="form-group">
                                                                         <div class="col-sm-6">
-                                                                            <input type="text" class="form-control"
+                                                                            <input type="text" class="form-control float-type"
                                                                                    name="option_data[variants][{{$variantKey}}][price_modifier]"
                                                                                    value="{{$variantValue->price_modifier}}">
                                                                         </div>
@@ -262,7 +263,7 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                                                                 <td>
                                                                     <div class="form-group">
                                                                         <div class="col-sm-6">
-                                                                            <input type="text" class="form-control"
+                                                                            <input type="text" class="form-control float-type"
                                                                                    name="option_data[variants][{{$variantKey}}][weight_modifier]"
                                                                                    value="{{$variantValue->weight_modifier}}">
                                                                         </div>
@@ -313,7 +314,7 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                                                             <td>
                                                                 <div class="form-group">
                                                                     <div class="col-sm-6">
-                                                                        <input type="text" class="form-control"
+                                                                        <input type="text" class="form-control float-type"
                                                                                name="option_data[variants][0][price_modifier]">
                                                                     </div>
                                                                     <span class="col-sm-1 separator">/</span>
@@ -330,7 +331,7 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                                                             <td>
                                                                 <div class="form-group">
                                                                     <div class="col-sm-6">
-                                                                        <input type="text" class="form-control"
+                                                                        <input type="text" class="form-control float-type"
                                                                                name="option_data[variants][0][weight_modifier]">
                                                                     </div>
                                                                     <span class="col-sm-1 separator">/</span>
@@ -397,7 +398,7 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                 toAppendNewTableRow += '<td>';
                 toAppendNewTableRow += '<div class="form-group">';
                 toAppendNewTableRow += '<div class="col-sm-6">';
-                toAppendNewTableRow += '<input type="text" class="form-control" name="option_data[variants][' + variantCounter + '][price_modifier]">';
+                toAppendNewTableRow += '<input type="text" class="form-control float-type" name="option_data[variants][' + variantCounter + '][price_modifier]">';
                 toAppendNewTableRow += '</div>';
                 toAppendNewTableRow += '<span class="col-sm-1 separator">/</span>';
 
@@ -412,7 +413,7 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                 toAppendNewTableRow += '<td>';
                 toAppendNewTableRow += '<div class="form-group">';
                 toAppendNewTableRow += '<div class="col-sm-6">';
-                toAppendNewTableRow += '<input type="text" class="form-control" name="option_data[variants][' + variantCounter + '][weight_modifier]">';
+                toAppendNewTableRow += '<input type="text" class="form-control float-type" name="option_data[variants][' + variantCounter + '][weight_modifier]">';
                 toAppendNewTableRow += '</div>';
                 toAppendNewTableRow += '<span class="col-sm-1 separator">/</span>';
 

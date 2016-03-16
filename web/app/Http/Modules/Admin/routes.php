@@ -72,6 +72,7 @@ Route::group(['middleware' => ['guest']], function () {
 Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), function () {
     \Illuminate\Support\Facades\Session::put("startTime", microtime(true));//FOR CALCULATION IN EXECUTION TIME (ADMIN LAYOUT PAGE)
 
+    /* Clear all cache and return back */
     Route::get('/admin/cacheClear', function () {
         Cache::flush();
         return Redirect::back()->with(['status' => 'success', 'msg' => 'Cache has been cleared.']);
@@ -199,6 +200,13 @@ Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), fun
 
         Route::get('/admin/multi-lang-text/{lcode}', 'AdministrationController@addmultilangtext');
         Route::post('/admin/multi-lang-text/{lcode}', 'AdministrationController@addmultilangtext');
+
+
+        Route::resource('/admin/manage-taxes', 'TaxController@manageTaxes');
+        Route::resource('/admin/add-tax', 'TaxController@addTax');
+        Route::get('/admin/edit-tax/{id}', 'TaxController@editTax');
+        Route::post('/admin/edit-tax/{id}', 'TaxController@editTax');
+        Route::post('/admin/tax-ajax-handler', 'TaxController@taxAjaxHandler');
 
 
         //-----------------------------ROUTES FOR MANAGER----------------------------------------
