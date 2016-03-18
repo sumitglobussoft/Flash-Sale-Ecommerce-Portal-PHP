@@ -1,6 +1,6 @@
 @extends('Admin/Layouts/adminlayout')
 
-@section('title', 'Available Supplier') {{--TITLE GOES HERE--}}
+@section('title', trans('message.available_supplier')) {{--TITLE GOES HERE--}}
 
 @section('headcontent')
     {{--OPTIONAL--}}
@@ -86,7 +86,7 @@
                         </div>
                     </div>
                     <div align="right">
-                        <button type="button" class="btn btn-default" data-dismiss="modal"> Close</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
@@ -170,10 +170,12 @@
                 var obj = $(this);
                 var UserId = $(this).attr('data-id');
                 var status = 0;
+                var statussetBy = $(this).attr('data-set-by');
+                alert(statussetBy);
                 if (obj.hasClass('btn-success')) {
-                    status = 2;
-                } else if (obj.hasClass('btn-danger')) {
                     status = 1;
+                } else if (obj.hasClass('btn-danger')) {
+                    status = 2;
                 }
                 if (status == 1 || status == 2) {
                     $.ajax({
@@ -183,7 +185,8 @@
                         data: {
                             method: 'changeSupplierStatus',
                             UserId: UserId,
-                            status: status
+                            status: status,
+                            statussetBy:statussetBy
                         },
                         success: function (response) {
                             response = $.parseJSON(response);
@@ -207,31 +210,25 @@
             $(document.body).on('click', '.delete-supplier', function () {
                 var obj = $(this);
                 var UserId = $(this).attr('data-cid');
-
-                $.ajax({
-                    url: '/admin/supplier-ajax-handler',
-                    type: 'POST',
-                    datatype: 'json',
-                    data: {
-                        method: 'deleteSupplierStatus',
-                        UserId: UserId,
-                    },
-                    success: function (response) {
-                        response = $.parseJSON(response);
-                        toastr[response['status']](response['msg']);
-                        if (response['status'] == "success") {
-                            if (obj.hasClass('btn-success')) {
-                                obj.removeClass('btn-success');
-                                obj.addClass('btn-danger');
-                                obj.text('Inactive');
-                            } else {
-                                obj.removeClass('btn-danger');
-                                obj.addClass('btn-success');
-                                obj.text('Active');
+//                alert(UserId);
+                if (confirm("Do you want to Delete Supplier!") == true) {
+                    $.ajax({
+                        url: '/admin/supplier-ajax-handler',
+                        type: 'POST',
+                        datatype: 'json',
+                        data: {
+                            method: 'deleteSupplierStatus',
+                            UserId: UserId,
+                        },
+                        success: function (response) {
+                            response = $.parseJSON(response);
+                            if (response) {
+                            toastr[response['status']](response['msg']);
+                                window.location.reload();
                             }
                         }
-                    }
-                });
+                    });
+                }
 
             });
 

@@ -103,9 +103,10 @@ Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), fun
 //        Route::resource('/admin/pending-products', 'ProductController@pendingProducts');
 //        Route::resource('/admin/add-product', 'ProductController@addProduct');
         /* Product controller route start */
-        Route::resource('/admin/pending-products', 'ProductController@pendingProducts');
+//        Route::resource('/admin/pending-products', 'ProductController@pendingProducts');
         Route::resource('/admin/add-product', 'ProductController@addProduct');
         Route::post('/admin/product-ajax-handler', 'ProductController@productAjaxHandler');
+        Route::post('/admin/product-list-ajax-handler/{method}', 'ProductController@productListAjaxHandler');
         /* Product controller route end */
 
         Route::resource('/admin/manage-categories', 'CategoryController@manageCategories');
@@ -121,6 +122,9 @@ Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), fun
 
         Route::resource('/admin/add-product', 'ProductController@addProduct');
         Route::resource('/admin/manage-products', 'ProductController@manageProducts');
+        Route::resource('/admin/deleted-products', 'ProductController@deletedProducts');
+        Route::resource('/admin/pending-products', 'ProductController@pendingProducts');
+        Route::resource('/admin/rejected-products', 'ProductController@rejectedProducts');
 
 
         Route::resource('/admin/control-panel', 'SettingController@controlPanel');
@@ -193,7 +197,7 @@ Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), fun
         Route::get('/admin/edit-language-value/{vid}', 'AdministrationController@editLanguageValue');
         Route::post('/admin/edit-language-value/{vid}', 'AdministrationController@editLanguageValue');
 
-        Route::get('/lang/{locale}', [
+        Route::get('admin/lang/{locale}', [
             'as' => 'lang',
             'uses' => 'AdministrationController@changeLang'
         ]);
@@ -201,6 +205,17 @@ Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), fun
         Route::get('/admin/multi-lang-text/{lcode}', 'AdministrationController@addmultilangtext');
         Route::post('/admin/multi-lang-text/{lcode}', 'AdministrationController@addmultilangtext');
 
+        Route::resource('/admin/add-campaign', 'CampaignController@addCampaign');
+        Route::resource('/admin/manage-campaign', 'CampaignController@manageCampaign');
+        Route::resource('/admin/manage-wholesale', 'CampaignController@manageWholesale');
+        Route::resource('/admin/extended-campaign-log', 'CampaignController@extendedCampaignLog');
+        Route::get('/admin/edit-campaign/{campaignId}/{added_by}', 'CampaignController@editCampaign');
+        Route::post('/admin/edit-campaign/{campaignId}/{added_by}', 'CampaignController@editCampaign');
+        Route::get('/admin/edit-wholesale/{campaign_id}/{added_by}', 'CampaignController@editWholesale');
+        Route::post('/admin/edit-wholesale/{campaign_id}/{added_by}', 'CampaignController@editWholesale');
+        Route::resource('/admin/campaign-ajax-handler', 'CampaignController@campaignAjaxHandler');
+//        Route::get('/admin/campaign-list-ajax-handler/{method}', 'CampaignController@campaignListAjaxHandler');
+        Route::post('/admin/campaign-list-ajax-handler/{method}', 'CampaignController@campaignListAjaxHandler');
 
         Route::resource('/admin/manage-taxes', 'TaxController@manageTaxes');
         Route::resource('/admin/add-tax', 'TaxController@addTax');

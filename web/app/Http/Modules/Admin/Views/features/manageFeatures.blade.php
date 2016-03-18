@@ -1,6 +1,6 @@
 @extends('Admin/Layouts/adminlayout')
 
-@section('title', 'Features') {{--TITLE GOES HERE--}}
+@section('title', trans('message.features')) {{--TITLE GOES HERE--}}
 
 @section('headcontent')
     {{--OPTIONAL--}}

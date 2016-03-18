@@ -113,4 +113,84 @@ class ProductCategory extends Model
         }
     }
 
+
+    public function getAllMainCategories($where,$selectedColumn = ['*']){
+
+        try {
+            $result = DB::table($this->table)
+                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                ->select($selectedColumn)
+                ->get();
+            return $result;
+        }catch(QueryException $e){
+            echo $e;
+        }
+
+
+    }
+
+    public function getCategoryNameById($where){
+
+        {
+            try {
+                $result = DB::table($this->table)
+                    ->select((array(DB::raw('GROUP_CONCAT(DISTINCT category_name) AS category_name', 'GROUP_CONCAT(DISTINCT category_id) AS category_id'))))
+                    ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+//                ->toSql();
+                    ->get();
+            } catch
+            (QueryException $e) {
+                echo $e;
+            }
+            if ($result) {
+                return $result;
+            } else {
+                return 0;
+            }
+
+        }
+
+    }
+
+    public function getAllParentCategoryDetails($where,$selectedColumns = ['*']){
+
+        if (func_num_args() > 0) {
+            $where = func_get_arg(0);
+            $result = DB::table($this->table)
+                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                ->join('products', 'products.category_id', '=', 'product_categories.category_id')
+                ->select($selectedColumns)
+                ->get();
+            return $result;
+        } else {
+            throw new Exception('Argument Not Passed');
+        }
+
+
+    }
+
+    public function getCategory($where){
+
+        {
+            try {
+                $result = DB::table($this->table)
+                    ->select()
+                    ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+//                ->toSql();
+                    ->get();
+            } catch
+            (QueryException $e) {
+                echo $e;
+            }
+            if ($result) {
+                return $result;
+            } else {
+                return 0;
+            }
+
+        }
+
+    }
+
+
 }

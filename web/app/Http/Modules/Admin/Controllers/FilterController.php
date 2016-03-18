@@ -204,51 +204,16 @@ class FilterController extends Controller
 
     public function editFilterGroup(Request $request, $id)
     {
+
         $postdata = $request->all();
         $ObjProductFeatures = ProductFeatures::getInstance();
         $ObjProductCategory = ProductCategory::getInstance();
         $ObjProductFilterOption = ProductFilterOption::getInstance();
-        if ($request->isMethod('GET')) {
-            $where = array('rawQuery' => 'category_status = ?', 'bindParams' => [1]);
-            $allCategories = $ObjProductCategory->getAllCategoriesWhere($where);
-            foreach ($allCategories as $key => $value) {
-                $allCategories[$key]->display_name = $this->getCategoryDisplayName($value->category_id);
-            }
-            $whereId = array('rawQuery' => 'product_filter_option_id=?', 'bindParams' => [$id]);
-            $FilterGroup = $ObjProductFilterOption->getFilterDetailsById($whereId);
 
-            $catfilterName = array_values(array_unique(explode(',', $FilterGroup[0]->product_filter_category_id)));
-            $category = $ObjProductCategory->getCategoryById($catfilterName);
-
-            foreach ($category as $key => $val) {
-                $filtecat[$key] = $val->category_id;
-            }
-            $whereFeature = array('rawQuery' => 'status = ?', 'bindParams' => [1], 'rawQuery' => 'parent_id=?', 'bindParams' => [0]);
-            $allFeatures = $ObjProductFeatures->getAllFeaturesWhere($whereFeature);
-            return view('Admin/Views/filter/edit-filtergroup', ['editfiltergroup' => $FilterGroup[0], 'selectedcategory' => $filtecat, 'categories' => $allCategories, 'features' => $allFeatures]);
-        } elseif ($request->isMethod('POST')) {
+        if ($request->isMethod('POST')) {
             $data['product_filter_option_name'] = $postdata['productfiltergroupname'];
             $data['product_filter_option_description'] = $postdata['filterdescription'];
             $data['product_filter_category_id'] = $postdata['productcategories'];
-
-            // $data['status'] = $postdata['productfiltergroupnamestatus'];
-            // need to work //
-//            $checkforproduct = $postdata['filtercheckproduct'];
-//
-//            if ($checkforproduct == "on") {
-//                $data['display_on_product'] = 1;
-//            } else {
-//                $data['display_on_product'] = 0;
-//            }
-//            $checkforproduct = '';
-//            $checkforcatalog = $postdata['filtercheckcatalog'];
-//            if ($checkforcatalog == "on") {
-//                $data['display_on_catalog'] = 1;
-//            } else {
-//                $data['display_on_catalog'] = 0;
-//            }
-//            $checkforcatalog = '';
-            // end //
             $temp = array();
             $cat = $postdata['productcategories'];
             foreach ($cat as $catkey => $catval) {
@@ -269,13 +234,36 @@ class FilterController extends Controller
             $data['product_filter_category_id'] = $catmain;
 
             $result = $ObjProductFilterOption->updateFilterOption($where, $data);
+
+            if ($result) {
+                $success = "Successfully Edited!";
+                return Redirect::back()->with('message', $success);
+            } else {
+                $success = "Error!";
+                return Redirect::back()->with('message', $success);
+            }
         }
-        if ($result) {
-            $success = "Successfully Edited!";
-            return Redirect::back()->with('message', $success);
+
+        $where = array('rawQuery' => 'category_status = ?', 'bindParams' => [1]);
+        $allCategories = $ObjProductCategory->getAllCategoriesWhere($where);
+            foreach ($allCategories as $key => $value) {
+                $allCategories[$key]->display_name = $this->getCategoryDisplayName($value->category_id);
+            }
+            $whereId = array('rawQuery' => 'product_filter_option_id=?', 'bindParams' => [$id]);
+            $FilterGroup = $ObjProductFilterOption->getFilterDetailsById($whereId);
+        if ((isset($allCategories)) && (!empty($FilterGroup))) {
+
+            $catfilterName = array_values(array_unique(explode(',', $FilterGroup[0]->product_filter_category_id)));
+            $category = $ObjProductCategory->getCategoryById($catfilterName);
+
+            foreach ($category as $key => $val) {
+                $filtecat[$key] = $val->category_id;
+            }
+            $whereFeature = array('rawQuery' => 'status = ?', 'bindParams' => [1], 'rawQuery' => 'parent_id=?', 'bindParams' => [0]);
+            $allFeatures = $ObjProductFeatures->getAllFeaturesWhere($whereFeature);
+            return view('Admin/Views/filter/edit-filtergroup', ['editfiltergroup' => $FilterGroup[0], 'selectedcategory' => $filtecat, 'categories' => $allCategories, 'features' => $allFeatures]);
         } else {
-            $success = "Error!";
-            return Redirect::back()->with('message', $success);
+            return view('Admin/Views/filter/edit-filtergroup');
         }
 
     }

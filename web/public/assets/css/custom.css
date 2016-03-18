@@ -1,3 +1,4 @@
 /* Write your custom CSS here */
 .bg-color{background-color: #364150;}
 .login-box{background: #fff;padding: 15px;}
+.icon-percent::before { content: "%"; font-weight: bold; }

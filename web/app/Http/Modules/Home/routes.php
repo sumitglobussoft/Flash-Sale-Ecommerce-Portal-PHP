@@ -17,6 +17,17 @@
 
 Route::group(['middleware' => ['guest']], function () {
 
+    Route::get('user/lang/{locale}', function ($locale) {
+//        return $locale;
+        Session::put('user_locale', $locale);
+//        return $locale;
+        return Redirect::to(URL::previous());
+    });
+//    Route::get('user/lang/{locale}', [
+//        'as'=>'lang',
+//        'uses'=>'HomeController@changeLang'
+//    ]);
+
     /* // Authentication routes...
     //    Route::get('/logout', 'Auth\AuthController@getLogout');
         Route::resource('/login', 'Auth\AuthController@login');
@@ -62,13 +73,14 @@ Route::group(['middleware' => ['guest']], function () {
 //});
 
 
-
-
 Route::group(array('module' => 'Home', 'namespace' => 'Home\Controllers'), function () {
+
+
 
     Route::resource('/', 'HomeController@home');
     Route::resource('/home-ajax-handler', 'HomeController@homeAjaxHandler');
     Route::resource('/logout', 'HomeController@logout');
+
 
 });
 

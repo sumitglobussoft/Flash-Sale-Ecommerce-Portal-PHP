@@ -25,9 +25,11 @@
                             <tr>
                                 <td><input type="text" class="form-control"
                                            name="name[]">
+                                    {!!  $errors->first('name', '<font color="red">:message</font>') !!}
                                 </td>
                                 <td><input type="text" class="form-control"
                                            name="value[]">
+                                    {!!  $errors->first('value', '<font color="red">:message</font>') !!}
                                 </td>
                                 <td>
                                     <a class="col-sm-1 add-more"><i class="fa fa-plus"></i></a>

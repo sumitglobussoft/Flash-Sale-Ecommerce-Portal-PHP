@@ -180,6 +180,28 @@ class ProductCategory extends Model
             }
         }
     }
+    public function getCategoryNameById($where){
+
+        {
+            try {
+                $result = DB::table($this->table)
+                    ->select((array(DB::raw('GROUP_CONCAT(DISTINCT category_name) AS category_name', 'GROUP_CONCAT(DISTINCT category_id) AS category_id'))))
+                    ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+//                ->toSql();
+                    ->get();
+            } catch
+            (QueryException $e) {
+                echo $e;
+            }
+            if ($result) {
+                return $result;
+            } else {
+                return 0;
+            }
+
+        }
+
+    }
 
 
 }

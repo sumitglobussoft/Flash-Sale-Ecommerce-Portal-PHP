@@ -160,6 +160,26 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle waves-effect waves-button waves-classic"
                                data-toggle="dropdown">
+                                <span class="user-name">{{ trans('message.changelanguage') }}<i
+                                            class="fa fa-angle-down"></i></span>
+                            </a>
+                            <ul class="dropdown-menu"><?php $langinfo = \FlashSale\Http\Modules\Supplier\Controllers\SupplierController::getLanguageDetails();?>
+
+                                <?php if(isset($langinfo) && !(empty($langinfo))){ ?>
+
+                                @foreach($langinfo as  $val)
+
+                                    <li><a href="/supplier/lang/{{$val->lang_code}}">{{$val->name}}</a></li>
+                                    {{--<li> <a href="/lang/{{$val->lang_code}}">{{$val->name}}</a></li>--}}
+                                    {{--<option value="/lang/pt">Portuguese</option>--}}
+                                @endforeach
+                                <?php } ?>
+
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle waves-effect waves-button waves-classic"
+                               data-toggle="dropdown">
                                 <span class="user-name">{{Session::get('fs_supplier')['name']}}<i
                                             class="fa fa-angle-down"></i></span>
                                 <img class="img-circle avatar"
@@ -194,28 +214,32 @@
                     <a href="/supplier/dashboard" class="waves-effect waves-button">
                         <span class="menu-icon glyphicon glyphicon-home"></span>
 
-                        <p>Dashboard</p>
+                        <p>{{ trans('message.dashboard') }}</p>
                     </a>
                 </li>
                 <li class="droplink">
                     <a class="waves-effect waves-button">
-                        <span class="menu-icon glyphicon glyphicon-shopping-cart"></span>
+                        
 
-                        <p>Products</p> <span class="arrow"></span>
+                        <p>{{ trans('message.products') }}</p> <span class="arrow"></span>
                     </a>
                     <ul class="sub-menu">
                         {{--<li><a href="/supplier/manage-products">Products</a></li>--}}
-                        <li><a href="/supplier/manage-categories">Categories</a></li>
+                        <li><a href="/supplier/manage-categories">{{ trans('message.categories') }}</a></li>
                         {{--<li><a href="/supplier/manage-features">Features</a></li>--}}
                         {{--<li><a href="/supplier/manage-filtergroup">Filters</a></li>--}}
                         <li><a href="/supplier/manage-options">Options</a></li>
+                        {{--<li><a href="/supplier/manage-flashsale">Flashsale</a></li>--}}
+                        <li><a href="/supplier/manage-campaign">Campaign</a></li>
+                        <li><a href="/supplier/manage-wholesale">Wholesale</a></li>
+
                     </ul>
                 </li>
                 <li class="droplink">
                     <a class="waves-effect waves-button">
                         <span class="menu-icon glyphicon glyphicon-shopping-cart"></span>
 
-                        <p>Shop</p> <span class="arrow"></span>
+                        <p>{{ trans('message.shop') }}</p> <span class="arrow"></span>
                     </a>
                     <ul class="sub-menu">
                         <li><a href="/supplier/shopList">Shop List</a></li>
@@ -230,6 +254,7 @@
 
     <div class="page-inner">
         <div class="page-title">
+    
             <h3><b>@yield('title')</b></h3>
             <!--<div class="page-breadcrumb">
                 <ol class="breadcrumb">

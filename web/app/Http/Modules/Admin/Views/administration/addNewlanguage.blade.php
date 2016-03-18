@@ -117,7 +117,11 @@
 
             $(document.body).on("change", 'input:checkbox[name="statact"]', function () {
                 var checkactiveflag = $(this).is(':checked');
+<<<<<<< .mine
 //                alert(checkactiveflag);
+=======
+
+>>>>>>> .theirs
             });
 
             {{--@if(Session::has('msg') != ''){--}}

@@ -108,8 +108,12 @@ class AdministrationController extends Controller
 
     }
 
+    /**
+     * @param Request $request
+     * @return mixed
+     */
     public function administrationAjaxHandler(Request $request)
-    {
+        {
 
         $inputData = $request->input();
         $method = $inputData['method'];
@@ -117,6 +121,7 @@ class AdministrationController extends Controller
         $ObjLocationModel = Location::getInstance();
         $ObjLanguageValuesModel = LanguageValues::getInstance();
         switch ($method) {
+
             case 'manageLanguage':
                 $available_languages = $ObjLanguageModel->getAvailableLanguageDetails();
                 return Datatables::of($available_languages)
@@ -214,53 +219,66 @@ class AdministrationController extends Controller
             case 'multi-lang-text':
                 $ObjLanguageValue = LanguageValues::getInstance();
                 $lcode = Lang::getLocale();
-                if ($request->isMethod('GET')) {
-                    $selectColumn = ['language_values.*'];
-                    $langDetail = $ObjLanguageValue->getAllLanguageVariable($selectColumn, $lcode);
 
-                    $langInfo = json_decode(json_encode($langDetail), true);
-                    $lang = new Collection();
-                    foreach ($langInfo as $key => $val) {
-                        $lang->push([
-                            'lang_value_id' => $val['lang_value_id'],
-                            'name' => $val['name'],
-                            'value' => $val['value'],
-                            $lcode => $val[$lcode],
-                        ]);
-                    }
+                if ($lcode == 'en') {
+                    $lcode = 'value';
+                }
+                $selectColumn = ['language_values.*'];
+                $langDetail = $ObjLanguageValue->getAllLanguageVariable($selectColumn, $lcode);
+                unset($lcode);
 
-                    return Datatables::of($lang, $lcode)
-                        ->editColumn('value', function ($lang) use ($lcode) {
-                            if ($lcode == 'en') {
-                                return '<td class="text-center" style="display:none"><input type="text" class="form-control" style="display:none" id="lnagId"
+                $langInfo = json_decode(json_encode($langDetail), true);
+                $lang = new Collection();
+                $lcode = Lang::getLocale();
+                if ($lcode == 'en') {
+                    $lcode = 'en';
+                }
+
+                foreach ($langInfo as $key => $val) {
+                    $lang->push([
+                        'lang_value_id' => $val['lang_value_id'],
+                        'name' => $val['name'],
+                        'value' => $val['value'],
+                        $lcode => $val[$lcode],
+//                        $lvname = $val['name'],
+                    ]);
+
+                }
+
+                return Datatables::of($lang, $lcode)
+                    ->editColumn('value', function ($lang) use ($lcode) {
+                        if ($lcode == 'en') {
+//                            return '<td class="text-center"><input type="text" class="form-control" readonly="readonly" id="langValue"
+//                                                                   value="' . $lang['value'] . '" name="lang_value"></td>';
+
+                            return '<td class="text-center" style="display:none"><input type="text" class="form-control" style="display:none" id="lnagId"
                                                                                         value="' . $lang['lang_value_id'] . '"
-                                                                                        name="lang_id[]"></td> <td class="text-center" ><input type="text" class="form-control" id="langName" readonly="readonly"
-                                                                                        value="' . $lang['name'] . '"
-                                                                                        name="lang_name[]"></td>';
-                            } else {
-                                return '<td class="text-center" style="display:none"><input type="text" class="form-control" style="display:none" id="lnagId"
+                                                                                        name="lang_id[]"></td><td class="text-center" style="display:none"><input type="text" class="form-control" style="display:none" id="lnagId"
+                                                                                        value="' . $lang['name'] . '"> <td class="text-center" ><input type="text" class="form-control" id="langName" readonly="readonly"                                                                                        value="' . $lang['name'] . '"
+                                                                                       name="lang_name[]"></td>';
+                        } else {
+                            return '<td class="text-center" style="display:none"><input type="text" class="form-control" style="display:none" id="lnagId"
                                                                                         value="' . $lang['lang_value_id'] . '"
                                                                                         name="lang_id[]"></td> <td class="text-center" ><input type="text" class="form-control" style="display:none" id="langName"
                                                                                         value="' . $lang['name'] . '"
                                                                                         name="lang_name[]"></td>
                                     <td class="text-center"><input type="text" class="form-control" readonly="readonly" id="langValue"
                                                                    value="' . $lang['value'] . '" name="lang_value"></td>';
-                            }
-                        })
-                        ->editColumn($lcode, function ($lang) use ($lcode) {
-                            if ($lcode == 'en') {
-                                return ' <td class="text-center"><input type="text" class="form-control" id="langCode"
+                        }
+                    })
+                    ->editColumn($lcode, function ($lang) use ($lcode) {
+                        if ($lcode == 'en') {
+                            return '<td class="text-center"><input type="text" class="form-control" id="langCode"
                                                                    value="' . $lang['value'] . '" name="convertname[]"></td>';
-                            } else {
-                                return ' <td class="text-center"><input type="text" class="form-control" id="langCode"
+                        } else {
+                            return '<td class="text-center"><input type="text" class="form-control" id="langCode"
                                                                    value="' . $lang[$lcode] . '" name="convertname[]"></td>';
-                            }
-                        })
-                        ->removeColumn('lang_value_id')
-                        ->removeColumn('name')
-                        ->make();
+                        }
+                    })
+                    ->removeColumn('lang_value_id')
+                    ->removeColumn('name')
+                    ->make();
 
-                }
                 break;
             case 'submitconvertlang':
                 $ObjLanguageValue = LanguageValues::getInstance();
@@ -272,12 +290,15 @@ class AdministrationController extends Controller
                 $lang_name['name'] = $postData['lang_name'];
                 $lang_id['lang_value_id'] = $postData['lang_id'];
                 $convertName[$lcode] = $postData['convertname'];
-
-
                 $case = implode(' ', array_map(function ($v, $k) {
                     return ' WHEN ' . $v . ' THEN "' . $k . '"';
                 }, $postData['lang_id'], $postData['convertname']));
-                $updateData = [$lcode => DB::raw("(CASE lang_value_id $case END)")];
+                if ($lcode == 'en') {
+                    $lcode = 'value';
+                    $updateData = [$lcode => DB::raw("(CASE lang_value_id $case END)")];
+                } else {
+                    $updateData = [$lcode => DB::raw("(CASE lang_value_id $case END)")];
+                }
                 $whereForUpdate = ['rawQuery' => 'lang_value_id IN(' . implode(',', $postData['lang_id']) . ')'];
                 $updateLang = $ObjLanguageValue->updateLanguageValueStatus($updateData, $whereForUpdate);
                 $langval = array_combine($lang_name['name'], $convertName[$lcode]);
@@ -293,7 +314,6 @@ class AdministrationController extends Controller
                 }, $array));
                 $case = rtrim($case, ',');
                 $case .= '];';
-
 
                 File::put(env('LANG_PATH') . '/' . Lang::getLocale() . '/message.php', $case);
 
@@ -323,52 +343,56 @@ class AdministrationController extends Controller
         $response = new stdClass();
         $ObjLanguageModel = Languages::getInstance();
         $ObjLanguageValuesModel = LanguageValues::getInstance();
+
         if ($request->isMethod('POST')) {
             $postData = $request->all();
             $rules = array(
-                'name' => 'required|unique:languages',
+                'name' => 'required|unique:language_values',
                 'value' => 'required|max:255',
             );
-
+//            $rules = array(
+//                'name' => 'required',
+//                'value' => 'required',
+//            );
             $validator = Validator::make($request->all(), $rules);
 
             if ($validator->fails()) {
                 return Redirect::back()
                     ->withErrors($validator)
                     ->withInput();
-            }
-            $namedata = array();
-            $data['lang_code'] = 'en';
-            $data['name'] = $request->input('name');
-            $data['value'] = $request->input('value');
-
-            $newData = array_map(function ($v, $k) {
-                $temp['lang_code'] = 'en';
-                $temp['name'] = $v;
-                $temp['value'] = $k;
-                return $temp;
-            }, $data['name'], $data['value']);
-
-
-            $array = array_merge((include env('LANG_PATH') . '/' . 'en' . '/message.php'), array_combine($data['name'], $data['value']));
-
-            $case = ('<?php return [');
-            $case .= implode(' ', array_map(function ($v, $k) {
-                return "'" . $k . "'" . '=>' . "'" . $v . "',";
-            }, $array, array_keys($array)));
-            $case = rtrim($case, ',');
-            $case .= '];';
-            File::put(env('LANG_PATH') . '/' . 'en' . '/message.php', $case);
-
-
-            $languagevalue = $ObjLanguageValuesModel->addLanguagesValue($newData);
-
-            if ($languagevalue) {
-                return Redirect::back()->with(['status' => 'success', 'msg' => 'Language values Added Successfully!!.']);
             } else {
-                return Redirect::back()->with(['status' => 'info', 'msg' => 'Some Error!!.']);
-            }
+                $namedata = array();
+                $data['lang_code'] = 'en';
+                $data['name'] = $request->input('name');
+                $data['value'] = $request->input('value');
 
+                $newData = array_map(function ($v, $k) {
+                    $temp['lang_code'] = 'en';
+                    $temp['name'] = $v;
+                    $temp['value'] = $k;
+                    return $temp;
+                }, $data['name'], $data['value']);
+
+
+                $array = array_merge((include env('LANG_PATH') . '/' . 'en' . '/message.php'), array_combine($data['name'], $data['value']));
+
+                $case = ('<?php return [');
+                $case .= implode(' ', array_map(function ($v, $k) {
+                    return "'" . $k . "'" . '=>' . "'" . $v . "',";
+                }, $array, array_keys($array)));
+                $case = rtrim($case, ',');
+                $case .= '];';
+                File::put(env('LANG_PATH') . '/' . 'en' . '/message.php', $case);
+
+
+                $languagevalue = $ObjLanguageValuesModel->addLanguagesValue($newData);
+
+                if ($languagevalue) {
+                    return Redirect::back()->with(['status' => 'success', 'msg' => 'Language values Added Successfully!!.']);
+                } else {
+                    return Redirect::back()->with(['status' => 'info', 'msg' => 'Some Error!!.']);
+                }
+            }
         }
 
         return view('Admin/Views/administration/addLanguageValue');
@@ -493,6 +517,7 @@ class AdministrationController extends Controller
      */
     public function changeLang(Request $request, $locale = null)
     {
+
         Session::put('locale', $locale);
         return Redirect::to(URL::previous());
     }

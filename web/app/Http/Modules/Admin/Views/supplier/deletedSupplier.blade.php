@@ -1,6 +1,6 @@
 @extends('Admin/Layouts/adminlayout')
 
-@section('title', 'Deleted Supplier') {{--TITLE GOES HERE--}}
+@section('title', trans('message.deleted_supplier')) {{--TITLE GOES HERE--}}
 
 @section('headcontent')
     {{--OPTIONAL--}}

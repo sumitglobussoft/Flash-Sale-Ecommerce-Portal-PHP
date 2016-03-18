@@ -23,6 +23,10 @@ class RedirectIfAuthenticated
     public function __construct(Guard $auth)
     {
         $this->auth = $auth;
+
+        $lang = \Session::get('user_locale');
+//        echo'<pre>';print_r($lang);die("dxsvg");
+        if ($lang != null) \App::setLocale($lang);
     }
 
     /**
@@ -34,9 +38,11 @@ class RedirectIfAuthenticated
      */
     public function handle($request, Closure $next)
     {
-        if ($this->auth->check()) {
-            return redirect('/');
-        }
+
+//        die( \Session::get('user_locale'));
+//        if ($this->auth->guest()) {
+//            return redirect('/');
+//        }
 
         return $next($request);
     }

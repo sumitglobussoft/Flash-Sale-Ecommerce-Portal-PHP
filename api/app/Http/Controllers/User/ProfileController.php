@@ -3,6 +3,7 @@
 namespace FlashSaleApi\Http\Controllers\User;
 
 use DB;
+use FlashSaleApi\Http\Models\Languages;
 use Illuminate\Http\Request;
 use FlashSaleApi\Http\Requests;
 use FlashSaleApi\Http\Controllers\Controller;
@@ -103,6 +104,86 @@ class ProfileController extends Controller
         }
         echo json_encode($response, true);
         die;
+    }
+
+
+    public function languageTranslate(Request $request){
+        $response = new stdclass();
+        $objLanguage = new Languages();
+        $objuser = new User();
+        $API_TOKEN = env('API_TOKEN');
+
+        if ($request->isMethod("POST")) {
+            $postData = $request->all();
+            $userId = "";
+//            $apitoken = 0;
+//            $authFlag = false;
+            if (isset($postData['user_id'])) {
+                $userId = $postData['user_id'];
+            }
+//            $apitoken = "";
+            if (isset($postData['api_token'])) {
+                $apitoken = $postData['api_token'];
+
+            }
+
+            if ($apitoken == $API_TOKEN) {
+//            if ($apitoken == $API_TOKEN) {
+
+//            if (isset($postData['api_token'])) {
+//                $apitoken = $postData['api_token'];
+//                if ($apitoken == $API_TOKEN) {
+//                    $authFlag = true;
+//                } else {
+//                    if ($userId != '') {
+//                        $where = [
+//                            'rawQuery' => 'id =?',
+//                            'bindParams' => [$userId]
+//                        ];
+//                        $Userscredentials = $objuser->getUsercredsWhere($where);
+//                        if ($apitoken == $Userscredentials->login_token) {
+//                            $authFlag = true;
+//                        }
+//                    }
+//                }
+//            }
+//            if ($apitoken == $API_TOKEN) {
+//                    $where = [
+//                        'rawQuery' => 'users.id =?',
+//                        'bindParams' => [$userId]
+//                    ];
+//                    $userdetails = $objuser->getUsercreds($where);
+                    $ObjLanguageModel = Languages::getInstance();
+                    $selectColumn = ['languages.lang_code','languages.name'];
+                    $langInfo = $ObjLanguageModel->getAllLanguages($selectColumn);
+
+                    if ($langInfo) {
+                        $response->code = 200;
+                        $response->message = "Success";
+                        $response->data = $langInfo;
+                    } else {
+                        $response->code = 400;
+                        $response->message = "No user Details found.";
+                        $response->data = null;
+                    }
+//                } else {
+//                    $response->code = 400;
+//                    $response->message = "You need to login to view profile setting.";
+//                    $response->data = null;
+//                }
+            } else {
+                $response->code = 401;
+                $response->message = "Access Denied";
+                $response->data = null;
+            }
+        } else {
+            $response->code = 401;
+            $response->message = "Invalid request";
+            $response->data = null;
+        }
+        echo json_encode($response, true);
+        die;
+
     }
 
     /**
@@ -485,33 +566,35 @@ class ProfileController extends Controller
                                     $response->data = null;
                                     echo json_encode($response);
                                 } else {
-                                    $destinationPath = $_SERVER['DOCUMENT_ROOT'] . '/../../web/public/assets/uploads/useravatar/';
-                                    $filename = $userId . '_' . time() . ".jpg";
-                                    File::makeDirectory($destinationPath, 0777, true, true);
-                                    $filePath = $destinationPath . $filename;
-                                    $quality = $this->imageQuality(Input::file('file'));
-                                    Image::make(Input::file('file'))->resize(1024, 1024, function ($constraint) {
-                                        $constraint->aspectRatio();
-                                    })->save($filePath, $quality);
-                                    $filepathupdate = '/assets/uploads/useravatar/' . $filename;
-                                    $updateData['profilepic'] = $filepathupdate;
-                                    $where = [
-                                        'rawQuery' => 'id =?',
-                                        'bindParams' => [$userId]
-                                    ];
-                                    $UserData = $objuser->getUsercredsWhere($where);
-                                    $updatedResult = $objuser->UpdateUserDetailsbyId($where, $updateData);
-                                    if ($updatedResult) {
-                                        if ($UserData->profilepic != '') {
-                                            File::delete(public_path() . '/../../web/public' . $UserData->profilepic);
+                                    $filePath = uploadImageToStoragePath(Input::file('file'), 'profileavatar', 'profileavatar_' . $userId . '_' . time() . ".jpg");
+                                    if ($filePath) {
+                                        $updateData['profilepic'] = $filePath;
+                                        $where = [
+                                            'rawQuery' => 'id =?',
+                                            'bindParams' => [$userId]
+                                        ];
+                                        $UserData = $objuser->getUsercredsWhere($where);
+                                        $updatedResult = $objuser->UpdateUserDetailsbyId($where, $updateData);
+                                        if ($updatedResult) {
+                                            if ($UserData->profilepic != '') {
+                                                if (!strpos($UserData->profilepic, 'placeholder')) {
+                                                    deleteImageFromStoragePath($UserData->profilepic);
+                                                }
+                                            }
+//
+                                            $response->code = 200;
+                                            $response->message = "Successfully updated profile image.";
+                                            $response->data = $filePath;
+                                            echo json_encode($response);
+                                        } else {
+                                            $response->code = 400;
+                                            $response->message = "Something went wrong, please try again.";
+                                            $response->data = null;
+                                            echo json_encode($response);
                                         }
-                                        $response->code = 200;
-                                        $response->message = "Successfully updated profile image.";
-                                        $response->data = $filepathupdate;
-                                        echo json_encode($response);
                                     } else {
                                         $response->code = 400;
-                                        $response->message = "Something went wrong, please try again.";
+                                        $response->message = "Something went wrong, please reload the page and try again..";
                                         $response->data = null;
                                         echo json_encode($response);
                                     }

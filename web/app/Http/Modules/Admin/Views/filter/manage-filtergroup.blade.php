@@ -121,7 +121,7 @@
             $(document.body).on('click', '.delete-feature', function () {
                 var w = $(this);
                 var filterId = w.attr('data-cid');
-                alert(filterId);
+//                alert(filterId);
                 $.ajax({
                     url: '/admin/filter-ajax-handler',
                     type: 'POST',

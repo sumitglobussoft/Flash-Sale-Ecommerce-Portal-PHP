@@ -1,6 +1,6 @@
 @extends('Admin/Layouts/adminlayout')
 
-@section('title', 'Available Customers') {{--TITLE GOES HERE--}}
+@section('title', trans('message.available_customer')) {{--TITLE GOES HERE--}}
 
 @section('headcontent')
     {{--OPTIONAL--}}
@@ -18,8 +18,7 @@
         <div class="col-md-12">
             <div class="panel panel-white">
                 <div class="panel-body">
-                    <a href="/admin/add-new-customer" class="btn btn-success"><i class="fa fa-plus "></i>&nbsp;Add New
-                        Customer
+                    <a href="/admin/add-new-customer" class="btn btn-success"><i class="fa fa-plus "></i>&nbsp;{{trans('message.add_new_customer')}}
                     </a>
                     <table id="available_customer" class="display" cellspacing="0" width="100%">
                         <thead>
@@ -69,11 +68,12 @@
 
                 var obj = $(this);
                 var UserId = $(this).attr('data-id');
+                var statusSetBy = $(this).attr('data-set-by');
                 var status = 0;
                 if (obj.hasClass('btn-success')) {
-                    status = 2;
-                } else if (obj.hasClass('btn-danger')) {
                     status = 1;
+                } else if (obj.hasClass('btn-danger')) {
+                    status = 2;
                 }
                 if (status == 1 || status == 2) {
                     $.ajax({
@@ -83,7 +83,8 @@
                         data: {
                             method: 'changeCustomerStatus',
                             UserId: UserId,
-                            status: status
+                            status: status,
+                            statusSetBy:statusSetBy
                         },
                         success: function (response) {
                             response = $.parseJSON(response);
@@ -104,36 +105,26 @@
                 }
 
                 $(document.body).on('click', '.delete-user', function () {
-                    //   alert("cfh");
                     var obj = $(this);
                     var UserId = $(this).attr('data-cid');
-                    alert(UserId);
-
-                    $.ajax({
-                        url: '/admin/customer-ajax-handler',
-                        type: 'POST',
-                        datatype: 'json',
-                        data: {
-                            method: 'deleteUserStatus',
-                            UserId: UserId,
-                        },
-                        success: function (response) {
-                            response = $.parseJSON(response);
-                            toastr[response['status']](response['msg']);
-                            if (response['status'] == "success") {
-                                if (obj.hasClass('btn-success')) {
-                                    obj.removeClass('btn-success');
-                                    obj.addClass('btn-danger');
-                                    obj.text('Inactive');
-                                } else {
-                                    obj.removeClass('btn-danger');
-                                    obj.addClass('btn-success');
-                                    obj.text('Active');
+                    if (confirm("Do you want to Delete Customer!") == true) {
+                        $.ajax({
+                            url: '/admin/customer-ajax-handler',
+                            type: 'POST',
+                            datatype: 'json',
+                            data: {
+                                method: 'deleteUserStatus',
+                                UserId: UserId,
+                            },
+                            success: function (response) {
+                                response = $.parseJSON(response);
+                                if (response) {
+                                    toastr[response['status']](response['msg']);
+                                    window.location.reload();
                                 }
                             }
-                        }
-                    });
-
+                        });
+                    }
                 });
 
             });

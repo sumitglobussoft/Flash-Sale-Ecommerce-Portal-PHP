@@ -2,6 +2,7 @@
 
 namespace FlashSale\Http\Modules\Home\Controllers;
 
+use FlashSaleApi\Http\Models\Campaigns;
 use Illuminate\Http\Request;
 
 use FlashSale\Http\Requests;
@@ -11,9 +12,10 @@ use Illuminate\Support\Facades\Hash;
 use DB;
 
 use FlashSale\Http\Modules\Admin\Models\User;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Curl\CurlRequestHandler;
-
+use Illuminate\Support\Facades\URL;
 
 
 class HomeController extends Controller
@@ -30,12 +32,23 @@ class HomeController extends Controller
      */
     public function home()
     {
-        //echo "<pre>";print_r(Session::get('fs_user'));die;
-//        Session::put('fs_user', "hhfgh");
-//       echo "<pre>"; print_r(Session::get('fs_user')['profilepic']);
-//        die();
-        //
-        return view("Home/Views/home");
+
+        $objCurl = CurlRequestHandler::getInstance();
+        $url = env("API_URL") . '/' . "flashsale-details";
+
+        $mytoken = env("API_TOKEN");
+        $user_id = '';
+        if (Session::has('fs_customer')) {
+            $user_id = Session::get('fs_customer')['id'];
+
+        }
+        $data = array('api_token' => $mytoken, 'id' => $user_id);
+
+        $curlResponse = $objCurl->curlUsingPost($url, $data);
+        if ($curlResponse->code == 200) {
+            return view('Home/Views/home',['flashsaledetails' => $curlResponse->data]);
+        }
+        return view("Home/Views/home",['locale'=>\Session::get('user_locale')]);
     }
 
     public function homeAjaxHandler(Request $request)
@@ -148,6 +161,30 @@ class HomeController extends Controller
     {
         Session::forget('fs_user');
         return redirect('/');
+    }
+
+    /**
+     * Changes the current language and returns to previous page
+     * @return Redirect
+     */
+    public function changeLang(Request $request, $locale = null)
+    {
+//        Session::put('locale', $locale);
+//        return Redirect::to(URL::previous());
+    }
+
+
+    public static function getTranslatedLanguage(){
+
+        $api_url = env('API_URL');
+        $API_TOKEN = env('API_TOKEN');
+        $objCurlHandler = CurlRequestHandler::getInstance();
+        $url = $api_url . "/language-translate";
+        $data['user_id'] = Session::get('fs_user')['id'];
+        $data['api_token'] = $API_TOKEN;
+        $curlResponse = $objCurlHandler->curlUsingPost($url, $data);
+        return $curlResponse->data;
+
     }
 
 }

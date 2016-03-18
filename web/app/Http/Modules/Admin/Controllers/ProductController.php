@@ -5,6 +5,7 @@ namespace FlashSale\Http\Modules\Admin\Controllers;
 use FlashSale\Http\Modules\Admin\Models\ProductImage;
 use FlashSale\Http\Modules\Admin\Models\ProductMeta;
 use FlashSale\Http\Modules\Admin\Models\ProductOptionVariantRelation;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 use FlashSale\Http\Requests;
@@ -212,7 +213,7 @@ class ProductController extends Controller
                     $productImages = $_FILES['product_data'];
                     $imageData = array();
                     if ($productImages['error']['mainimage'] == 0) {
-                        $mainImageURL = uploadImageToStoragePath($productImages['tmp_name']['mainimage'], 'product_' . $insertedProductId, 'product_' . $insertedProductId . '_0_' . time() . '.jpg');
+                        $mainImageURL = uploadImageToStoragePath($productImages['tmp_name']['mainimage'], 'product_' . $insertedProductId, 'product_' . $insertedProductId . '_0_' . time() . '.jpg',724,1024);
                         if ($mainImageURL) {
                             $mainImageData['for_product_id'] = $insertedProductId;
                             $mainImageData['image_type'] = 0;
@@ -227,7 +228,7 @@ class ProductController extends Controller
                     if (array_key_exists('otherimages', $productImages['name'])) {
                         foreach ($productImages['tmp_name']['otherimages'] as $otherImageKey => $otherImage) {
                             if ($otherImage != '') {
-                                $otherImageURL = uploadImageToStoragePath($otherImage, 'product_' . $insertedProductId, 'product_' . $insertedProductId . '_' . ($otherImageKey + 1) . '_' . time() . '.jpg');
+                                $otherImageURL = uploadImageToStoragePath($otherImage, 'product_' . $insertedProductId, 'product_' . $insertedProductId . '_' . ($otherImageKey + 1) . '_' . time() . '.jpg',724,1024);
                                 if ($otherImageURL) {
                                     $otherImageData['for_product_id'] = $insertedProductId;
                                     $otherImageData['image_type'] = 1;
@@ -244,20 +245,20 @@ class ProductController extends Controller
                     //--------------------------END PRODUCT-IMAGES----------------------------//
 
                     //------------------------PRODUCT FEATURES START HERE---------------------//
-                    $productDataFeatures = $inputData['features'];
-                    $fvrDataToInsert = array();
-                    foreach ($productDataFeatures as $keyPDF => $valuePDF) {
-                        if (array_key_exists("single", $productDataFeatures[$keyPDF])) {
-//                            $fvrDataToInsert[] = ['product_id' => $insertedProductId, 'feature_id' => $keyPDF, 'variant_ids' => 0, 'display_status' => $productDataFeatures[$keyPDF]['status']];
-                            $objModelProductFeatureVariantRelation->addFeatureVariantRelation(['product_id' => $insertedProductId, 'feature_id' => $keyPDF, 'variant_ids' => 0, 'display_status' => $productDataFeatures[$keyPDF]['status']]);
-                        } else if (array_key_exists("muliple", $productDataFeatures[$keyPDF])) {
-//                            $fvrDataToInsert[] = ['product_id' => $insertedProductId, 'feature_id' => $keyPDF, 'variant_ids' => implode(",", array_keys($valuePDF['multiple'])), 'display_status' => $valuePDF['status']];
-                            $objModelProductFeatureVariantRelation->addFeatureVariantRelation(['product_id' => $insertedProductId, 'feature_id' => $keyPDF, 'variant_ids' => implode(",", array_keys($valuePDF['multiple'])), 'display_status' => $valuePDF['status']]);
-                        } else if (array_key_exists("select", $productDataFeatures[$keyPDF])) {
-//                            $fvrDataToInsert[] = ['product_id' => $insertedProductId, 'feature_id' => $keyPDF, 'variant_ids' => $valuePDF['select'], 'display_status' => $valuePDF['status']];
-                            $objModelProductFeatureVariantRelation->addFeatureVariantRelation(['product_id' => $insertedProductId, 'feature_id' => $keyPDF, 'variant_ids' => "" . $valuePDF['select'], 'display_status' => $valuePDF['status']]);
-                        }
-                    }
+//                    $productDataFeatures = $inputData['features'];
+//                    $fvrDataToInsert = array();
+//                    foreach ($productDataFeatures as $keyPDF => $valuePDF) {
+//                        if (array_key_exists("single", $productDataFeatures[$keyPDF])) {
+////                            $fvrDataToInsert[] = ['product_id' => $insertedProductId, 'feature_id' => $keyPDF, 'variant_ids' => 0, 'display_status' => $productDataFeatures[$keyPDF]['status']];
+//                            $objModelProductFeatureVariantRelation->addFeatureVariantRelation(['product_id' => $insertedProductId, 'feature_id' => $keyPDF, 'variant_ids' => 0, 'display_status' => $productDataFeatures[$keyPDF]['status']]);
+//                        } else if (array_key_exists("muliple", $productDataFeatures[$keyPDF])) {
+////                            $fvrDataToInsert[] = ['product_id' => $insertedProductId, 'feature_id' => $keyPDF, 'variant_ids' => implode(",", array_keys($valuePDF['multiple'])), 'display_status' => $valuePDF['status']];
+//                            $objModelProductFeatureVariantRelation->addFeatureVariantRelation(['product_id' => $insertedProductId, 'feature_id' => $keyPDF, 'variant_ids' => implode(",", array_keys($valuePDF['multiple'])), 'display_status' => $valuePDF['status']]);
+//                        } else if (array_key_exists("select", $productDataFeatures[$keyPDF])) {
+////                            $fvrDataToInsert[] = ['product_id' => $insertedProductId, 'feature_id' => $keyPDF, 'variant_ids' => $valuePDF['select'], 'display_status' => $valuePDF['status']];
+//                            $objModelProductFeatureVariantRelation->addFeatureVariantRelation(['product_id' => $insertedProductId, 'feature_id' => $keyPDF, 'variant_ids' => "" . $valuePDF['select'], 'display_status' => $valuePDF['status']]);
+//                        }
+//                    }
 //                    $objModelProductFeatureVariantRelation->addFeatureVariantRelation($fvrDataToInsert);
                     //------------------------PRODUCT FEATURES END HERE---------------------//
 
@@ -294,8 +295,11 @@ class ProductController extends Controller
 
     public function manageProducts()
     {
-//        return view('Admin/Views/product/addProduct', ['pendingProducts' => $pendingProducts]);
-        return view('Admin/Views/product/manageProducts');
+        $objCategoryModel = ProductCategory::getInstance();
+
+        $where = ['rawQuery' => '1'];
+        $allactivecategories = $objCategoryModel->getAllCategoriesWhere($where);
+        return view('Admin/Views/product/manageProducts', ['allCategories' => $allactivecategories]);
 
     }
 
@@ -307,6 +311,8 @@ class ProductController extends Controller
         $response['code'] = 400;
         $response['data'] = array();
         $response['message'] = "Invalid request.";
+        $objModelProducts = Products::getInstance();
+        $objCategoryModel = ProductCategory::getInstance();
         if ($method) {
             switch ($method) {
                 case 'getOptionVariantsWhere':
@@ -327,7 +333,6 @@ class ProductController extends Controller
                         $response['data']['optionVariants'] = $allOptionVariants;
                     }
                     break;
-
                 //26-02-2016
                 case "getFeaturesWhereCatIdLike":
                     $response['code'] = 400;
@@ -386,12 +391,631 @@ class ProductController extends Controller
 //                        dd($response);
                     }
                     break;
+                case 'deletedProducts':
+                    $where = ['rawQuery' => 'products.product_type = ? AND products.product_status = ? AND product_images.image_type = ?', 'bindParams' => [0, 4, 0]];
+                    $selectedColumn = ['products.*', 'users.username', 'users.role', 'shops.shop_name', 'product_categories.category_name', 'product_images.image_url'];
+                    $getAllProducts = $objModelProducts->getAllProducts($where, $selectedColumn);
+                    $productInfo = json_decode(json_encode($getAllProducts), true);
+                    $products = new Collection();
+                    foreach ($productInfo as $key => $val) {
+                        $products->push([
+                            'product_id' => $val['product_id'],
+                            'product_images' => '<img src="' . $val['image_url'] . '" width="30px">',
+                            'added_date' => date('d-F-Y', strtotime($val['added_date'])),
+                            'shop_name' => $val['shop_name'],
+                            'product_name' => $val['product_name'],
+                            'price_total' => $val['price_total'],
+                            'list_price' => $val['list_price'],
+                            'min_qty' => $val['min_qty'],
+                            'max_qty' => $val['max_qty'],
+                            'category_name' => $val['category_name'],
+                            'in_stock' => $val['in_stock'],
+                            'username' => $val['username'],
+                            'available_countries' => $val['available_countries'],
+                            'product_status' => $val['product_status'],
+                        ]);
+                    }
 
+                    // FILTERING STARTS FROM HERE //
+                    $filteringRules = '';
+                    if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'filter' && $_REQUEST['action'][0] != 'filter_cancel') {
+
+                        if ($_REQUEST['product_id'] != '') {
+                            $filteringRules[] = "(`products`.`product_id` = " . $_REQUEST['product_id'] . " )";
+                        }
+                        if ($_REQUEST['date_from'] != '' && $_REQUEST['date_to'] != '') {
+                            $filteringRules[] = "(`products`.`added_date` BETWEEN " . strtotime(str_replace('-', ' ', $_REQUEST['date_from'])) . " AND " . strtotime(str_replace('-', ' ', $_REQUEST['date_to'])) . "  )";
+                        }
+                        if ($_REQUEST['store_name'] != '') {
+                            $filteringRules[] = "(`shops`.`shop_name` LIKE '%" . $_REQUEST['store_name'] . "%' )";
+                        }
+                        if ($_REQUEST['product_name'] != '') {
+                            $filteringRules[] = "(`products`.`product_name` LIKE '%" . $_REQUEST['product_name'] . "%' )";
+                        }
+                        if ($_REQUEST['price_from'] != '' && $_REQUEST['price_to'] != '') {
+                            $filteringRules[] = "(`products`.`price_total` BETWEEN " . intval($_REQUEST['price_from']) . " AND " . intval($_REQUEST['price_to']) . "  )";
+                        }
+                        if ($_REQUEST['list_price_from'] != '' && $_REQUEST['list_price_to'] != '') {
+                            $filteringRules[] = "(`products`.`list_price` BETWEEN " . intval($_REQUEST['list_price_from']) . " AND " . intval($_REQUEST['list_price_to']) . "  )";
+                        }
+                        if ($_REQUEST['minimum_quantity'] != '') {
+                            $filteringRules[] = "( `products`.`min_qty` = " . intval($_REQUEST['minimum_quantity']) . ")";
+                        }
+                        if ($_REQUEST['maximum_quantity'] != '') {
+                            $filteringRules[] = "(`products`.`max_qty` = " . intval($_REQUEST['maximum_quantity']) . ")";
+                        }
+                        if ($_REQUEST['product_categories'] != '') {
+                            $filteringRules[] = "(`products`.`category_id` = " . $_REQUEST['product_categories'] . " )";
+                        }
+                        if ($_REQUEST['added_by'] != '') {
+                            $filteringRules[] = "(`users`.`username` LIKE '%" . $_REQUEST['added_by'] . "%' )";
+                        }
+//                        if ($_REQUEST['product_status'] != '') {
+//                            $filteringRules[] = "(`products`.`product_status` = " . $_REQUEST['product_status'] . " )";
+//                        }
+
+                        // Filter Implode //
+                        $implodedWhere = '';
+                        if (!empty($filteringRules)) {
+                            $implodedWhere = implode(' AND ', array_map(function ($filterValues) {
+                                return $filterValues;
+                            }, $filteringRules));
+                        }
+                        //   Modify code for filter //
+                        $iTotalRecords = $iDisplayLength = intval($_REQUEST['length']);
+                        $iDisplayLength = $iDisplayLength < 0 ? $iTotalRecords : $iDisplayLength;
+                        $iDisplayStart = intval($_REQUEST['start']);
+                        $sEcho = intval($_REQUEST['draw']);
+//                $columns = array('o.order_id', 'o.added_date', 'customer_email', 'product_name', 'o.finalprice', 't.tx_type', 'o.order_status');
+                        $columns = array('products.product_id', 'products.added_date', 'products.product_type', 'users.username', 'shops.shop_name', 'products.product_name', 'products.price_total', 'products.list_price', 'products.min_qty', 'products.max_qty', 'products.category_id', 'products.available_countries', 'products.products_status');
+                        $sortingOrder = "";
+                        if (isset($_REQUEST['order'])) {
+                            $sortingOrder = $columns[$_REQUEST['order'][0]['column']];
+                        }
+                        // End Modify code for filter//
+                        if (!empty($implodedWhere)) {
+                            $where = ['rawQuery' => 'products.product_type = ? AND products.product_status = ? AND product_images.image_type = ?', 'bindParams' => [0, 4, 0]];
+                            $selectedColumn = ['products.*', 'users.username', 'users.role', 'shops.shop_name', 'product_categories.category_name', 'product_images.image_url'];
+                            $getAllFilterProducts = $objModelProducts->getAllFilterProducts($where, $implodedWhere, $sortingOrder, $iDisplayLength, $iDisplayStart, $selectedColumn);
+                            $productFilter = json_decode(json_encode($getAllFilterProducts), true);
+                            $products = new Collection();
+                            foreach ($productFilter as $key => $val) {
+                                $products->push([
+                                    'product_id' => $val['product_id'],
+                                    'product_images' => '<img src="' . $val['image_url'] . '" width="80px">',
+                                    'added_date' => date('d-F-Y', strtotime($val['added_date'])),
+                                    'shop_name' => $val['shop_name'],
+                                    'product_name' => $val['product_name'],
+                                    'price_total' => $val['price_total'],
+                                    'list_price' => $val['list_price'],
+                                    'min_qty' => $val['min_qty'],
+                                    'max_qty' => $val['max_qty'],
+                                    'category_name' => $val['category_name'],
+                                    'in_stock' => $val['in_stock'],
+                                    'username' => $val['username'],
+                                    'available_countries' => $val['available_countries'],
+                                    'product_status' => $val['product_status'],
+                                ]);
+                            }
+                        }
+                    }
+
+                    return Datatables::of($products)
+                        ->addColumn('action', function ($products) {
+                            $action = '<div role="group" class="btn-group "> <button aria-expanded="false" data-toggle="dropdown" class="btn btn-default dropdown-toggle" type="button"> <i class="fa fa-cog"></i>&nbsp; <span class="caret"></span></button>';
+                            $action .= '<ul role="menu" class="dropdown-menu">';
+                            $action .= '<li><a href="/admin/edit-supplier/' . $products['product_id'] . '"><i class="fa fa-pencil" data-id="{{$products->product_id}}"></i>&nbsp;Edit</a></li>';
+                            $action .= '</ul>';
+                            $action .= '</div>';
+                            return $action;
+                        })
+                        ->addColumn('product_status', function ($products) {
+                            $button = '<td style="text-align: center">';
+                            $button .= '<button class="btn btn-success">Deleted Product</button>';
+                            $button .= '<td>';
+                            return $button;
+
+                        })
+                        ->make();
+                    break;
+                case 'changeProductStatus':
+                    $productId = $inputData['productId'];
+                    $whereForUpdate = ['rawQuery' => 'product_id =?', 'bindParams' => [$productId]];
+                    $dataToUpdate['product_status'] = $inputData['status'];
+                    $dataToUpdate['status_set_by'] = $inputData['statussetby'];
+                    $dataToUpdate['status_set_by'] = Session::get('fs_admin')['id'];
+                    $updateResult = $objModelProducts->updateProductWhere($dataToUpdate, $whereForUpdate);
+                    if ($updateResult == 1) {
+                        echo json_encode(['status' => 'success', 'msg' => 'Status has been changed . ']);
+                    } else {
+                        echo json_encode(['status' => 'error', 'msg' => 'Something went wrong, please reload the page and try again . ']);
+                    }
+                    break;
+                case 'pendingProducts':
+                    // NORMAL DATATABLE STARTS HERE//
+                    $where = ['rawQuery' => 'products.product_type = ? AND products.product_status = ? AND product_images.image_type = ?', 'bindParams' => [0, 0, 0]];
+                    $selectedColumn = ['products.*', 'users.username', 'users.role', 'shops.shop_name', 'product_categories.category_name', 'product_images.image_url'];
+                    $getAllProducts = $objModelProducts->getAllProducts($where, $selectedColumn);
+                    $productInfo = json_decode(json_encode($getAllProducts), true);
+                    $products = new Collection();
+                    foreach ($productInfo as $key => $val) {
+                        $products->push([
+                            'product_id' => $val['product_id'],
+                            'product_images' => '<img src="' . $val['image_url'] . '" width="30px">',
+                            'added_date' => date('d-F-Y', strtotime($val['added_date'])),
+                            'shop_name' => $val['shop_name'],
+                            'product_name' => $val['product_name'],
+                            'price_total' => $val['price_total'],
+                            'list_price' => $val['list_price'],
+                            'min_qty' => $val['min_qty'],
+                            'max_qty' => $val['max_qty'],
+                            'category_name' => $val['category_name'],
+                            'in_stock' => $val['in_stock'],
+                            'username' => $val['username'],
+                            'available_countries' => $val['available_countries'],
+                            'product_status' => $val['product_status'],
+                        ]);
+                    }
+                    //NORMAL DATATABLE ENDS//
+
+                    // FILTERING STARTS FROM HERE//
+
+
+                    $filteringRules = '';
+                    if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'filter' && $_REQUEST['action'][0] != 'filter_cancel') {
+
+                        if ($_REQUEST['product_id'] != '') {
+                            $filteringRules[] = "(`products`.`product_id` = " . $_REQUEST['product_id'] . " )";
+                        }
+                        if ($_REQUEST['date_from'] != '' && $_REQUEST['date_to'] != '') {
+                            $filteringRules[] = "(`products`.`added_date` BETWEEN " . strtotime(str_replace('-', ' ', $_REQUEST['date_from'])) . " AND " . strtotime(str_replace('-', ' ', $_REQUEST['date_to'])) . "  )";
+                        }
+                        if ($_REQUEST['store_name'] != '') {
+                            $filteringRules[] = "(`shops`.`shop_name` LIKE '%" . $_REQUEST['store_name'] . "%' )";
+                        }
+                        if ($_REQUEST['product_name'] != '') {
+                            $filteringRules[] = "(`products`.`product_name` LIKE '%" . $_REQUEST['product_name'] . "%' )";
+                        }
+                        if ($_REQUEST['price_from'] != '' && $_REQUEST['price_to'] != '') {
+                            $filteringRules[] = "(`products`.`price_total` BETWEEN " . intval($_REQUEST['price_from']) . " AND " . intval($_REQUEST['price_to']) . "  )";
+                        }
+                        if ($_REQUEST['list_price_from'] != '' && $_REQUEST['list_price_to'] != '') {
+                            $filteringRules[] = "(`products`.`list_price` BETWEEN " . intval($_REQUEST['list_price_from']) . " AND " . intval($_REQUEST['list_price_to']) . "  )";
+                        }
+                        if ($_REQUEST['minimum_quantity'] != '') {
+                            $filteringRules[] = "( `products`.`min_qty` = " . intval($_REQUEST['minimum_quantity']) . ")";
+                        }
+                        if ($_REQUEST['maximum_quantity'] != '') {
+                            $filteringRules[] = "(`products`.`max_qty` = " . intval($_REQUEST['maximum_quantity']) . ")";
+                        }
+                        if ($_REQUEST['product_categories'] != '') {
+                            $filteringRules[] = "(`products`.`category_id` = " . $_REQUEST['product_categories'] . " )";
+                        }
+                        if ($_REQUEST['added_by'] != '') {
+                            $filteringRules[] = "(`users`.`username` LIKE '%" . $_REQUEST['added_by'] . "%' )";
+                        }
+//                        if ($_REQUEST['product_status'] != '') {
+//                            $filteringRules[] = "(`products`.`product_status` = " . $_REQUEST['product_status'] . " )";
+//                        }
+
+                        // Filter Implode //
+                        $implodedWhere = '';
+                        if (!empty($filteringRules)) {
+                            $implodedWhere = implode(' AND ', array_map(function ($filterValues) {
+                                return $filterValues;
+                            }, $filteringRules));
+                        }
+                        //   Modify code for filter //
+                        $iTotalRecords = $iDisplayLength = intval($_REQUEST['length']);
+                        $iDisplayLength = $iDisplayLength < 0 ? $iTotalRecords : $iDisplayLength;
+                        $iDisplayStart = intval($_REQUEST['start']);
+                        $sEcho = intval($_REQUEST['draw']);
+//                $columns = array('o.order_id', 'o.added_date', 'customer_email', 'product_name', 'o.finalprice', 't.tx_type', 'o.order_status');
+                        $columns = array('products.product_id', 'products.added_date', 'products.product_type', 'users.username', 'shops.shop_name', 'products.product_name', 'products.price_total', 'products.list_price', 'products.min_qty', 'products.max_qty', 'products.category_id', 'products.available_countries', 'products.products_status');
+                        $sortingOrder = "";
+                        if (isset($_REQUEST['order'])) {
+                            $sortingOrder = $columns[$_REQUEST['order'][0]['column']];
+                        }
+                        // End Modify code for filter//
+                        if (!empty($implodedWhere)) {
+                            $where = ['rawQuery' => 'products.product_type = ? AND products.product_status = ? AND product_images.image_type = ?', 'bindParams' => [0, 0, 0]];
+                            $selectedColumn = ['products.*', 'users.username', 'users.role', 'shops.shop_name', 'product_categories.category_name', 'product_images.image_url'];
+                            $getAllFilterProducts = $objModelProducts->getAllFilterProducts($where, $implodedWhere, $sortingOrder, $iDisplayLength, $iDisplayStart, $selectedColumn);
+                            $productFilter = json_decode(json_encode($getAllFilterProducts), true);
+                            $products = new Collection();
+                            foreach ($productFilter as $key => $val) {
+                                $products->push([
+                                    'product_id' => $val['product_id'],
+                                    'product_images' => '<img src="' . $val['image_url'] . '" width="80px">',
+                                    'added_date' => date('d-F-Y', strtotime($val['added_date'])),
+                                    'shop_name' => $val['shop_name'],
+                                    'product_name' => $val['product_name'],
+                                    'price_total' => $val['price_total'],
+                                    'list_price' => $val['list_price'],
+                                    'min_qty' => $val['min_qty'],
+                                    'max_qty' => $val['max_qty'],
+                                    'category_name' => $val['category_name'],
+                                    'in_stock' => $val['in_stock'],
+                                    'username' => $val['username'],
+                                    'available_countries' => $val['available_countries'],
+                                    'product_status' => $val['product_status'],
+                                ]);
+                            }
+                        }
+                    }
+
+                    // FILTERING ENDS//
+
+                    return Datatables::of($products)
+                        ->addColumn('action', function ($products) {
+                            $action = '<div role="group" class="btn-group "> <button aria-expanded="false" data-toggle="dropdown" class="btn btn-default dropdown-toggle" type="button"> <i class="fa fa-cog"></i>&nbsp; <span class="caret"></span></button>';
+                            $action .= '<ul role="menu" class="dropdown-menu">';
+                            $action .= '<li><a href="/admin/edit-supplier/' . $products['product_id'] . '"><i class="fa fa-pencil" data-id="{{$products->product_id}}"></i>&nbsp;Edit</a></li>';
+                            $action .= '</ul>';
+                            $action .= '</div>';
+                            return $action;
+                        })
+                        ->addColumn('product_status', function ($products) {
+                            $button = '<td style="text-align: center">';
+                            $button .= '<td class="center" style="text-align: center;">';
+                            $button .= '<div class="form-group">';
+                            $button .= '<select class="form-control" data-id="' . $products['product_id'] . '" id="statuspending" style="width:90%; margin-left: 2%; background-color: orange">';
+                            $button .= '<option value="0" selected style="background-color: whitesmoke">Pending</option>';
+                            $button .= '<option value="1" style="background-color: whitesmoke">Approved</option>';
+                            $button .= '<option value="3" style="background-color: whitesmoke">Rejected</option>';
+                            $button .= '</select>';
+                            $button .= '</div>';
+                            $button .= '<td>';
+                            return $button;
+
+                        })
+                        ->make();
+                    break;
+                case 'rejectedProducts':
+                    // NORMAL DATATABLE FOR DISPLAY //
+                    $where = ['rawQuery' => 'products.product_type = ? AND products.product_status = ? AND product_images.image_type = ?', 'bindParams' => [0, 3, 0]];
+                    $selectedColumn = ['products.*', 'users.username', 'users.role', 'shops.shop_name', 'product_categories.category_name', 'product_images.image_url'];
+                    $getAllProducts = $objModelProducts->getAllProducts($where, $selectedColumn);
+                    $productInfo = json_decode(json_encode($getAllProducts), true);
+                    $products = new Collection();
+                    foreach ($productInfo as $key => $val) {
+                        $products->push([
+                            'product_id' => $val['product_id'],
+                            'shop_name' => $val['shop_name'],
+                            'product_name' => $val['product_name'],
+                            'price_total' => $val['price_total'],
+                            'list_price' => $val['list_price'],
+                            'min_qty' => $val['min_qty'],
+                            'max_qty' => $val['max_qty'],
+                            'category_name' => $val['category_name'],
+                            'in_stock' => $val['in_stock'],
+                            'username' => $val['username'],
+                            'available_countries' => $val['available_countries'],
+                            'product_status' => $val['product_status'],
+                        ]);
+                    }
+                    // NORMAL DATATABLE ENDS HERE//
+
+                    // FILTERING STARTS FROM HERE //
+                    $filteringRules = '';
+                    if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'filter' && $_REQUEST['action'][0] != 'filter_cancel') {
+
+                        if ($_REQUEST['product_id'] != '') {
+                            $filteringRules[] = "(`products`.`product_id` = " . $_REQUEST['product_id'] . " )";
+                        }
+                        if ($_REQUEST['date_from'] != '' && $_REQUEST['date_to'] != '') {
+                            $filteringRules[] = "(`products`.`added_date` BETWEEN " . strtotime(str_replace('-', ' ', $_REQUEST['date_from'])) . " AND " . strtotime(str_replace('-', ' ', $_REQUEST['date_to'])) . "  )";
+                        }
+                        if ($_REQUEST['store_name'] != '') {
+                            $filteringRules[] = "(`shops`.`shop_name` LIKE '%" . $_REQUEST['store_name'] . "%' )";
+                        }
+                        if ($_REQUEST['product_name'] != '') {
+                            $filteringRules[] = "(`products`.`product_name` LIKE '%" . $_REQUEST['product_name'] . "%' )";
+                        }
+                        if ($_REQUEST['price_from'] != '' && $_REQUEST['price_to'] != '') {
+                            $filteringRules[] = "(`products`.`price_total` BETWEEN " . intval($_REQUEST['price_from']) . " AND " . intval($_REQUEST['price_to']) . "  )";
+                        }
+                        if ($_REQUEST['list_price_from'] != '' && $_REQUEST['list_price_to'] != '') {
+                            $filteringRules[] = "(`products`.`list_price` BETWEEN " . intval($_REQUEST['list_price_from']) . " AND " . intval($_REQUEST['list_price_to']) . "  )";
+                        }
+                        if ($_REQUEST['minimum_quantity'] != '') {
+                            $filteringRules[] = "( `products`.`min_qty` = " . intval($_REQUEST['minimum_quantity']) . ")";
+                        }
+                        if ($_REQUEST['maximum_quantity'] != '') {
+                            $filteringRules[] = "(`products`.`max_qty` = " . intval($_REQUEST['maximum_quantity']) . ")";
+                        }
+                        if ($_REQUEST['product_categories'] != '') {
+                            $filteringRules[] = "(`products`.`category_id` = " . $_REQUEST['product_categories'] . " )";
+                        }
+                        if ($_REQUEST['added_by'] != '') {
+                            $filteringRules[] = "(`users`.`username` LIKE '%" . $_REQUEST['added_by'] . "%' )";
+                        }
+//                        if ($_REQUEST['product_status'] != '') {
+//                            $filteringRules[] = "(`products`.`product_status` = " . $_REQUEST['product_status'] . " )";
+//                        }
+
+                        // Filter Implode //
+                        $implodedWhere = '';
+                        if (!empty($filteringRules)) {
+                            $implodedWhere = implode(' AND ', array_map(function ($filterValues) {
+                                return $filterValues;
+                            }, $filteringRules));
+                        }
+                        //   Modify code for filter //
+                        $iTotalRecords = $iDisplayLength = intval($_REQUEST['length']);
+                        $iDisplayLength = $iDisplayLength < 0 ? $iTotalRecords : $iDisplayLength;
+                        $iDisplayStart = intval($_REQUEST['start']);
+                        $sEcho = intval($_REQUEST['draw']);
+//                $columns = array('o.order_id', 'o.added_date', 'customer_email', 'product_name', 'o.finalprice', 't.tx_type', 'o.order_status');
+                        $columns = array('products.product_id', 'products.added_date', 'products.product_type', 'users.username', 'shops.shop_name', 'products.product_name', 'products.price_total', 'products.list_price', 'products.min_qty', 'products.max_qty', 'products.category_id', 'products.available_countries', 'products.products_status');
+                        $sortingOrder = "";
+                        if (isset($_REQUEST['order'])) {
+                            $sortingOrder = $columns[$_REQUEST['order'][0]['column']];
+                        }
+                        // End Modify code for filter//
+                        if (!empty($implodedWhere)) {
+                            $where = ['rawQuery' => 'products.product_type = ? AND products.product_status = ? AND product_images.image_type = ?', 'bindParams' => [0, 3, 0]];
+                            $selectedColumn = ['products.*', 'users.username', 'users.role', 'shops.shop_name', 'product_categories.category_name', 'product_images.image_url'];
+                            $getAllFilterProducts = $objModelProducts->getAllFilterProducts($where, $implodedWhere, $sortingOrder, $iDisplayLength, $iDisplayStart, $selectedColumn);
+                            print_a($getAllFilterProducts);
+                            $productFilter = json_decode(json_encode($getAllFilterProducts), true);
+                            $products = new Collection();
+                            foreach ($productFilter as $key => $val) {
+                                $products->push([
+                                    'product_id' => $val['product_id'],
+                                    'product_images' => '<img src="' . $val['image_url'] . '" width="30px">',
+                                    'added_date' => date('d-F-Y', strtotime($val['added_date'])),
+                                    'shop_name' => $val['shop_name'],
+                                    'product_name' => $val['product_name'],
+                                    'price_total' => $val['price_total'],
+                                    'list_price' => $val['list_price'],
+                                    'min_qty' => $val['min_qty'],
+                                    'max_qty' => $val['max_qty'],
+                                    'category_name' => $val['category_name'],
+                                    'in_stock' => $val['in_stock'],
+                                    'username' => $val['username'],
+                                    'available_countries' => $val['available_countries'],
+                                    'product_status' => $val['product_status'],
+                                ]);
+                            }
+                        }
+                    }
+
+                    // FITERING ENDS//
+
+                    return Datatables::of($products)
+                        ->addColumn('action', function ($products) {
+                            $action = '<div role="group" class="btn-group "> <button aria-expanded="false" data-toggle="dropdown" class="btn btn-default dropdown-toggle" type="button"> <i class="fa fa-cog"></i>&nbsp; <span class="caret"></span></button>';
+                            $action .= '<ul role="menu" class="dropdown-menu">';
+                            $action .= '<li><a href="/admin/edit-supplier/' . $products['product_id'] . '"><i class="fa fa-pencil" data-id="{{$products->product_id}}"></i>&nbsp;Edit</a></li>';
+                            $action .= '</ul>';
+                            $action .= '</div>';
+                            return $action;
+                        })
+                        ->addColumn('product_status', function ($products) {
+                            $button = '<td style="text-align: center">';
+                            $button .= '<button class="btn btn-success">Rejected Product</button>';
+                            $button .= '<td>';
+                            return $button;
+                        })
+                        ->make();
+                    break;
+                case 'getActiveCategories':
+                    $where = ['rawQuery' => 'category_status = ?', 'bindParams' => [1]];
+                    $selectedColumn = ['category_id', 'category_name', 'category_status', 'for_shop_id'];
+                    $allactivecategories = $objCategoryModel->getAllCategoriesWhere($where, $selectedColumn);
+                    if (!empty($allactivecategories)) {
+                        $response['code'] = 200;
+                        $response['message'] = 'data';
+                        $response['data'] = $allactivecategories;
+//                        echo json_encode($allactivecategories);
+                    } else {
+                        echo 0;
+                    }
+                    break;
                 default:
                     break;
             }
         }
         echo json_encode($response, true);
         die;
+    }
+
+
+    public function productListAjaxHandler(Request $request,$method){
+
+        $inputData = $request->input();
+        $objModelProducts = Products::getInstance();
+        $objCategoryModel = ProductCategory::getInstance();
+        $supplierId = Session::get('fs_supplier')['id'];
+        switch($method){
+
+            case 'manageProducts':
+                //   Modify code for filter //
+                $iTotalRecords = $iDisplayLength = intval($_REQUEST['length']);
+                $iDisplayLength = $iDisplayLength < 0 ? $iTotalRecords : $iDisplayLength;
+                $iDisplayStart = intval($_REQUEST['start']);
+                $sEcho = intval($_REQUEST['draw']);
+//                $columns = array('o.order_id', 'o.added_date', 'customer_email', 'product_name', 'o.finalprice', 't.tx_type', 'o.order_status');
+                $columns = array('products.product_id', 'products.added_date', 'products.product_type', 'users.username', 'shops.shop_name', 'products.product_name', 'products.price_total', 'products.list_price', 'products.min_qty', 'products.max_qty', 'products.category_id', 'products.available_countries', 'products.products_status');
+                $sortingOrder = "";
+                if (isset($_REQUEST['order'])) {
+                    $sortingOrder = $columns[$_REQUEST['order'][0]['column']];
+                }
+                if (isset($_REQUEST["customActionType"]) && $_REQUEST["customActionType"] == "group_action") {
+
+                    if ($_REQUEST['customActionValue'] != '' && !empty($_REQUEST['productId'])) {
+
+                        $statusData['product_status'] = $_REQUEST['customActionValue'];
+                        $whereForStatusUpdate = ['rawQuery' => 'product_id IN (' . implode(',', $_REQUEST['productId']) . ')'];
+                        $updateResult = $objModelProducts->updateProductWhere($statusData, $whereForStatusUpdate);
+                        if ($updateResult) {
+                            //NOTIFICATION TO USER FOR ORDER STATUS CHANGE
+                            $records["customActionStatus"] = "OK"; // pass custom message(useful for getting status of group actions)
+                            $records["customActionMessage"] = "Group action successfully has been completed."; // pass custom message(useful for getting status of group actions)
+                        }
+                    }
+                }
+                // End Modify code for filter//
+                // NORMAL DATATABLE CODE STARTS//
+                $where = ['rawQuery' => 'products.product_type = ? AND products.product_status IN (0,1,2,3,4) AND product_images.image_type = ?', 'bindParams' => [0, 0]];
+                $selectedColumn = ['products.*', 'users.username', 'users.role', 'shops.shop_name', 'product_categories.category_name', 'product_images.image_url'];
+                $getAllProducts = $objModelProducts->getAllProducts($where, $selectedColumn);
+                $productInfo = json_decode(json_encode($getAllProducts), true);
+                $products = new Collection();
+                foreach ($productInfo as $key => $val) {
+                    $products->push([
+                        'checkbox' => '<input type="checkbox" name="id[]" value="' . $val['product_id'] . '">',
+                        'product_id' => $val['product_id'],
+                        'product_images' => '<img src="' . $val['image_url'] . '" width="30px">',
+                        'added_date' => date('d-F-Y',($val['added_date'])),
+                        'shop_name' => $val['shop_name'],
+                        'product_name' => $val['product_name'],
+                        'price_total' => $val['price_total'],
+                        'list_price' => $val['list_price'],
+                        'min_qty' => $val['min_qty'],
+                        'max_qty' => $val['max_qty'],
+                        'category_name' => $val['category_name'],
+                        'in_stock' => $val['in_stock'],
+                        'username' => $val['username'],
+                        'available_countries' => $val['available_countries'],
+                        'product_status' => $val['product_status'],
+                    ]);
+                }
+
+                // FILTERING STARTS FROM HERE //
+                $filteringRules = '';
+                if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'filter' && $_REQUEST['action'][0] != 'filter_cancel') {
+
+                    if ($_REQUEST['product_id'] != '') {
+                        $filteringRules[] = "(`products`.`product_id` = " . $_REQUEST['product_id'] . " )";
+                    }
+                    if ($_REQUEST['date_from'] != '' && $_REQUEST['date_to'] != '') {
+                        $filteringRules[] = "(`products`.`added_date` BETWEEN " . strtotime(str_replace('-', ' ', $_REQUEST['date_from'])) . " AND " . strtotime(str_replace('-', ' ', $_REQUEST['date_to'])) . "  )";
+                    }
+                    if ($_REQUEST['store_name'] != '') {
+                        $filteringRules[] = "(`shops`.`shop_name` LIKE '%" . $_REQUEST['store_name'] . "%' )";
+                    }
+                    if ($_REQUEST['product_name'] != '') {
+                        $filteringRules[] = "(`products`.`product_name` LIKE '%" . $_REQUEST['product_name'] . "%' )";
+                    }
+                    if ($_REQUEST['price_from'] != '' && $_REQUEST['price_to'] != '') {
+                        $filteringRules[] = "(`products`.`price_total` BETWEEN " . intval($_REQUEST['price_from']) . " AND " . intval($_REQUEST['price_to']) . "  )";
+                    }
+                    if ($_REQUEST['list_price_from'] != '' && $_REQUEST['list_price_to'] != '') {
+                        $filteringRules[] = "(`products`.`list_price` BETWEEN " . intval($_REQUEST['list_price_from']) . " AND " . intval($_REQUEST['list_price_to']) . "  )";
+                    }
+                    if ($_REQUEST['minimum_quantity'] != '') {
+                        $filteringRules[] = "( `products`.`min_qty` = " . intval($_REQUEST['minimum_quantity']) . ")";
+                    }
+                    if ($_REQUEST['maximum_quantity'] != '') {
+                        $filteringRules[] = "(`products`.`max_qty` = " . intval($_REQUEST['maximum_quantity']) . ")";
+                    }
+                    if ($_REQUEST['product_categories'] != '') {
+                        $filteringRules[] = "(`products`.`category_id` = " . $_REQUEST['product_categories'] . " )";
+                    }
+                    if ($_REQUEST['added_by'] != '') {
+                        $filteringRules[] = "(`users`.`username` LIKE '%" . $_REQUEST['added_by'] . "%' )";
+                    }
+                    if ($_REQUEST['product_status'] != '') {
+                        $filteringRules[] = "(`products`.`product_status` = " . $_REQUEST['product_status'] . " )";
+                    }
+//print_a($filteringRules);
+                    // Filter Implode //
+                    $implodedWhere = '';
+                    if (!empty($filteringRules)) {
+                        $implodedWhere = implode(' AND ', array_map(function ($filterValues) {
+                            return $filterValues;
+                        }, $filteringRules));
+                    }
+                    if (!empty($implodedWhere)) {
+                        $where = ['rawQuery' => 'products.product_type = ? AND products.product_status IN (0,1,2,3,4) AND product_images.image_type = ?', 'bindParams' => [0, 0]];
+                        $selectedColumn = ['products.*', 'users.username', 'users.role', 'shops.shop_name', 'product_categories.category_name', 'product_images.image_url'];
+                        $getAllFilterProducts = $objModelProducts->getAllFilterProducts($where, $implodedWhere, $sortingOrder, $iDisplayLength, $iDisplayStart, $selectedColumn);
+
+                        $productFilter = json_decode(json_encode($getAllFilterProducts), true);
+                        $products = new Collection();
+                        foreach ($productFilter as $key => $val) {
+                            $products->push([
+                                'checkbox' => '<input type="checkbox" name="id[]" value="' . $val['product_id'] . '">',
+                                'product_id' => $val['product_id'],
+                                'product_images' => '<img src="' . $val['image_url'] . '" width="80px">',
+                                'added_date' => date('d-F-Y',($val['added_date'])),
+                                'shop_name' => $val['shop_name'],
+                                'product_name' => $val['product_name'],
+                                'price_total' => $val['price_total'],
+                                'list_price' => $val['list_price'],
+                                'min_qty' => $val['min_qty'],
+                                'max_qty' => $val['max_qty'],
+                                'category_name' => $val['category_name'],
+                                'in_stock' => $val['in_stock'],
+                                'username' => $val['username'],
+                                'available_countries' => $val['available_countries'],
+                                'product_status' => $val['product_status'],
+                            ]);
+                        }
+                    }
+                }
+                $status_list = array(
+                    0 => array("warning" => "Pending"),
+                    1 => array("success" => "Success"),
+                    2 => array("primary" => "InActive"),
+                    3 => array("warning" => "Rejected"),
+                    4 => array("danger" => "Deleted"),
+                    5 => array("danger" => "Finished"),
+                );
+                return Datatables::of($products,$status_list)
+                    ->addColumn('action', function ($products) {
+                        $action = '<div role="group" class="btn-group "> <button aria-expanded="false" data-toggle="dropdown" class="btn btn-default dropdown-toggle" type="button"> <i class="fa fa-cog"></i>&nbsp; <span class="caret"></span></button>';
+                        $action .= '<ul role="menu" class="dropdown-menu">';
+                        $action .= '<li><a href="/admin/edit-supplier/' . $products['product_id'] . '"><i class="fa fa-pencil" data-id="{{$products->product_id}}"></i>&nbsp;Edit</a></li>';
+                        $action .= '<li><a href="javascript:void(0);" class="delete-product" data-cid="' . $products['product_id'] . '"><i class="fa fa-trash"></i>&nbsp;Delete</a></li>';
+                        $action .= '</ul>';
+                        $action .= '</div>';
+                        return $action;
+                    })
+                    ->addColumn('product_status', function ($products) use ($status_list) {
+                        return '<span class="label label-sm label-' . (key($status_list[$products['product_status']])) . '">' . (current($status_list[$products['product_status']])) . '</span>';
+
+                    })
+                    ->make();
+                // NORMAL DATATABLE CODE END'S HERE//
+                break;
+
+
+        }
+
+    }
+
+    public function deletedProducts(Request $request)
+    {
+        $objCategoryModel = ProductCategory::getInstance();
+
+        $where = ['rawQuery' => '1'];
+        $allactivecategories = $objCategoryModel->getAllCategoriesWhere($where);
+
+        return view('Admin/Views/product/deletedProducts', ['allCategories' => $allactivecategories]);
+
+    }
+
+    public function pendingProducts(Request $request)
+    {
+
+        $objCategoryModel = ProductCategory::getInstance();
+        $where = ['rawQuery' => '1'];
+        $allactivecategories = $objCategoryModel->getAllCategoriesWhere($where);
+
+        return view('Admin/Views/product/pendingProducts', ['allCategories' => $allactivecategories]);
+
+    }
+
+    public function rejectedProducts(Request $request)
+    {
+
+        $objCategoryModel = ProductCategory::getInstance();
+
+        $where = ['rawQuery' => '1'];
+        $allactivecategories = $objCategoryModel->getAllCategoriesWhere($where);
+        return view('Admin/Views/product/rejectedProducts', ['allCategories' => $allactivecategories]);
     }
 }

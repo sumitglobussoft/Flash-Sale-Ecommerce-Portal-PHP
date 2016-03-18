@@ -51,4 +51,106 @@ class Products extends Model
             throw new Exception('Argument Not Passed');
         }
     }
+    public function getAllProducts($where, $selectedColumns = ['*'])
+    {
+
+        try {
+            $result = DB::table($this->table)
+                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                ->join('users', 'users.id', '=', 'products.added_by')
+                ->leftJoin('shops', 'shops.shop_id', '=', 'products.for_shop_id')
+                ->join('product_categories', 'product_categories.category_id', '=', 'products.category_id')
+                ->join('product_images','product_images.for_product_id','=','products.product_id')
+                ->select($selectedColumns)
+                ->get();
+            return $result;
+        } catch (QueryException $e) {
+            echo $e;
+        }
+
+    }
+
+    public function updateProductWhere()
+    {
+
+        if (func_num_args() > 0) {
+            $data = func_get_arg(0);
+            $where = func_get_arg(1);
+            try {
+                $result = DB::table($this->table)
+                    ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                    ->update($data);
+                return $result;
+            } catch (\Exception $e) {
+                return $e->getMessage();
+            }
+            if ($result) {
+                return $result;
+            } else {
+                return 0;
+            }
+        } else {
+            throw new Exception('Argument Not Passed');
+        }
+    }
+
+    public function getAllFilterProducts($wheres,$where = null, $order = null, $count = null, $offset = null, $selectedColumn = ['*']){
+
+        if (func_get_args() > 0) {
+            $result = DB::table($this->table)
+                ->whereRaw($wheres['rawQuery'], isset($wheres['bindParams']) ? $wheres['bindParams'] : array())
+                ->whereRaw($where)
+                ->join('users', 'users.id', '=', 'products.added_by')
+                ->leftJoin('shops', 'shops.shop_id', '=', 'products.for_shop_id')
+                ->join('product_categories', 'product_categories.category_id', '=', 'products.category_id')
+                ->join('product_images','product_images.for_product_id','=','products.product_id')
+                ->select($selectedColumn)
+                ->orderBy($order)
+                ->skip($offset)
+                ->take($count)
+//                ->limit($count, $offset)
+//                ->toSql();
+                ->get();
+            return $result;
+        } else {
+            throw new Exception('Argument Not Passed');
+        }
+
+    }
+
+    public function getProductNameById($where,$selectedColumn)
+    {
+        {
+            try {
+                $result = DB::table($this->table)
+                    ->select($selectedColumn)
+                    ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+//                ->toSql();
+                    ->get();
+            } catch
+            (QueryException $e) {
+                echo $e;
+            }
+            if ($result) {
+                return $result;
+            } else {
+                return 0;
+            }
+
+        }
+    }
+
+
+    public function getAllSupplierProducts($where,$selectedColumn){
+
+        try {
+            $result = DB::table($this->table)
+                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                ->select($selectedColumn)
+                ->get();
+            return $result;
+        }catch(QueryException $e){
+            echo $e;
+        }
+    }
 }

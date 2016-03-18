@@ -22,7 +22,7 @@ class User extends Model implements AuthenticatableContract,
 
     protected $table = 'users';
 
-    protected $fillable = ['name', 'email', 'password', 'username', 'last_name', 'role', 'status'];
+    protected $fillable = ['name', 'email', 'password', 'username', 'last_name', 'role', 'status','campaign_mode'];
     protected $hidden = ['password', 'remember_token'];
 
     public static function getInstance()
@@ -136,11 +136,6 @@ class User extends Model implements AuthenticatableContract,
                 return $result;
             } catch (\Exception $e) {
                 return $e->getMessage();
-            }
-            if ($result) {
-                return $result;
-            } else {
-                return 0;
             }
         } else {
             throw new Exception('Argument Not Passed');

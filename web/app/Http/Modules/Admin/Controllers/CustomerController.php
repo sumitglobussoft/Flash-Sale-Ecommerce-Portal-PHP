@@ -39,6 +39,7 @@ class CustomerController extends Controller
         $inputData = $request->input();
         $method = $request->input('method');
         $ObjUser = User::getInstance();
+        $mainId = Session::get('fs_admin')['id'];
         if ($method) {
             switch ($method) {
                 case "availableCustomer":
@@ -59,10 +60,10 @@ class CustomerController extends Controller
                                                 </a>
                                             </span>';
                         })
-                        ->addColumn('status', function ($available_customers) {
+                        ->addColumn('status', function ($available_customers)  use ($mainId){
 
                             $button = '<td style="text-align: center">';
-                            $button .= '<button class="btn ' . (($available_customers->status == 1) ? "btn-success" : "btn-danger") . ' customer-status" data-id="' . $available_customers->id . '">' . (($available_customers->status == 1) ? "Active" : "Inactve") . ' </button>';
+                            $button .= '<button class="btn ' . (($available_customers->status == 1) ? "btn-success" : "btn-danger") . ' customer-status" data-id="' . $available_customers->id . '" data-set-by="'.$mainId.'">' . (($available_customers->status == 1) ? "Active" : "Inactve") . ' </button>';
                             $button .= '</td>';
                             return $button;
                         })
@@ -74,6 +75,7 @@ class CustomerController extends Controller
                     $userId = $inputData['UserId'];
                     $whereForUpdate = ['rawQuery' => 'id =?', 'bindParams' => [$userId]];
                     $dataToUpdate['status'] = $inputData['status'];
+                    $dataToUpdate['status_set_by'] = $inputData['statusSetBy'];
                     $updateResult = $ObjUser->updateUserWhere($dataToUpdate, $whereForUpdate);
 
                     if ($updateResult == 1) {

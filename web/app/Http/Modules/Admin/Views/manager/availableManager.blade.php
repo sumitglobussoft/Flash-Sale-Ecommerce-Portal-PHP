@@ -108,11 +108,12 @@
 
                 var obj = $(this);
                 var UserId = $(this).attr('data-id');
+                var statusSetBy = $(this).attr('data-set-by');
                 var status = 0;
                 if (obj.hasClass('btn-success')) {
-                    status = 2;
-                } else if (obj.hasClass('btn-danger')) {
                     status = 1;
+                } else if (obj.hasClass('btn-danger')) {
+                    status = 2;
                 }
                 if (status == 1 || status == 2) {
                     $.ajax({
@@ -122,7 +123,8 @@
                         data: {
                             method: 'changePermissionStatus',
                             UserId: UserId,
-                            status: status
+                            status: status,
+                            statusSetBy:statusSetBy
                         },
                         success: function (response) {
                             response = $.parseJSON(response);
@@ -146,37 +148,32 @@
             $(document.body).on('click', '.delete-manager', function () {
                 var obj = $(this);
                 var UserId = $(this).attr('data-cid');
-
-                $.ajax({
-                    url: '/admin/manager-ajax-handler',
-                    type: 'POST',
-                    datatype: 'json',
-                    data: {
-                        method: 'deleteStatus',
-                        UserId: UserId,
-                    },
-                    success: function (response) {
-                        response = $.parseJSON(response);
-                        toastr[response['status']](response['msg']);
-                        if (response['status'] == "success") {
-                            if (obj.hasClass('btn-success')) {
-                                obj.removeClass('btn-success');
-                                obj.addClass('btn-danger');
-                                obj.text('Inactive');
-                            } else {
-                                obj.removeClass('btn-danger');
-                                obj.addClass('btn-success');
-                                obj.text('Active');
+                if (confirm("Do you want to Delete Manager!") == true) {
+                    $.ajax({
+                        url: '/admin/manager-ajax-handler',
+                        type: 'POST',
+                        datatype: 'json',
+                        data: {
+                            method: 'deleteStatus',
+                            UserId: UserId,
+                        },
+                        success: function (response) {
+                            response = $.parseJSON(response);
+                            if (response) {
+                                toastr[response['status']](response['msg']);
+//                                obj.parent().parent().remove();
+                                window.location.reload();
                             }
                         }
-                    }
-                });
+                    });
+                }
             });
 
             var permission_detail = new Array();
             $(document.body).on('click', '.permission', function () {
                 var obj = $(this);
                 var UserId = $(this).attr('data-id');
+
                 $.ajax({
                     url: '/admin/manager-ajax-handler',
                     type: 'POST',

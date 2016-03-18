@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use DB;
 //use Illuminate\View\View;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\URL;
 use View;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Curl\CurlRequestHandler;
@@ -98,6 +100,15 @@ class ProfileController extends Controller
                     break;
             }
         }
+
     }
+
+
+
+//    public static function getLanguageDetails(){
+//
+//
+//
+//    }
 
 }

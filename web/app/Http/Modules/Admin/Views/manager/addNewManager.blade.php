@@ -1,6 +1,6 @@
 @extends('Admin/Layouts/adminlayout')
 
-@section('title', 'Add New Manager') {{--TITLE GOES HERE--}}
+@section('title', trans('message.add_new_manager')) {{--TITLE GOES HERE--}}
 
 @section('headcontent')
     <link href="/assets/plugins/jquery-nestable/jquery.nestable.css" rel="stylesheet" type="text/css"/>
@@ -58,7 +58,7 @@
                                 <button type="button"
                                         class="btn btn-primary btn-addon m-b-sm btn-rounded btn-lg permission"
                                         value="nestable"><i
-                                            class="fa fa-plus"></i> Permission
+                                            class="fa fa-plus"></i> {{ trans('message.permission') }}
 
                                 </button> <h4>Click On Icon To Assign Permissions</h4>
                             </div>

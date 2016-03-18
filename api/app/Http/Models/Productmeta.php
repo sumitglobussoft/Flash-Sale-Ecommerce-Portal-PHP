@@ -11,6 +11,7 @@ class Productmeta extends Model
 
 {
 
+    private static $_instance = null;
     /**
      * The database table used by the model.
      *
@@ -25,6 +26,12 @@ class Productmeta extends Model
      */
     protected $fillable = ['productmeta_id', 'product_id', 'color_id', 'sizing_id', 'quantity_total', 'quantity_sold', 'barcode_gtin', 'barcode_upc', 'barcode_ean', 'price', 'sale_price'];
 
+    public static function getInstance()
+    {
+        if (!is_object(self::$_instance))  //or if( is_null(self::$_instance) ) or if( self::$_instance == null )
+            self::$_instance = new Productmeta();
+        return self::$_instance;
+    }
     /**
      * Get product sizing ,color details and campaign details discount from product meta by product id
      * @return int

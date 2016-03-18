@@ -1,6 +1,6 @@
 @extends('Admin/Layouts/adminlayout')
 
-@section('title', 'New Filter Group') {{--TITLE GOES HERE--}}
+@section('title', trans('message.new_filter_group')) {{--TITLE GOES HERE--}}
 
 @section('headcontent')
     {{--<link href="/assets/plugins/select2/css/select2.css" rel="stylesheet" type="text/css"/>--}}
@@ -199,6 +199,7 @@
         $(document).ready(function () {
 //            $("#select2_sample_modal_5").select2({
 //                productcategories: ['2', '3', '5']
+
 //            });
 
             $(document.body).on("change", 'input:checkbox[name="filtercheckproduct"]', function () {
@@ -303,7 +304,7 @@
                 });
             }, 1000);
             $(document.body).on("click", '.jstree-anchor', function () {
-                console.log($(this).find('.catinput'));
+//                console.log($(this).find('.catinput'));
                 if ($(this).parent().attr('aria-selected') == 'true') {
                     $(this).find('.catinput').attr('checked', true);
                     var catid = $(this).find('.catinput').attr('data-catid');

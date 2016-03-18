@@ -37,7 +37,7 @@ class PermissionUserRelation extends Model
 
     }
 
-    public function getPermissiondetailsByUserId($where,$selectedColumns = ['*'])
+    public function getPermissiondetailsByUserId($where, $selectedColumns = ['*'])
     {
 
         try {
@@ -82,7 +82,8 @@ class PermissionUserRelation extends Model
         }
     }
 
-    public function updatePermissionInfo(){
+    public function updatePermissionInfo()
+    {
 
         if (func_num_args() > 0) {
             $data = func_get_arg(0);
@@ -101,6 +102,17 @@ class PermissionUserRelation extends Model
 
     }
 
+    public function deleteUserPermission($where)
+    {
+        try {
+            $sql = DB::table($this->table)
+                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                ->delete();
+            return $sql;
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
 
 
 }

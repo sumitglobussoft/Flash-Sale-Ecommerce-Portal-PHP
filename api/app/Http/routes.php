@@ -27,3 +27,31 @@ Route::resource('/login','User\AuthenticationController@login');
 Route::resource('/forgot-password','User\AuthenticationController@forgotPassword');
 Route::resource('/profile-settings','User\ProfileController@profileSettings');
 Route::resource('/profile-ajax-handler','User\ProfileController@profileAjaxHandler');
+Route::resource('/flashsale-products','Campaign\FlashsaleController@flashsaleProducts');
+Route::resource('/product-popup','Campaign\FlashsaleController@productPopup');
+
+
+Route::resource('/language-translate','User\ProfileController@languageTranslate');
+
+Route::get('image/{filename}', function ($filename) {
+    $filePath = explode("_", $filename);
+    $folderPath = '';
+    switch ($filePath[0]) {
+        case 'profileavatar':
+            $folderPath = $filePath[0];
+            break;
+
+        default:
+            unset($filePath[count($filePath) - 1]);
+            $folderPath = implode('/', array_map(function ($value) {
+                return $value;
+            }, $filePath));
+            break;
+    }
+    $path = storage_path() . '/uploads/' . $folderPath . '/' . $filename;
+    $file = File::get($path);
+    $type = File::mimeType($path);
+    $response = Response::make($file, 200);
+    $response->header("Content-Type", $type);
+    return $response;
+});

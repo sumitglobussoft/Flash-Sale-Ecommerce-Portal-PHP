@@ -5,11 +5,12 @@ namespace FlashSaleApi\Http\Models;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 use Illuminate\Database\QueryException;
+use Illuminate\Http\Request;
 
 class Products extends Model
 
 {
-
+    private static $_instance = null;
     /**
      * The database table used by the model.
      *
@@ -24,6 +25,12 @@ class Products extends Model
      */
     protected $fillable = ['product_id', 'for_shop_id', 'product_name', 'product_description', 'category_id', 'brand_id', 'for_gender', 'for_age_group_id', 'delivery_price_type', 'delivery_price', 'estimated_deliver_time', 'added_date', 'added_by', 'product_status', 'status_set_by', 'material_ids', 'pattern_ids', 'available_countries', 'page_title', 'meta_description', 'meta_keywords'];
 
+    public static function getInstance()
+    {
+        if (!is_object(self::$_instance))  //or if( is_null(self::$_instance) ) or if( self::$_instance == null )
+            self::$_instance = new Products();
+        return self::$_instance;
+    }
 
     public function getProductDetailsWhere()
     {
@@ -109,6 +116,44 @@ class Products extends Model
             }
 
         }
+    }
+
+    public function getProductDetailsByCategoryIds($where, $selectedColumn = ['*'])
+    {
+            try {
+                $result = DB::table($this->table)
+                    ->join('product_images','product_images.for_product_id','=','products.product_id')
+                    ->leftJoin('productmeta','productmeta.product_id','=','products.product_id')
+                    ->select($selectedColumn)
+                    ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                    ->get();
+                return $result;
+            } catch
+            (QueryException $e) {
+                echo $e;
+            }
+
+    }
+
+    public function getProductAndImages($where, $selectedColumn = ['*'])
+    {
+
+        try {
+            $result = DB::table($this->table)
+                ->join('product_images', 'product_images.for_product_id', '=', 'products.product_id')
+                ->join('productmeta', 'productmeta.product_id', '=', 'products.product_id')
+                ->leftJoin('product_option_variant_relation as product_option_variant_relation', function($join) {
+                    $join->on('products.product_id', '=','product_option_variant_relation.product_id');
+                })
+//                ->leftjoin('product_option_variant_relation', 'product_option_variant_relation.product_id', '=', 'products.product_id')
+                ->select($selectedColumn)
+                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                ->get();
+            return $result;
+        } catch (QueryException $e) {
+            echo $e;
+        }
+
     }
 
 

@@ -34,7 +34,7 @@ class SupplierController extends Controller
 
         $response = new stdClass();
         if ($request->isMethod('post')) {
-            // echo"<pre>";print_r($request->all());die("fch");
+
             $postData = $request->all();
 
             $rules = array(
@@ -42,6 +42,7 @@ class SupplierController extends Controller
                 'lastname' => 'required|max:255',
                 'email' => 'required|email|max:255|unique:users',
                 'username' => 'required|max:255',
+                'flashsale' => 'required'
             );
 
             $validator = Validator::make($request->all(), $rules);
@@ -59,13 +60,15 @@ class SupplierController extends Controller
                     $rand = mt_rand(0, $max);
                     $password .= $characters[$rand];
                 }
+
                 $supplier = User::create([
                     'name' => $postData['firstname'],
                     'last_name' => $postData['lastname'],
                     'email' => $postData['email'],
                     'password' => Hash::make($password),
                     'role' => '3',
-                    'username' => $postData['username']
+                    'username' => $postData['username'],
+                    'campaign_mode' => implode(",", $postData['flashsale'])
                 ]);
 
 
@@ -219,6 +222,7 @@ class SupplierController extends Controller
         $ObjUser = User::getInstance();
         $objModelLocation = Location::getInstance();
         $ObjUsermeta = Usersmeta::getInstance();
+        $mainId = Session::get('fs_admin')['id'];
         if ($method) {
             switch ($method) {
                 case 'availableSupplier':
@@ -291,10 +295,10 @@ class SupplierController extends Controller
                             return $action;
 
                         })
-                        ->addColumn('status', function ($available_supplier) {
+                        ->addColumn('status', function ($available_supplier) use ($mainId) {
 
                             $button = '<td style="text-align: center">';
-                            $button .= '<button class="btn ' . (($available_supplier->status == 1) ? "btn-success" : "btn-danger") . ' supplier-status" data-id="' . $available_supplier->id . '">' . (($available_supplier->status == 1) ? "Active" : "Inactve") . ' </button>';
+                            $button .= '<button class="btn ' . (($available_supplier->status == 1) ? "btn-success" : "btn-danger") . ' supplier-status" data-id="' . $available_supplier->id . '"  data-set-by="' . $mainId . '">' . (($available_supplier->status == 1) ? "Active" : "Inactve") . ' </button>';
                             $button .= '<td>';
                             return $button;
 
@@ -353,6 +357,7 @@ class SupplierController extends Controller
                     $userId = $inputData['UserId'];
                     $whereForUpdate = ['rawQuery' => 'id =?', 'bindParams' => [$userId]];
                     $dataToUpdate['status'] = $inputData['status'];
+                    $dataToUpdate['status_set_by'] = $inputData['statussetBy'];
                     $updateResult = $ObjUser->updateUserWhere($dataToUpdate, $whereForUpdate);
 
                     if ($updateResult == 1) {
@@ -366,8 +371,11 @@ class SupplierController extends Controller
                     $where = ['rawQuery' => 'id = ?', 'bindParams' => [$userId]];
                     $deleteStatus = $ObjUser->deleteUserDetails($where);
                     if ($deleteStatus) {
-                        echo json_encode(['status' => 'success', 'msg' => 'User Deleted']);
-
+                        $where = ['rawQuery' => 'user_id = ?', 'bindParams' => [$userId]];
+                        $deleteSupplier = $ObjUsermeta->deleteSupplierDetails($where);
+                        if ($deleteSupplier) {
+                            echo json_encode(['status' => 'success', 'msg' => 'User Deleted']);
+                        }
                     } else {
                         echo json_encode(['status' => 'error', 'msg' => 'Something went wrong, please reload the page and try again . ']);
 
@@ -395,8 +403,8 @@ class SupplierController extends Controller
                 case 'getUsermetaInfoByUserId':
                     $UserId = $request->input('UserId');
                     $where = array('rawQuery' => 'user_id = ?', 'bindParams' => [$UserId]);
-                    $selectedColumns=['location.*','usersmeta.addressline1','usersmeta.addressline2','usersmeta.city','usersmeta.state','usersmeta.zipcode','usersmeta.phone','usersmeta.user_id'];
-                    $userMetaInfo = $ObjUsermeta->getUserMetaInfoByUserId($where,$selectedColumns);
+                    $selectedColumns = ['location.*', 'usersmeta.addressline1', 'usersmeta.addressline2', 'usersmeta.city', 'usersmeta.state', 'usersmeta.zipcode', 'usersmeta.phone', 'usersmeta.user_id'];
+                    $userMetaInfo = $ObjUsermeta->getUserMetaInfoByUserId($where, $selectedColumns);
 //                    echo"<pre>";print_r($userMetaInfo);die("Cfh");
                     echo json_encode($userMetaInfo);
                     break;
@@ -427,15 +435,15 @@ class SupplierController extends Controller
         if ($request->isMethod("GET")) {
 //             $where = ['rawQuery' => 'id = ?', 'bindParams' => [$sid]];
             $customerDetails = $ObjUser->getUserById($sid);
+
             return view('Admin/Views/supplier/editSupplier', ['userinfo' => $customerDetails]);
         } else if ($request->isMethod("POST")) {
-
 
             $data['name'] = $postdata['firstname'];
             $data['last_name'] = $postdata['lastname'];
             $data['email'] = $postdata['email'];
             $data['username'] = $postdata['username'];
-
+            $data['campaign_mode'] = implode(",", $postdata['flashsale']);
             $result = $ObjUser->updateUserInfo($data, $sid);
             if ($result) {
                 return Redirect::back()->with(['status' => 'success', 'msg' => 'Details Suuccesfully Edited . ']);

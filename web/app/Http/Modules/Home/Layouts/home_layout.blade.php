@@ -5,486 +5,417 @@
 </head>
 <body>
 
-<!--Layout Theme Options-->
-<div id="layout">
-    <!--Preloader-->
-    <div class="preloader">
-        <div class="status">&nbsp;</div>
-    </div>
-    <!--Preloader-->
-    <!--Header-->
+<div class="wrapper"><!--body wrapper-->
     <header>
-        <!--Bar Current & Extras-->
-        <div class="bar-extras">
+        <div class="container-fluid  bg-color-login"><!--Login-->
             <div class="container">
-                <div class="row right">
-                    <div class="col-lg-12">
-                        <ul class="list-inline">
-                            <!--Current-->
-                            <li class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                    USD $ <i class="fa fa-angle-down"></i>
-                                </a>
-                                <ul class="dropdown-menu current right text-uppercase">
-                                    <li><a href="#"> AUD $</a></li>
-                                    <li><a href="#"> EUR €</a></li>
-                                    <li><a href="#"> BOB Bs.</a></li>
-                                    <li><a href="#"> COP $</a></li>
-                                </ul>
-                            </li>
-
-                            <!--Current-->
-
-                            <!--Language-->
-                            {{--<li class="dropdown">--}}
-                            {{--<a class="dropdown-toggle" data-toggle="dropdown" href="#">--}}
-                            {{--ENG <i class="fa fa-angle-down"></i>--}}
-                            {{--</a>--}}
-                            {{--<ul class="dropdown-menu left">--}}
-                            {{--<li><a href="#"><img src="/assets/home/img/language/spanish.png" alt=""> Spanish</a></li>--}}
-                            {{--<li><a href="#"><img src="/assets/home/img/language/english.png" alt=""> English</a></li>--}}
-                            {{--<li><a href="#"><img src="/assets/home/img/language/frances.png" alt=""> French</a></li>--}}
-                            {{--<li><a href="#"><img src="/assets/home/img/language/portugues.png" alt=""> Portuguese</a></li>--}}
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p class="inline text-white">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle waves-effect waves-button waves-classic"
+                               data-toggle="dropdown">
+                                    <span class="user-name" style="padding-bottom: 6px;">{{ trans('message.changelanguage') }}<i
+                                                class="fa fa-angle-down"></i></span>
+                            </a>
+                            {{--<ul class="dropdown-menu">--}}
+                            {{--<li>fcb</li>--}}
                             {{--</ul>--}}
-                            {{--</li>--}}
-                            <!--Language-->
-                        </ul>
+                            <ul class="dropdown-menu"><?php $langinfo = \FlashSale\Http\Modules\Home\Controllers\HomeController::getTranslatedLanguage();?>
+
+                                <?php if(isset($langinfo) && !(empty($langinfo))){ ?>
+
+                                @foreach($langinfo as  $val)
+
+                                    <li><a href="/user/lang/{{$val['lang_code']}}">{{$val['name']}}</a></li>
+                                    {{--<li><a href="/user/lang/en">English</a></li>--}}
+                                    {{--<li> <a href="/lang/{{$val->lang_code}}">{{$val->name}}</a></li>--}}
+                                    {{--<option value="/lang/pt">Portuguese</option>--}}
+                                @endforeach
+                                <?php } ?>
+
+                            </ul>
+                        </li>
+                        {{--<i class="fa fa-eur"> </i>  <span class="caret cart-caret-blue"> </span></p>--}}
+                        {{--<p class="inline text-white">EN <span class="caret cart-caret-blue"></span></p>--}}
                     </div>
-                </div>
+                    <div class="col-sm-2 pull-right inline top_5">
+
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle waves-effect waves-button waves-classic"
+                               data-toggle="dropdown">
+                                <p class="text-white inline">(<span class='cart-items-count'>0</span>) CART</p>
+                                <img src="/assets/images/shopping-cart-wht.png" class="cart-img-header inline"
+                                     alt="shopping cart">
+                            </a>
+                            {{--<ul class="dropdown-menu">--}}
+                            {{--<li>fcb</li>--}}
+                            {{--</ul>--}}
+                            <ul class="dropdown-menu" style="margin:0;z-index: 999999;">
+                               <li><a href="#">1</a></li>
+                                <li><a href="#">2</a></li>
+                                <li><a href="#">3</a></li>
+                             </ul>
+                        </li>
+
+                    </div>
+                    <!--Login-->
+
             </div>
         </div>
-        <!--Bar Current & Extras-->
 
-        <!--Logo Menu & Bar Login-->
-        <div class="logo-menu">
+
+        <div class="container-fluid  bg-color-1d padd-top-2"><!--navbar search-->
             <div class="container">
-                <div class="row right">
-                    <!--Logo-->
-                    <div class="col-lg-4 col-md-4 col-sm-3 m-top-minus">
-                        <div class="logo center text-uppercase">
-                            <a href="/"><h1>Flash Sale</h1></a>
-                        </div>
-                    </div>
-                    <!--Logo-->
+                <div class="row">
 
-                    <!--Search-->
-                    <div class="col-lg-5 search col-md-4 col-sm-4 col-xs-6">
-                        <form class="search" action="#" method="Post">
-                            <div class="input-group">
-                                <input class="form-control" placeholder="" name="email" type="email" required="required">
-                                        <span class="input-group-btn">
-                                            <button class="btn btn-primary" type="submit" name="subscribe"><i
-                                                        class="fa fa-search"></i></button>
-                                        </span>
+                    <div class="col-sm-3  t-a-r">
+                        <a class="navbar-brand" href="#"><span class="f-ts">Fashion</span></a>
+                    </div>
+
+                    <div class="col-sm-4  js-navbar-collapse hidden-xs">
+                        <form class="">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="search-box" placeholder="">
+
+                                    <div class="input-group-addon input-addon">
+                                        <i class="fa fa-search glyph-color"></i>
+                                    </div>
+                                </div>
                             </div>
                         </form>
                     </div>
-                    <!--Search-->
-
-                    <!--Login-->
-                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
-                        <ul class="login list-inline text-uppercase">
+                    <div class="col-md-3 col-sm-5 col-xs-6 pull-right">
+                        <ul class="login list-inline text-uppercase" style="text-align: right;">
                             <?php if (Session::has('fs_user')){
-                             $value = Session::get('fs_user')['profilepic'];
+                            $value = Session::get('fs_user')['profilepic'];
                             ?>
-                            <li>
-                                <a href="javascript:void(0)" id="showdetails"><img src="<?php if($value != ''){  echo $value; } else { echo "http://placehold.it/350x150"; }?>" style="height:30px; width:30px;" class="img-circle" id="user_profile_pic_id"/> Username <span id="triangle_down">&#9660;</span>
+                            <li  style="text-align: left;">
+                                <a href="javascript:void(0)" id="showdetails" class="white_color"><img src="<?php if ($value != '') {
+                                        echo $value;
+                                    } else {
+                                        echo "http://placehold.it/350x150";
+                                    }?>" style="height:30px; width:30px;" class="img-circle" id="user_profile_pic_id"/>Hello
+                                    <?php echo(Session::get('fs_user')['username']); ?><span
+                                            id="triangle_down">&#9660;</span>
                                     <span id="triangle_up" style="display:none;">&#9650;</span></a>
-                                <div id="userpanel" class="left-panel">
+
+                                <div id="userpanel" class="left-panel click_panel" style="display: none;">
                                     <!--body panel-->
                                     <div class="body-user">
-                                        <div class="content-body-user text-overflow">
+                                        <div class="content-body-user text-overflow admin-dropdwn">
                                             <ul class="list-unstyled">
-                                                <li><a href="/profile-setting"><i class="fa fa-user"></i>&nbsp;&nbsp;My Account</a></li>
-                                                <li><a href="#"><i class="fa fa-heart"></i>&nbsp;&nbsp;My Wishlist</a></li>
-                                                <li><a href="#"><i class="fa fa-truck"></i>&nbsp;&nbsp;My Orders</a></li>
-                                                <li><a href="#"><i class="fa fa-outdent"></i>&nbsp;&nbsp;My Tickets</a></li>
-                                                <li><a href="#"><i class="fa fa-bullhorn"></i>&nbsp;&nbsp;Add New Ticket</a></li>
-                                                <li><a href="#"><i class="fa fa-envelope"></i>&nbsp;&nbsp;Newsletter</a></li>
-                                                <li><a href="/logout"><i class="fa fa-key"></i>&nbsp;&nbsp;Log Out</a></li>
+                                                <li><a href="/profile-setting" class="white_color"><i
+                                                                class="fa fa-user white_color"></i>&nbsp;&nbsp;{{ trans('message.my_account') }}
+                                                    </a></li>
+                                                <li><a href="#" class="white_color"><i
+                                                                class="fa fa-heart white_color"></i>&nbsp;&nbsp;{{ trans('my_wishlist') }}
+                                                    </a>
+                                                </li>
+                                                <li><a href="#" class="white_color"><i
+                                                                class="fa fa-truck white_color"></i>&nbsp;&nbsp;{{ trans('message.my_orders') }}
+                                                    </a>
+                                                </li>
+                                                <li><a href="#" class="white_color"><i
+                                                                class="fa fa-outdent white_color"></i>&nbsp;&nbsp;{{ trans('message.my_tickets') }}
+                                                    </a>
+                                                </li>
+                                                <li><a href="#" class="white_color"><i
+                                                                class="fa fa-bullhorn white_color"></i>&nbsp;&nbsp;{{ trans('message.add_new_ticket') }}
+                                                    </a>
+                                                </li>
+                                                <li><a href="#" class="white_color"><i
+                                                                class="fa fa-envelope white_color"></i>&nbsp;&nbsp;{{ trans('message.newsletter') }}
+                                                    </a>
+                                                </li>
+                                                <li><a href="/logout" class="white_color"><i
+                                                                class="fa fa-key white_color"></i>&nbsp;&nbsp;{{ trans('message.logout') }}
+                                                    </a>
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>
                                     <!--body panel-->
                                 </div>
                             </li>
+
                             <?php } else { ?>
-                            <li><a href="#" class="open_login_model" data-toggle="modal" data-target=".modal-login">login</a>
-                            </li>
-                            <li><a href="#" class="open_signup_model" data-toggle="modal" data-target=".modal-login">Register</a>
-                            </li>
+                            <div class="col-md-8 pull-right">
+
+                                <button type="button" class="btn btn-bg-clr-grey text-white b-rad-0 open_login_model pull-left"  data-toggle="modal"
+                                        data-target=".modal-login">{{ trans('message.login') }}</button>
+                                {{--<li><a href="#" class="open_login_model" data-toggle="modal"--}}
+                                {{--data-target=".modal-login"--}}
+                                {{--class="btn btn-bg-clr-grey text-white b-rad-0 mar-min-btm">{{ trans('message.login') }}</a>--}}
+                                {{--</li>--}}
+                                <button type="button" class="btn btn-bg-clr-dblue text-white b-rad-0 open_signup_model pull-left" data-toggle="modal"
+                                        data-target=".modal-login">{{ trans('message.register') }}</button>
+                                {{--<li><a href="#" class="open_signup_model" data-toggle="modal"--}}
+                                {{--data-target=".modal-login"--}}
+                                {{--class="btn btn-bg-clr-dblue text-white b-rad-0 mar-min-btm">{{ trans('message.register') }}</a>--}}
+                                {{--</li>--}}
+
+                            </div>
                             <?php } ?>
-                            <li style="float:left ">
-                                <a href="#" id="showbag">bag (1) <span id="triangle_down">&#9660;</span>
-                                    <span id="triangle_up" style="display:none;">&#9650;</span> </a>
+                            {{--<li style="float:left ">--}}
+                            {{--<a href="#" id="showbag">bag (1) <span id="triangle_down">&#9660;</span>--}}
+                            {{--<span id="triangle_up" style="display:none;">&#9650;</span> </a>--}}
 
-                                <div id="bagpanel" class="left-panel">
-                                    <!--Header panel-->
-                                    <div class="header-bag"><p>1 item (s) added to your bag</p></div>
-                                    <!--Header panel-->
+                            {{--<div id="bagpanel" class="left-panel">--}}
+                            {{--<!--Header panel-->--}}
+                            {{--<div class="header-bag"><p>1 item (s) added to your bag</p></div>--}}
+                            {{--<!--Header panel-->--}}
 
-                                    <!--body panel-->
-                                    <div class="body-bag">
-                                        <img src="/assets/home/img/featured-products/product-01.jpg" alt="">
+                            {{--<!--body panel-->--}}
+                            {{--<div class="body-bag">--}}
+                            {{--<img src="/assets/home/img/featured-products/product-01.jpg" alt="">--}}
 
-                                        <div class="content-body-bag text-overflow">
-                                            <h4 class="product-bag">YX Black T-Shirt</h4>
+                            {{--<div class="content-body-bag text-overflow">--}}
+                            {{--<h4 class="product-bag">YX Black T-Shirt</h4>--}}
 
-                                            <p><span class="amount">1</span>x<span class="price">$36.00</span></p>
-                                        </div>
-                                    </div>
-                                    <!--body panel-->
+                            {{--<p><span class="amount">1</span>x<span class="price">$36.00</span></p>--}}
+                            {{--</div>--}}
+                            {{--</div>--}}
+                            {{--<!--body panel-->--}}
 
-                                    <!--Footer panel-->
-                                    <div class="footer-bag">
-                                        <div class="total-bag"><p>total<span>$36.00</span></p></div>
-                                        <div class="view-bag">view bag</div>
-                                    </div>
-                                    <!--Footer panel-->
-                                </div>
-                            </li>
+                            {{--<!--Footer panel-->--}}
+                            {{--<div class="footer-bag">--}}
+                            {{--<div class="total-bag"><p>total<span>$36.00</span></p></div>--}}
+                            {{--<div class="view-bag">view bag</div>--}}
+                            {{--</div>--}}
+                            {{--<!--Footer panel-->--}}
+                            {{--</div>--}}
+                            {{--</li>--}}
                         </ul>
                     </div>
                     <!--Login-->
+                    {{--<div class="col-md-4 pull-right">--}}
+                    {{--<div class="pull-right">--}}
+                    {{--<button type="button" class="btn btn-bg-clr-grey text-white b-rad-0 mar-min-btm">Login</button>--}}
+                    {{--<button type="button" class="btn btn-bg-clr-dblue text-white b-rad-0 mar-min-btm">Register</button>--}}
+                    {{--</div>--}}
+                    {{--</div>--}}
 
-                    <!--Menu-->
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <nav class="navbar menu yamm top-mini">
-                            <div class="navbar-header">
-                                <button type="button" data-toggle="collapse" data-target="#navbar-collapse-grid"
-                                        class="navbar-toggle"><i class="fa fa-bars"></i></button>
-                            </div>
-                            <div id="navbar-collapse-grid" class="navbar-collapse collapse left">
-                                <ul class="nav navbar-nav">
-                                    <!-- home -->
-                                    <li class="dropdown yamm-fw"> Home</li>
-                                    <!--home -->
+                </div>
 
-                                    <!--shop-->
-                                    <li class="dropdown yamm-fw"><a href="#" data-toggle="dropdown"
-                                                                    class="dropdown-toggle">Flash Sale <b
-                                                    class="caret"></b></a>
-                                        <ul class="dropdown-menu">
-                                            <li class="grid">
-                                                <div class="row" style="margin-left:0px;">
-                                                    <div class="col-lg-5 col-md-5 col-sm-5">
-                                                        <h4>new arrivals</h4>
-                                                        <ul class="list-unstyled">
-                                                            <li><a href="shop.html">Shop Site</a></li>
-                                                            <li><a href="shop-sidebarleft.html">Shop with Sidebar</a>
-                                                            </li>
-                                                            <li><a href="#" data-toggle="modal"
-                                                                   data-target=".modal-quickview">Quickview</a></li>
-                                                            <li><a href="#">Clothes</a></li>
-                                                            <li><a href="#">Shoes</a></li>
-                                                            <li><a href="#">Accesories</a></li>
-                                                            <li><a href="#">Other</a></li>
-                                                            <li><a href="#">Cashmere: From $75</a></li>
-                                                        </ul>
-                                                    </div>
-                                                    <div class="col-lg-4 col-md-4 col-sm-4">
-                                                        <h4>clothes</h4>
-                                                        <ul class="list-unstyled">
-                                                            <li><a href="#">Tops</a></li>
-                                                            <li><a href="#">Knitwear</a></li>
-                                                            <li><a href="#">Dresses</a></li>
-                                                            <li><a href="#">Denim</a></li>
-                                                            <li><a href="#">Bottoms</a></li>
-                                                            <li><a href="#">Jackets</a></li>
-                                                        </ul>
-                                                    </div>
-                                                    <div class="col-lg-3 col-md-3 col-sm-3">
 
-                                                        <ul class="list-unstyled">
-                                                            <li>
-                                                                <a href="#"><img
-                                                                            src="/assets/home/img/Gilt_GiftCard_Nav_GC_227x442.jpg"
-                                                                            class="img-responsive" style="width:404px;">
-                                                                </a>
-                                                            </li>
-
-                                                        </ul>
-                                                    </div>
-
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <!--shop-->
-
-                                    <!--pages-->
-                                    <li class="dropdown yamm-fw"><a href="#" data-toggle="dropdown"
-                                                                    class="dropdown-toggle">Shop <b
-                                                    class="caret"></b></a>
-                                        <ul class="dropdown-menu">
-                                            <li class="grid">
-                                                <div class="row" style="margin-left:0px;">
-                                                    <div class="col-lg-5 col-md-5 col-sm-5">
-                                                        <h4>new arrivals</h4>
-                                                        <ul class="list-unstyled">
-                                                            <li><a href="shop.html">Shop Site</a></li>
-                                                            <li><a href="shop-sidebarleft.html">Shop with Sidebar</a>
-                                                            </li>
-                                                            <li><a href="#" data-toggle="modal"
-                                                                   data-target=".modal-quickview">Quickview</a></li>
-                                                            <li><a href="#">Clothes</a></li>
-                                                            <li><a href="#">Shoes</a></li>
-                                                            <li><a href="#">Accesories</a></li>
-                                                            <li><a href="#">Other</a></li>
-                                                            <li><a href="#">Cashmere: From $75</a></li>
-                                                        </ul>
-                                                    </div>
-                                                    <div class="col-lg-4 col-md-4 col-sm-4">
-                                                        <h4>clothes</h4>
-                                                        <ul class="list-unstyled">
-                                                            <li><a href="#">Tops</a></li>
-                                                            <li><a href="#">Knitwear</a></li>
-                                                            <li><a href="#">Dresses</a></li>
-                                                            <li><a href="#">Denim</a></li>
-                                                            <li><a href="#">Bottoms</a></li>
-                                                            <li><a href="#">Jackets</a></li>
-                                                        </ul>
-                                                    </div>
-                                                    <div class="col-lg-3 col-md-3 col-sm-3">
-
-                                                        <ul class="list-unstyled">
-                                                            <li><a href="#"><img
-                                                                            src="/assets/home/img/Gilt_GiftCard_Nav_GC_227x442.jpg"
-                                                                            class="img-responsive" style="width:404px;"></a>
-                                                            </li>
-
-                                                        </ul>
-                                                    </div>
-
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <!--pages-->
-                                    <li class="dropdown yamm-fw"><a href="#" data-toggle="dropdown"
-                                                                    class="dropdown-toggle">Daily Specials <b
-                                                    class="caret"></b></a>
-                                        <ul class="dropdown-menu">
-                                            <li class="grid">
-                                                <div class="row" style="margin-left:0px;">
-                                                    <div class="col-lg-5 col-md-5 col-sm-5">
-                                                        <h4>Today's Sales </h4>
-                                                        <ul class="list-unstyled">
-                                                            <li><a href="#"> Nanos for Baby & Kids</a></li>
-                                                            <li><a href="#">Gotta-Have Toys</a></li>
-                                                            <li><a href="#">Jaime King for Sapling</a></li>
-
-                                                            <li><a href="#">Shopping Cart</a></li>
-                                                            <li><a href="#">CheckOut</a></li>
-                                                            <li><a href="#">Shop</a></li>
-                                                            <li><a href="#">The Toy Shop </a></li>
-
-                                                        </ul>
-                                                    </div>
-                                                    <div class="col-lg-4 col-md-4 col-sm-4">
-                                                        <h4>Categories</h4>
-                                                        <ul class="list-unstyled">
-                                                            <li><a href="#">Girls Dresses & Skirts </a></li>
-                                                            <li><a href="#">Girls Tops</a></li>
-                                                            <li><a href="#">Girls Bottom</a></li>
-                                                            <li><a href="#">Boys Bottoms</a></li>
-                                                            <li><a href="#">Boys Tops </a></li>
-                                                            <li><a href="#">Boys Dresses </a></li>
-                                                            <li><a href="#">Shoes and Accessories</a></li>
-                                                            <li><a href="#">Maternity</a></li>
-                                                            <li><a href="#">Toys, Furnishings & Gear </a></li>
-                                                        </ul>
-                                                    </div>
-                                                    <div class="col-lg-3 col-md-3 col-sm-3">
-
-                                                        <ul class="list-unstyled">
-                                                            <li><a href="#"><img
-                                                                            src="/assets/home/img/Gilt_GiftCard_Nav_GC_227x442.jpg"
-                                                                            class="img-responsive" style="width:404px;"></a>
-                                                            </li>
-
-                                                        </ul>
-                                                    </div>
-
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </li>
-
-                                    <!--Blog-->
-                                    <li class="dropdown yamm-fw"><a href="#">About Us</a></li>
-                                    <!--Blog-->
-
-                                    <!--Contact-->
-                                    <li class="dropdown yamm-fw"><a href="#">Contact</a></li>
-                                    <!--Contact-->
-                                </ul>
-                            </div>
-                        </nav>
-                    </div>
-                    <!--Menu-->
                 </div>
             </div>
-        </div>
-        <!--Logo Menu & Bar Login-->
-    </header>
-    <!--Header-->
 
+        </div>
+        <!--/navbar search-->
+
+        <div class="nav-bar-container bg-color-1d"><!--container1-->
+            <div class="container">
+                <nav class="navbar navbar-inverse navbar-rad-0 row m-btm-7  bg-color-1d nav-padd-mar-0">
+                    <!--navbar start -->
+                    <div class="navbar-header col-sm-3 col-md-2 t-a-r">
+                        <a class="navbar-brand padding-0" href="#"><span class="bridge">BRIDGE</span></a>
+                    </div>
+
+                    <!--only for mobile-->
+                    <div class="col-xs-12 visible-xs margin-top-10">
+                        <ul class="remove-list-style">
+                            <li><a href="">{{ trans('message.home') }}</a></li>
+                            <li><a href="">{{ trans('message.flashsale') }}</a></li>
+                            <li><a href="">{{ trans('message.shop') }}</a></li>
+                            <li><a href="">{{ trans('message.dailyspecial') }}</a></li>
+                            <li><a href="">BABY &amp; KIDS</a></li>
+                        </ul>
+                    </div>
+                    <!--/only for mobile-->
+                    <div class='col-sm-8 col-md-7'>
+                        <div class="collapse navbar-collapse js-navbar-collapse">
+                            <ul class="nav navbar-nav ">
+                                <li><a href="#">{{ trans('message.home') }}</a></li>
+                                <li class="dropdown mega-dropdown">
+
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">WOMEN <span
+                                                class="caret"></span></a>
+                                    <ul class="dropdown-menu mega-dropdown-menu dropdown-styles">
+
+                                        <li class='col-sm-1 p-m-0 width-auto hidden-xs'>
+                                            <img src="/assets/images/drop-down-txt.png" class='img-responsive'
+                                                 alt="text-image">
+                                        </li>
+
+                                        <li class="col-sm-4 p-m-0">
+                                            <ul class="display-img">
+                                                <li><a href="javascript:;"><img src="/assets/images/dd-img-3.png"
+                                                                                alt="img-1"/></a></li>
+                                                <li><a href="javascript:;"><img src="/assets/images/dd-img-2.png"
+                                                                                alt="img-2"/></a></li>
+                                                <li><a href="javascript:;"><img src="/assets/images/dd-img-1.png"
+                                                                                alt="img-3"/></a></li>
+                                            </ul>
+                                        </li>
+
+                                        <li class="col-sm-3 p-m-0">
+                                            <ul class="padd-10-a bg-color-dark">
+                                                <li><a href="#">Tops</a></li>
+                                                <li><a href="#">Dresses</a></li>
+                                                <li><a href="#">Shoes</a></li>
+                                                <li><a href="#">Bags</a></li>
+                                                <li><a href="#">Glasses</a></li>
+                                                <li><a href="#"><img src="/assets/images/dots.png" alt="more"></a></li>
+                                            </ul>
+                                        </li>
+
+                                        <li class="col-sm-4 p-m-0 dd-bg">
+                                            <h1>SALE</h1>
+                                        </li>
+                                        <li class='col-xs-12 s-a'><a href="#" class="s-a-a">SHOW ALL</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown mega-dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">MEN <span
+                                                class="caret"></span></a>
+                                    <ul class="dropdown-menu mega-dropdown-menu dropdown-styles">
+
+                                        <li class='col-sm-1 p-m-0 width-auto hidden-xs'>
+                                            <img src="/assets/images/drop-down-txt.png" class='img-responsive'
+                                                 alt="text-image">
+                                        </li>
+
+                                        <li class="col-sm-3 p-m-0">
+                                            <ul class="padd-10-a bg-color-dark">
+                                                <li><a href="#">Tops</a></li>
+                                                <li><a href="#">Dresses</a></li>
+                                                <li><a href="#">Shoes</a></li>
+                                                <li><a href="#">Bags</a></li>
+                                                <li><a href="#">Glasses</a></li>
+                                                <li><a href="#"><img src="/assets/images/dots.png" alt="more"></a></li>
+                                            </ul>
+                                        </li>
+
+                                        <li class="col-sm-4 p-m-0">
+                                            <ul class="display-img">
+                                                <li><a href="javascript:;"><img src="/assets/images/dd-img-3.png"
+                                                                                alt="img-1"/></a></li>
+                                                <li><a href="javascript:;"><img src="/assets/images/dd-img-2.png"
+                                                                                alt="img-2"/></a></li>
+                                                <li><a href="javascript:;"><img src="/assets/images/dd-img-1.png"
+                                                                                alt="img-3"/></a></li>
+                                            </ul>
+                                        </li>
+
+                                        <li class="col-sm-4 p-m-0 dd-bg">
+                                            <h1>SALE</h1>
+                                        </li>
+                                        <li class='col-xs-12 s-a'><a href="#" class="s-a-a">SHOW ALL</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="#">BABY &amp; KIDS</a></li>
+                                <li><a href="#">ABOUT US</a></li>
+                                <li><a href="#">{{ trans('message.contact') }}</a></li>
+                            </ul>
+
+                        </div>
+                        <!-- /.nav-collapse -->
+
+                    </div>
+                </nav>
+                <!--navbar end -->
+
+            </div>
+        </div>
+        <!--/container1-->
+    </header>
     {{------------------------------------------PAGE CONTENT STARTS HERE-----------------------------------------}}
     @yield('content')
     {{------------------------------------------PAGE CONTENT ENDS HERE-----------------------------------------}}
 
-            <!--advertisement-->
-    <section class="bg-image">
-        <div class="bg-color"></div>
-        <div class="paddings title-banner center text-uppercase">
-            <div class="container">
-                <div class="row">
-                    <h2><span>LOOKBOOK</span> 2015/2016</h2>
 
-                    <h3>THE NEW COLLECTION</h3>
-
-                    <div class="boton-border"><a href="#">shop now</a></div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!--advertisement-->
-
-    <!--Footer-->
-    <footer class="paddings">
+    <footer class="bg-color-1d footer-float">
         <div class="container">
             <div class="row">
-                <div class="col-lg-3 col-md-2 col-sm-3 col-xs-6">
-                    <h4>company</h4>
-                    <ul class="list-unstyled">
-                        <li><a href="#">About us</a></li>
-                        <li><a href="#">Brands</a></li>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Our Stores</a></li>
-                        <li><a href="#">Press</a></li>
-                        <li><a href="#">Contact us</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
-                    <h4>help</h4>
-                    <ul class="list-unstyled">
-                        <li><a href="#">Payment</a></li>
-                        <li><a href="#">Shipping & Returns</a></li>
-                        <li><a href="#">Size Guide</a></li>
-                        <li><a href="#">Track Orders</a></li>
-                        <li><a href="#">Gift Card</a></li>
-                        <li><a href="#">Faqs</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
-                    <h4>from the upcoming</h4>
-                    <!--item-->
-                    <div class="top-mini">
-                        <div class="date center text-uppercase">
-                            15 Dec
-                        </div>
-                        <div class="info-date">
-                            <h5><a href="#">What’s trending for 2015? </a></h5>
-                            <!--                                <p>&nbsp;&nbsp;&nbsp;</p>-->
-                        </div>
+                <img src="/assets/images/footer-img.png" alt="" class="img-responsive footer-img">
+            </div>
+        </div>
+        <div class="container margin-top-1 footer-font-style">
+            <div class="row ">
+                <div class="col-md-12">
+                    <div class="col-md-2">
+                        <a href="#"><span class="f-ts">Fashion</span></a>
+                        <a href="#"><span class="bridge">BRIDGE</span></a>
                     </div>
-                    <!--item-->
-                    <div class="clearfix"></div>
-                    <!--item-->
-                    <div class="top-mini">
-                        <div class="date center text-uppercase">
-                            15 Dec
-                        </div>
-                        <div class="info-date">
-                            <h5><a href="#">New collection is here! 50 new styles</a></h5>
-
-                        </div>
+                    <div class="col-md-2">
+                        <h5 class="col-fff">COMPANY</h5>
+                        <ul class="no-list-style">
+                            <li><a href="">About</a></li>
+                            <li><a href="">Press</a></li>
+                            <li><a href="">Careers</a></li>
+                            <li><a href="">Tech</a></li>
+                            <li><a href="">Style Directory</a></li>
+                            <li><a href="">Brand Directory</a></li>
+                            <li><a href="">Category Directory</a></li>
+                            <li><a href="">Contact Us</a></li>
+                        </ul>
                     </div>
-                    <!--item-->
-                    <div class="clearfix"></div>
-                    <!--item-->
-                    <div class="top-mini">
-                        <div class="date center text-uppercase">
-                            15 Dec
-                        </div>
-                        <div class="info-date">
-                            <h5><a href="#">NYC The world’s fashion capital</a></h5>
-
-                        </div>
+                    <div class="col-md-2">
+                        <h5 class="col-fff">Customer Service</h5>
+                        <ul class="no-list-style">
+                            <li><a href="">FAQ / Contact Us</a></li>
+                            <li><a href="">Return Policy</a></li>
+                            <li><a href="">Shipping & Tax</a></li>
+                        </ul>
                     </div>
-                    <!--item-->
-                    <div class="clearfix"></div>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-12 col-xs-6">
-                    <h4>follow us</h4>
-                    <!--Social-->
-                    <ul class="social-links list-inline">
-                        <li><a href="#"><img src="/assets/home/img/social-icons/facebook.png" alt=""></a></li>
-                        <li><a href="#"><img src="/assets/home/img/social-icons/twitter.png" alt=""></a></li>
-                        <li><a href="#"><img src="/assets/home/img/social-icons/google.png" alt=""></a></li>
-                        <li><a href="#"><img src="/assets/home/img/social-icons/skype.png" alt=""></a></li>
+                    <div class="col-md-2">
+                        <h5 class="col-fff">Policies</h5>
+                        <ul class="no-list-style">
+                            <li><a href="">Terms of Membership</a></li>
+                            <li><a href="">Privacy</a></li>
+                            <li><a href="">Security</a></li>
+                            <li><a href="">Terms of Use</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-2">
+                        <h5 class="col-fff">Social Media</h5>
+                        <ul class="no-list-style social-col">
+                            <li>
+                                <a href=""><i class="fa fa-rss social-icons"></i></a>
+                                <a href=""><i class="fa fa-twitter social-icons"></i></a>
+                                <a href=""><i class="fa fa-twitter social-icons"></i></a>
+                            </li>
 
-                    </ul>
-                    <!--Social-->
-
-                    <!--Newsletter-->
-                    <h4 class="top newsletter">Newsletter</h4>
-
-                    <form class="newsletterForm top-mini"
-                          action="http://html.iwthemes.com/Enter/php/mailchip/newsletter-subscribe.php">
-                        <div class="input-group newsletterFormborder">
-                            <input class="form-control" placeholder="Enter your email" name="email" type="email"
-                                   required="required">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-primary" type="submit" name="subscribe">></button>
-                                    </span>
-                        </div>
-                    </form>
-                    <div class="result-newsletter"></div>
-                    <!--Newsletter-->
+                            <li>
+                                <a href=""><i class="fa fa-twitter social-icons"></i></a>
+                                <a href=""><i class="fa fa-twitter social-icons"></i></a>
+                                <a href=""><i class="fa fa-twitter social-icons"></i></a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </footer>
-    <!--Footer-->
-
-    <!--Copry-->
-    <div class="copry center">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <p>Copyright 2015 <span>Flash Sale</span> All rights reserved</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--Copry-->
-
-
     <!-- Modal Contact -->
     <div class="modal fade modal-login">
-        <div class="modal-dialog" id="dialog_modal">
-            <div class="modal-content">
+        <div class="modal-dialog" id="dialog_modal" style="width: 90rem;">
+            <div class="modal-content modal_bgdark_grey">
                 <div class="modal-body row">
                     <div class="loginmodel col-lg-12  hidden">
                         <div class="col-lg-6">
-                            <h4 class="text-uppercase">Login</h4>
+                            <h4 class="text-uppercase white_color">{{ trans('message.login') }}</h4>
 
                             <form class="signin_form" method="post" id="userloginform">
                                 <div class="form-group">
-                                    <label for="login_email">Username or email</label>
-                                    <input type="text" class="form-control" id="login_email" name="login_email"
+                                    <label for="login_email" class="white_color">{{ trans('message.username') }}
+                                        or {{ trans('message.email') }}</label>
+                                    <input type="text" class="form-control white_color" id="login_email" name="login_email"
                                            placeholder="Username or email">
                                     <span id="login_email_err"></span>
                                 </div>
                                 <div class="form-group">
-                                    <label for="login_password">Password</label>
-                                    <input type="password" class="form-control" id="login_password"
+                                    <label for="login_password" class="white_color">{{ trans('message.password') }}</label>
+                                    <input type="password" class="form-control white_color" id="login_password"
                                            name="login_password" placeholder="Password">
                                     <span id="login_password_err"></span>
                                 </div>
-                                <input type="submit" value="Login" class="boton-color text-uppercase">
+                                <input type="submit" value="{{ trans('message.login')}}"
+                                       class="boton-color text-uppercase">
                                 <a class="pss" onClick="forgotpd()">Lost password?</a>
 
                                 <div id="login-suc-err"></div>
@@ -492,53 +423,51 @@
                         </div>
 
                         <div class="col-lg-6">
-                            <h4 class="text-uppercase">Register</h4>
+                            <h4 class="text-uppercase white_color">{{ trans('message.register') }}</h4>
 
-                            <p class="top">By creating an account with our Site, you will be able to move through the
-                                checkout
-                                process faster, view and track your orders in your
-                                account
-                                and more.</p>
+                            <p class="top white_color">{{ trans('message.By creating an account with our Site, you will be able to move through the checkout process faster, view and track your orders in your account and more.') }}
+                                .</p>
 
                             <a class="boton-color text-uppercase open_signup_model"
-                               style="color: #f0f0f0;cursor: pointer">Sign up</a>
+                               style="color: #f0f0f0;cursor: pointer">{{ trans('message.signup') }}</a>
                         </div>
                     </div>
 
                     <div class="signupmodel col-lg-12 hidden" style="width: 100%">
                         <div class="col-lg-12">
-                            <h4 class="text-uppercase">Signup</h4>
+                            <h4 class="text-uppercase white_color">{{ trans('message.signup') }}</h4>
 
                             <form class="regsiter_form" method="post" id="usersignupform">
                                 <div class="form-group">
-                                    <label for="firstname">First Name</label>
-                                    <input type="text" class="form-control" id="firstname" name="firstname"
+                                    <label for="firstname" class="white_color">{{ trans('message.firstname') }}</label>
+                                    <input type="text" class="form-control white_color" id="firstname" name="firstname"
                                            placeholder="First Name">
                                     <span id="first_name_err"></span>
                                 </div>
                                 <div class="form-group">
-                                    <label for="lastname">Last Name</label>
-                                    <input type="text" class="form-control" id="lastname" name="lastname"
+                                    <label for="lastname" class="white_color">{{ trans('message.lastname') }}</label>
+                                    <input type="text" class="form-control white_color" id="lastname" name="lastname"
                                            placeholder="Last Name">
                                     <span id="last_name_err"></span>
                                 </div>
                                 <div class="form-group">
-                                    <label for="username">Username</label>
-                                    <input type="text" class="form-control" id="username" name="username"
+                                    <label for="username" class="white_color">{{ trans('message.username') }}</label>
+                                    <input type="text" class="form-control white_color" id="username" name="username"
                                            placeholder="Username">
                                     <span id="username_err"></span>
                                 </div>
                                 <div class="form-group">
-                                    <label for="email">email</label>
-                                    <input type="text" class="form-control" id="email" name="email" placeholder="email">
+                                    <label for="email" class="white_color">{{ trans('message.email') }}</label>
+                                    <input type="text" class="form-control white_color" id="email" name="email" placeholder="email">
                                     <span id="email_err"></span>
                                 </div>
 
-                                <input type="submit" value="Signup" class="boton-color text-uppercase">
-                                <span style="float: right;">Already Registered
+                                <input type="submit" value="{{ trans('message.signup') }}"
+                                       class="boton-color text-uppercase">
+                                <span style="float: right;" class="white_color">Already Registered
 
                                 <a class="boton-color text-uppercase open_login_model"
-                                   style="color: #f0f0f0;cursor: pointer">Login</a></span><br>
+                                   style="color: #f0f0f0;cursor: pointer">{{ trans('message.login') }}</a></span><br>
 
                                 <div id="pw-suc-err"></div>
                             </form>
@@ -551,12 +480,12 @@
 
                     <div class="forgotpd col-lg-12 hidden" style="width: 100%">
                         <div class="col-lg-12">
-                            <h4 class="text-uppercase">Forgot Password</h4>
+                            <h4 class="text-uppercase white_color">Forgot Password</h4>
 
                             <form class="regsiter_form" method="post" id="forgotpasswordform">
                                 <div class="form-group">
-                                    <label for="fp_email">Email</label>
-                                    <input type="email" class="form-control" id="fp_email" name="fp_email"
+                                    <label for="fp_email" class="white_color">{{ trans('message.email') }}</label>
+                                    <input type="email" class="form-control white_color" id="fp_email" name="fp_email"
                                            placeholder="Email">
                                     <span id="fp_email_err"></span>
                                 </div>
@@ -564,9 +493,10 @@
                                     <p>
                                         Check Mail and Enter your reset code below to Reset password
                                     </p>
+
                                     <div class="form-group">
-                                        <label for="fp_email">Reset code</label>
-                                        <input type="text" class="form-control" id="resetcode" name="resetcode"
+                                        <label for="fp_email" class="white_color">Reset code</label>
+                                        <input type="text" class="form-control white_color" id="resetcode" name="resetcode"
                                                placeholder="Reset Code">
                                         <span id="resetcode_err"></span>
                                     </div>
@@ -590,14 +520,14 @@
 
                             <form class="regsiter_form" method="post" id="EnterNewPasswordform">
                                 <div class="form-group">
-                                    <label for="password1">New Password</label>
-                                    <input type="password" class="form-control" id="password1" name="password1"
+                                    <label for="password1" class="white_color">New Password</label>
+                                    <input type="password" class="form-control white_color" id="password1" name="password1"
                                            placeholder="New Password">
                                     <span id="password1_err"></span>
                                 </div>
                                 <div class="form-group">
-                                    <label for="password2">Re-enter Password</label>
-                                    <input type="password" class="form-control" id="password2" name="password2"
+                                    <label for="password2" class="white_color">Re-enter Password</label>
+                                    <input type="password" class="form-control white_color" id="password2" name="password2"
                                            placeholder="Re-enter Password">
                                     <span id="password2_err"></span>
                                 </div>
@@ -616,140 +546,48 @@
     </div>
     <!-- Modal Contact -->
 
-    <!-- Modal Lightbox Subscribe-->
-    <div class="modal fade modal-subscribe">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body row">
-
-                    <div class="col-lg-6 text-uppercase">
-                        <h2>BE THE FIRST TO <span>KNOW ABOUT NEW ARRIVALS</span></h2>
-                    </div>
-
-                    <div class="col-lg-6">
-                        <!--Newsletter-->
-                        <div class="newsletter-top">
-                            <h4 class="newsletter">SUBSCRIBE</h4>
-
-                            <form class="newsletterForm"
-                                  action="http://html.iwthemes.com/Enter/php/mailchip/newsletter-subscribe.php">
-                                <div class="input-group newsletterFormborder">
-                                    <input class="form-control" placeholder="Enter your e-mail" name="email"
-                                           type="email"
-                                           required="required">
-                                            <span class="input-group-btn">
-                                                <button class="btn btn-primary" type="submit" name="subscribe">>
-                                                </button>
-                                            </span>
-                                </div>
-                            </form>
-                            <div class="result-newsletter"></div>
-                        </div>
-                        <!--Newsletter-->
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Modal Lightbox Subscribe-->
-
-    <!-- Modal quickview -->
-    <div class="modal fade modal-quickview">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body row">
-                    <div class="col-lg-4">
-                        <img src="/assets/home/img/featured-products/product-01.jpg" alt="">
-                    </div>
-                    <div class="col-lg-8">
-                        <div class="quickview-info">
-                            <h3 class="product-bag">YX Black T-Shirt</h3>
-
-                            <p class="price bottom-mini">$36.00</p>
-                            <!--Rating-->
-                                    <span class="rating-star">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star down"></i>
-                                    </span>
-                            <!--Rating-->
-
-                            <!--description-->
-                            <div class="description top-mini">Style #4102 <br>In stock</div>
-                            <!--description-->
-
-                            <!--sizes-->
-                            <ul class="sizes list-inline top-mini text-uppercase">
-                                <li class="border-box"><a href="#">XS</a></li>
-                                <li class="border-box"><a href="#">s</a></li>
-                                <li class="border-box"><a href="#">m</a></li>
-                                <li class="border-box"><a href="#">l</a></li>
-                                <li class="border-box"><a href="#">Xl</a></li>
-                            </ul>
-                            <!--sizes-->
-
-                            <!--colors-->
-                            <ul class="colors list-inline text-uppercase">
-                                <li><a href="#"><img src="/assets/home/img/theme-images/color-dark.png"
-                                                     alt="colors select dark"></a>
-                                </li>
-                                <li><a href="#"><img src="/assets/home/img/theme-images/color-gray.png"
-                                                     alt="colors select gray"></a>
-                                </li>
-                            </ul>
-                            <!--colors-->
-
-                            <div class="row top">
-                                <div class="col-lg-3">
-                                    <!--Counter bag-->
-                                    <ul class="counter-bag list-inline">
-                                        <li><a href="#">-</a></li>
-                                        <li>1</li>
-                                        <li><a href="#">+</a></li>
-                                    </ul>
-                                    <!--Counter bag-->
-                                </div>
-                                <div class="col-lg-5">
-                                    <!--Buttom Add to cart-->
-                                    <button type="submit" value="Submit" class="boton-dark text-uppercase">add to cart
-                                    </button>
-                                    <!--Buttom Add to cart-->
-                                </div>
-                                <div class="col-lg-4">
-                                    <!--Add to bag and save to closet-->
-                                    <ul class="gotobag text-uppercase list-unstyled">
-                                        <li><span><a href="#">add to bag +</a></span></li>
-                                        <li><span><a href="#">save to closet +</a></span></li>
-                                    </ul>
-                                    <!--Add to bag and save to closet-->
-                                </div>
-                            </div>
-
-                            <ul class="social-simple list-inline top-mini">
-                                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                <li><a href="#"><i class="fa fa-vimeo"></i></a></li>
-                                <li><a href="#"><i class="fa fa-google"></i></a></li>
-                                <li><a href="#"><i class="fa fa-pinterest-p"></i></a></li>
-                            </ul>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Modal quickview -->
 
 </div>
-<!--Layout Theme Options-->
+<!--/bodywrapper -->
 
 @include('Home/Layouts/home_footer_scripts')
 @yield('pagejavascripts')
-<script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('.main-grid').isotope({
+            percentPosition: true,
+            itemSelector: '.grid-item',
+            masonry: {
+                columnWidth: '.grid-item'
+            }
+        });
+
+
+        /* $('.grid').masonry({
+         // options
+         itemSelector: '.g-item',
+         columnWidth: 499
+         });*/
+
+    });
+
+
+    $(document).ready(function () {
+        $(".dropdown").hover(
+                function () {
+                    $('.dropdown-menu', this).not('.in .dropdown-menu').stop(true, true).slideDown("fast");
+                    $(this).toggleClass('open');
+                },
+                function () {
+                    $('.dropdown-menu', this).not('.in .dropdown-menu').stop(true, true).slideUp("fast");
+                    $(this).toggleClass('open');
+                }
+        );
+    });
+</script>
+<script type="text/javascript">
+
     $(".open_login_model").click(function () {
         $(".signupmodel").addClass("hidden");
         $(".loginmodel").removeClass("hidden");
@@ -760,14 +598,14 @@
     $(".open_signup_model").click(function () {
         $(".loginmodel").addClass("hidden");
         $(".signupmodel").removeClass("hidden");
-        $("#dialog_modal").removeAttr('style');
+        $("#dialog_modal").css("width", "60rem");
         $('#firstname').val('');
         $('#lastname').val('');
         $('#username').val('');
         $('#email').val('');
     });
     function forgotpd() {
-        $("#dialog_modal").removeAttr('style');
+        $("#dialog_modal").css("width", "60rem");
         $('.forgotpd').removeClass('hidden');
         $('.loginmodel').addClass('hidden');
         $('.enternewpw').addClass('hidden');//emailID resetcode password1 password2
@@ -786,7 +624,7 @@
         $('#fp_email').prop('disabled', false);
     }
     function enternewpw() {
-        $("#dialog_modal").removeAttr('style');
+        $("#dialog_modal").css("width", "60rem");
         $('.enternewpw').removeClass('hidden');
         $('.forgotpd').addClass('hidden');
         $('.loginmodel').addClass('hidden');
@@ -799,8 +637,8 @@
 
     $(document).ready(function () {
 
-        $('#showdetails').click(function() {
-            $('#userpanel').slideToggle('slow', function() {
+        $('#showdetails').click(function () {
+            $('#userpanel').slideToggle('slow', function () {
                 $("#triangle_down").toggle();
                 $("#triangle_up").toggle();
             });
@@ -1145,6 +983,7 @@
         });
 
     });
+
 </script>
 
 </body>

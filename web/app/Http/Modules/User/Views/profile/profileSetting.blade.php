@@ -131,48 +131,48 @@
     <section class="container">
         <?php // if(isset($profiledata['profilepic']) && !empty($profiledata['profilepic'])) { echo "<pre>";print_r($profiledata);die;} ?>
         <div class="row m-top-md">
-            <h2 style="margin-left: 15px;">PROFILE SETTINGS</h2>
+            <h2 style="margin-left: 15px;">{{ trans('profile_settings') }}</h2>
 
             <div class="col-md-12">
                 <div id="wrapper">
                     <section id="generic-tabs">
                         <ul id="tabs">
                             <li>
-                                <a title="General Info" href="#first-tab"><i class="fa fa-home"></i> GENERAL INFO </a>
+                                <a title="General Info" href="#first-tab"><i class="fa fa-home"></i>{{ trans('message.general_info') }} </a>
                             </li>
                             <li>
-                                <a title="Shipping Info" href="#second-tab"><i class="fa fa-ship"></i> SHIPPING ADDRESS </a>
+                                <a title="Shipping Info" href="#second-tab"><i class="fa fa-ship"></i>{{ trans('message.shipping_address') }}</a>
                             </li>
                             <li>
-                                <a title="Password Change" href="#third-tab"><i class="fa fa-key"></i> CHANGE PASSWORD </a>
+                                <a title="Password Change" href="#third-tab"><i class="fa fa-key"></i>{{ trans('message.change_password') }}</a>
                             </li>
                             <li>
-                                <a title="Change Profile Pic" href="#fourth-tab"><i class="fa fa-picture-o"></i> CHANGE AVATAR </a>
+                                <a title="Change Profile Pic" href="#fourth-tab"><i class="fa fa-picture-o"></i>{{ trans('message.change_avatar') }}</a>
                             </li>
                         </ul>
 
                         <section id="first-tab" class="tab-content">
-                            <h2 style="margin-left:2%"> GENERAL INFO </h2>
+                            <h2 style="margin-left:2%">{{ trans('message.general_info') }}</h2>
 
                             <div class="row" style="margin-top:3%;">
                                 <div class="col-md-12">
                                     <form class="form-hotizontal" role="form" action="" id="generalinfo">
                                         <div class="form-group col-md-6">
                                             <div class="form-group ">
-                                                <label class="control-label">First Name <span
+                                                <label class="control-label">{{ trans('message.firstname') }}<span
                                                             class="text-danger">*</span></label>
                                                 <input type="text" class="form-control" name="firstname" id="firstname"
                                                        @if(isset($profiledata)) value="{{$profiledata['name']}}" @endif />
                                             </div>
                                             <div class="firstname_err"></div>
                                             <div class="form-group ">
-                                                <label class="control-label">Username <span class="text-danger">*</span></label>
+                                                <label class="control-label">{{ trans('message.username') }} <span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control" name="username" id="username"
                                                        @if(isset($profiledata)) value="{{$profiledata['username']}}" @endif />
                                             </div>
                                             <div class="username_err"></div>
                                             <div class="form-group ">
-                                                <label class="control-label">Email <span
+                                                <label class="control-label">{{ trans('message.email') }} <span
                                                             class="text-danger">*</span></label>
                                                 <input type="text" class="form-control" name="email" id="email"
                                                        @if(isset($profiledata)) value="{{$profiledata['email']}}" @endif />
@@ -181,7 +181,7 @@
                                         </div>
                                         <div class="form-group col-md-6">
                                             <div class="form-group ">
-                                                <label class="control-label">Last Name <span
+                                                <label class="control-label">{{ trans('message.lastname') }}<span
                                                             class="text-danger">*</span></label>
                                                 <input type="text" class="form-control" name="lastname" id="lastname"
                                                        @if(isset($profiledata)) value="{{$profiledata['last_name']}}" @endif />
@@ -205,7 +205,7 @@
                                         <div class="general_info_succ col-md-12"></div>
                                         <div class="form-group col-md-6 pull-right">
                                             <button class="boton-dark text-uppercase pull-right" value="Submit"
-                                                    type="submit">SAVE
+                                                    type="submit">{{ trans('message.save') }}
                                             </button>
                                         </div>
                                     </form>
@@ -214,7 +214,7 @@
                         </section>
 
                         <section id="second-tab" class="tab-content">
-                            <h2 style="margin-left:2%"> SHIPPING ADDRESS </h2>
+                            <h2 style="margin-left:2%">{{trans('message.shipping_address')}}</h2>
 
                             <div class="row" style="margin-top:3%;">
                                 <div class="col-md-12">
@@ -227,14 +227,14 @@
                                         {{--</div>--}}
                                         <div class="col-md-6">
                                             <div class="form-group ">
-                                                <label class="control-label">State <span
+                                                <label class="control-label">{{ trans('message.state') }} <span
                                                             class="text-danger">*</span></label>
                                                 <input type="text" class="form-control" name="state" id="state"
                                                        @if(isset($profiledata)) value="{{$profiledata['state']}}" @endif/>
                                             </div>
                                             <div class="state_err"></div>
                                             <div class="form-group ">
-                                                <label class="control-label">City <span
+                                                <label class="control-label">{{ trans('message.city') }} <span
                                                             class="text-danger">*</span></label>
                                                 <input type="text" class="form-control" name="city" id="city"
                                                        @if(isset($profiledata)) value="{{$profiledata['city']}}" @endif/>
@@ -243,7 +243,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group ">
-                                                <label class="control-label">Zipcode <span
+                                                <label class="control-label">{{ trans('message.zipcode') }} <span
                                                             class="text-danger">*</span></label>
                                                 <input type="text" class="form-control" name="zip_code" id="zip_code"
                                                        @if(isset($profiledata)) value="{{$profiledata['zipcode']}}" @endif/>
@@ -251,14 +251,14 @@
                                             <div class="zip_code_err"></div>
                                         </div>
                                         <div class="form-group col-md-12">
-                                            <label class="control-label">Street Address 1 <span
+                                            <label class="control-label">{{ trans('message.street_address1') }}<span
                                                         class="text-danger">*</span></label>
                                             <input type="text" class="form-control" name="address1" id="address1"
                                                    @if(isset($profiledata)) value="{{$profiledata['addressline1']}}" @endif/>
                                         </div>
                                         <div class="address1_err col-md-12"></div>
                                         <div class="form-group col-md-12">
-                                            <label class="control-label">Street Address 2 </label>
+                                            <label class="control-label">{{ trans('message.street_address2') }}</label>
                                             <input type="text" class="form-control" name="address2" id="address2"
                                                    @if(isset($profiledata)) value="{{$profiledata['addressline2']}}" @endif/>
                                         </div>
@@ -269,7 +269,7 @@
                                         <div class="shipping_info_succ col-md-12"></div>
                                         <div class="form-group col-md-6 pull-right">
                                             <button class="boton-dark text-uppercase pull-right" value="Submit"
-                                                    type="submit">SAVE
+                                                    type="submit">{{ trans('message.save') }}
                                             </button>
                                         </div>
                                     </form>
@@ -278,21 +278,21 @@
                         </section>
 
                         <section id="third-tab" class="tab-content">
-                            <h2 style="margin-left:2%"> CHANGE PASSWORD </h2>
+                            <h2 style="margin-left:2%">{{ trans('message.change_password') }}</h2>
 
                             <div class="row" style="margin-top:3%;">
                                 <div class="col-md-12">
                                     <form class="form-hotizontal" role="form" action="" id="passwordchange">
                                         <div class="col-md-6">
                                             <div class="form-group ">
-                                                <label class="control-label">Current Password <span
+                                                <label class="control-label">{{ trans('current_password') }}<span
                                                             class="text-danger">*</span></label>
                                                 <input type="password" class="form-control" name="opassword"
                                                        id="opassword"/>
                                             </div>
                                             <div class="opassword_err"></div>
                                             <div class="form-group ">
-                                                <label class="control-label">Confirm Password <span
+                                                <label class="control-label">{{ trans('message.confirm_password') }}<span
                                                             class="text-danger">*</span></label>
                                                 <input type="password" class="form-control" name="rnpassword"
                                                        id="rnpassword"/>
@@ -301,7 +301,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group ">
-                                                <label class="control-label">New Password <span
+                                                <label class="control-label">{{ trans('message.new_password') }}<span
                                                             class="text-danger">*</span></label>
                                                 <input type="password" class="form-control" name="npassword"
                                                        id="npassword"/>
@@ -318,7 +318,7 @@
                                         </div>
                                         <div class="form-group col-md-12 pull-right">
                                             <button class="boton-dark text-uppercase pull-right" value="Submit"
-                                                    type="submit">SAVE
+                                                    type="submit">{{ trans('message.save') }}
                                             </button>
                                         </div>
                                     </form>
@@ -327,7 +327,7 @@
                         </section>
 
                         <section id="fourth-tab" class="tab-content">
-                            <h2 style="margin-left:2%"> CHANGE AVATAR </h2>
+                            <h2 style="margin-left:2%">{{ trans('message.change_avatar') }}</h2>
 
                             <div class="row" style="margin-top:3%;">
                                 <div class="col-md-12">
@@ -356,7 +356,7 @@
                                         <div id="error_placement"></div>
                                         <div class="form-group col-md-6 pull-right" >
                                             <button class="boton-dark text-uppercase pull-right" value="Submit"
-                                                    type="submit"> SAVE
+                                                    type="submit"> {{ trans('message.save') }}
                                             </button>
                                         </div>
                                     </form>

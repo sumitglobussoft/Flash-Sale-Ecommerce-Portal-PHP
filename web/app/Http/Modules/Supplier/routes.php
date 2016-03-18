@@ -60,8 +60,72 @@ Route::group(array('module' => 'Supplier', 'namespace' => 'Supplier\Controllers'
         Route::post('/supplier/edit-option/{id}', 'OptionController@editOption');
         Route::post('/supplier/option-ajax-handler', 'OptionController@optionAjaxHandler');
 
-//        Get image source
+
+        Route::resource('/supplier/add-flashsale', 'FlashsaleController@addFlashsale');
+        Route::resource('/supplier/manage-flashsale', 'FlashsaleController@manageFlashsale');
+        Route::get('/supplier/edit-flashsale/{fid}', 'FlashsaleController@editFlashsale');
+        Route::post('/supplier/edit-flashsale/{fid}', 'FlashsaleController@editFlashsale');
+        Route::resource('/supplier/flashsale-ajax-handler', 'FlashsaleController@flashsaleAjaxHandler');
+
+        Route::resource('/supplier/add-new-campaign', 'DailyspecialController@addDailyspecial');
+        Route::resource('/supplier/manage-campaign', 'DailyspecialController@manageDailyspecial');
+        Route::get('/supplier/edit-campaign/{did}', 'DailyspecialController@editDailyspecial');
+        Route::post('/supplier/edit-campaign/{did}', 'DailyspecialController@editDailyspecial');
+        Route::resource('/supplier/dailyspecial-ajax-handler', 'DailyspecialController@dailyspecialAjaxHandler');
+        Route::post('/supplier/campaign-list-ajax-handler/{method}', 'DailyspecialController@campaignListAjaxHandler');
+
+
+        Route::resource('/supplier/add-wholesale', 'WholesaleController@addWholesale');
+        Route::resource('/supplier/manage-wholesale', 'WholesaleController@manageWholesale');
+        Route::get('/supplier/edit-wholesale/{wid}', 'WholesaleController@editWholesale');
+        Route::post('/supplier/edit-wholesale/{wid}', 'WholesaleController@editWholesale');
+        Route::post('/supplier/wholesale-ajax-handler/{method}', 'WholesaleController@wholesaleAjaxHandler');
+
+
+//        Route::get('image/{filename}', function ($filename) {
+//return $filename;
+//            $filePath = explode("_", $filename);
+//            $folderPath = '';
+//            switch ($filePath[0]) {
+//
+//                case 'special_case':
+//                    unset($filePath[count($filePath) - 1]);
+//                    $folderPath = implode('/', array_map(function ($value) {
+//                        return $value;
+//                    }, $filePath));
+//                    break;
+//
+////                case 'useravatar':
+////                    $folderPath = $filePath[0];
+////                    break;
+////                case 'shopbanner':
+////                    $folderPath = $filePath[0];
+////                    break;
+////                case 'shoplogo':
+////                    $folderPath = $filePath[0];
+////                    break;
+////
+////                case 'flashsale':
+////                    $folderPath = $filePath[0];
+////                    break;
+////                case 'dailyspecial':
+////                    $folderPath = $filePath[0];
+////                    break;
+//
+//                default:
+//                    $folderPath = $filePath[0];
+//                    break;
+//            }
+//            $path = storage_path() . '/uploads/' . $folderPath . '/' . $filename;
+//            $file = File::get($path);
+//            $type = File::mimeType($path);
+//            $response = Response::make($file, 200);
+//            $response->header("Content-Type", $type);
+//            return $response;
+//        });
+
         Route::get('image/{filename}', function ($filename) {
+            return $filename;
             $filePath = explode("_", $filename);
             $folderPath = '';
             switch ($filePath[0]) {
@@ -79,5 +143,10 @@ Route::group(array('module' => 'Supplier', 'namespace' => 'Supplier\Controllers'
             $response->header("Content-Type", $type);
             return $response;
         });
+
+        Route::get('supplier/lang/{locale}', [
+            'as'=>'lang',
+            'uses'=>'SupplierController@changeLang'
+        ]);
     });
 });

@@ -1,6 +1,6 @@
 @extends('Admin/Layouts/adminlayout')
 
-@section('title', 'Pending Customers') {{--TITLE GOES HERE--}}
+@section('title', trans('message.pending_customer')) {{--TITLE GOES HERE--}}
 
 @section('headcontent')
     {{--OPTIONAL--}}
@@ -18,8 +18,7 @@
         <div class="col-md-12">
             <div class="panel panel-white">
                 <div class="panel-body">
-                    <a href="/admin/add-new-customer" class="btn btn-success"><i class="fa fa-plus "></i>&nbsp;Add New
-                        Customer
+                    <a href="/admin/add-new-customer" class="btn btn-success"><i class="fa fa-plus "></i>&nbsp;{{trans('message.add_new_customer')}}
                     </a>
                     <table id="pending_customer" class="display" cellspacing="0" width="100%">
                         <thead>

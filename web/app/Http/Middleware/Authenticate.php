@@ -26,7 +26,8 @@ class Authenticate
     public function __construct(Guard $auth)
     {
         $this->auth = $auth;
-        $lang = Session::get ('locale');
+        $lang = Session::get('locale');
+
         if ($lang != null) \App::setLocale($lang);
     }
 
@@ -133,8 +134,8 @@ class Authenticate
                     $uesrDetails = $objModelUser->getUserDetailsWhere($where);
                     if (!$uesrDetails) {
                         return redirect('/supplier/supplierDetails');
-                    }else{
-                        if(!($uesrDetails->role == 3 && $uesrDetails->status == 1 )){
+                    } else {
+                        if (!($uesrDetails->role == 3 && $uesrDetails->status == 1)) {
                             return redirect('/supplier/logout');
                         }
                     }

@@ -17,7 +17,13 @@
             <div class="portlet light bordered">
 
                 <div class="portlet-title">
-
+                    @if(empty($editfiltergroup)||!isset($editfiltergroup))
+                        <div style="text-align: center">
+                            <span class="">Sorry, no such filtergroup found.</span><br>
+                            <a href="/supplier/manage-flashsale" class="btn btn-default btn-circle"><i
+                                        class="fa fa-angle-left"></i> Back To List</a>
+                        </div>
+                    @else
                     <div class="actions">
                         <a class="btn btn-default" href="/admin/manage-filtergroup">Back to list </a>
                     </div>
@@ -177,6 +183,7 @@
 
 
                 </form>
+                @endif
 
             </div>
         </div>

@@ -82,5 +82,18 @@ class Usersmeta extends Model
 
     }
 
+    public function deleteSupplierDetails($where){
+        {
+            try {
+                $sql = DB::table($this->table)
+                    ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                    ->delete();
+                return $sql;
+            } catch (\Exception $e) {
+                return $e->getMessage();
+            }
+        }
+    }
+
 
 }

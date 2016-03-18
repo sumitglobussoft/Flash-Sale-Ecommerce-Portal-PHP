@@ -9,7 +9,7 @@ use Illuminate\Database\QueryException;
 class ProductCategories extends Model
 
 {
-
+    private static $_instance = null;
     /**
      * The database table used by the model.
      *
@@ -22,9 +22,17 @@ class ProductCategories extends Model
      *
      * @var array
      */
-    protected $fillable = ['category_id', 'category_name', 'created_by', 'category_status', 'status_set_by', 'parent_category_id','for_shop_id','category_banner_url','page_title','meta_description','meta_keywords'];
+    protected $fillable = ['category_id', 'category_name', 'created_by', 'category_status', 'status_set_by', 'parent_category_id', 'for_shop_id', 'category_banner_url', 'page_title', 'meta_description', 'meta_keywords'];
 
-    public function getCategoriesWhere(){
+    public static function getInstance()
+    {
+        if (!is_object(self::$_instance))  //or if( is_null(self::$_instance) ) or if( self::$_instance == null )
+            self::$_instance = new ProductCategories();
+        return self::$_instance;
+    }
+
+    public function getCategoriesWhere()
+    {
 
         if (func_num_args() > 0) {
             $categoryId = func_get_arg(0);
@@ -45,6 +53,36 @@ class ProductCategories extends Model
             }
 
         }
+    }
+
+    /**
+     * Get Category Name By Category_id.
+     * @param $where
+     * @return int
+     * @since 24-02-2016
+     * @author Vini Dubey <vinidubey@globussoft.com>
+     */
+    public function getCategoryNameById($where,$selectedColumn = ['*'])
+    {
+        {
+            try {
+                $result = DB::table($this->table)
+//                    ->select((array(DB::raw('GROUP_CONCAT(DISTINCT category_name) AS category_name', 'GROUP_CONCAT(DISTINCT parent_category_id) AS parent_category_id'))),$selectedColumn)
+                    ->select($selectedColumn)
+                    ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                    ->get();
+            } catch
+            (QueryException $e) {
+                echo $e;
+            }
+            if ($result) {
+                return $result;
+            } else {
+                return 0;
+            }
+
+        }
+
     }
 
 }

@@ -1,6 +1,6 @@
 /*!
  * Select2 4.0.0-rc.2
- * https://select2.github.io
+ * https://select2.github.iosrcindex1
  *
  * Released under the MIT license
  * https://github.com/select2/select2/blob/master/LICENSE.md

@@ -211,7 +211,7 @@
 
                                 @foreach($langinfo as  $val)
 
-                                    <li><a href="/lang/{{$val->lang_code}}">{{$val->name}}</a></li>
+                                    <li><a href="/admin/lang/{{$val->lang_code}}">{{$val->name}}</a></li>
                                     {{--<li> <a href="/lang/{{$val->lang_code}}">{{$val->name}}</a></li>--}}
                                     {{--<option value="/lang/pt">Portuguese</option>--}}
                                 @endforeach
@@ -358,11 +358,11 @@
                         <p>{{ trans('message.suppliers') }}</p> <span class="arrow"></span>
                     </a>
                     <ul class="sub-menu">
-                        <li><a href="/admin/pending-supplier">Pending requests</a></li>
-                        <li><a href="/admin/available-supplier">Available suppliers</a></li>
-                        <li><a href="/admin/add-new-supplier">Add New suppliers</a></li>
+                        <li><a href="/admin/pending-supplier">{{ trans('message.pending_requests') }}</a></li>
+                        <li><a href="/admin/available-supplier">{{ trans('message.available_supplier') }}</a></li>
+                        <li><a href="/admin/add-new-supplier">{{ trans('message.add_new_supplier') }}</a></li>
                         {{--<li><a href="/admin/rejected-suppliers">Rejected suppliers</a></li>--}}
-                        <li><a href="/admin/deleted-supplier">Deleted suppliers</a></li>
+                        <li><a href="/admin/deleted-supplier">{{ trans('message.deleted_supplier') }}</a></li>
                     </ul>
                 </li>
 
@@ -373,9 +373,9 @@
                         <p>{{ trans('message.customers') }}</p> <span class="arrow"></span>
                     </a>
                     <ul class="sub-menu">
-                        <li><a href="/admin/pending-customer">Pending Customers</a></li>
-                        <li><a href="/admin/available-customer">Available Customers</a></li>
-                        <li><a href="/admin/deleted-customer">Deleted Customers</a></li>
+                        <li><a href="/admin/pending-customer">{{ trans('message.pending_customer') }}</a></li>
+                        <li><a href="/admin/available-customer">{{ trans('message.available_customer') }}</a></li>
+                        <li><a href="/admin/deleted-customer">{{ trans('message.deleted_customer') }}</a></li>
                     </ul>
                 </li>
 
@@ -399,9 +399,9 @@
                         <p>{{ trans('message.manager') }}</p> <span class="arrow"></span>
                     </a>
                     <ul class="sub-menu">
-                        <li><a href="/admin/add-new-manager">Add New Manager</a></li>
-                        <li><a href="/admin/pending-manager">Pending Manager</a></li>
-                        <li><a href="/admin/available-manager">Available Manager</a></li>
+                        <li><a href="/admin/add-new-manager">{{ trans('message.add_new_manager') }}</a></li>
+                        <li><a href="/admin/pending-manager">{{ trans('message.pending_manager') }}</a></li>
+                        <li><a href="/admin/available-manager">{{ trans('message.available_manager') }}</a></li>
                         {{--<li><a href="/admin/deleted-manager">Deleted Manager</a></li>--}}
                     </ul>
                 </li>
@@ -413,11 +413,26 @@
                         <p>{{ trans('message.products') }}</p> <span class="arrow"></span>
                     </a>
                     <ul class="sub-menu">
-                        <li><a href="/admin/manage-categories">{{trans('message.categories')}}</a></li>
-                        <li><a href="/admin/manage-products">{{trans('message.products')}}</a></li>
-                        <li><a href="/admin/manage-features">{{trans('message.features')}}</a></li>
-                        <li><a href="/admin/manage-filtergroup">{{trans('message.filters')}}</a></li>
-                        <li><a href="/admin/manage-options">{{trans('message.options')}}</a></li>
+                        <li><a href="/admin/manage-categories">{{ trans('message.categories') }}</a></li>
+                        <li><a href="/admin/manage-products">{{ trans('message.products') }}</a></li>
+                        {{--<li><a href="/admin/pending-products">{{ trans('message.pending-products') }}</a></li>--}}
+                        {{--<li><a href="/admin/rejected-products">{{ trans('message.rejected-products') }}</a></li>--}}
+                        {{--<li><a href="/admin/deleted-products">{{ trans('message.deleted-products') }}</a></li>--}}
+                        <li><a href="/admin/manage-features">{{ trans('message.features') }}</a></li>
+                        <li><a href="/admin/manage-filtergroup">{{ trans ('message.filters') }}</a></li>
+                        <li><a href="/admin/manage-options">{{ trans('message.options') }}</a></li>
+                    </ul>
+                </li>
+                <li class="droplink">
+                    <a class="waves-effect waves-button">
+                        <span class="menu-icon glyphicon glyphicon-envelope"></span>
+
+                        <p>{{ trans('message.campaign') }}</p> <span class="arrow"></span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li><a href="/admin/manage-campaign">{{ trans('message.campaign') }}</a></li>
+                        <li><a href="/admin/extended-campaign-log">{{ trans('message.campaign-log') }}</a></li>
+                        <li><a href="/admin/manage-wholesale">WholeSale</a></li>
                     </ul>
                 </li>
 
@@ -507,7 +522,7 @@
 {{--}--}}
 {{--}--}}
 {{--window.onload = notifyMe;--}}
-<?php \Illuminate\Support\Facades\Session::forget('startTime'); ?>
+{{--<?php \Illuminate\Support\Facades\Session::forget('startTime'); ?>--}}
 {{--</script>--}}
 </body>
 </html>

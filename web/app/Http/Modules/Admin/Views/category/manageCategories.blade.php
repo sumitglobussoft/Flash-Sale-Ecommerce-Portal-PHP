@@ -1,6 +1,6 @@
 @extends('Admin/Layouts/adminlayout')
 
-@section('title', 'Manage Categories') {{--TITLE GOES HERE--}}
+@section('title', trans('message.manage_categories')) {{--TITLE GOES HERE--}}
 
 @section('headcontent')
     <link rel="stylesheet" type="text/css" href="/assets/plugins/jstree/dist/themes/default/style.min.css"/>

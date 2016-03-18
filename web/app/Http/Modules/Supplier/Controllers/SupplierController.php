@@ -2,6 +2,7 @@
 
 namespace FlashSale\Http\Modules\Supplier\Controllers;
 
+use FlashSale\Http\Modules\Supplier\Models\Languages;
 use Illuminate\Http\Request;
 
 use FlashSale\Http\Requests;
@@ -9,6 +10,7 @@ use FlashSale\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use DB;
+use Illuminate\Support\Facades\URL;
 use Image;
 use Validator;
 use Input;
@@ -717,6 +719,7 @@ class SupplierController extends Controller
             }
 
             if ($request->isMethod('post')) {
+
                 if ($parentShopId == '') { //Sub store flag is not set
                     $rules = array(
                         'shop_name' => 'required'
@@ -814,6 +817,7 @@ class SupplierController extends Controller
                             'show_shop_address' => $show_shop,
                             'shop_metadata_status' => 1
                         );
+                        echo'<pre>';print_r($shopMatadata);die("xcgb");
                         $addShop = $objShopMetadataModel->addShopMetadata($shopMatadata);
                         if ($addShop) {
                             if ($parentShopId == "") {
@@ -919,5 +923,29 @@ class SupplierController extends Controller
         }
         return view("Supplier/Views/supplier/editShop");
     }
+
+
+    /**
+     * Changes the current language and returns to previous page
+     * @return Redirect
+     */
+    public function changeLang(Request $request, $locale = null)
+    {
+
+        Session::put('locale', $locale);
+        return Redirect::to(URL::previous());
+    }
+
+
+    public static function getLanguageDetails()
+    {
+
+        $ObjLanguageModel = Languages::getInstance();
+        $selectColumn = ['languages.*'];
+        $langInfo = $ObjLanguageModel->getAllLanguages($selectColumn);
+        return $langInfo;
+
+    }
+
 
 }

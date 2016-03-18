@@ -21,7 +21,10 @@
         ],
         "psr-4": {
             "FlashSaleApi\\": "app/"
-        }
+        },
+        "files": [
+            "app/Support/helpers.php"
+        ]
     },
     "autoload-dev": {
         "classmap": [
