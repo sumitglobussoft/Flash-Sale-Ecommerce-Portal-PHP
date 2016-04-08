@@ -234,6 +234,14 @@ Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), fun
             return view("Admin/Views/accessdenied");
         });
 
+
+        Route::resource('/admin/pending-shop', 'ShopController@pendingShop');
+        Route::resource('/admin/available-shop', 'ShopController@availableShop');
+        Route::resource('/admin/shop-ajax-handler', 'ShopController@shopAjaxHandler');
+        Route::get('/admin/edit-shop/{shopid}', 'ShopController@editShop');
+        Route::post('/admin/edit-shop/{shopid}', 'ShopController@editShop');
+
+
     });
 
 

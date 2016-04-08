@@ -16,7 +16,7 @@ class Shops extends Model
      * @var string
      */
     protected $table = 'shops';
-
+    private static $_instance = null;
     /**
      * The attributes that are mass assignable.
      *
@@ -24,6 +24,12 @@ class Shops extends Model
      */
     protected $fillable = ['shop_id', 'user_id', 'shop_name', 'shop_banner', 'parent_category_id', 'shop_status', 'status_set_by'];
 
+    public static function getInstance()
+    {
+        if (!is_object(self::$_instance))  //or if( is_null(self::$_instance) ) or if( self::$_instance == null )
+            self::$_instance = new Shops();
+        return self::$_instance;
+    }
    public function getAllStoreWhere(){
 
            try {
@@ -46,6 +52,66 @@ class Shops extends Model
            }
        }
 
+    public function getShopDetails($where)
+    {
+
+        try {
+            $result = Shops::whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                ->join('users', 'users.id', '=', 'shops.user_id')
+                ->select(['shop_id', 'shop_name', 'users.name', 'users.last_name', 'shop_status'])
+                ->get();
+
+            return $result;
+
+        } catch (\Exception $e) {
+            return $e->getMessage();
+
+        }
+
+    }
+
+    /**
+     * Get all shop details
+     * @param $where
+     * @param array $selectedColumns
+     * @return mixed
+     * @author Harshal Wagh
+     */
+    public function getAllshopsWhere($where, $selectedColumns = ['*'])
+    {
+        $result = DB::table($this->table)
+            ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+            ->select($selectedColumns)
+            ->get();
+        return $result;
+    }
+
+    /**
+     * @param array : $where
+     * @return int
+     * @throws "Argument Not Passed"
+     * @since 4-4-2016
+     * @author Harshal Wagh
+     * @uses
+     */
+    public function updateShopWhere()
+    {
+
+        if (func_num_args() > 0) {
+            $data = func_get_arg(0);
+            $where = func_get_arg(1);
+            try {
+                $result = DB::table($this->table)
+                    ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                    ->update($data);
+                return 1;
+            } catch (\Exception $e) {
+                return $e->getMessage();
+            }
+        } else {
+            throw new Exception('Argument Not Passed');
+        }
+    }
 
 }
 

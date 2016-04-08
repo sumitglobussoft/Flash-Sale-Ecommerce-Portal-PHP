@@ -217,18 +217,18 @@ class SupplierController extends Controller
     {
 
 
-        $inputData = $request->input();
-        $method = $request->input('method');
-        $ObjUser = User::getInstance();
-        $objModelLocation = Location::getInstance();
-        $ObjUsermeta = Usersmeta::getInstance();
-        $mainId = Session::get('fs_admin')['id'];
-        if ($method) {
-            switch ($method) {
-                case 'availableSupplier':
-                    $objuser = User::getInstance();
-                    $where = array('rawQuery' => 'role = ?', 'bindParams' => [3]);
-                    $available_supplier = $objuser->getAvailableSupplierDetails($where);
+                    $inputData = $request->input();
+                    $method = $request->input('method');
+                    $ObjUser = User::getInstance();
+                    $objModelLocation = Location::getInstance();
+                    $ObjUsermeta = Usersmeta::getInstance();
+                    $mainId = Session::get('fs_admin')['id'];
+                    if ($method) {
+                        switch ($method) {
+                            case 'availableSupplier':
+                                $objuser = User::getInstance();
+                                $where = array('rawQuery' => 'role = ?', 'bindParams' => [3]);
+                                $available_supplier = $objuser->getAvailableSupplierDetails($where);
 //                    echo"<pre>";print_r($available_supplier);die("gvj");
 //                    foreach ($available_supplier as $key => $val) {
 //                        $vail[$key] = $val->id;

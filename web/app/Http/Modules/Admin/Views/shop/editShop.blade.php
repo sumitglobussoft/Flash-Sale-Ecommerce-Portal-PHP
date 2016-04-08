@@ -1,8 +1,8 @@
-@extends('Supplier/Layouts/supplierlayout')
+@extends('Admin/Layouts/adminlayout')
 
 @section('title', 'Manage Stores')
 
-@section('pageheadcontent')
+@section('headcontent')
     {{--OPTIONAL--}}
     {{--PAGE STYLES OR SCRIPTS LINKS--}}
     <style>
@@ -191,11 +191,13 @@
                                                        data-dismiss="fileinput">Remove</a>
                                                 </span>
                                             </div>
+
                                         </div>
                                     </div>
                                 </form>
                                 <br><div>Shop Banner</div>
                             </div>
+
 
                             <div class="col-md-4" align="center">
                                 <form method="post" enctype="multipart/form-data" id="update-logo-form">
@@ -241,8 +243,7 @@
                             </div>
                         </div>
                     </div>
-                    <a href="/supplier/addNewShop" type="button" class="btn btn-primary pull-right btn-circle btn-sm">Add
-                        new Shop</a><br><br>
+                    {{--<a href="" type="button" class="btn btn-primary pull-right btn-circle btn-sm">Add new Shop</a><br><br>--}}
 
                     <div class="clearfix"></div>
                     <div class="portlet light bordered">
@@ -435,7 +436,7 @@
                                     </div>
                                     <!--                                </div>-->
                                 </div>
-                                <a href="/supplier/shopList" class="btn btn-circle default">Back</a>
+                                <a href="/admin/available-shop" class="btn btn-circle default">Back</a>
                             </div>
                         </div>
                     </div>
@@ -491,13 +492,13 @@
             var initEditables = function () {
                 //global settings
                 $.fn.editable.defaults.inputclass = 'form-control';
-                $.fn.editable.defaults.url = '/supplier/ajaxHandler';
+                $.fn.editable.defaults.url = '/admin/shop-ajax-handler';
                 $("#store_name").editable({
                     validate: function (value) {
                         if ($.trim(value) == '')
                             return 'This field is required';
                     },
-                    url: '/supplier/ajaxHandler',
+                    url: '/admin/shop-ajax-handler',
                     type: 'text',
                     pk: '<?php if(isset($shopData['SupplierShopDetails'])) echo $shopData['SupplierShopDetails']->shop_id; ?>',
                     name: 'updateSellerShop/shop_name',
@@ -546,7 +547,7 @@
                         });
 
                 $("#address_line_1_<?php echo $value->shop_metadata_id; ?>").editable({
-                    url: '/supplier/ajaxHandler',
+                    url: '/admin/shop-ajax-handler',
                     type: 'text',
                     pk: '<?php echo $value->shop_metadata_id; ?>',
                     name: 'updateStoreDetails/address_line_1',
@@ -554,7 +555,7 @@
                 });
 
                 $("#address_line_2_<?php echo $value->shop_metadata_id; ?>").editable({
-                    url: '/supplier/ajaxHandler',
+                    url: '/admin/shop-ajax-handler',
                     type: 'text',
                     pk: '<?php echo $value->shop_metadata_id; ?>',
                     name: 'updateStoreDetails/address_line_2',
@@ -610,7 +611,7 @@
                     }
                 });
                 $("#zip_code_<?php echo $value->shop_metadata_id; ?>").editable({
-                    url: '/supplier/ajaxHandler',
+                    url: '/admin/shop-ajax-handler',
                     type: 'text',
                     pk: '<?php echo $value->shop_metadata_id; ?>',
                     name: 'updateStoreDetails/zipcode',
@@ -679,7 +680,7 @@
                 });
                 $.ajax({
                     type: "POST",
-                    url: "/supplier/ajaxHandler",
+                    url: "/admin/shop-ajax-handler",
                     contentType: false,
                     cache: false,
                     processData: false,
@@ -709,7 +710,7 @@
                 });
                 $.ajax({
                     type: "POST",
-                    url: "/supplier/ajaxHandler",
+                    url: "/admin/shop-ajax-handler",
                     contentType: false,
                     cache: false,
                     processData: false,
@@ -740,7 +741,7 @@
                     message: 'Changing the Shop status...'
                 });
                 $.ajax({
-                    url: "/supplier/ajaxHandler",
+                    url: "/admin/shop-ajax-handler",
                     type: 'POST',
                     datatype: 'json',
                     data: {
@@ -779,7 +780,7 @@
                             message: 'Deleting Shop details from database...'
                         });
                         $.ajax({
-                            url: "/supplier/ajaxHandler",
+                            url: "/admin/shop-ajax-handler",
                             type: 'POST',
                             datatype: 'json',
                             data: {

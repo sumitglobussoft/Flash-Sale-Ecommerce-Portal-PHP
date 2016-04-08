@@ -817,7 +817,7 @@ class SupplierController extends Controller
                             'show_shop_address' => $show_shop,
                             'shop_metadata_status' => 1
                         );
-                        echo'<pre>';print_r($shopMatadata);die("xcgb");
+                        //echo'<pre>';print_r($shopMatadata);die("xcgb");
                         $addShop = $objShopMetadataModel->addShopMetadata($shopMatadata);
                         if ($addShop) {
                             if ($parentShopId == "") {
@@ -908,11 +908,6 @@ class SupplierController extends Controller
                 $reviewData['rating'] = $rating;
                 $reviewData['total'] = $total;
                 $reviewData['overAllRating'] = $overAllRating;
-//                $reviewData['followersCount']= $SupplierShopDetails->store_followers_count;
-//                $this->view->rating = $rating;
-//                $this->view->total = $total;
-//                $this->view->overAllRating = $overAllRating;
-//                $this->view->followersCount = $merchantStoreDetails['store_followers_count'];
 
             } else {
 //                $this->view->ErrorMsg = "Page you are looking for does not exist";

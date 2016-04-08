@@ -173,9 +173,9 @@
                 var statussetBy = $(this).attr('data-set-by');
                 alert(statussetBy);
                 if (obj.hasClass('btn-success')) {
-                    status = 1;
-                } else if (obj.hasClass('btn-danger')) {
                     status = 2;
+                } else if (obj.hasClass('btn-danger')) {
+                    status = 1;
                 }
                 if (status == 1 || status == 2) {
                     $.ajax({

@@ -436,6 +436,17 @@
                     </ul>
                 </li>
 
+                <li class="droplink">
+                    <a class="waves-effect waves-button">
+                        <span class="menu-icon glyphicon glyphicon-envelope"></span>
+
+                        <p>Shop</p> <span class="arrow"></span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li><a href="/admin/pending-shop">Pending_shop</a></li>
+                        <li><a href="/admin/available-shop">Available_shop</a></li>
+                    </ul>
+                </li>
 
                 <!-- glyphicon-briefcase    glyphicon-th    glyphicon-list  glyphicon-edit  glyphicon-stats
                 glyphicon-log-in    glyphicon-map-marker    glyphicon-gift-->
