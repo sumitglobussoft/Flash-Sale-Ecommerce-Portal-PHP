@@ -239,6 +239,7 @@
                             {{--</div>--}}
                         {{--</div>--}}
                     {{--</div>--}}
+                    @if(isset($flashsaledetails) && !empty($flashsaledetails))
                     @foreach($flashsaledetails as $key =>  $val)
                     <div class="grid-item">
                         <div class="div-content s-1-c p-r margin-gutter g-item">
@@ -275,6 +276,7 @@
                         </div>
                     </div>
                     @endforeach
+                    @endif
                     {{--<div class="grid-item width-2D grid-item-height2">--}}
                         {{--<div class="div-content s-1-c p-r margin-gutter g-item">--}}
                             {{--<img src="/assets/images/img-8.png" class="img-responsive display-images" alt="img">--}}

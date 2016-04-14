@@ -89,6 +89,10 @@ class ProductFeatureVariants extends Model
         return json_encode($returnData);
     }
 
+    /**TODO: COMPLETE COMMENT BLOCK
+     * @return string
+     * @author Akash M. Pai <akashpai@globussoft.in>
+     */
     public function updateFeatureVariantWhere()
     {
         $returnData = array('code' => 400, 'message' => 'Argument Not Passed.', 'data' => null);
@@ -113,6 +117,10 @@ class ProductFeatureVariants extends Model
         return json_encode($returnData);
     }
 
+    /**TODO: COMPLETE COMMENT BLOCK
+     * @return string
+     * @author Akash M. Pai <akashpai@globussoft.in>
+     */
     public function deleteFeatureVariantWhere()
     {
         $returnData = array('code' => 400, 'message' => 'Argument Not Passed.', 'data' => null);

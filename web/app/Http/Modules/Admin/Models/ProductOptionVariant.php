@@ -161,4 +161,43 @@ class ProductOptionVariant extends Model
         }
     }
 
+    /**TODO: COMPLETE COMMENT BLOCK
+     * @param $where
+     * @param array $selectedColumns
+     * @return string
+     * @author Akash M. Pai <akashpai@globussoft.in>
+     */
+    public function getOptionVarWithRelationsWhere($where, $selectedColumns = ['*'])
+    {
+        $returnData = array('code' => 400, 'message' => 'Argument Not Passed.', 'data' => null);
+        if (func_num_args() > 0) {
+            $where = func_get_arg(0);
+            $whereForJoin = func_get_arg(2);
+            $result = DB::table($this->table)
+                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                ->leftjoin('product_option_variant_relation as povr', function ($join) use ($whereForJoin) {
+                    $join->on('povr.option_id', '=', 'product_option_variants.option_id');
+                    $join->where($whereForJoin['column'], $whereForJoin['condition'], $whereForJoin['value']);
+                })
+                ->leftjoin('product_option_variants as pov', function ($join) {
+                    $join->on('pov.option_id', '=', 'product_option_variants.option_id');
+                    $join->on('pov.variant_id', '=', 'product_option_variants.variant_id');
+                })
+                ->select(DB::raw("product_option_variants.*, CONCAT('[', GROUP_CONCAT(DISTINCT CONCAT('{\"VID\":\"',pov.variant_id,'\",\"VN\":\"',pov.variant_name,'\",\"PM\":\"',pov.price_modifier,'\",\"PMT\":\"',pov.price_modifier_type,'\",\"WM\":\"',pov.weight_modifier,'\",\"WMT\":\"',pov.weight_modifier_type,'\",\"STTS\":\"',pov.status,'\"}') ORDER BY pov.variant_id SEPARATOR ','),']') AS all_variant_data, povr.relation_id, povr.variant_ids, povr.variant_data, povr.product_id"))
+                ->distinct('product_option_variants.option_id')
+                ->distinct('pov.variant_id')
+                ->groupBy('product_option_variants.option_id')
+                ->get();
+            if ($result) {
+                $returnData['code'] = 200;
+                $returnData['message'] = 'All option variants with relation.';
+            } else {
+                $returnData['code'] = 400;
+                $returnData['message'] = 'No data found.';
+            }
+            $returnData['data'] = $result;
+        }
+        return json_encode($returnData);
+    }
+
 }

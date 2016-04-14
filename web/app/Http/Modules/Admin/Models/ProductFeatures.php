@@ -94,6 +94,10 @@ class ProductFeatures extends Model
         return json_encode($returnData);
     }
 
+    /**TODO: COMPLETE COMMENT BLOCK
+     * @return string
+     * @author Akash M. Pai <akashpai@globussoft.in>
+     */
     public function updateFeatureWhere()
     {
         $returnData = array('code' => 400, 'message' => 'Argument Not Passed.', 'data' => null);
@@ -271,6 +275,12 @@ class ProductFeatures extends Model
 
     }
 
+    /**
+     * @param $where
+     * @param array $selectedColumns
+     * @return string
+     * @author Akash M. Pai <akashpai@globussoft.in>
+     */
     public function getAllFeaturesWithVariantsWhere($where, $selectedColumns = ['*'])
     {
         $returnData = array('code' => 400, 'message' => 'Argument Not Passed.', 'data' => null);
@@ -308,6 +318,10 @@ class ProductFeatures extends Model
 
     }
 
+    /**TODO: COMPLETE COMMENT BLOCK
+     * @return string
+     * @author Akash M. Pai <akashpai@globussoft.in>
+     */
     public function getAllFGsWithFsWhere()
     {
         $returnData = array('code' => 400, 'message' => 'Argument Not Passed.', 'data' => null);
@@ -335,5 +349,43 @@ class ProductFeatures extends Model
 
     }
 
+    //TODELETE NOT USED
+    /**
+     * @param $where
+     * @param array $selectedColumns
+     * @return string
+     * @author Akash M. Pai <akashpai@globussoft.in>
+     */
+    public function getAllFeaturesWithFVRelationWhere($where, $selectedColumns = ['*'])
+    {
+        $returnData = array('code' => 400, 'message' => 'Argument Not Passed.', 'data' => null);
+        if (func_num_args() > 0) {
+            $where = func_get_arg(0);
+            $result = DB::table($this->table)
+                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+//                ->leftJoin('product_feature_variant_relation as pfvr', function ($join) {
+//                    $join->on('pfvr.feature_id', '=', 'product_features.feature_id');
+//                })
+//                ->leftJoin('product_feature_variants as pfv', function ($join) {
+//                    $join->on('product_features.feature_id', '=', 'pfv.feature_id');
+//                })
+//                ->leftjoin('product_feature_variant_relation', 'product_feature_variant_relation.feature_id', '=', 'product_features.feature_id')
+                ->leftJoin('product_feature_variants', 'product_features.feature_id', '=', 'product_feature_variants.feature_id')
+//                ->leftjoin('product_feature_variant_relation as fvr', 'fvr.feature_id', '=', 'product_feature_variant_relation.feature_id')
+                ->select(DB::raw('product_features.*,
+                    GROUP_CONCAT(DISTINCT(product_feature_variants.variant_id) ORDER BY product_feature_variants.feature_id) AS all_variant_ids,
+                    GROUP_CONCAT(DISTINCT(product_feature_variants.variant_name) ORDER BY product_feature_variants.feature_id) AS variant_names,
+                    GROUP_CONCAT(product_feature_variants.description ORDER BY product_feature_variants.feature_id) AS variant_descriptions'))
+                //,product_feature_variant_relation.variant_ids AS variant_ids'))//product_feature_variant_relation.variant_ids,
+                ->groupBy('product_features.feature_id')
+//                ->distinct('product_features.feature_id')
+//                ->distinct('product_feature_variants.variant_id')
+                ->get();
+            $returnData['code'] = 200;
+            $returnData['message'] = 'All features.';
+            $returnData['data'] = $result;
+        }
+        return json_encode($returnData);
+    }
 
 }

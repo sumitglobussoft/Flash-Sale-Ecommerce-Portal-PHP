@@ -3,7 +3,7 @@
 namespace FlashSale\Http\Modules\Campaign\Controllers;
 
 
-use FlashSale\Http\Modules\Admin\Models\ProductOption;
+//use FlashSale\Http\Modules\Admin\Models\ProductOption;
 use Illuminate\Http\Request;
 
 use FlashSale\Http\Requests;
@@ -65,7 +65,7 @@ class FlashsaleController extends Controller
 
         $inputData = $request->input();
         $method = $inputData['method'];
-        $objProductOption = ProductOption::getInstance();
+//        $objProductOption = ProductOption::getInstance();
         switch ($method) {
 
             case 'getProductDetailsForPopUp':

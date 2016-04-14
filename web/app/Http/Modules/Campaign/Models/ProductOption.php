@@ -1,6 +1,6 @@
 <?php
 
-namespace FlashSale\Http\Modules\Admin\Models;
+namespace FlashSale\Http\Modules\Campaign\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -9,7 +9,7 @@ use \Exception;
 /**
  * Product-option model
  * Class ProductOption
- * @package FlashSale\Http\Modules\Admin\Models
+ * @package FlashSale\Http\Modules\Campaign\Models
  */
 class ProductOption extends Model
 {

@@ -14,6 +14,7 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
     <link href="/assets/plugins/select2/css/select2.css" rel="stylesheet" type="text/css"/>
     {{--<link href="/assets/css/custom/components.css" rel="stylesheet" type="text/css"/>--}}
     <link href="/assets/css/custom/components-rounded.min.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="/assets/plugins/datatables/css/jquery.datatables.min.css"/>
 
     <style>
         /*table tr th {*/
@@ -866,6 +867,7 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                             <button type="submit" class="btn btn-primary">Submit</button>
                             <button type="reset" class="btn btn-default">Reset</button>
                         </div>
+
                         <!-- OPTION COMBINATION MODAL START-->
                         <div class="modal fade bs-modal-lg" id="option_combinations_modal" role="dialog">
                             <div class="modal-dialog  modal-lg">
@@ -877,46 +879,39 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                                     </div>
                                     <div class="modal-body">
                                         <div class="form-horizontal">
-                                            <div class="form-group">
-                                                <div class="panel panel-white">
-                                                    {{--<div class="panel-heading clearfix">--}}
-                                                    {{--<h4 class="panel-title">Option Combinations</h4>--}}
-                                                    {{--</div>--}}
-                                                    <div class="panel-body">
-                                                        <div class="row" style="  height: 300px; overflow-y: auto;">
-                                                            <div class="table-responsive">
-                                                                <table class="table table-bordered" id="option-combination-table">
-                                                                    <thead>
-                                                                    <tr>
-                                                                        <th>Name</th>
-                                                                        <th>Quantity</th>
-                                                                        <th>Bar code</th>
-                                                                        <th>Exclude combination</th>
-                                                                    </tr>
-                                                                    </thead>
-                                                                    <tbody id="variantCombinationTBody">
-                                                                    <!-- OPTION COMBINATIONS WILL BE ADDED/UPDATED/REMOVED HERE-->
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-
-                                                        </div>
+                                            <div class="panel-body">
+                                                <div class="row" style="  height: 450px; overflow-y: auto;">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered" id="option-combination-table">
+                                                            <thead>
+                                                            <tr>
+                                                                <th>Name</th>
+                                                                <th>Quantity</th>
+                                                                <th>Bar code</th>
+                                                                <th>Exclude combination</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody id="variantCombinationTBody">
+                                                            <!-- OPTION COMBINATIONS WILL BE ADDED/UPDATED/REMOVED HERE-->
+                                                            </tbody>
+                                                        </table>
                                                     </div>
+
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
                                     <div class="modal-footer" style="text-align: center">
-                                        <button data-dismiss="modal" class="btn default" type="button">Close</button>
-                                        <button class="btn blue" type="button" id="save-option-combinations">Save
-                                            changes
+                                        {{--<button data-dismiss="modal" class="btn default" type="button">Close</button>--}}
+                                        <button data-dismiss="modal" class="btn blue" type="button" id="save-option-combinations">
+                                            Save and close
                                         </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <!-- OPTION COMBINATION MODAL END-->
+
                     </form>
                 </div>
             </div>
@@ -1061,6 +1056,8 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
     <script src="/assets/plugins/bootstrap-fileinput/bootstrap-fileinput.js"></script>
     <script src="/assets/plugins/select2/js/select2.js"></script>
     <script src="/assets/global/scripts/app.min.js"></script>
+    <script src="/assets/plugins/datatables/js/jquery.datatables.min.js"></script>
+    <script src="/assets/global/plugins/underscore-js/underscore.js"></script>
 
     <script>
         $(document).ready(function () {
@@ -1077,6 +1074,7 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
              width: "70%"
              }); */
 
+            var optionAddedRemovedFlag = false;
             $("#select_option").select2({
                 allowClear: !0,
                 placeholder: "Select an option",
@@ -1169,6 +1167,7 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
 
                                     });
 //                                $('#toAppendOptionDiv').html(toAppend);
+                                    optionAddedRemovedFlag = true;
                                 } else {
                                     toastr['error'](response['message']);
                                 }
@@ -1308,6 +1307,7 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
             $(document.body).on('click', '.delete-option', function () {
                 $(this).closest('tr').remove();
                 if ($("#optionTableBody tr").length == 0) $("#optionTable").addClass('hidden');
+                optionAddedRemovedFlag = true;
             });
 
             var variantCounterForEdit = 1;
@@ -1328,8 +1328,12 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                     if ($(this).find(".all-data-of-a-variant").length > 0) {
                         $.each($(this).find(".all-data-of-a-variant"), function (i, v) {
 //                            console.log(v);
+                            var newVarClass = '';
+                            if ($(v).hasClass('new-variant')) {
+                                newVarClass = 'new-variant';
+                            }
                             var toAppendVariantDetail = '';
-                            toAppendVariantDetail += '<tr class="variant-data"  variant-id="' + $(this).attr('variant_id') + '">';
+                            toAppendVariantDetail += '<tr class="variant-data ' + newVarClass + '"  variant-id="' + $(this).attr('variant_id') + '">';
                             toAppendVariantDetail += '<td><input field-name="variant_name" type="text" class="form-control variant_name" value="' + $(this).attr('variant_name') + '"></td>';
                             toAppendVariantDetail += '<td>';
                             toAppendVariantDetail += '<div class="form-group">';
@@ -1379,7 +1383,7 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                         });
                     } else {
                         var toAppendVariantDetail = '';
-                        toAppendVariantDetail += '<tr class="variant-data"  variant-id="0">';
+                        toAppendVariantDetail += '<tr class="variant-data new-variant"  variant-id="' + newVariantCounter + '">';
                         toAppendVariantDetail += '<td><input field-name="variant_name" type="text" class="form-control variant_name "></td>';
                         toAppendVariantDetail += '<td>';
                         toAppendVariantDetail += '<div class="form-group">';
@@ -1431,10 +1435,11 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
 //                if ($("#optionTableBody tr").length == 0) $("#optionTable").addClass('hidden');
             });
 
+            var newVariantCounter = 1;
             $(document.body).on('click', '.for-edit-add-more', function () {
                 var toAppendVariantDetail = '';
                 var optionId = $(this).attr('option_id');
-                toAppendVariantDetail += '<tr class="variant-data" variant-id="0">';
+                toAppendVariantDetail += '<tr class="variant-data new-variant" variant-id="' + newVariantCounter + '">';
                 toAppendVariantDetail += '<td><input field-name="variant_name" type="text" class="form-control variant_name "></td>';
                 toAppendVariantDetail += '<td>';
                 toAppendVariantDetail += '<div class="form-group">';
@@ -1482,6 +1487,7 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
 
                 $("#variantTBody").append(toAppendVariantDetail);
                 variantCounterForEdit++;
+                newVariantCounter++;
             });
 
             $(document.body).on('click', '.for-edit-remove', function () {
@@ -1505,7 +1511,11 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                 $("#option_id_" + optionId + " .all-data-of-a-variant").remove();
                 $("#option_id_" + optionId + " .option-variant-data").remove();
                 $.each(modalObj.find(".variant-data"), function (i, v) {
-                    var allDataOfAVariant = '<input class="all-data-of-a-variant hidden" type="hidden" variant_id="' + $(this).attr('variant-id') + '" ';
+                    var newVarClass = '';
+                    if ($(v).hasClass('new-variant')) {
+                        newVarClass = 'new-variant';
+                    }
+                    var allDataOfAVariant = '<input class="all-data-of-a-variant  ' + newVarClass + ' hidden" type="hidden" variant_id="' + $(this).attr('variant-id') + '" ';
                     $.each($(this).find(":input"), function (index, value) {
                         allDataOfAVariant += $(this).attr('field-name') + ' = "' + $(this).val() + '" ';
                     });
@@ -1523,16 +1533,27 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                     var optionId = $(this).attr('option-id');
                     var allDataOfAVariantObj = $(this).find('.all-data-of-a-variant');
                     $.each(allDataOfAVariantObj, function (index, value) {
-                        $("#addProductForm").append('<input class="option-variant-data" type="hidden" name="product_data[options][' + optionId + '][variantData][' + variantSerialNumber + '][variant_id]" value="' + $(this).attr('variant_id') + '">');
-                        $("#addProductForm").append('<input class="option-variant-data" type="hidden" name="product_data[options][' + optionId + '][variantData][' + variantSerialNumber + '][variant_name]" value="' + $(this).attr('variant_name') + '">');
-                        $("#addProductForm").append('<input class="option-variant-data" type="hidden" name="product_data[options][' + optionId + '][variantData][' + variantSerialNumber + '][price_modifier]" value="' + $(this).attr('price_modifier') + '">');
-                        $("#addProductForm").append('<input class="option-variant-data" type="hidden" name="product_data[options][' + optionId + '][variantData][' + variantSerialNumber + '][price_modifier_type]" value="' + $(this).attr('price_modifier_type') + '">');
-                        $("#addProductForm").append('<input class="option-variant-data" type="hidden" name="product_data[options][' + optionId + '][variantData][' + variantSerialNumber + '][weight_modifier]" value="' + $(this).attr('weight_modifier') + '">');
-                        $("#addProductForm").append('<input class="option-variant-data" type="hidden" name="product_data[options][' + optionId + '][variantData][' + variantSerialNumber + '][weight_modifier_type]" value="' + $(this).attr('weight_modifier_type') + '">');
-                        $("#addProductForm").append('<input class="option-variant-data" type="hidden" name="product_data[options][' + optionId + '][variantData][' + variantSerialNumber + '][status]" value="' + $(this).attr('status') + '">');
+                        if ($(value).hasClass('new-variant')) {
+                            $("#addProductForm").append('<input class="option-variant-data" type="hidden" name="product_data[options][' + optionId + '][variantDataNew][' + variantSerialNumber + '][variant_id]" value="' + $(this).attr('variant_id') + '">');
+                            $("#addProductForm").append('<input class="option-variant-data" type="hidden" name="product_data[options][' + optionId + '][variantDataNew][' + variantSerialNumber + '][variant_name]" value="' + $(this).attr('variant_name') + '">');
+                            $("#addProductForm").append('<input class="option-variant-data" type="hidden" name="product_data[options][' + optionId + '][variantDataNew][' + variantSerialNumber + '][price_modifier]" value="' + $(this).attr('price_modifier') + '">');
+                            $("#addProductForm").append('<input class="option-variant-data" type="hidden" name="product_data[options][' + optionId + '][variantDataNew][' + variantSerialNumber + '][price_modifier_type]" value="' + $(this).attr('price_modifier_type') + '">');
+                            $("#addProductForm").append('<input class="option-variant-data" type="hidden" name="product_data[options][' + optionId + '][variantDataNew][' + variantSerialNumber + '][weight_modifier]" value="' + $(this).attr('weight_modifier') + '">');
+                            $("#addProductForm").append('<input class="option-variant-data" type="hidden" name="product_data[options][' + optionId + '][variantDataNew][' + variantSerialNumber + '][weight_modifier_type]" value="' + $(this).attr('weight_modifier_type') + '">');
+                            $("#addProductForm").append('<input class="option-variant-data" type="hidden" name="product_data[options][' + optionId + '][variantDataNew][' + variantSerialNumber + '][status]" value="' + $(this).attr('status') + '">');
+                        } else {
+                            $("#addProductForm").append('<input class="option-variant-data" type="hidden" name="product_data[options][' + optionId + '][variantData][' + variantSerialNumber + '][variant_id]" value="' + $(this).attr('variant_id') + '">');
+                            $("#addProductForm").append('<input class="option-variant-data" type="hidden" name="product_data[options][' + optionId + '][variantData][' + variantSerialNumber + '][variant_name]" value="' + $(this).attr('variant_name') + '">');
+                            $("#addProductForm").append('<input class="option-variant-data" type="hidden" name="product_data[options][' + optionId + '][variantData][' + variantSerialNumber + '][price_modifier]" value="' + $(this).attr('price_modifier') + '">');
+                            $("#addProductForm").append('<input class="option-variant-data" type="hidden" name="product_data[options][' + optionId + '][variantData][' + variantSerialNumber + '][price_modifier_type]" value="' + $(this).attr('price_modifier_type') + '">');
+                            $("#addProductForm").append('<input class="option-variant-data" type="hidden" name="product_data[options][' + optionId + '][variantData][' + variantSerialNumber + '][weight_modifier]" value="' + $(this).attr('weight_modifier') + '">');
+                            $("#addProductForm").append('<input class="option-variant-data" type="hidden" name="product_data[options][' + optionId + '][variantData][' + variantSerialNumber + '][weight_modifier_type]" value="' + $(this).attr('weight_modifier_type') + '">');
+                            $("#addProductForm").append('<input class="option-variant-data" type="hidden" name="product_data[options][' + optionId + '][variantData][' + variantSerialNumber + '][status]" value="' + $(this).attr('status') + '">');
+                        }
                         variantSerialNumber++;
                     });
                 });
+//                $('#option-combinations').click();
                 return true;
             });
 
@@ -1655,85 +1676,136 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                 }
             });
 
-//            $('#option-combination-table').DataTables
+//            var table = $('#option-combination-table');
+//            var oTable = table.dataTable({
+//                "lengthMenu": [
+//                    [5, 10, 20],
+//                    [5, 10, 20]
+//                ],
+//                "bAutoWidth": false
+//            });
 
             $(document.body).on('click', '#option-combinations', function () {
+                if (optionAddedRemovedFlag) {//if options are added or removed clear the table since new set combinations are generated
+//                    oTable.fnClearTable();
+                    $('#variantCombinationTBody').empty();
+                }
                 var options = $('#optionTableBody > tr');
-                var optionsData = [];
-                $.each(options, function (i, a) {
-                    var optionId = $(a).attr('option-id');
-                    var temp = [];
-                    temp['variantData'] = $(a).find('.all-data-of-a-variant');
-                    temp['optionId'] = optionId;
-                    optionsData.push(temp);
-                });
-//                console.log(optionsData);
-//                function optionComination(array, currentIndex, toAppendString) {
-//                    $.each(array, function (i, a) {
-//                        toAppendString += a['variantData'];
-//                        if (array[i + 1] != undefined) {
-//                            toAppendString += optionCombination(array, i, toAppendString);
-//                        }
-//                    });
-//                    return toAppendString;
-//                }
-//                optionCombination(optionsData, 0, '');
+                if (options.length > 1) {
+                    var optionsData = [];
+                    $.each(options, function (i, a) {
+                        var optionId = $(a).attr('option-id');
+                        var temp = [];
+                        temp['variantData'] = $(a).find('.all-data-of-a-variant');
+                        temp['optionId'] = optionId;
+                        temp['optionName'] = $(a).find('[field-name=option_name]').val();
+                        optionsData.push(temp);
+                    });
+                    var optionCount = options.length;
+                    optionsData.sort(function (a, b) {
+                        a = a['variantData'].length;
+                        b = b['variantData'].length;
+                        return a > b ? -1 : (a < b ? 1 : 0);
+                    });
 
-                var combinations = [];
+                    var combinations = [];
+                    var tempcombs = optionCombination(optionsData, 0, '', {});//calling function to generate combination ids
 
-                $.each(optionsData, function (i, a) {
-                    combinations.push(optionCombination(optionsData, i, ''));
-                });
+                    //---------------variants exists check and add combiantion start------------------//
+//                    var optCombTrs = oTable.fnGetNodes();//getting all the table rows of combinations previously made
+                    var optCombTrs = $('#variantCombinationTBody > tr');//getting all the table rows of combinations previously made
+                    $(optCombTrs).addClass('to_delete');
+                    var combinputs = $(optCombTrs).find('input[type="number"]');//getting inputs to get combination id
+                    $.each(tempcombs, function (i, a) {
+                        var combinationIds = a['combinationId'].split("_");//get individual variant ids from newly made combination ids
+                        console.log(combinationIds);
+                        var cIdExistsFlag = false;
+                        $.each(combinputs, function (iIp, aIp) {//loop is to check if new made combination ids already exists in previously made combination ids
+                            var varIds = $(aIp).attr('dataCid').split("_");//getting combination ids of previously added combination ids
+                            if (_.intersection(varIds, combinationIds).length == optionCount) {
+                                $(aIp).parent().parent().removeClass('to_delete');
+                                cIdExistsFlag = true;
+                                return false;
+                            }
+                        });
+                        if (!cIdExistsFlag) {//if doesn't exists add the combiantion to table rows
+//                            var toAppend = [];
+                            var toAppend = '<tr>';
+                            var namesString = '';
+                            var varFlagString = '';
+                            var optIps = '';
+                            var i = 0;
+                            while (i < optionCount) {
+                                namesString += a['optionName' + i] + ": " + a['variantName' + i] + '<br>';
+                                if (i == 0) {
+                                    varFlagString += a['newVariantFlag'];
+                                } else {
+                                    varFlagString += "_" + a['newVariantFlag'];
+                                }
+                                i++;
+                            }
+                            /* toAppend.push(namesString + '<input name="product_data[opt_combination][' + a['combinationId'] + '][newflag]" type="hidden" value="' + varFlagString + '"/>');
+                             toAppend.push('<input name="product_data[opt_combination][' + a['combinationId'] + '][quantity]" type="number" value="100" dataCid="' + a['combinationId'] + '"/>');
+                             toAppend.push('<input name="product_data[opt_combination][' + a['combinationId'] + '][barcode]"/>');
+                             toAppend.push('<input name="product_data[opt_combination][' + a['combinationId'] + '][excludeflag]" type="checkbox"/>');
+                             oTable.fnAddData(toAppend); */
+                            toAppend += '<td>' +namesString + '<input name="product_data[opt_combination][' + a['combinationId'] + '][newflag]" type="hidden" value="' + varFlagString + '"/></td>';
+                            toAppend += '<td><input name="product_data[opt_combination][' + a['combinationId'] + '][quantity]" type="number" value="100" dataCid="' + a['combinationId'] + '"/></td>';
+                            toAppend += '<td><input name="product_data[opt_combination][' + a['combinationId'] + '][barcode]"/></td>';
+                            toAppend += '<td><input name="product_data[opt_combination][' + a['combinationId'] + '][excludeflag]" type="checkbox"/></td>';
+                            toAppend += '</tr>';
+                            $('#variantCombinationTBody').append(toAppend);
+                        }
+                    });
+                    //---------------variants exists check and add combiantion end------------------//
+//                    oTable.fnDeleteRow('.to_delete');//remove other combination ids which are not valid since optoion variants are changed
+                    $('.to_delete').remove();
+                    optionAddedRemovedFlag = false;
+                    $("#option_combinations_modal").modal('show');
+                } else {
+                    oTable.fnClearTable();
+                    $('#variantCombinationTBody').empty();
+                    toastr['error']("Please select atleast 2 options for combining.");
+                }
 
-                console.log(combinations);
-                alert(combinations);
-                var toAppend = '<tr class="combination_trs">';
-                toAppend += '<td>oId1: vId1<br>oId2:vId3</td>';
-                toAppend += '<td><input name="product_data[opt_combination][v1_v3][quantity]"/></td>';
-                toAppend += '<td><input name="product_data[opt_combination][v1_v3][barcode]"/></td>';
-                toAppend += '<td><input name="product_data[opt_combination][v1_v3][excludeflag]" type="checkbox"/></td>';
-                toAppend += '</tr>';
-
-                toAppend += '<tr class="combination_trs">';
-                toAppend += '<td>oId1: vId1<br>oId2:vId4</td>';
-                toAppend += '<td><input name="product_data[opt_combination][v1_v4][quantity]"/></td>';
-                toAppend += '<td><input name="product_data[opt_combination][v1_v4][barcode]"/></td>';
-                toAppend += '<td><input name="product_data[opt_combination][v1_v4][excludeflag]" type="checkbox"/></td>';
-                toAppend += '</tr>';
-
-                toAppend += '<tr class="combination_trs">';
-                toAppend += '<td>oId1: vId2<br>oId2:vId3</td>';
-                toAppend += '<td><input name="product_data[opt_combination][v2_v3][quantity]"/></td>';
-                toAppend += '<td><input name="product_data[opt_combination][v2_v3][barcode]"/></td>';
-                toAppend += '<td><input name="product_data[opt_combination][v2_v3][excludeflag]" type="checkbox"/></td>';
-                toAppend += '</tr>';
-
-                toAppend += '<tr class="combination_trs">';
-                toAppend += '<td>oId1: vId2<br>oId2:vId4</td>';
-                toAppend += '<td><input name="product_data[opt_combination][v2_v4][quantity]"/></td>';
-                toAppend += '<td><input name="product_data[opt_combination][v2_v4][barcode]"/></td>';
-                toAppend += '<td><input name="product_data[opt_combination][v2_v4][excludeflag]" type="checkbox"/></td>';
-                toAppend += '</tr>';
-
-                $('#variantCombinationTBody').append(toAppend);
-                $("#option_combinations_modal").modal('show');
             });
 
-        })
+        });
 
-        function optionCombination(array, currentIndex, toAppendString) {
-//            console.log(currentIndex);
+        function optionCombination(array, currentIndex, toAppendString, tempNamesArr) {
+            var arrayLength = array.length;
             var tempArray = [];
             $.each(array[currentIndex]['variantData'], function (iVD, aVD) {
-                tempArray.push(toAppendString + $(aVD).attr('variant_id'));
+                var temp1 = [];
+                temp1['combinationId'] = toAppendString + $(aVD).attr('variant_id');
+                if (temp1['combinationId'].split("_").length == arrayLength) {
+                    temp1['newVariantFlag' + currentIndex] = 0;
+                    if ($(aVD).hasClass('new-variant')) {
+                        temp1['newVariantFlag' + currentIndex] = 1;
+                    }
+                    temp1['optionName' + currentIndex] = array[currentIndex]['optionName'];
+                    temp1['optionId' + currentIndex] = array[currentIndex]['optionId'];
+                    temp1['variantName' + currentIndex] = $(aVD).attr('variant_name');
+                    $.each(tempNamesArr, function (iN, aN) {
+                        temp1[iN] = aN;
+                    });
+                    tempArray.push(temp1);
+                }
                 if (array[currentIndex + 1] != undefined) {
                     console.log('next option exists');
-                    tempArray.push(optionCombination(array, currentIndex + 1, toAppendString + $(aVD).attr('variant_id') + '_'));//toAppendString =
-//                    console.log(toAppendString);
+                    var temp2 = [];
+                    tempNamesArr['optionName' + currentIndex] = array[currentIndex]['optionName'];
+                    tempNamesArr['optionId' + currentIndex] = array[currentIndex]['optionId'];
+                    tempNamesArr['variantName' + currentIndex] = $(aVD).attr('variant_name');
+                    temp2 = optionCombination(array, currentIndex + 1, toAppendString + $(aVD).attr('variant_id') + '_', tempNamesArr);
+                    $.each(temp2, function (iTemp2, aTemp2) {
+                        tempArray.push(aTemp2);
+                    });
                 }
             });
-//            console.log(tempArray);
             return tempArray;
         }
+
+
     </script>
 @endsection

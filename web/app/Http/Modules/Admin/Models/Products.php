@@ -51,6 +51,7 @@ class Products extends Model
             throw new Exception('Argument Not Passed');
         }
     }
+
     public function getAllProducts($where, $selectedColumns = ['*'])
     {
 
@@ -60,7 +61,7 @@ class Products extends Model
                 ->join('users', 'users.id', '=', 'products.added_by')
                 ->leftJoin('shops', 'shops.shop_id', '=', 'products.for_shop_id')
                 ->join('product_categories', 'product_categories.category_id', '=', 'products.category_id')
-                ->join('product_images','product_images.for_product_id','=','products.product_id')
+                ->join('product_images', 'product_images.for_product_id', '=', 'products.product_id')
                 ->select($selectedColumns)
                 ->get();
             return $result;
@@ -94,7 +95,8 @@ class Products extends Model
         }
     }
 
-    public function getAllFilterProducts($wheres,$where = null, $order = null, $count = null, $offset = null, $selectedColumn = ['*']){
+    public function getAllFilterProducts($wheres, $where = null, $order = null, $count = null, $offset = null, $selectedColumn = ['*'])
+    {
 
         if (func_get_args() > 0) {
             $result = DB::table($this->table)
@@ -103,7 +105,7 @@ class Products extends Model
                 ->join('users', 'users.id', '=', 'products.added_by')
                 ->leftJoin('shops', 'shops.shop_id', '=', 'products.for_shop_id')
                 ->join('product_categories', 'product_categories.category_id', '=', 'products.category_id')
-                ->join('product_images','product_images.for_product_id','=','products.product_id')
+                ->join('product_images', 'product_images.for_product_id', '=', 'products.product_id')
                 ->select($selectedColumn)
                 ->orderBy($order)
                 ->skip($offset)
@@ -118,7 +120,7 @@ class Products extends Model
 
     }
 
-    public function getProductNameById($where,$selectedColumn)
+    public function getProductNameById($where, $selectedColumn)
     {
         {
             try {
@@ -141,7 +143,8 @@ class Products extends Model
     }
 
 
-    public function getAllSupplierProducts($where,$selectedColumn){
+    public function getAllSupplierProducts($where, $selectedColumn)
+    {
 
         try {
             $result = DB::table($this->table)
@@ -149,8 +152,56 @@ class Products extends Model
                 ->select($selectedColumn)
                 ->get();
             return $result;
-        }catch(QueryException $e){
+        } catch (QueryException $e) {
             echo $e;
         }
     }
+
+    /**TODO: COMPLETE COMMENT BLOCK
+     * @param $where
+     * @param array $selectedColumns
+     * @return string
+     * @author Akash M. Pai <akashpai@globussoft.in>
+     */
+    public function getProductWhere($where, $selectedColumns = ['*'])
+    {
+        $returnData = array('code' => 400, 'message' => 'Argument Not Passed.', 'data' => null);
+        if (func_num_args() > 0) {
+            $where = func_get_arg(0);
+            $result = DB::table($this->table)
+                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                ->leftjoin('productmeta', 'productmeta.product_id', '=', 'products.product_id')
+                ->select($selectedColumns)
+                ->first();
+            $returnData['code'] = 200;
+            $returnData['message'] = 'Product data.';
+            $returnData['data'] = $result;
+        }
+        return json_encode($returnData);
+    }
+
+    public function updateProductsWhere()
+    {
+        $returnData = array('code' => 400, 'message' => 'Argument Not Passed.', 'data' => null);
+        if (func_num_args() > 0) {
+            $data = func_get_arg(0);
+            $where = func_get_arg(1);
+            try {
+                $updatedResult = $this->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                    ->update($data);
+                if ($updatedResult) {
+                    $returnData['code'] = 200;
+                    $returnData['message'] = 'Changes saved successfully.';
+                } else {
+                    $returnData['code'] = 100;
+                    $returnData['message'] = 'Nothing to update.';
+                }
+            } catch (\Exception $e) {
+                $returnData['code'] = 400;
+                $returnData['message'] = 'Something went wrong. Please reload the page and try again.';
+            }
+        }
+        return json_encode($returnData);
+    }
+
 }

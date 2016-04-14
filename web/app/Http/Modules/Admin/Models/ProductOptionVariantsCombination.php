@@ -4,50 +4,86 @@ namespace FlashSale\Http\Modules\Admin\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use \Exception;
 
-class ProductFeatureVariantRelation extends Model
+/**
+ * Class ProductOptionVariantCombination
+ * @package FlashSale\Http\Modules\Admin\Models
+ * @since 18-03-2016
+ * @author Akash M. Pai <akashpai@globussoft.in>
+ */
+class ProductOptionVariantsCombination extends Model
 {
 
     private static $_instance = null;
 
-    protected $table = 'product_feature_variant_relation';
-    protected $fillable = ['product_id', 'feature_id', 'variant_ids', 'display_status'];
+    protected $table = 'product_option_variants_combination';
+    protected $fillable = ['product_id', 'variant_ids', 'quantity', 'exception_flag'];
 
+    /**
+     * Get instance/object of this class
+     * @return ProductOptionVariantRelation|null
+     * @since 29-02-2016
+     * @author Dinanath Thakur <dinanaththakur@globussoft.in>
+     */
     public static function getInstance()
     {
         if (!is_object(self::$_instance))  //or if( is_null(self::$_instance) ) or if( self::$_instance == null )
-            self::$_instance = new ProductFeatureVariantRelation();
+            self::$_instance = new ProductOptionVariantsCombination();
         return self::$_instance;
     }
 
     /**
-     * @return string
-     * @author Akash M. Pai <akashpai@globussoft.com>
+     * Add new option-variant combination data
+     * @return string|int
+     * @throws Exception
+     * @since 18-03-2016
+     * @author Akash M. Pai <akashpai@globussoft.in>
      */
-    public function addFeatureVariantRelation($data)
+    public function addNewOptionVariantsCombination()
     {
         if (func_num_args() > 0) {
             $data = func_get_arg(0);
             try {
-                $result = $this->firstOrCreate($data);
-                return json_encode(array('code' => 200, 'message' => 'Feature relation added successfully.', 'data' => $result));
-//                return $result;
+                $result = DB::table($this->table)->insert($data);
+                return $result;
             } catch (\Exception $e) {
-                return json_encode(array('code' => 400, 'message' => 'Could not add data. Please try again later', 'data' => $e));
-//                return $e->getMessage();
+                return $e->getMessage();
             }
         } else {
-            return json_encode(array('code' => 400, 'message' => 'Argument Not Passed.'));
-//            throw new Exception('Argument Not Passed');
+            throw new Exception('Argument Not Passed');
         }
     }
 
     /**
-     * @param string $where one or more where conditions
-     * @return array of all results matching the where condition or null
-     * @author Akash M. Pai <akashpai@globussoft.com>
+     * @param $where
+     * @param array $selectedColumns
+     * @return string
+     * @author Akash M. Pai <akashpai@globussoft.in>
      */
-    public function getAllFeatureVariantRelationsWhere($where, $selectedColumns = ['*'])
+    public function getCombinationWhere($where, $selectedColumns = ['*'])
+    {
+        $returnData = array('code' => 400, 'message' => 'Argument Not Passed.', 'data' => null);
+        if (func_num_args() > 0) {
+            $where = func_get_arg(0);
+            $result = DB::table($this->table)
+                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                ->select($selectedColumns)
+                ->first();
+            $returnData['code'] = 200;
+            $returnData['message'] = 'Combination data.';
+            $returnData['data'] = $result;
+        }
+        return json_encode($returnData);
+    }
+
+    /**
+     * @param $where
+     * @param array $selectedColumns
+     * @return string
+     * @author Akash M. Pai <akashpai@globussoft.in>
+     */
+    public function getAllCombinationsWhere($where, $selectedColumns = ['*'])
     {
         $returnData = array('code' => 400, 'message' => 'Argument Not Passed.', 'data' => null);
         if (func_num_args() > 0) {
@@ -57,43 +93,17 @@ class ProductFeatureVariantRelation extends Model
                 ->select($selectedColumns)
                 ->get();
             $returnData['code'] = 200;
-            $returnData['message'] = 'All features.';
+            $returnData['message'] = 'All combinations.';
             $returnData['data'] = $result;
         }
         return json_encode($returnData);
     }
 
     /**
-     * @param string $where one or more where conditions
-     * @return array of result matching the where condition or null
-     * @author Akash M. Pai <akashpai@globussoft.com>
-     */
-    public function getFeatureVariantRelationWhere($where, $selectedColumns = ['*'])
-    {
-        $returnData = array('code' => 400, 'message' => 'Argument Not Passed.', 'data' => null);
-        if (func_num_args() > 0) {
-            $where = func_get_arg(0);
-            $result = DB::table($this->table)
-                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
-                ->select($selectedColumns)
-                ->first();
-            if ($result) {
-                $returnData['code'] = 200;
-                $returnData['message'] = 'All feature variants relations.';
-            } else {
-                $returnData['code'] = 400;
-                $returnData['message'] = 'No data found.';
-            }
-            $returnData['data'] = $result;
-        }
-        return json_encode($returnData);
-    }
-
-    /**TODO: COMPLETE COMMENT BLOCK
      * @return string
      * @author Akash M. Pai <akashpai@globussoft.in>
      */
-    public function updateFeatureVariantRelationWhere()
+    public function updateCombinationWhere()
     {
         $returnData = array('code' => 400, 'message' => 'Argument Not Passed.', 'data' => null);
         if (func_num_args() > 0) {
@@ -121,7 +131,7 @@ class ProductFeatureVariantRelation extends Model
      * @return string
      * @author Akash M. Pai <akashpai@globussoft.in>
      */
-    public function deleteFeatureVariantRelationWhere()
+    public function deleteCombinationWhere()
     {
         $returnData = array('code' => 400, 'message' => 'Argument Not Passed.', 'data' => null);
         if (func_num_args() > 0) {
@@ -132,7 +142,7 @@ class ProductFeatureVariantRelation extends Model
                     ->delete();
                 if ($result) {
                     $returnData['code'] = 200;
-                    $returnData['message'] = 'Variant Relation/s deleted.';
+                    $returnData['message'] = 'Variant Combination/s deleted.';
                 } else {
                     $returnData['code'] = 100;
                     $returnData['message'] = 'Could not delete. Try again later.';
@@ -144,5 +154,6 @@ class ProductFeatureVariantRelation extends Model
         }
         return json_encode($returnData);
     }
+
 
 }
