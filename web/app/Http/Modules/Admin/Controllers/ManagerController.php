@@ -28,6 +28,12 @@ class ManagerController extends Controller
 {
 
 
+    /**
+     * Add New Manager Action
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @author: Vini Dubey<vinidubey@globussoft.in>
+     */
     public function addNewManager(Request $request)
     {
 
@@ -153,6 +159,12 @@ class ManagerController extends Controller
 
     }
 
+    /**
+     * Available Manager Action
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @author: Vini Dubey<vinidubey@globussoft.in>
+     */
     public function availableManager(Request $request)
     {
 
@@ -160,6 +172,12 @@ class ManagerController extends Controller
 
     }
 
+    /**
+     * Manager Ajax Handler
+     * @param Request $request
+     * @return mixed
+     * @author: Vini Dubey<vinidubey@globussoft.in>
+     */
     public function managerAjaxHandler(Request $request)
     {
 

@@ -109,11 +109,13 @@ class AdministrationController extends Controller
     }
 
     /**
+     * Administration Ajax Handler
      * @param Request $request
      * @return mixed
+     * @author Vini Dubey
      */
     public function administrationAjaxHandler(Request $request)
-        {
+    {
 
         $inputData = $request->input();
         $method = $inputData['method'];
@@ -335,10 +337,12 @@ class AdministrationController extends Controller
 
 
     /**
+     * Add Language Value Action
      * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @author Vini Dubey
      */
-    public
-    function addLanguageValue(Request $request)
+    public function addLanguageValue(Request $request)
     {
         $response = new stdClass();
         $ObjLanguageModel = Languages::getInstance();
@@ -404,8 +408,7 @@ class AdministrationController extends Controller
      * Manage Language
      * @param Request $request
      */
-    public
-    function manageLanguage(Request $request)
+    public function manageLanguage(Request $request)
     {
 
         return view('Admin/Views/administration/manageLanguage');
@@ -413,6 +416,13 @@ class AdministrationController extends Controller
     }
 
 
+    /**
+     * Edit Language Action
+     * @param Request $request
+     * @param $lid
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @author Vini Dubey
+     */
     public function editLanguage(Request $request, $lid)
     {
 
@@ -463,6 +473,11 @@ class AdministrationController extends Controller
 
     }
 
+    /**
+     * Manage Language Values Action
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function manageLanguageValue(Request $request)
     {
 
@@ -470,6 +485,13 @@ class AdministrationController extends Controller
 
     }
 
+    /**
+     * Edit Language Values Action
+     * @param Request $request
+     * @param $vid
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @author Vini Dubey
+     */
     public function editLanguageValue(Request $request, $vid)
     {
 
@@ -511,9 +533,13 @@ class AdministrationController extends Controller
         }
     }
 
+
     /**
      * Changes the current language and returns to previous page
-     * @return Redirect
+     * @param Request $request
+     * @param null $locale
+     * @return mixed
+     * @author Vini Dubey
      */
     public function changeLang(Request $request, $locale = null)
     {
@@ -523,6 +549,11 @@ class AdministrationController extends Controller
     }
 
 
+    /**
+     * Get All Language Details
+     * @return mixed
+     * @author Vini Dubey
+     */
     public static function getLanguageDetails()
     {
 
@@ -533,6 +564,11 @@ class AdministrationController extends Controller
 
     }
 
+    /**
+     * @param Request $request
+     * @param $lcode
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function addmultilangtext(Request $request, $lcode)
     {
         return view('Admin/Views/administration/addMultiLangText');

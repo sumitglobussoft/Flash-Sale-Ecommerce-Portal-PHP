@@ -429,7 +429,6 @@ class SupplierController extends Controller
                 break;
             case 'getState':
                 $countryId = $request->input('countryId');
-
                 $where = ['rawQuery' => 'is_visible =? and location_type =? and parent_id =?', 'bindParams' => [0, 1, $countryId]];
                 $allstates = $objLocationModel->getAllLocationsWhere($where);
                 echo json_encode($allstates);
@@ -627,6 +626,9 @@ class SupplierController extends Controller
         }
     }
 
+    /**
+     * @param Request $request
+     */
     public function getImages(Request $request)
     {
         if (Input::hasFile('file')) {
@@ -677,6 +679,10 @@ class SupplierController extends Controller
         else return 50;
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function addNewShop(Request $request)
     {
 
@@ -796,6 +802,7 @@ class SupplierController extends Controller
                                 'parent_category_id' => $parentCategoryId,
                                 'shop_flag' => $shop_flag,
                             );
+
                             $addShop = $objShopModel->addShop($shopdata);
                             $shop_id = $addShop;
                             $shopType = "0";
@@ -817,7 +824,7 @@ class SupplierController extends Controller
                             'show_shop_address' => $show_shop,
                             'shop_metadata_status' => 1
                         );
-                        //echo'<pre>';print_r($shopMatadata);die("xcgb");
+
                         $addShop = $objShopMetadataModel->addShopMetadata($shopMatadata);
                         if ($addShop) {
                             if ($parentShopId == "") {

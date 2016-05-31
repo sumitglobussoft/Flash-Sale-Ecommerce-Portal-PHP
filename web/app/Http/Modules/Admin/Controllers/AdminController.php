@@ -178,12 +178,18 @@ class AdminController extends Controller
     }
 
 
+    /**
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function adminLogout()
     {
         Session::forget('fs_admin');
         return redirect('/admin/login');
     }
 
+    /**
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function managerLogout()
     {
         Session::forget('fs_manager');
@@ -191,6 +197,9 @@ class AdminController extends Controller
     }
 
 
+    /**
+     * @return array|bool|object
+     */
     public static function getSettingsSection()
     {
         $objSettingsSection = SettingsSection::getInstance();

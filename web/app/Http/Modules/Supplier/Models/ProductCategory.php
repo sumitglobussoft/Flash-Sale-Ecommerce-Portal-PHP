@@ -129,12 +129,28 @@ class ProductCategory extends Model
 
     }
 
-    public function getCategoryNameById($where){
+    public function getSubCategoriesForMaincategory($where,$selectedColumn = ['*']){
+
+        try {
+            $result = DB::table($this->table)
+                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                ->select($selectedColumn)
+                ->groupBy('parent_category_id')
+                ->get();
+            return $result;
+        }catch(QueryException $e){
+            echo $e;
+        }
+    }
+
+
+
+    public function getCategoryNameById($where,$selectedColumn){
 
         {
             try {
                 $result = DB::table($this->table)
-                    ->select((array(DB::raw('GROUP_CONCAT(DISTINCT category_name) AS category_name', 'GROUP_CONCAT(DISTINCT category_id) AS category_id'))))
+                    ->select($selectedColumn)
                     ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
 //                ->toSql();
                     ->get();

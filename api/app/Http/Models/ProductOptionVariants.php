@@ -34,18 +34,43 @@ class ProductOptionVariants extends Model
 
     public function getOptionVariantsInfo($where,$selectedColumn = ['*']){
 
-            try {
-                $result = DB::table($this->table)
-                    ->join('product_options', 'product_options.option_id', '=', 'product_option_variants.option_id')
-                    ->select($selectedColumn)
-                    ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
-                    ->get();
-                return $result;
-            } catch
-            (QueryException $e) {
-                echo $e;
-            }
+        try {
+            $result = DB::table($this->table)
+                ->join('product_options', 'product_options.option_id', '=', 'product_option_variants.option_id')
+                ->select($selectedColumn)
+                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                ->get();
+            return $result;
+        } catch
+        (QueryException $e) {
+            echo $e;
+        }
+    }
 
+    public function getOptionVariantDetailsForPopup($where,$selectedColumn = ['*']){
+
+        try {
+            $result = DB::table($this->table)
+//                ->join('product_images', 'product_images.for_product_id', '=', 'products.product_id')
+                ->leftJoin('product_option_variant_relation as product_option_variant_relation', function ($join) {
+                    $join->on('product_option_variants.variant_id', '=',  DB::raw('SUBSTRING_INDEX(product_option_variant_relation.variant_ids, ",", 1)'));
+                })
+//                ->leftJoin('product_option_variants_combination as product_option_variants_combination',function($join){
+//                    $join->on('product_option_variants.variant_id','=','SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT `product_option_variants_combination.variant_ids`  SEPARATOR " _ "),",")  as groups');
+//                })
+                ->leftJoin('product_option_variants_combination as product_option_variants_combination',function($join){
+                    $join->on('product_option_variants.variant_id','=',DB::raw('SUBSTRING_INDEX(product_option_variants_combination.variant_ids, "_", 1)'));
+                })
+                ->leftJoin('product_images','product_images.for_combination_id', '=', 'product_option_variants_combination.combination_id')
+                ->select($selectedColumn)
+                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+//                ->toSql();die($result);
+                ->get();
+            return $result;
+        } catch
+        (QueryException $e) {
+            echo $e;
+        }
 
     }
 }

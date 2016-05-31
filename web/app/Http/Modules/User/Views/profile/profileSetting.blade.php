@@ -554,6 +554,7 @@
                 var contact = $('#contact').val();
                 var username = $('#username').val();
                 var email = $('#email').val();
+                console.log(firstname);
 
                 if ($("#generalinfo").valid()) {
 

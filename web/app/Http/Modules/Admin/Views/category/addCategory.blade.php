@@ -73,7 +73,14 @@
                                 <input type="radio" name="status" value="0">Inactive
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Visibility For Header</label>
 
+                            <div class="col-sm-4">
+                                <input type="radio" name="is_visible" value="Y" checked>Yes
+                                <input type="radio" name="is_visible" value="N">No
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Image</label>
 

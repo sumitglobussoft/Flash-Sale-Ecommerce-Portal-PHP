@@ -34,57 +34,25 @@
 
 <!-- New Layout Content Start -->
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html>
+    <head>
+        <title>Flash Sale</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="/assets/css/styles.css"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.2/css/font-awesome.min.css" />
+        {{--FOR UI-NOTIFICATIONS--}}
+        <link href="/assets/plugins/toastr/toastr.min.css" rel="stylesheet"/>
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Flash Sale | @yield('title')</title>
-
-    <!-- bootstrap CDN Links -->
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
-          type='text/css'/>
-    <!-- Styles -->
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600' rel='stylesheet' type='text/css'>
-
-    <!-- Favicons -->
-    <!--        <link rel="shortcut icon" href="img/icons/favicon.ico">-->
-    <link rel="apple-touch-icon" href="/assets/home/img/icons/apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="/assets/home/img/icons/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="/assets/home/img/icons/apple-touch-icon-114x114.png">
-
-
-    <!-- fonts CDN Links -->
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,700' rel='stylesheet'
-          type='text/css'/>
-    <link href='https://fonts.googleapis.com/css?family=Nunito:400,700' rel='stylesheet' type='text/css'>
-    <link href='http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
-
-    <!-- icons CDN Links -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-
-    <!-- Custom css  -->
-    <link href="/assets/css/styles.css" rel="stylesheet"/>
-    <link href="/assets/home/css/responsive-theme.css" rel="stylesheet" media="screen">
-</head>
+    </head>
 <!-- Skins Changer-->
 
 <!-- New Layout Content Ends Here -->
 
-<script src="/assets/home/js/modernizr/modernizr.js"></script>
+{{--<script src="/assets/home/js/modernizr/modernizr.js"></script>--}}
 
-
-<style>
-    label.error {
-        font-weight: normal;
-        color: #FF0000 !important;
-    }
-
-    span.error {
-        font-weight: normal;
-        color: #FF0000 !important;
-    }
-</style>

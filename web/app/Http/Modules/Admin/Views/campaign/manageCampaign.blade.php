@@ -70,7 +70,7 @@
                                 <th width="5%">Available From</th>
                                 <th width="5%">Available Upto</th>
                                 {{--<th width="5%">Extended End Time</th>--}}
-                                <th width="10%">For Categories</th>
+                                {{--<th width="10%">For Categories</th>--}}
                                 <th width="1%">No Of Products</th>
                                 <th width="20%">Status</th>
                                 <th width="5%">Action</th>
@@ -143,12 +143,12 @@
                                     {{--</div>--}}
                                 </td>
                                 {{--<td></td>--}}
-                                <td>
-                                    <select id="js-states" class="form-control form-filter input-sm select2" multiple
-                                            data-placeholder="Choose Categories..." value=""
-                                            name="category_id[]">
-                                    </select>
-                                </td>
+                                {{--<td>--}}
+                                    {{--<select id="js-states" class="form-control form-filter input-sm select2" multiple--}}
+                                            {{--data-placeholder="Choose Categories..." value=""--}}
+                                            {{--name="category_id[]">--}}
+                                    {{--</select>--}}
+                                {{--</td>--}}
                                 <td></td>
                                 <td>
                                     <select name="campaign_status" class="form-control form-filter input-sm">

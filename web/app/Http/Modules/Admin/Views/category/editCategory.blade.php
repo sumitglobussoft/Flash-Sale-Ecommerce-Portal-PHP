@@ -126,6 +126,17 @@
                                         @endforeach
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Visibility For Header</label>
+
+                                    <div class="col-sm-8">
+                                        <?php $status = array('Y' => 'Yes', 'N' => 'No');?>
+                                        @foreach($status as $key=>$value)
+                                            <input type="radio" name="is_visible" value="{{$key}}"
+                                                   @if($categoryDetails->is_visible==$key) checked @endif>{{$value}}
+                                        @endforeach
+                                    </div>
+                                </div>
 
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Image</label>

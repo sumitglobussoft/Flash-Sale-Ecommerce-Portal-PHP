@@ -124,6 +124,7 @@ class ProductOptionVariant extends Model
         if (func_num_args() > 0) {
             $data = func_get_arg(0);
             $where = func_get_arg(1);
+
             try {
                 $result = DB::table($this->table)
                     ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())

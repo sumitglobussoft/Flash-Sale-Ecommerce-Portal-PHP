@@ -17,10 +17,11 @@ Route::get('/', function () {
 
 
 Route::resource('/product-details','Campaign\ProductController@productdetails');
-Route::resource('/flashsale-details','Campaign\FlashsaleController@flashsaledetails');
+Route::resource('/flashsale-details','Campaign\FlashsaleController@flashsaleDetails');
+Route::resource('/flashsale-ajax-handler','Campaign\FlashsaleController@flashsaleAjaxHandler');
 Route::resource('/dailyspecial-details','Campaign\DailyspecialController@dailyspecialdetails');
 Route::resource('/shop-details','Campaign\ShopController@shopdetails');
-Route::resource('/product-ajax-handler','Campaign\ProductController@productAjaxHandler');
+Route::resource('/campaign/product-ajax-handler','Campaign\ProductController@productAjaxHandler');
 Route::resource('/product-filter','Campaign\ProductController@productfilter');
 Route::resource('/signup','User\AuthenticationController@signup');
 Route::resource('/login','User\AuthenticationController@login');
@@ -29,6 +30,8 @@ Route::resource('/profile-settings','User\ProfileController@profileSettings');
 Route::resource('/profile-ajax-handler','User\ProfileController@profileAjaxHandler');
 Route::resource('/flashsale-products','Campaign\FlashsaleController@flashsaleProducts');
 Route::resource('/product-popup','Campaign\FlashsaleController@productPopup');
+Route::resource('/product-list','Product\ProductController@productList');
+Route::resource('/product/product-ajax-handler','Product\ProductController@productAjaxHandler');
 
 
 Route::resource('/language-translate','User\ProfileController@languageTranslate');

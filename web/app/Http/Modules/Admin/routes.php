@@ -153,6 +153,7 @@ Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), fun
 
         Route::resource('/admin/add-new-filtergroup', 'FilterController@addNewFiltergroup');
         Route::resource('/admin/manage-filtergroup', 'FilterController@manageFilterGroup');
+        Route::resource('/admin/add-filter-variant', 'FilterController@addFilterVariant');
 
         Route::resource('/admin/filter-ajax-handler', 'FilterController@filterAjaxHandler');
 
@@ -238,8 +239,10 @@ Route::group(array('module' => 'Admin', 'namespace' => 'Admin\Controllers'), fun
         Route::resource('/admin/pending-shop', 'ShopController@pendingShop');
         Route::resource('/admin/available-shop', 'ShopController@availableShop');
         Route::resource('/admin/shop-ajax-handler', 'ShopController@shopAjaxHandler');
+        Route::resource('/admin/add-new-shop', 'ShopController@addNewShop');
         Route::get('/admin/edit-shop/{shopid}', 'ShopController@editShop');
         Route::post('/admin/edit-shop/{shopid}', 'ShopController@editShop');
+
 
 
     });

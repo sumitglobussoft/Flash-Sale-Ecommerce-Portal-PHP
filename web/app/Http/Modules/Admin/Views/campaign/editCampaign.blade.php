@@ -28,6 +28,21 @@
     <link type="text/css" rel="stylesheet" media="screen"
           href="/assets/plugins/input-autocomplete-without-addnew/dist/tokens.css">
     <link href="/assets/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
+    <style type="text/css">
+        .form-group .select2-selection {
+            position: relative;
+            z-index: 2;
+            float: left;
+            width: 100%;
+            margin-bottom: 0;
+            display: table;
+            table-layout: fixed;
+        }
+        .form-group ul li{
+            padding:2px !important;
+        }
+
+    </style>
 @endsection
 
 @section('content')
@@ -228,12 +243,11 @@
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-2">Choose Category:</label>
-
                             <div class="col-md-6">
                                 <select id="js-states" class="form-control select2" multiple
                                         data-placeholder="Choose Category..." name="productcategories[]">
                                     <?php
-                                    $selectedCategory = explode(',', $dailyspecialInfo->for_category_ids);
+                                    $selectedCategory = explode(',', $dailyspecialInfo->category_ids);
                                     foreach ($activeCategory as $keyTCsWithTs => $valueTCsWithTs) {
                                     $categoryName = explode(",", $valueTCsWithTs->category_name);
                                     $category_ids = explode(",", $valueTCsWithTs->category_id);
@@ -244,11 +258,39 @@
                                     <?php } ?>
                                     <?php
                                     $categoryName = '';
-                                    }
-                                    ?>
+                                    }  ?>
                                 </select>
                             </div>
                         </div>
+
+                        <div class="form-group" id="validonvaluesdivsubcat">
+                            <div class="form-group">
+                                <label class="control-label col-md-2">Choose Subcategories</label>
+                                <div class="col-md-6">
+                                    <select id="select2_sample2" class="form-control select2" multiple
+                                            data-placeholder="Choose Subcategories.." value=""
+                                            name="productsubcategories[]">
+                                        <?php
+                                        $selectedCategory = explode(',', $dailyspecialInfo->category_ids);
+                                        foreach ($allcategories as $keyTCsWithTs => $valueTCsWithTs) {
+                                        $categoryName = explode(",", $valueTCsWithTs->main_category_name);
+                                        $category_ids = explode(",", $valueTCsWithTs->main_category_id);
+                                        ?>
+                                        <optgroup data-id="<?php echo $keyTCsWithTs ?>"
+                                                  label="<?php echo $valueTCsWithTs->main_cat_name ?>">
+                                            <?php foreach ($categoryName as $keyCategory => $valueCategory) { ?>
+                                            <option value="<?php echo $keyTCsWithTs . '_' . $category_ids[$keyCategory]; ?>"
+                                                    <?php if (in_array($category_ids[$keyCategory], $selectedCategory)) { ?> selected=""<?php } ?>><?php echo $valueCategory; ?></option>
+                                            <?php } ?>
+                                        </optgroup>
+                                        <?php
+                                        $categoryName = '';
+                                        }  ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <label class="control-label col-md-2">Choose Products:</label>
                             <span>If You Select More Than 10 Products. It will be Added as a Flashsale Campaign.</span>
@@ -257,7 +299,7 @@
                                 <select id="select2_tags" class="form-control select2" multiple
                                         data-placeholder="Choose Products..." name="product[]">
                                     <?php
-                                    $selectedCategory = explode(',', $dailyspecialInfo->for_product_ids);
+                                    $selectedProduct = explode(',', $dailyspecialInfo->for_product_ids);
                                     foreach ($allProducts as $keyTCsWithTs => $valueTCsWithTs) {
                                     $productName = explode(",", $valueTCsWithTs->product_name);
                                     $product_ids = explode(",", $valueTCsWithTs->product_id);
@@ -265,7 +307,7 @@
                                     <?php foreach ($productName as $keyProduct => $valueProduct) { ?>
 
                                     <option value="<?php echo $product_ids[$keyProduct]; ?>"
-                                            <?php if (in_array($product_ids[$keyProduct], $selectedCategory)) { ?> selected=""<?php } ?>><?php echo $valueProduct; ?></option>
+                                            <?php if (in_array($product_ids[$keyProduct], $selectedProduct)) { ?> selected=""<?php } ?>><?php echo $valueProduct; ?></option>
                                     <?php } ?>
                                     <?php
                                     $productName = '';
@@ -373,6 +415,66 @@
                 }
             });
 
+            var productData = new Array();
+            var autocompleteList1 = new Array();
+            var srcindex1 = new Array();
+            var subcategoryData = new Array();
+            $.ajax({
+                url: '/admin/campaign-ajax-handler',
+                type: 'POST',
+                datatype: 'json',
+                data: {
+                    method: 'getSubCategoriesForMainCategory'
+                },
+                success: function (resposne) {
+                    data1 = $.parseJSON(resposne);
+
+                    var toAppend = '';
+                    $.each(data1, function (i, v) {
+                        var tempArray = [];
+//                        tempArray['id'] = v.category_id;
+//                        tempArray['text'] = v.category_name;
+//                        subcategoryData.push({id: tempArray['id'], text: tempArray['text']});
+                        var categoryId = v['main_category_id'].split(",");
+                        var categoryNames = v['main_category_name'].split(",");
+                        toAppend += '<optgroup data-id="' + i + '" label="' + v['main_cat_name'] + '">';
+                        $.each(categoryNames, function (catI, catV) {
+                            toAppend += '<option value="' + i + '_' + categoryId[catI] + '">' + catV + '</option>';
+                        });
+                        toAppend += '</optgroup>';
+
+                    });
+
+//                    $("#select2_sample2").select2({
+//                        data: toAppend
+//                    });
+                    $("#select2_sample2").append(toAppend);
+                }
+            });
+            {{--var datas = new Array();--}}
+            {{--$.ajax({--}}
+                {{--url: '/admin/campaign-ajax-handler',--}}
+                {{--type: 'POST',--}}
+                {{--datatype: 'json',--}}
+                {{--data: {--}}
+                    {{--method: 'getActiveProductsOfSuppliers',--}}
+                    {{--products:products--}}
+                {{--},--}}
+                {{--success: function (resposne) {--}}
+                    {{--data1 = $.parseJSON(resposne);--}}
+                    {{--$.each(data1, function (i, v) {--}}
+                        {{--var tempArray = [];--}}
+                        {{--tempArray['id'] = v.product_id;--}}
+                        {{--tempArray['text'] = v.product_name;--}}
+                        {{--datas.push({id: tempArray['id'], text: tempArray['text']});--}}
+                    {{--});--}}
+
+                    {{--$("#select2_tags").select2({--}}
+                        {{--data: datas--}}
+                    {{--});--}}
+                {{--}--}}
+            {{--});--}}
+
 //            var maindata = new Array();
 //            var mainId = new Array();
 ////            $(document.body).on("change", "#select2_tags", function () {
@@ -440,6 +542,10 @@
 //                }
 //
 //            });
+//            $('#select2_tags').select2({
+//                allowClear: true
+//            });
+
             // ============================================== //
             $('#addnewdailyspecial').submit(function () {
                 var sub = $('#select2_tags').val();

@@ -16,8 +16,6 @@
     {{--<link rel="stylesheet" type="text/css"--}}
     {{--href="/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css"/>--}}
 
-
-
     <link rel="stylesheet" type="text/css" href=" /assets/global/plugins/bootstrap-datepicker/css/datepicker3.css"/>
     <link rel="stylesheet" type="text/css"
           href=" /assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css"/>
@@ -29,6 +27,21 @@
     <link type="text/css" rel="stylesheet" media="screen"
           href="/assets/plugins/input-autocomplete-without-addnew/dist/tokens.css">
     <link href="/assets/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
+    <style type="text/css">
+        .form-group .select2-selection {
+            position: relative;
+            z-index: 2;
+            float: left;
+            width: 100%;
+            margin-bottom: 0;
+            display: table;
+            table-layout: fixed;
+        }
+        .form-group ul li{
+            padding:2px !important;
+        }
+
+    </style>
 @endsection
 
 @section('content')
@@ -229,12 +242,11 @@
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-2">Choose Category:</label>
-
                             <div class="col-md-6">
                                 <select id="js-states" class="form-control select2" multiple
                                         data-placeholder="Choose Category..." name="productcategories[]">
                                     <?php
-                                    $selectedCategory = explode(',', $dailyspecialInfo->for_category_ids);
+                                    $selectedCategory = explode(',', $dailyspecialInfo->category_ids);
                                     foreach ($activeCategory as $keyTCsWithTs => $valueTCsWithTs) {
                                     $categoryName = explode(",", $valueTCsWithTs->category_name);
                                     $category_ids = explode(",", $valueTCsWithTs->category_id);
@@ -245,9 +257,35 @@
                                     <?php } ?>
                                     <?php
                                     $categoryName = '';
-                                    }
-                                    ?>
+                                    }  ?>
                                 </select>
+                            </div>
+                        </div>
+                        <div class="form-group" id="validonvaluesdivsubcat">
+                            <div class="form-group">
+                                <label class="control-label col-md-2">Choose Subcategories</label>
+                                <div class="col-md-6">
+                                    <select id="select2_sample2" class="form-control select2" multiple
+                                            data-placeholder="Choose Subcategories.." value=""
+                                            name="productsubcategories[]">
+                                        <?php
+                                        $selectedCategory = explode(',', $dailyspecialInfo->category_ids);
+                                        foreach ($allcategories as $keyTCsWithTs => $valueTCsWithTs) {
+                                        $categoryName = explode(",", $valueTCsWithTs->main_category_name);
+                                        $category_ids = explode(",", $valueTCsWithTs->main_category_id);
+                                        ?>
+                                        <optgroup data-id="<?php echo $keyTCsWithTs ?>"
+                                                  label="<?php echo $valueTCsWithTs->main_cat_name ?>">
+                                            <?php foreach ($categoryName as $keyCategory => $valueCategory) { ?>
+                                            <option value="<?php echo $keyTCsWithTs . '_' . $category_ids[$keyCategory]; ?>"
+                                                    <?php if (in_array($category_ids[$keyCategory], $selectedCategory)) { ?> selected=""<?php } ?>><?php echo $valueCategory; ?></option>
+                                            <?php } ?>
+                                        </optgroup>
+                                        <?php
+                                        $categoryName = '';
+                                        }  ?>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">
@@ -269,14 +307,14 @@
                                             <?php if (in_array($product_ids[$keyProduct], $selectedCategory)) { ?> selected=""<?php } ?>><?php echo $valueProduct; ?></option>
                                     <?php } ?>
                                     <?php
-                                        $productName = '';
+                                    $productName = '';
                                     }
                                     ?>
                                 </select>
                             </div>
                         </div>
                         {{--</div>--}}
-                        <!-- SUBMIT BUTTON-->
+                                <!-- SUBMIT BUTTON-->
                         <div class="form-actions">
                             <div align="center">
                                 <button type="submit" class="btn blue" type="submit" id="addsubmit">Edit Campaign
@@ -380,31 +418,68 @@
 
 
 //                var catId = $(this).val();
-                $.ajax({
-                    url: '/supplier/dailyspecial-ajax-handler',
-                    type: 'POST',
-                    datatype: 'json',
-                    data: {
-                        method: 'getSupplierProducts',
+            $.ajax({
+                url: '/supplier/dailyspecial-ajax-handler',
+                type: 'POST',
+                datatype: 'json',
+                data: {
+                    method: 'getSupplierProducts',
 //                        catId: catId
-                    },
-                    success: function (response) {
-                        var data = $.parseJSON(response);
-                        var temparrayId = [];
-                        var temparrayName = [];
-                        $.each(data, function (pi, pv) {
-                            temparrayId['id'] = pv['product_id'];
-                            temparrayName['text'] = pv['product_name'];
-                            data.push({id: temparrayId['id'], text: temparrayName['text']});
-                        });
-                        $("#select2_tags").select2({
-                            data: data
-                        });
+                },
+                success: function (response) {
+                    var data = $.parseJSON(response);
+                    var temparrayId = [];
+                    var temparrayName = [];
+                    $.each(data, function (pi, pv) {
+                        temparrayId['id'] = pv['product_id'];
+                        temparrayName['text'] = pv['product_name'];
+                        data.push({id: temparrayId['id'], text: temparrayName['text']});
+                    });
+                    $("#select2_tags").select2({
+                        data: data
+                    });
 //
 ////                        $('#select2_tags').html('<option value="' + temparrayId + '">' + temparrayName + '</option>');
 //
-                    }
-                });
+                }
+            });
+
+//            var productData = new Array();
+//            var autocompleteList1 = new Array();
+//            var srcindex1 = new Array();
+//            var subcategoryData = new Array();
+//            $.ajax({
+//                url: '/supplier/flashsale-ajax-handler',
+//                type: 'POST',
+//                datatype: 'json',
+//                data: {
+//                    method: 'getSubCategoriesForMainCategory'
+//                },
+//                success: function (resposne) {
+//                    data1 = $.parseJSON(resposne);
+//
+//                    var toAppend = '';
+//                    $.each(data1, function (i, v) {
+//                        var tempArray = [];
+////                        tempArray['id'] = v.category_id;
+////                        tempArray['text'] = v.category_name;
+////                        subcategoryData.push({id: tempArray['id'], text: tempArray['text']});
+//                        var categoryId = v['main_category_id'].split(",");
+//                        var categoryNames = v['main_category_name'].split(",");
+//                        toAppend += '<optgroup data-id="' + i + '" label="' + v['main_cat_name'] + '">';
+//                        $.each(categoryNames, function (catI, catV) {
+//                            toAppend += '<option value="' + i + '_' + categoryId[catI] + '">' + catV + '</option>';
+//                        });
+//                        toAppend += '</optgroup>';
+//
+//                    });
+//
+////                    $("#select2_sample2").select2({
+////                        data: toAppend
+////                    });
+//                    $("#select2_sample2").append(toAppend);
+//                }
+//            });
 
             // ============================================ //
 

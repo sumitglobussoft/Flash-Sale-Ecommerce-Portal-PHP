@@ -347,6 +347,7 @@
 //                                toastr["error"](alertMsg);
                                 toastr[ response['status'] ](alertMsg );
                             } else {
+
                                 toastr[response['status']](response['message']);
 //                                toastr["success"](response['message']);
                             }
@@ -442,8 +443,9 @@
                             toastr[ response['status'] ](alertMsg );
                             location.reload();
                         } else {
-                            toastr[response['status']](response['message']);
-//                            alert(response['message']);
+//                            toastr(response['message']);
+//                            toastr[ response['status'] ](alertMsg );
+                            alert(response['message']);
                         }
                     },
                     error: function (response) {

@@ -101,7 +101,7 @@
             $(document.body).on('click', '#flashsale', function () {
 
                 var checkId = $(this).val();
-//                alert(checkId);
+                alert(checkId);
             });
 
 

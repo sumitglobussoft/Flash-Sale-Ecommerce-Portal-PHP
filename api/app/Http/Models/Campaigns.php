@@ -46,8 +46,9 @@ class Campaigns extends Model
         try {
             $result = DB::table($this->table)
                 ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
-                ->select()
+                ->select($selectedColumns)
                 ->get();
+//            ->toSql();
             return $result;
         } catch (QueryException $e) {
             echo $e;

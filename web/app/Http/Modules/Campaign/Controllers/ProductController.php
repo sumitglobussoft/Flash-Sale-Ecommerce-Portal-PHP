@@ -31,11 +31,18 @@ class ProductController extends Controller
 //        return view("Admin\admin")
     }
 
-    public function productDetails(Request $request, $productId)
+    /**
+     * Get All product Details
+     * @param Request $request
+     * @param $productId
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @author Vini Dubey
+     */
+    public function productDetails(Request $request, $productId,$productName)
     {
 
         $objCurl = CurlRequestHandler::getInstance();
-        $url = env("API_URL") . '/' . "product-details";
+        $url = env("API_URL") . '/' . "product-popup";
 
         $mytoken = env("API_TOKEN");
         $user_id = '';
@@ -43,13 +50,10 @@ class ProductController extends Controller
             $user_id = Session::get('fs_customer')['id'];
 
         }
-        $data = array('product_id' => $productId, 'mytoken' => $mytoken, 'id' => $user_id);
-        //  echo "<pre>";print_r($data);die('ere');
-        DB::setFetchMode(PDO::FETCH_ASSOC);
+        $data = array('product_id' => $productId, 'api_token' => $mytoken, 'id' => $user_id);
         $curlResponse = $objCurl->curlUsingPost($url, $data);
-//        echo "<pre>";print_r((array)$curlResponse->data);die("xdg");
         if ($curlResponse->code == 200) {
-            return view('Campaign.Views.product.product-details', ['productdetails' => (array)$curlResponse->data]);
+            return view('Campaign.Views.product.product-details', ['productdetails' => $curlResponse->data]);
         }
 
 
@@ -114,6 +118,7 @@ class ProductController extends Controller
 //          echo "<pre>";print_r($data);die('ere');
         DB::setFetchMode(PDO::FETCH_ASSOC);
         $curlResponse = $objCurl->curlUsingPost($url, $data);
+
         echo "<pre>";
         print_r((array)$curlResponse->data);
         die("xdg");

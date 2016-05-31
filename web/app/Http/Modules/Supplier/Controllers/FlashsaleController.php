@@ -113,9 +113,41 @@ class FlashsaleController extends Controller
                     echo 0;
                 }
                 break;
-            case 'manageFlashsale':
+            case 'getSubCategoriesForMainCategory':
+                $where = ['rawQuery' => 'category_status = ?', 'bindParams' => [1]];
+//                $selectedColumn = [DB::raw('SELECT product_categories.*
+//                CASE WHEN (parent_category_id == 0)
+//                 THEN DB::raw("GROUP_CONCAT(category_name)AS main_category_name")
+//                 END ')];
+                $selectedColumn = ['product_categories.*', DB::raw('GROUP_CONCAT(category_id)AS main_category_id'),
+                    DB::raw('GROUP_CONCAT(category_name)AS main_category_name')];
+                $allActiveSubcategories = $objCategoryModel->getSubCategoriesForMaincategory($where, $selectedColumn);
+
+                $mainCategory = array_filter(array_map(function ($category) {
+                    if ($category->parent_category_id == 0)
+                        return $category;
+                }, $allActiveSubcategories))[0];
+
+                $finalCatData = [];
+                foreach (explode(',', $mainCategory->main_category_id) as $index => $mainCatID) {
+                    foreach ($allActiveSubcategories as $subCatKey => $allActiveSubcategory) {
+                        if ($allActiveSubcategory->parent_category_id == $mainCatID) {
+                            $allActiveSubcategory->main_cat_name = explode(',', $mainCategory->main_category_name)[$index];
+                            $finalCatData[$mainCatID] = $allActiveSubcategory;
+                        }
+                    }
+                }
+
+                if (!empty($finalCatData)) {
+                    echo json_encode($finalCatData);
+                } else {
+                    echo 0;
+                }
+                break;
+            case
+            'manageFlashsale':
                 $where = ['rawQuery' => 'campaign_type = ?', 'bindParams' => [2]];
-                $selectedColumn = ['campaigns.*','users.username'];
+                $selectedColumn = ['campaigns.*', 'users.username'];
                 $flashsaleInfo = $objCampaignModel->getAllFlashsaleDetails($where, $selectedColumn);
                 foreach ($flashsaleInfo as $flashkey => $flashval) {
                     $categoryIds = $flashval->for_category_ids;

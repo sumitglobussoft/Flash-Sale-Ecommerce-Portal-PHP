@@ -25,6 +25,10 @@ class CustomerController extends Controller
 {
 
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function availableCustomer(Request $request)
     {
 
@@ -34,6 +38,10 @@ class CustomerController extends Controller
         return view("Admin/Views/customer/availableCustomer");
     }
 
+    /**
+     * @param Request $request
+     * @return mixed
+     */
     public function customerAjaxHandler(Request $request)
     {
         $inputData = $request->input();
@@ -45,10 +53,6 @@ class CustomerController extends Controller
                 case "availableCustomer":
                     $objuser = User::getInstance();
                     $available_customers = $objuser->getAvailableUserDetails();
-//                    foreach ($available_customers as $key => $val) {
-//                        $available[$key] = $val->status;
-//                    }
-                    // echo"<pre>";print_r($available);die("kgkj");
                     return Datatables::of($available_customers)
                         ->addColumn('action', function ($available_customers) {
                             return '<span class="tooltips" title="Edit User Details." data-placement="top"> <a href="/admin/edit-customer/' . $available_customers->id . '" class="btn btn-sm grey-cascade" style="margin-left: 10%;">
@@ -60,10 +64,10 @@ class CustomerController extends Controller
                                                 </a>
                                             </span>';
                         })
-                        ->addColumn('status', function ($available_customers)  use ($mainId){
+                        ->addColumn('status', function ($available_customers) use ($mainId) {
 
                             $button = '<td style="text-align: center">';
-                            $button .= '<button class="btn ' . (($available_customers->status == 1) ? "btn-success" : "btn-danger") . ' customer-status" data-id="' . $available_customers->id . '" data-set-by="'.$mainId.'">' . (($available_customers->status == 1) ? "Active" : "Inactve") . ' </button>';
+                            $button .= '<button class="btn ' . (($available_customers->status == 1) ? "btn-success" : "btn-danger") . ' customer-status" data-id="' . $available_customers->id . '" data-set-by="' . $mainId . '">' . (($available_customers->status == 1) ? "Active" : "Inactve") . ' </button>';
                             $button .= '</td>';
                             return $button;
                         })
@@ -142,6 +146,12 @@ class CustomerController extends Controller
     }
 
 
+    /**
+     * Add New Customers Action
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @author Vini Dubey
+     */
     public function addNewCustomer(Request $request)
     {
 
@@ -149,7 +159,6 @@ class CustomerController extends Controller
         if ($request->isMethod("POST")) {
 
             $postData = $request->all();
-
 
             $rules = array(
                 'firstname' => 'required|regex:/^[A-Za-z\s]+$/|max:255',
@@ -192,7 +201,6 @@ class CustomerController extends Controller
 
                     $objMailTemplate = MailTemplate::getInstance();
                     $temp_name = "signup_success_mail";
-                    //  $where = ['rawQuery' => 'temp_name = ?', 'bindParam' => $temp_name];
 
                     $mailTempContent = $objMailTemplate->getTemplateByName($temp_name);
                     $key = env('MANDRILL_KEY');
@@ -246,10 +254,16 @@ class CustomerController extends Controller
         return view('Admin/Views/customer/addNewCustomer');
     }
 
+    /**
+     * Edit Customer Action
+     * @param Request $request
+     * @param $uid
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @author Vini Dubey
+     */
     public function editCustomer(Request $request, $uid)
     {
         $postdata = $request->all();
-
         $ObjUser = User::getInstance();
         if ($request->isMethod("GET")) {
             // $where = ['rawQuery' => 'id = ?', 'bindParams' => $uid];
@@ -275,6 +289,11 @@ class CustomerController extends Controller
 
     }
 
+    /**
+     * Pending Customer Action
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function pendingCustomer(Request $request)
     {
 
@@ -282,6 +301,11 @@ class CustomerController extends Controller
 
     }
 
+    /**
+     * Deleted Customer Action
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function deletedCustomer(Request $request)
     {
 

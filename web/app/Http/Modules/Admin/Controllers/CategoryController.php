@@ -89,11 +89,12 @@ class CategoryController extends Controller
                     $filePath = uploadImageToStoragePath(Input::file('category_image'), 'category');
                     if ($filePath) $categoryData['category_banner_url'] = $filePath;
                 }
-                $categoryData['category_name'] = $request->input('category_name');
+                $categoryData['category_name'] = trim($request->input('category_name'));
                 $categoryData['category_desc'] = $request->input('category_desc');
                 $categoryData['created_by'] = $userId;
                 $categoryData['status_set_by'] = $userId;
                 $categoryData['category_status'] = $request->input('status');
+                $categoryData['is_visible'] = $request->input('is_visible');
                 $categoryData['parent_category_id'] = $request->input('parent_category');
                 $categoryData['page_title'] = $request->input('page_title');
                 $categoryData['meta_description'] = $request->input('meta_desc');
@@ -108,8 +109,6 @@ class CategoryController extends Controller
                 );
             }
         }
-
-
 //        $where = ['rawQuery' => 'category_status =?', 'bindParams' => [1]];
         $where = ['rawQuery' => '1'];
         $allCategories = $objCategoryModel->getAllCategoriesWhere($where);
@@ -159,6 +158,7 @@ class CategoryController extends Controller
                 $dataToUpdate['category_name'] = $request->input('category_name');
                 $dataToUpdate['category_desc'] = $request->input('category_desc');
                 $dataToUpdate['category_status'] = $request->input('status');
+                $dataToUpdate['is_visible'] = $request->input('is_visible');
                 $dataToUpdate['parent_category_id'] = $request->input('parent_category');
                 $dataToUpdate['page_title'] = $request->input('page_title');
                 $dataToUpdate['meta_description'] = $request->input('meta_desc');

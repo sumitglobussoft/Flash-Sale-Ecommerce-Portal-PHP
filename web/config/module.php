@@ -8,6 +8,7 @@ return [
         "Home",
         "Payment",
         "Supplier",
-        "User"
+        "User",
+        "Product"
     ),
 ];

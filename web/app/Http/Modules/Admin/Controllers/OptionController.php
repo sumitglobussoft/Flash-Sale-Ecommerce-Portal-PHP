@@ -50,6 +50,7 @@ class OptionController extends Controller
         $userId = Session::get('fs_admin')['id'];
         if ($request->isMethod('post')) {
             $inputData = $request->input('option_data');
+            print_a($inputData);
             $variantInputData = $request->input('option_data')['variants'];
             $rules = array(
                 'option_name' => 'required|max:50|unique:product_options,option_name,NULL,option_id,shop_id,' . $inputData['shop_id'] . ',added_by,' . $userId,
@@ -74,6 +75,7 @@ class OptionController extends Controller
                     }
                 }
             }
+//            print_a($rules);
             $validator = Validator::make($inputData, $rules, $messages);
             if ($validator->fails()) {
                 return Redirect::back()
@@ -146,6 +148,7 @@ class OptionController extends Controller
         $userId = Session::get('fs_admin')['id'];
 
         if ($request->isMethod('post')) {
+
             $inputData = $request->input('option_data');
             $variantInputData = $request->input('option_data')['variants'];
             $rules = array(
@@ -208,7 +211,6 @@ class OptionController extends Controller
                         if ($variantValues['variant_name'] != '') {
                             if (isset($variantValues['variant_id']) && in_array($variantValues['variant_id'], $oldVariantIds)) {//UPDATE VARIANT DETAILS
                                 $inputVariantIds[] = $variantValues['variant_id'];
-
                                 $updateVariantData = '';
                                 $updateVariantData['variant_name'] = $variantValues['variant_name'];
                                 $updateVariantData['price_modifier'] = $variantValues['price_modifier'];

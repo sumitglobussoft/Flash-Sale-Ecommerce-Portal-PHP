@@ -3,6 +3,7 @@
 namespace FlashSaleApi\Http\Controllers\User;
 
 use DB;
+use FlashSaleApi\Http\Models\Usersmeta;
 use Illuminate\Http\Request;
 use FlashSaleApi\Http\Requests;
 use FlashSaleApi\Http\Controllers\Controller;
@@ -78,6 +79,14 @@ class AuthenticationController extends Controller
                         'status' => '1',
                         'username' => $postData['username']
                     ]);
+                    $objUsersMetaModel = new Usersmeta();
+                    if ($postData['optradio'] != '' && $postData['contact_no'] != '' && $postData['date_of_birth'] != '') {
+                        $whereForUpdate = [
+                            'rawQuery' => 'gender = ? and phone = ? and date_of_birth = ?',
+                            'bindParams' => [$postData['optradio'], $postData['contact_no'],$postData['date_of_birth']]
+                        ];
+                        $exists = $objUsersMetaModel->UpdateUsermetawhere($whereForUpdate);
+                    }
                     if ($supplier) {
 
                         $objMailTemplate = new MailTemplate();

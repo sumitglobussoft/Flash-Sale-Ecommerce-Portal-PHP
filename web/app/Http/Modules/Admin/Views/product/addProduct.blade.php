@@ -1763,7 +1763,7 @@ $priceSymbol = getSetting('price_symbol'); $priceSymbol = $priceSymbol ? $priceS
                     optionAddedRemovedFlag = false;
                     $("#option_combinations_modal").modal('show');
                 } else {
-                    oTable.fnClearTable();
+//                    oTable.fnClearTable();
                     $('#variantCombinationTBody').empty();
                     toastr['error']("Please select atleast 2 options for combining.");
                 }

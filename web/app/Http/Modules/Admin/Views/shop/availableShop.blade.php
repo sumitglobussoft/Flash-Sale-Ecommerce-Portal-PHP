@@ -18,6 +18,7 @@
         <div class="col-md-12">
             <div class="panel panel-white">
                 <div class="panel-body">
+                    <a href="/admin/add-new-shop" class="btn btn-circle default">Back</a>
                     <table id="pending_shop" class="display" cellspacing="0" width="100%">
                         <thead>
                         <tr>

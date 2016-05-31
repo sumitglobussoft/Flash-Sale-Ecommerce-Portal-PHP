@@ -56,7 +56,7 @@ class DailyspecialController extends Controller
                 'availableuptodate' => 'required',
                 'dailyspecial_image' => 'image|required',
                 'productcategories' => 'required',
-                'product' => 'required'
+                'product' => 'required',
 
             );
             $validator = Validator::make($request->all(), $rules);
@@ -86,11 +86,25 @@ class DailyspecialController extends Controller
                 $data['available_from'] = $validFrom;
                 $data['available_upto'] = $validTo;
                 $categ = $postData['productcategories'];
-                $data['for_category_ids'] = implode(",", $categ);
+                if (isset($postData['productsubcategories'])) {
+                    $subcat = $postData['productsubcategories'];
+                } else {
+                    $subcat = [];
+                }
+                $tmp = [];
+                foreach ($categ as $index => $item) {
+                    $tmp[$item] = array_values(array_filter(array_map(function ($cat) use ($item) {
+                        if (explode('_', $cat)[0] == $item) {
+                            return explode('_', $cat)[1];
+                        }
+                    }, $subcat)));
+                }
                 $data['by_user_id'] = $supplierId;
 //                $product = $postData['product'];
+                $data['for_category_ids'] = json_encode($tmp);
                 $data['for_product_ids'] = implode(",", $postData['product']);
                 $campaigns = 'Flashsale';
+
             } else {
                 if (Input::hasFile('dailyspecial_image')) {
                     $filePath = uploadImageToStoragePath(Input::file('dailyspecial_image'), 'dailyspecial', 'dailyspecial_' . $supplierId . '_' . time() . ".jpg");
@@ -108,11 +122,25 @@ class DailyspecialController extends Controller
                 $data['available_from'] = $validFrom;
                 $data['available_upto'] = $validTo;
                 $categ = $postData['productcategories'];
-                $data['for_category_ids'] = implode(",", $categ);
+                if (isset($postData['productsubcategories'])) {
+                    $subcat = $postData['productsubcategories'];
+                } else {
+                    $subcat = [];
+                }
+                $tmp = [];
+                foreach ($categ as $index => $item) {
+                    $tmp[$item] = array_values(array_filter(array_map(function ($cat) use ($item) {
+                        if (explode('_', $cat)[0] == $item) {
+                            return explode('_', $cat)[1];
+                        }
+                    }, $subcat)));
+                }
                 $data['by_user_id'] = $supplierId;
                 $product = $postData['product'];
+                $data['for_category_ids'] = json_encode($tmp);
                 $data['for_product_ids'] = implode(",", $product);
                 $campaigns = 'Dailyspecial';
+                print_a($data);
             }
 
             $campaign = $objCampaignModel->addFlashsale($data);
@@ -126,6 +154,11 @@ class DailyspecialController extends Controller
 
     }
 
+    /**
+     *Daily Special Ajax Handler
+     * @param Request $request
+     * @author: Vini Dubey<vinidubey@globussoft.in>
+     */
     public function dailyspecialAjaxhandler(Request $request)
     {
 
@@ -152,6 +185,15 @@ class DailyspecialController extends Controller
         }
     }
 
+    /**
+     * Campaign Listing AjaxHandler With Filter
+     * @param Request $request
+     * @param $method
+     * @return mixed
+     * @throws \Exception
+     * @author: Vini Dubey<vinidubey@globussoft.in>
+     * @since: xx-xx-xxxx
+     */
     public function campaignListAjaxHandler(Request $request, $method)
     {
 
@@ -200,18 +242,18 @@ class DailyspecialController extends Controller
                 $dailyspecialInfo = $objCampaignModel->getAllFlashsaleDetails($where, $selectedColumn);
 
                 foreach ($dailyspecialInfo as $flashkey => $flashval) {
-                    $categoryIds = $flashval->for_category_ids;
+//                    $categoryIds = $flashval->for_category_ids;
                     $productIds = $flashval->for_product_ids;
 
-                    $where = ['rawQuery' => 'category_id IN(' . $categoryIds . ')'];
-                    $getcategory = $objCategoryModel->getCategoryNameById($where);
+//                    $where = ['rawQuery' => 'category_id IN(' . $categoryIds . ')'];
+//                    $getcategory = $objCategoryModel->getCategoryNameById($where);
                     $whereProd = ['rawQuery' => 'product_id IN(' . $productIds . ')'];
                     $selectedColumn = [DB::raw('GROUP_CONCAT(DISTINCT product_name) AS product_name'), DB::raw('GROUP_CONCAT(DISTINCT product_id) AS product_id')];
                     $getproduct = $objProductModel->getProductNameById($whereProd, $selectedColumn);
 
-                    foreach ($getcategory as $catkey => $catval) {
-                        $dailyspecialInfo[$flashkey]->category = $catval->category_name;
-                    }
+//                    foreach ($getcategory as $catkey => $catval) {
+//                        $dailyspecialInfo[$flashkey]->category = $catval->category_name;
+//                    }
                     foreach ($getproduct as $prodkey => $prodval) {
                         $dailyspecialInfo[$flashkey]->product = $prodval->product_name;
                     }
@@ -230,7 +272,7 @@ class DailyspecialController extends Controller
                         'discount_value' => $mainflashval['discount_value'] . '%',
                         'available_from' => date('d F Y - h:i A', $mainflashval['available_from']),
                         'available_upto' => date('d F Y - h:i A', $mainflashval['available_upto']),
-                        'category' => $mainflashval['category'],
+//                        'category' => $mainflashval['category'],
                         'product' => count(explode(",", $mainflashval['product'])),
                         'campaign_status' => $mainflashval['campaign_status'],
                         'action' => '',
@@ -272,9 +314,9 @@ class DailyspecialController extends Controller
 //                    } elseif($_REQUEST['available_upto_date'] != ''){
 //                        $filteringRules[] = "(`campaigns`.`available_upto` LIKE '%" . strtotime(str_replace( '-',' ',$_REQUEST['available_upto_date'])) . "%')";
 //                    }
-                    if ($_REQUEST['category_id'] != '') {
-                        $filteringRules[] = "(`campaigns`.`for_category_ids`  LIKE '%" . implode(",", $_REQUEST['category_id']) . "%' )";
-                    }
+//                    if ($_REQUEST['category_id'] != '') {
+//                        $filteringRules[] = "(`campaigns`.`for_category_ids`  LIKE '%" . implode(",", $_REQUEST['category_id']) . "%' )";
+//                    }
                     if ($_REQUEST['campaign_status'] != '') {
                         $filteringRules[] = "(`campaigns`.`campaign_status` = " . $_REQUEST['campaign_status'] . " )";
                     }
@@ -289,18 +331,19 @@ class DailyspecialController extends Controller
                     $where = ['rawQuery' => 'campaign_type IN(1,2) AND by_user_id = ? AND campaign_status IN(1,2,3,4,5)', 'bindParams' => [$supplierId]];
                     $selectedColumn = ['campaigns.*', 'users.username'];
                     $MainFlashInfo = $objCampaignModel->getAllFlashDetail($where, $implodedWhere, $sortingOrder, $iDisplayLength, $iDisplayStart, $selectedColumn);
+
                     foreach ($MainFlashInfo as $flashkey => $flashval) {
-                        $categoryIds = $flashval->for_category_ids;
+//                        $categoryIds = $flashval->for_category_ids;
                         $productIds = $flashval->for_product_ids;
-                        $where = ['rawQuery' => 'category_id IN(' . $categoryIds . ')'];
-                        $getcategory = $objCategoryModel->getCategoryNameById($where);
+//                        $where = ['rawQuery' => 'category_id IN(' . $categoryIds . ')'];
+//                        $getcategory = $objCategoryModel->getCategoryNameById($where);
                         $whereProd = ['rawQuery' => 'product_id IN(' . $productIds . ')'];
                         $selectedColumn = [DB::raw('GROUP_CONCAT(DISTINCT product_name) AS product_name'), DB::raw('GROUP_CONCAT(DISTINCT product_id) AS product_id')];
                         $getproduct = $objProductModel->getProductNameById($whereProd, $selectedColumn);
 
-                        foreach ($getcategory as $catkey => $catval) {
-                            $MainFlashInfo[$flashkey]->category = $catval->category_name;
-                        }
+//                        foreach ($getcategory as $catkey => $catval) {
+//                            $MainFlashInfo[$flashkey]->category = $catval->category_name;
+//                        }
                         foreach ($getproduct as $prodkey => $prodval) {
                             $MainFlashInfo[$flashkey]->product = $prodval->product_name;
                         }
@@ -320,7 +363,7 @@ class DailyspecialController extends Controller
                             'discount_value' => $mainflashval['discount_value'] . '%',
                             'available_from' => date('d F Y - h:i A', $mainflashval['available_from']),
                             'available_upto' => date('d F Y - h:i A', $mainflashval['available_upto']),
-                            'category' => $mainflashval['category'],
+//                            'category' => $mainflashval['category'],
                             'product' => count(explode(",", $mainflashval['product'])),
                             'campaign_status' => $mainflashval['campaign_status'],
                             'action' => '',
@@ -384,6 +427,15 @@ class DailyspecialController extends Controller
 
     }
 
+    /**
+     * Edit Dailyspecail And Campaign Action
+     * @param Request $request
+     * @param $did
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \Exception
+     * @author: Vini Dubey<vinidubey@globussoft.in>
+     * @since: xx-xx-xxxx
+     */
     public function editDailyspecial(Request $request, $did)
     {
 
@@ -431,12 +483,26 @@ class DailyspecialController extends Controller
                 $data['available_from'] = $validFrom;
                 $data['available_upto'] = $validTo;
                 $categ = $postData['productcategories'];
-                $data['for_category_ids'] = implode(",", $categ);
+                if (isset($postData['productsubcategories'])) {
+                    $subcat = $postData['productsubcategories'];
+                } else {
+                    $subcat = [];
+                }
+                $tmp = [];
+                foreach ($categ as $index => $item) {
+                    $tmp[$item] = array_values(array_filter(array_map(function ($cat) use ($item) {
+                        if (explode('_', $cat)[0] == $item) {
+                            return explode('_', $cat)[1];
+                        }
+                    }, $subcat)));
+                }
+                $data['for_category_ids'] = json_encode($tmp);
                 $data['by_user_id'] = $supplierId;
 //                $product = $postData['product'];
                 $data['for_product_ids'] = implode(",", $postData['product']);
                 $where = ['rawQuery' => 'campaign_id = ?', 'bindParams' => [$did]];
                 $campaigns = 'Flashsale';
+//                print_a($data);
             } else {
                 if (Input::hasFile('dailyspecial_image')) {
                     $filePath = uploadImageToStoragePath(Input::file('dailyspecial_image'), 'dailyspecial', 'dailyspecial_' . $supplierId . '_' . time() . ".jpg");
@@ -451,13 +517,31 @@ class DailyspecialController extends Controller
                 $data['available_from'] = $validFrom;
                 $data['available_upto'] = $validTo;
                 $categ = $postData['productcategories'];
-                $data['for_category_ids'] = implode(",", $categ);
+
+                if (isset($postData['productsubcategories'])) {
+                    $subcat = $postData['productsubcategories'];
+                } else {
+                    $subcat = [];
+                }
+//                print_r($categ);
+//                print_a($subcat);
+                $tmp = [];
+                foreach ($categ as $index => $item) {
+                    $tmp[$item] = array_values(array_filter(array_map(function ($cat) use ($item) {
+                        if (explode('_', $cat)[0] == $item) {
+                            return explode('_', $cat)[1];
+                        }
+                    }, $subcat)));
+                }
+//                print_a(json_encode($tmp));
+                $data['for_category_ids'] = json_encode($tmp);
                 $data['by_user_id'] = $supplierId;
 //                $product = $postData['product'];
                 $data['for_product_ids'] = implode(",", $postData['product']);
 //                $data['for_product_ids'] = $postData['product'][0];
                 $where = ['rawQuery' => 'campaign_id = ?', 'bindParams' => [$did]];
                 $campaigns = 'Dailyspecial';
+//                print_a($data);
             }
             $campaignUpdate = $objCampaignModel->updateFlashsaleStatus($data, $where);
             if ($campaignUpdate) {
@@ -472,17 +556,25 @@ class DailyspecialController extends Controller
         $where = ['rawQuery' => 'campaign_id = ? AND by_user_id = ?', 'bindParams' => [$did, $supplierId]];
         $selectedColumn = ['campaigns.*', 'users.username'];
         $dailyspecialInfo = $objCampaignModel->getAllFlashsaleDetails($where, $selectedColumn);
+//        print_a($dailyspecialInfo);
         if ((isset($dailyspecialInfo) && (!empty($dailyspecialInfo)))) {
             foreach ($dailyspecialInfo as $flashkey => $flashval) {
-                $categoryIds = $flashval->for_category_ids;
-                $where = ['rawQuery' => 'category_id IN(' . $categoryIds . ')'];
-                $getcategory = $objProductCategory->getCategoryNameById($where);
+                $categoryIds = json_decode($flashval->for_category_ids, true);
+                $categoryMerg = array_merge(array_keys($categoryIds));
+                $categoryMergee = array_merge(array_flatten($categoryIds));
+                $categoryMerge = array_merge(array_keys($categoryIds), array_flatten($categoryIds));
+//                echo'<pre>';print_r($categoryMerg);
+//                echo'<pre>';print_r($categoryMergee);
+//                print_a($categoryMerge);
+                $where = ['rawQuery' => 'category_id IN(' . implode(",", $categoryMerge) . ')'];
+                $selectedColumn = [DB::raw('GROUP_CONCAT(DISTINCT category_name) AS category_name'), DB::raw('GROUP_CONCAT(DISTINCT category_id) AS category_id')];
+                $getcategory = $objProductCategory->getCategoryNameById($where, $selectedColumn);
                 foreach ($getcategory as $catkey => $catval) {
                     $dailyspecialInfo[$flashkey]->category = $catval->category_name;
+                    $dailyspecialInfo[$flashkey]->category_ids = $catval->category_id;
                 }
                 $whereProduct = ['rawQuery' => 'product_id IN(' . $flashval->for_product_ids . ')'];
                 $selectedColumn = [DB::raw('GROUP_CONCAT(DISTINCT product_name) AS product_name'), DB::raw('GROUP_CONCAT(DISTINCT product_id) AS product_id')];
-
                 $getproduct = $objProductModel->getProductNameById($whereProduct, $selectedColumn);
 
                 foreach ($getproduct as $prodkey => $prodval) {
@@ -493,11 +585,30 @@ class DailyspecialController extends Controller
             $where = ['rawQuery' => 'category_status = ? AND parent_category_id = ?', 'bindParams' => [1, 0]];
             $selectedColumn = ['category_id', 'category_name', 'category_status', 'for_shop_id'];
             $allactivecategories = $objProductCategory->getAllMainCategories($where, $selectedColumn);
+            $where = ['rawQuery' => 'category_status = ?', 'bindParams' => [1]];
+            $selectedColumn = ['product_categories.*', DB::raw('GROUP_CONCAT(category_id)AS main_category_id'),
+                DB::raw('GROUP_CONCAT(category_name)AS main_category_name')];
+            $allActiveSubcategories = $objProductCategory->getSubCategoriesForMaincategory($where, $selectedColumn);
+
+            $mainCategory = array_filter(array_map(function ($category) {
+                if ($category->parent_category_id == 0)
+                    return $category;
+            }, $allActiveSubcategories))[0];
+
+            $finalCatData = [];
+            foreach (explode(',', $mainCategory->main_category_id) as $index => $mainCatID) {
+                foreach ($allActiveSubcategories as $subCatKey => $allActiveSubcategory) {
+                    if ($allActiveSubcategory->parent_category_id == $mainCatID) {
+                        $allActiveSubcategory->main_cat_name = explode(',', $mainCategory->main_category_name)[$index];
+                        $finalCatData[$mainCatID] = $allActiveSubcategory;
+                    }
+                }
+            }
             $where = ['rawQuery' => 'added_by = ? AND product_type = ?', 'bindParams' => [$supplierId, 0]];
             $selectedColumn = ['product_id', 'product_name'];
             $allproducts = $objProductModel->getAllSupplierProducts($where, $selectedColumn);
 
-            return view('Supplier/Views/dailyspecial/editDailySpecial', ['dailyspecialInfo' => $dailyspecialInfo[0], 'activeCategory' => $allactivecategories, 'allProducts' => $allproducts]);
+            return view('Supplier/Views/dailyspecial/editDailySpecial', ['dailyspecialInfo' => $dailyspecialInfo[0], 'activeCategory' => $allactivecategories, 'allProducts' => $allproducts, 'allcategories' => $finalCatData]);
 
         } else {
             return view('Supplier/Views/dailyspecial/editDailySpecial');

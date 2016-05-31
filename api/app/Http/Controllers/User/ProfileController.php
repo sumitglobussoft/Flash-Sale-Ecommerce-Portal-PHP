@@ -107,7 +107,12 @@ class ProfileController extends Controller
     }
 
 
-    public function languageTranslate(Request $request){
+    /**
+     * Service is used for getting language name and code.
+     * @param Request $request
+     */
+    public function languageTranslate(Request $request)
+    {
         $response = new stdclass();
         $objLanguage = new Languages();
         $objuser = new User();
@@ -126,51 +131,20 @@ class ProfileController extends Controller
                 $apitoken = $postData['api_token'];
 
             }
-
             if ($apitoken == $API_TOKEN) {
-//            if ($apitoken == $API_TOKEN) {
+                $ObjLanguageModel = Languages::getInstance();
+                $selectColumn = ['languages.lang_code', 'languages.name'];
+                $langInfo = $ObjLanguageModel->getAllLanguages($selectColumn);
 
-//            if (isset($postData['api_token'])) {
-//                $apitoken = $postData['api_token'];
-//                if ($apitoken == $API_TOKEN) {
-//                    $authFlag = true;
-//                } else {
-//                    if ($userId != '') {
-//                        $where = [
-//                            'rawQuery' => 'id =?',
-//                            'bindParams' => [$userId]
-//                        ];
-//                        $Userscredentials = $objuser->getUsercredsWhere($where);
-//                        if ($apitoken == $Userscredentials->login_token) {
-//                            $authFlag = true;
-//                        }
-//                    }
-//                }
-//            }
-//            if ($apitoken == $API_TOKEN) {
-//                    $where = [
-//                        'rawQuery' => 'users.id =?',
-//                        'bindParams' => [$userId]
-//                    ];
-//                    $userdetails = $objuser->getUsercreds($where);
-                    $ObjLanguageModel = Languages::getInstance();
-                    $selectColumn = ['languages.lang_code','languages.name'];
-                    $langInfo = $ObjLanguageModel->getAllLanguages($selectColumn);
-
-                    if ($langInfo) {
-                        $response->code = 200;
-                        $response->message = "Success";
-                        $response->data = $langInfo;
-                    } else {
-                        $response->code = 400;
-                        $response->message = "No user Details found.";
-                        $response->data = null;
-                    }
-//                } else {
-//                    $response->code = 400;
-//                    $response->message = "You need to login to view profile setting.";
-//                    $response->data = null;
-//                }
+                if ($langInfo) {
+                    $response->code = 200;
+                    $response->message = "Success";
+                    $response->data = $langInfo;
+                } else {
+                    $response->code = 400;
+                    $response->message = "No user Details found.";
+                    $response->data = null;
+                }
             } else {
                 $response->code = 401;
                 $response->message = "Access Denied";

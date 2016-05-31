@@ -21,6 +21,7 @@
           href=" /assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css"/>
     <link src="/assets/global/plugins/datatables/media/css/jquery.dataTables.min.css" type="text/css">
     <link href="/assets/css/custom/components.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/plugins/metrojs/MetroJs.min.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
 @endsection
 

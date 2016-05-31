@@ -136,18 +136,18 @@ class WholesaleController extends Controller
                 $selectedColumn = ['campaigns.*', 'users.username'];
                 $dailyspecialInfo = $objCampaignModel->getAllFlashsaleDetails($where, $selectedColumn);
                 foreach ($dailyspecialInfo as $flashkey => $flashval) {
-                    $categoryIds = $flashval->for_category_ids;
+//                    $categoryIds = $flashval->for_category_ids;
                     $productIds = $flashval->for_product_ids;
 
-                    $where = ['rawQuery' => 'category_id IN(' . $categoryIds . ')'];
-                    $getcategory = $objCategoryModel->getCategoryNameById($where);
+//                    $where = ['rawQuery' => 'category_id IN(' . $categoryIds . ')'];
+//                    $getcategory = $objCategoryModel->getCategoryNameById($where);
                     $whereProd = ['rawQuery' => 'product_id IN(' . $productIds . ')'];
                     $selectedColumn = [DB::raw('GROUP_CONCAT(DISTINCT product_name) AS product_name'), DB::raw('GROUP_CONCAT(DISTINCT product_id) AS product_id')];
                     $getproduct = $objProductModel->getProductNameById($whereProd, $selectedColumn);
 
-                    foreach ($getcategory as $catkey => $catval) {
-                        $dailyspecialInfo[$flashkey]->category = $catval->category_name;
-                    }
+//                    foreach ($getcategory as $catkey => $catval) {
+//                        $dailyspecialInfo[$flashkey]->category = $catval->category_name;
+//                    }
                     foreach ($getproduct as $prodkey => $prodval) {
                         $dailyspecialInfo[$flashkey]->product = $prodval->product_name;
                     }
@@ -163,7 +163,7 @@ class WholesaleController extends Controller
                         'username' => $mainflashval['username'],
 //                        'discount_type' => ($mainflashval['discount_type'] == 1) ? 'Flatdiscount' : 'Percentagediscount',
                         'discount_value' => $mainflashval['discount_value'] . '%',
-                        'category' => $mainflashval['category'],
+//                        'category' => $mainflashval['category'],
                         'product' => count(explode(",", $mainflashval['product'])),
                         'campaign_status' => $mainflashval['campaign_status'],
                         'action' => '',
@@ -189,9 +189,9 @@ class WholesaleController extends Controller
                     if ($_REQUEST['discount_value_from'] != '' && $_REQUEST['discount_value_to'] != '') {
                         $filteringRules[] = "(`campaigns`.`discount_value` BETWEEN " . intval($_REQUEST['discount_value_from']) . " AND " . intval($_REQUEST['discount_value_to']) . "  )";
                     }
-                    if ($_REQUEST['category_id'] != '') {
-                        $filteringRules[] = "(`campaigns`.`for_category_ids`  LIKE '%" . implode(",", $_REQUEST['category_id']) . "%' )";
-                    }
+//                    if ($_REQUEST['category_id'] != '') {
+//                        $filteringRules[] = "(`campaigns`.`for_category_ids`  LIKE '%" . implode(",", $_REQUEST['category_id']) . "%' )";
+//                    }
                     if ($_REQUEST['campaign_status'] != '') {
                         $filteringRules[] = "(`campaigns`.`campaign_status` = " . $_REQUEST['campaign_status'] . " )";
                     }
@@ -207,17 +207,17 @@ class WholesaleController extends Controller
                     $selectedColumn = ['campaigns.*', 'users.username'];
                     $MainFlashInfo = $objCampaignModel->getAllFlashDetail($where, $implodedWhere, $sortingOrder, $iDisplayLength, $iDisplayStart, $selectedColumn);
                     foreach ($MainFlashInfo as $flashkey => $flashval) {
-                        $categoryIds = $flashval->for_category_ids;
+//                        $categoryIds = $flashval->for_category_ids;
                         $productIds = $flashval->for_product_ids;
-                        $where = ['rawQuery' => 'category_id IN(' . $categoryIds . ')'];
-                        $getcategory = $objCategoryModel->getCategoryNameById($where);
+//                        $where = ['rawQuery' => 'category_id IN(' . $categoryIds . ')'];
+//                        $getcategory = $objCategoryModel->getCategoryNameById($where);
                         $whereProd = ['rawQuery' => 'product_id IN(' . $productIds . ')'];
                         $selectedColumn = [DB::raw('GROUP_CONCAT(DISTINCT product_name) AS product_name'), DB::raw('GROUP_CONCAT(DISTINCT product_id) AS product_id')];
                         $getproduct = $objProductModel->getProductNameById($whereProd, $selectedColumn);
 
-                        foreach ($getcategory as $catkey => $catval) {
-                            $MainFlashInfo[$flashkey]->category = $catval->category_name;
-                        }
+//                        foreach ($getcategory as $catkey => $catval) {
+//                            $MainFlashInfo[$flashkey]->category = $catval->category_name;
+//                        }
                         foreach ($getproduct as $prodkey => $prodval) {
                             $MainFlashInfo[$flashkey]->product = $prodval->product_name;
                         }
@@ -234,7 +234,7 @@ class WholesaleController extends Controller
                             'campaign_type' => $mainflashval['campaign_type'] = 'Wholesale',
                             'username' => $mainflashval['username'],
                             'discount_value' => $mainflashval['discount_value'] . '%',
-                            'category' => $mainflashval['category'],
+//                            'category' => $mainflashval['category'],
                             'product' => count(explode(",", $mainflashval['product'])),
                             'campaign_status' => $mainflashval['campaign_status'],
                             'action' => '',
@@ -334,7 +334,20 @@ class WholesaleController extends Controller
             $data['discount_type'] = '2';
             $data['discount_value'] = $postData['percentagediscount'];
             $categ = $postData['productcategories'];
-            $data['for_category_ids'] = implode(",", $categ);
+            if (isset($postData['productsubcategories'])) {
+                $subcat = $postData['productsubcategories'];
+            } else {
+                $subcat = [];
+            }
+            $tmp = [];
+            foreach ($categ as $index => $item) {
+                $tmp[$item] = array_values(array_filter(array_map(function ($cat) use ($item) {
+                    if (explode('_', $cat)[0] == $item) {
+                        return explode('_', $cat)[1];
+                    }
+                }, $subcat)));
+            }
+            $data['for_category_ids'] = json_encode($tmp);
             $data['by_user_id'] = $supplierId;
             $data['for_product_ids'] = implode(",", $postData['product']);
             $where = ['rawQuery' => 'campaign_id = ?', 'bindParams' => [$wid]];
@@ -354,11 +367,19 @@ class WholesaleController extends Controller
         $wholesaleInfo = $objCampaignModel->getAllFlashsaleDetails($where, $selectedColumn);
         if ((isset($wholesaleInfo) && (!empty($wholesaleInfo)))) {
             foreach ($wholesaleInfo as $flashkey => $flashval) {
-                $categoryIds = $flashval->for_category_ids;
-                $where = ['rawQuery' => 'category_id IN(' . $categoryIds . ')'];
-                $getcategory = $objProductCategory->getCategoryNameById($where);
+                $categoryIds = json_decode( $flashval->for_category_ids, true);
+                $categoryMerg = array_merge(array_keys($categoryIds));
+                $categoryMergee = array_merge(array_flatten($categoryIds));
+                $categoryMerge = array_merge(array_keys($categoryIds), array_flatten($categoryIds));
+//                echo'<pre>';print_r($categoryMerg);
+//                echo'<pre>';print_r($categoryMergee);
+//                print_a($categoryMerge);
+                $where = ['rawQuery' => 'category_id IN(' .implode(",",$categoryMerge) . ')'];
+                $selectedColumn = [DB::raw('GROUP_CONCAT(DISTINCT category_name) AS category_name'), DB::raw('GROUP_CONCAT(DISTINCT category_id) AS category_id')];
+                $getcategory = $objProductCategory->getCategoryNameById($where,$selectedColumn);
                 foreach ($getcategory as $catkey => $catval) {
                     $wholesaleInfo[$flashkey]->category = $catval->category_name;
+                    $wholesaleInfo[$flashkey]->category_ids = $catval->category_id;
                 }
                 $whereProduct = ['rawQuery' => 'product_id IN(' . $flashval->for_product_ids . ')'];
                 $selectedColumn = [DB::raw('GROUP_CONCAT(DISTINCT product_name) AS product_name'), DB::raw('GROUP_CONCAT(DISTINCT product_id) AS product_id')];
@@ -374,12 +395,31 @@ class WholesaleController extends Controller
             $where = ['rawQuery' => 'category_status = ? AND parent_category_id = ?', 'bindParams' => [1, 0]];
             $selectedColumn = ['category_id', 'category_name', 'category_status', 'for_shop_id'];
             $allactivecategories = $objProductCategory->getAllMainCategories($where, $selectedColumn);
+            $where = ['rawQuery' => 'category_status = ?', 'bindParams' => [1]];
+            $selectedColumn = ['product_categories.*', DB::raw('GROUP_CONCAT(category_id)AS main_category_id'),
+                DB::raw('GROUP_CONCAT(category_name)AS main_category_name')];
+            $allActiveSubcategories = $objProductCategory->getSubCategoriesForMaincategory($where, $selectedColumn);
+
+            $mainCategory = array_filter(array_map(function ($category) {
+                if ($category->parent_category_id == 0)
+                    return $category;
+            }, $allActiveSubcategories))[0];
+
+            $finalCatData = [];
+            foreach (explode(',', $mainCategory->main_category_id) as $index => $mainCatID) {
+                foreach ($allActiveSubcategories as $subCatKey => $allActiveSubcategory) {
+                    if ($allActiveSubcategory->parent_category_id == $mainCatID) {
+                        $allActiveSubcategory->main_cat_name = explode(',', $mainCategory->main_category_name)[$index];
+                        $finalCatData[$mainCatID] = $allActiveSubcategory;
+                    }
+                }
+            }
             $where = ['rawQuery' => 'added_by = ? AND product_type = ?', 'bindParams' => [$supplierId, 1]];
             $selectedColumn = ['product_id', 'product_name'];
 
             $allproducts = $objProductModel->getAllSupplierProducts($where, $selectedColumn);
 
-            return view('Supplier/Views/wholesale/editWholesale', ['wholesaleDetails' => $wholesaleInfo[0], 'activeCategory' => $allactivecategories, 'allProducts' => $allproducts]);
+            return view('Supplier/Views/wholesale/editWholesale', ['wholesaleDetails' => $wholesaleInfo[0], 'activeCategory' => $allactivecategories, 'allProducts' => $allproducts,'allcategories' => $finalCatData]);
 
         } else {
             return view('Supplier/Views/wholesale/editWholesale');

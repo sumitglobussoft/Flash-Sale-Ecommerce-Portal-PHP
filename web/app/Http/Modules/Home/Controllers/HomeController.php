@@ -26,9 +26,9 @@ class HomeController extends Controller
 
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Get Campaign Details
+     * Get User Locale
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function home()
     {
@@ -45,10 +45,12 @@ class HomeController extends Controller
         $data = array('api_token' => $mytoken, 'id' => $user_id);
 
         $curlResponse = $objCurl->curlUsingPost($url, $data);
+//        print_a($curlResponse);
+
         if ($curlResponse->code == 200) {
-            return view('Home/Views/home',['flashsaledetails' => $curlResponse->data]);
+            return view('Home/Views/home', ['flashsaledetails' => $curlResponse->data]);
         }
-        return view("Home/Views/home",['locale'=>\Session::get('user_locale')]);
+        return view("Home/Views/home", ['locale' => \Session::get('user_locale')]);
     }
 
     public function homeAjaxHandler(Request $request)
@@ -64,8 +66,12 @@ class HomeController extends Controller
                     $data['last_name'] = trim($request->input('lname'));
                     $data['username'] = trim($request->input('uname'));
                     $data['email'] = trim($request->input('email'));
+                    $data['gender'] = $request->input('optradio');
+                    $data['phone'] = $request->input('contact_no');
+                    $data['date_of_birth'] = $request->input('date_of_birth');
                     $data['api_token'] = $API_TOKEN;
                     $url = $api_url . "/signup";
+
                     $curlResponse = $objCurlHandler->curlUsingPost($url, $data);
 //                    echo "<pre>";print_r($curlResponse);die;
                     if ($curlResponse->code == 200) {
@@ -174,7 +180,12 @@ class HomeController extends Controller
     }
 
 
-    public static function getTranslatedLanguage(){
+    /**
+     * Get Translated Language Values
+     * @return mixed
+     */
+    public static function getTranslatedLanguage()
+    {
 
         $api_url = env('API_URL');
         $API_TOKEN = env('API_TOKEN');
@@ -183,6 +194,33 @@ class HomeController extends Controller
         $data['user_id'] = Session::get('fs_user')['id'];
         $data['api_token'] = $API_TOKEN;
         $curlResponse = $objCurlHandler->curlUsingPost($url, $data);
+        return $curlResponse->data;
+
+    }
+
+    public static function getCategoriesForMenu()
+    {
+
+        $api_url = env('API_URL');
+        $API_TOKEN = env('API_TOKEN');
+        $objCurlHandler = CurlRequestHandler::getInstance();
+        $url = env("API_URL") . "/campaign/product-ajax-handler";
+        $mytoken = env("API_TOKEN");
+        $data = array('api_token' => $mytoken, 'method' => 'getCategoryForMenu');
+        $curlResponse = $objCurlHandler->curlUsingPost($url, $data);
+//        print_a($curlResponse);
+        return $curlResponse->data;
+    }
+
+    public static function getCampaignsForMenu(){
+        $api_url = env('API_URL');
+        $API_TOKEN = env('API_TOKEN');
+        $objCurlHandler = CurlRequestHandler::getInstance();
+        $url = env("API_URL") . '/' . "/flashsale-ajax-handler";
+        $mytoken = env("API_TOKEN");
+        $data = array('api_token' => $mytoken, 'method' => 'getCampaignsForMenu');
+        $curlResponse = $objCurlHandler->curlUsingPost($url,$data);
+//        print_a($curlResponse->data);
         return $curlResponse->data;
 
     }

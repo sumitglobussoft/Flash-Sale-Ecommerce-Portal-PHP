@@ -113,5 +113,21 @@ class Shops extends Model
         }
     }
 
+
+    /**
+     * Add shop details
+     * @param $data
+     * @return int
+     * @since 28-1-2016
+     * @author Harshal Wagh
+     */
+    public function addShop($data)
+    {
+        $result = DB::table($this->table)
+            ->insertGetId($data);
+        return $result;
+
+    }
+
 }
 

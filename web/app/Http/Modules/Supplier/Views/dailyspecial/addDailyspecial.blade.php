@@ -209,6 +209,7 @@
                             {{--</div>--}}
                         </div>
 
+
                         <div class="form-group" id="validonvaluesdivcat">
                             <div class="form-group">
                                 <label class="control-label col-md-2">Choose Categories:</label>
@@ -224,7 +225,65 @@
 
                             </div>
                         </div>
-
+                        <div class="form-group" id="validonvaluesdivsubcat">
+                            <div class="form-group">
+                                <label class="control-label col-md-2">Choose Subcategories</label>
+                                <div class="col-md-6">
+                                    <select id="select2_sample2" class="form-control select2" multiple
+                                            data-placeholder="Choose Subcategories.." value=""
+                                            name="productsubcategories[]">
+                                        {{--<optgroup label="NFC EAST">--}}
+                                        {{--<option>Dallas Cowboys</option>--}}
+                                        {{--<option>New York Giants</option>--}}
+                                        {{--<option>Philadelphia Eagles</option>--}}
+                                        {{--<option>Washington Redskins</option>--}}
+                                        {{--</optgroup>--}}
+                                        {{--<optgroup label="NFC NORTH">--}}
+                                        {{--<option>Chicago Bears</option>--}}
+                                        {{--<option>Detroit Lions</option>--}}
+                                        {{--<option>Green Bay Packers</option>--}}
+                                        {{--<option>Minnesota Vikings</option>--}}
+                                        {{--</optgroup>--}}
+                                        {{--<optgroup label="NFC SOUTH">--}}
+                                        {{--<option>Atlanta Falcons</option>--}}
+                                        {{--<option>Carolina Panthers</option>--}}
+                                        {{--<option>New Orleans Saints</option>--}}
+                                        {{--<option>Tampa Bay Buccaneers</option>--}}
+                                        {{--</optgroup>--}}
+                                        {{--<optgroup label="NFC WEST">--}}
+                                        {{--<option>Arizona Cardinals</option>--}}
+                                        {{--<option>St. Louis Rams</option>--}}
+                                        {{--<option>San Francisco 49ers</option>--}}
+                                        {{--<option>Seattle Seahawks</option>--}}
+                                        {{--</optgroup>--}}
+                                        {{--<optgroup label="AFC EAST">--}}
+                                        {{--<option>Buffalo Bills</option>--}}
+                                        {{--<option>Miami Dolphins</option>--}}
+                                        {{--<option>New England Patriots</option>--}}
+                                        {{--<option>New York Jets</option>--}}
+                                        {{--</optgroup>--}}
+                                        {{--<optgroup label="AFC NORTH">--}}
+                                        {{--<option>Baltimore Ravens</option>--}}
+                                        {{--<option>Cincinnati Bengals</option>--}}
+                                        {{--<option>Cleveland Browns</option>--}}
+                                        {{--<option>Pittsburgh Steelers</option>--}}
+                                        {{--</optgroup>--}}
+                                        {{--<optgroup label="AFC SOUTH">--}}
+                                        {{--<option>Houston Texans</option>--}}
+                                        {{--<option>Indianapolis Colts</option>--}}
+                                        {{--<option>Jacksonville Jaguars</option>--}}
+                                        {{--<option>Tennessee Titans</option>--}}
+                                        {{--</optgroup>--}}
+                                        {{--<optgroup label="AFC WEST">--}}
+                                        {{--<option>Denver Broncos</option>--}}
+                                        {{--<option>Kansas City Chiefs</option>--}}
+                                        {{--<option>Oakland Raiders</option>--}}
+                                        {{--<option>San Diego Chargers</option>--}}
+                                        {{--</optgroup>--}}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="form-group">
                             <label class="control-label col-md-2">Choose Products:</label>
@@ -243,7 +302,7 @@
                         </div>
 
                         {{--</div>--}}
-                        <!-- SUBMIT BUTTON-->
+                                <!-- SUBMIT BUTTON-->
                         <div class="form-actions">
                             <div align="center">
                                 <button type="submit" class="btn blue" type="submit" id="addsubmit">Add Camapign
@@ -263,6 +322,7 @@
 @section('pagejavascripts')
     <script src="/assets/plugins/select2/js/select2.min.js"></script>
     <script src="/assets/js/pages/form-select2.js"></script>
+    <script type="text/javascript" src="/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js"></script>
     <script type="text/javascript" src="/assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.js"></script>
     <script type="text/javascript" src="/assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
 
@@ -340,40 +400,92 @@
                     });
 
                 }
-
             });
 
-//            var maindata = new Array();
-//            var mainId = new Array();
-////            $(document.body).on("change", "#select2_tags", function () {
-//
-//
-////                var catId = $(this).val();
-//                $.ajax({
-//                    url: '/supplier/dailyspecial-ajax-handler',
-//                    type: 'POST',
-//                    datatype: 'json',
-//                    data: {
-//                        method: 'getSupplierProducts',
-////                        catId: catId
-//                    },
-//                    success: function (response) {
-//                        var data = $.parseJSON(response);
-//                        var temparrayId = [];
-//                        var temparrayName = [];
-//                        $.each(data, function (pi, pv) {
-//                            temparrayId['id'] = pv['product_id'];
-//                            temparrayName['text'] = pv['product_name'];
-//                            data.push({id: temparrayId['id'], text: temparrayName['text']});
-//                        });
-//                        $("#select2_tags").select2({
-//                            data: data
-//                        });
-//
-////                        $('#select2_tags').html('<option value="' + temparrayId + '">' + temparrayName + '</option>');
-//
-//                    }
-//                });
+            var productData = new Array();
+            var autocompleteList1 = new Array();
+            var srcindex1 = new Array();
+            var subcategoryData = new Array();
+            $.ajax({
+                url: '/supplier/flashsale-ajax-handler',
+                type: 'POST',
+                datatype: 'json',
+                data: {
+                    method: 'getSubCategoriesForMainCategory'
+                },
+                success: function (resposne) {
+                    data1 = $.parseJSON(resposne);
+
+                    var toAppend = '';
+                    $.each(data1, function (i, v) {
+                        var tempArray = [];
+//                        tempArray['id'] = v.category_id;
+//                        tempArray['text'] = v.category_name;
+//                        subcategoryData.push({id: tempArray['id'], text: tempArray['text']});
+                        var categoryId = v['main_category_id'].split(",");
+                        var categoryNames = v['main_category_name'].split(",");
+                        toAppend += '<optgroup data-id="'+i+'" label="' + v['main_cat_name'] + '">';
+                        $.each(categoryNames, function (catI, catV) {
+                            toAppend += '<option value="' + i +'_'+categoryId[catI] + '">' + catV + '</option>';
+                        });
+                        toAppend += '</optgroup>';
+
+                    });
+
+//                    $("#select2_sample2").select2({
+//                        data: toAppend
+//                    });
+                    $("#select2_sample2").append(toAppend);
+                }
+            });
+
+            {{--<div class="form-group" id="validonvaluesdivsubcat">--}}
+            {{--<div class="form-group">--}}
+            {{--<label class="control-label col-md-2">Choose SubCategories:</label>--}}
+
+            {{--<div class="col-md-6">--}}
+            {{--<select id="js-state" class="form-control select2" multiple--}}
+            {{--data-placeholder="Choose Subcategories..." value="" name="producsubtcategories[]">--}}
+            {{--</select>--}}
+            {{--</div>--}}
+            {{--{!!  $errors->first('productsubcategories', '<font color="red">:message</font>') !!}--}}
+            {{--<a href="/admin/add-category" class="btn btn-success" value="Add Category"--}}
+            {{--style="float:right">Add Your Own Category</a>--}}
+
+            {{--</div>--}}
+            {{--</div>--}}
+
+            //            var maindata = new Array();
+            //            var mainId = new Array();
+            ////            $(document.body).on("change", "#select2_tags", function () {
+            //
+            //
+            ////                var catId = $(this).val();
+            //                $.ajax({
+            //                    url: '/supplier/dailyspecial-ajax-handler',
+            //                    type: 'POST',
+            //                    datatype: 'json',
+            //                    data: {
+            //                        method: 'getSupplierProducts',
+            ////                        catId: catId
+            //                    },
+            //                    success: function (response) {
+            //                        var data = $.parseJSON(response);
+            //                        var temparrayId = [];
+            //                        var temparrayName = [];
+            //                        $.each(data, function (pi, pv) {
+            //                            temparrayId['id'] = pv['product_id'];
+            //                            temparrayName['text'] = pv['product_name'];
+            //                            data.push({id: temparrayId['id'], text: temparrayName['text']});
+            //                        });
+            //                        $("#select2_tags").select2({
+            //                            data: data
+            //                        });
+            //
+            ////                        $('#select2_tags').html('<option value="' + temparrayId + '">' + temparrayName + '</option>');
+            //
+            //                    }
+            //                });
 
             // ============================================ //
 
@@ -413,7 +525,7 @@
             // ============================================== //
             $('#addnewdailyspecial').submit(function () {
                 var sub = $('#select2_tags').val();
-                if(sub.length >= 10) {
+                if (sub.length >= 10) {
                     if (confirm("Do you want to Make These Products As Flashsale!") == true) {
                         return true;
                     } else {

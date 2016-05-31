@@ -10,6 +10,21 @@
     <link type="text/css" rel="stylesheet" media="screen"
           href="/assets/plugins/input-autocomplete-without-addnew/dist/tokens.css">
     <link href="/assets/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
+    <style type="text/css">
+        .form-group .select2-selection {
+            position: relative;
+            z-index: 2;
+            float: left;
+            width: 100%;
+            margin-bottom: 0;
+            display: table;
+            table-layout: fixed;
+        }
+        .form-group ul li{
+            padding:2px !important;
+        }
+
+    </style>
 @endsection
 
 @section('content')
@@ -94,7 +109,8 @@
                                 <div class="col-md-3" id="percentagediscount">
                                     <div class="input-inline input-medium input-icon right">
                                         <i class="icon-percent"></i>
-                                        <input id="percentagediscountval" type="text" value="{{ $wholesaleDetails->discount_value }}"
+                                        <input id="percentagediscountval" type="text"
+                                               value="{{ $wholesaleDetails->discount_value }}"
                                                name="percentagediscount" class="form-control integer-only">
                                         {!!  $errors->first('percentagediscount', '<font color="red">:message</font>') !!}
                                     </div>
@@ -103,12 +119,11 @@
 
                             <div class="form-group">
                                 <label class="control-label col-md-2">Choose Category:</label>
-
                                 <div class="col-md-6">
                                     <select id="js-states" class="form-control select2" multiple
                                             data-placeholder="Choose Category..." name="productcategories[]">
                                         <?php
-                                        $selectedCategory = explode(',', $wholesaleDetails->for_category_ids);
+                                        $selectedCategory = explode(',', $wholesaleDetails->category_ids);
                                         foreach ($activeCategory as $keyTCsWithTs => $valueTCsWithTs) {
                                         $categoryName = explode(",", $valueTCsWithTs->category_name);
                                         $category_ids = explode(",", $valueTCsWithTs->category_id);
@@ -119,9 +134,35 @@
                                         <?php } ?>
                                         <?php
                                         $categoryName = '';
-                                        }
-                                        ?>
+                                        }  ?>
                                     </select>
+                                </div>
+                            </div>
+                            <div class="form-group" id="validonvaluesdivsubcat">
+                                <div class="form-group">
+                                    <label class="control-label col-md-2">Choose Subcategories</label>
+                                    <div class="col-md-6">
+                                        <select id="select2_sample2" class="form-control select2" multiple
+                                                data-placeholder="Choose Subcategories.." value=""
+                                                name="productsubcategories[]">
+                                            <?php
+                                            $selectedCategory = explode(',', $wholesaleDetails->category_ids);
+                                            foreach ($allcategories as $keyTCsWithTs => $valueTCsWithTs) {
+                                            $categoryName = explode(",", $valueTCsWithTs->main_category_name);
+                                            $category_ids = explode(",", $valueTCsWithTs->main_category_id);
+                                            ?>
+                                            <optgroup data-id="<?php echo $keyTCsWithTs ?>"
+                                                      label="<?php echo $valueTCsWithTs->main_cat_name ?>">
+                                                <?php foreach ($categoryName as $keyCategory => $valueCategory) { ?>
+                                                <option value="<?php echo $keyTCsWithTs . '_' . $category_ids[$keyCategory]; ?>"
+                                                        <?php if (in_array($category_ids[$keyCategory], $selectedCategory)) { ?> selected=""<?php } ?>><?php echo $valueCategory; ?></option>
+                                                <?php } ?>
+                                            </optgroup>
+                                            <?php
+                                            $categoryName = '';
+                                            }  ?>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
 
@@ -150,7 +191,7 @@
                             </div>
 
                             {{--</div>--}}
-                            <!-- SUBMIT BUTTON-->
+                                    <!-- SUBMIT BUTTON-->
                             <div class="form-actions">
                                 <div align="center">
                                     <button type="submit" class="btn blue" type="submit">Edit Wholesale</button>

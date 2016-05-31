@@ -122,24 +122,18 @@ class Products extends Model
 
     public function getProductNameById($where, $selectedColumn)
     {
-        {
-            try {
-                $result = DB::table($this->table)
-                    ->select($selectedColumn)
-                    ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
-//                ->toSql();
-                    ->get();
-            } catch
-            (QueryException $e) {
-                echo $e;
-            }
-            if ($result) {
-                return $result;
-            } else {
-                return 0;
-            }
 
+        try {
+            $result = DB::table($this->table)
+                ->select($selectedColumn)
+                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+//                ->toSql();
+                ->get();
+            return $result;
+        } catch (QueryException $e) {
+            echo $e;
         }
+
     }
 
 

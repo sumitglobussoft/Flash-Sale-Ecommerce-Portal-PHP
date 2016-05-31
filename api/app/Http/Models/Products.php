@@ -120,18 +120,43 @@ class Products extends Model
 
     public function getProductDetailsByCategoryIds($where, $selectedColumn = ['*'])
     {
-            try {
-                $result = DB::table($this->table)
-                    ->join('product_images','product_images.for_product_id','=','products.product_id')
-                    ->leftJoin('productmeta','productmeta.product_id','=','products.product_id')
-                    ->select($selectedColumn)
-                    ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
-                    ->get();
-                return $result;
-            } catch
-            (QueryException $e) {
-                echo $e;
-            }
+        try {
+            $result = DB::table($this->table)
+//                ->join('product_images', 'product_images.for_product_id', '=', 'products.product_id')
+//                ->join('productmeta', 'productmeta.product_id', '=', 'products.product_id')
+//
+//                ->leftJoin('product_option_variant_relation', function ($join) {
+//                    $join->on('products.product_id', '=', 'product_option_variant_relation.product_id');
+//                })
+//                ->join('product_option_variants', 'product_option_variants.option_id', '=', 'product_option_variant_relation.option_id')
+//                ->join('product_options', 'product_options.option_id', '=', 'product_option_variants.option_id')
+//                ->select($selectedColumn)
+//                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+//                ->groupBy('product_option_variant_relation.product_id')
+
+
+                ->join('product_images', 'product_images.for_product_id', '=', 'products.product_id')
+                ->join('productmeta', 'productmeta.product_id', '=', 'products.product_id')
+                ->leftJoin('product_option_variant_relation', function ($join) {
+                    $join->on('products.product_id', '=', 'product_option_variant_relation.product_id');
+                })
+                ->leftJoin('product_option_variants_combination', function ($join) {
+                    $join->on('products.product_id', '=', 'product_option_variants_combination.product_id');
+                })
+//                ->join('product_option_variants', 'product_option_variants.option_id', '=', 'product_option_variant_relation.option_id')
+                ->join('product_options', 'product_options.option_id', '=', 'product_option_variant_relation.option_id')
+                ->select($selectedColumn)
+                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                ->groupBy('product_option_variant_relation.product_id')
+//                ->groupBy('products.category_id')
+//                ->toSql();
+                ->get();
+//            die($result);
+            return $result;
+        } catch
+        (QueryException $e) {
+            echo $e;
+        }
 
     }
 
@@ -142,17 +167,67 @@ class Products extends Model
             $result = DB::table($this->table)
                 ->join('product_images', 'product_images.for_product_id', '=', 'products.product_id')
                 ->join('productmeta', 'productmeta.product_id', '=', 'products.product_id')
-                ->leftJoin('product_option_variant_relation as product_option_variant_relation', function($join) {
-                    $join->on('products.product_id', '=','product_option_variant_relation.product_id');
+                ->leftJoin('product_option_variant_relation as product_option_variant_relation', function ($join) {
+                    $join->on('products.product_id', '=', 'product_option_variant_relation.product_id');
                 })
-//                ->leftjoin('product_option_variant_relation', 'product_option_variant_relation.product_id', '=', 'products.product_id')
+                ->leftJoin('product_option_variants_combination', 'product_images.for_combination_id', '=', 'product_option_variants_combination.combination_id')
+//                ->leftJoin('product_option_variants_combination as product_option_variants_combination', function ($join) {
+//                    $join->on('product_option_variants_combination.combination_id', '=','product_images.for_combination_id')
+//                        ->where('product_images.for_combination_id', '=', 0)
+//                        ->whereNotNull('product_images.for_combination_id')
+//                        ->where('product_images.image_type', '=', 1);
+//                })
+//                ->leftJoin('product_option_variants_combination','product_images.for_combination_id', '=', 'product_option_variants_combination.combination_id')
+//                ->leftJoin('product_images ', function ($join) {
+//                    $join->on('product_images.for_combination_id', '=', 'product_option_variants_combination.combination_id');
+//                })
                 ->select($selectedColumn)
                 ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
                 ->get();
+//            ->toSql();
             return $result;
         } catch (QueryException $e) {
             echo $e;
         }
+
+    }
+
+
+    public function getProducts($where, $whereForCategoryFilter, $whereForFilter, $limit, $offset, $sortClause, $wherePriceRange, $selectedColumn)
+    {
+
+        try {
+            $result = DB::table($this->table)
+                ->join('product_images', 'product_images.for_product_id', '=', 'products.product_id')
+                ->join('productmeta', 'productmeta.product_id', '=', 'products.product_id')
+                ->leftJoin('product_option_variant_relation', function ($join) {
+                    $join->on('products.product_id', '=', 'product_option_variant_relation.product_id');
+                })
+                ->leftJoin('product_option_variants_combination', function ($join) {
+                    $join->on('products.product_id', '=', 'product_option_variants_combination.product_id');
+                })
+                ->join('product_option_variants', 'product_option_variants.option_id', '=', 'product_option_variant_relation.option_id')
+                ->join('product_options', 'product_options.option_id', '=', 'product_option_variant_relation.option_id')
+//                ->leftJoin('product_filter_option','=','')
+                ->select($selectedColumn)
+                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                ->whereRaw($whereForCategoryFilter['rawQuery'], isset($whereForCategoryFilter['bindParams']) ? $whereForCategoryFilter['bindParams'] : array())
+                ->whereRaw($wherePriceRange['rawQuery'], isset($wherePriceRange['bindParams']) ? $wherePriceRange['bindParams'] : array())
+//                ->whereRaw($limit['rawQuery'], isset($limit['bindParams']) ? $limit['bindParams'] : array())
+//                ->whereRaw($offset['rawQuery'], isset($offset['bindParams']) ? $offset['bindParams'] : array())
+//                ->whereRaw($whereForFilter['rawQuery'], isset($whereForFilter['bindParams']) ? $whereForFilter['bindParams'] : array())
+                ->groupBy('product_option_variant_relation.product_id')
+                ->groupBy('product_images.for_product_id')
+                ->limit($limit, $offset)
+                ->orderBy(key($sortClause),current($sortClause))
+//                ->toSql();
+                ->get();
+            return $result;
+        } catch
+        (QueryException $e) {
+            echo $e;
+        }
+
 
     }
 

@@ -62,7 +62,7 @@ class ProductCategories extends Model
      * @since 24-02-2016
      * @author Vini Dubey <vinidubey@globussoft.com>
      */
-    public function getCategoryNameById($where,$selectedColumn = ['*'])
+    public function getCategoryNameById($where, $selectedColumn = ['*'])
     {
         {
             try {
@@ -70,6 +70,7 @@ class ProductCategories extends Model
 //                    ->select((array(DB::raw('GROUP_CONCAT(DISTINCT category_name) AS category_name', 'GROUP_CONCAT(DISTINCT parent_category_id) AS parent_category_id'))),$selectedColumn)
                     ->select($selectedColumn)
                     ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                    ->groupBy('parent_category_id')
                     ->get();
             } catch
             (QueryException $e) {
@@ -84,5 +85,75 @@ class ProductCategories extends Model
         }
 
     }
+
+    /**
+     * Get Category Name By Category_id.
+     * @param $where
+     * @return int
+     * @since 24-02-2016
+     * @author Vini Dubey <vinidubey@globussoft.com>
+     */
+    public function getAllCategories($where, $selectedColumn = ['*'])
+    {
+        {
+            try {
+                $result = DB::table($this->table)
+//                    ->select((array(DB::raw('GROUP_CONCAT(DISTINCT category_name) AS category_name', 'GROUP_CONCAT(DISTINCT parent_category_id) AS parent_category_id'))),$selectedColumn)
+                    ->select($selectedColumn)
+                    ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                    ->groupBy('parent_category_id')
+                    ->get();
+            } catch
+            (QueryException $e) {
+                echo $e;
+            }
+            if ($result) {
+                return $result;
+            } else {
+                return 0;
+            }
+
+        }
+
+    }
+
+    public function getCategoryWhere($where, $selectedColumn = ['*'])
+    {
+
+        try {
+            $result = DB::table($this->table)
+//                    ->select((array(DB::raw('GROUP_CONCAT(DISTINCT category_name) AS category_name', 'GROUP_CONCAT(DISTINCT parent_category_id) AS parent_category_id'))),$selectedColumn)
+                ->select($selectedColumn)
+                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+//                ->toSql();
+                ->get();
+            return $result;
+        } catch
+        (QueryException $e) {
+            echo $e;
+        }
+
+
+    }
+
+
+    public function getAllCategoryWhereByGrouping($where, $selectedColumn = ['*'])
+    {
+
+        try {
+            $result = DB::table($this->table)
+//                    ->select((array(DB::raw('GROUP_CONCAT(DISTINCT category_name) AS category_name', 'GROUP_CONCAT(DISTINCT parent_category_id) AS parent_category_id'))),$selectedColumn)
+                ->select($selectedColumn)
+                ->whereRaw($where['rawQuery'], isset($where['bindParams']) ? $where['bindParams'] : array())
+                ->groupBy("parent_category_id")
+//                ->toSql();
+                ->get();
+            return $result;
+        } catch
+        (QueryException $e) {
+            echo $e;
+        }
+    }
+
 
 }
